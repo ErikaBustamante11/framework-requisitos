@@ -1,0 +1,2150 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Framework Metodológico Digital — Requisitos de Software</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════════
+   DESIGN TOKENS
+═══════════════════════════════════════════════ */
+:root {
+  --c-teal:    #1D9E75; --c-teal-l:   #E1F5EE; --c-teal-d:   #085041;
+  --c-purple:  #534AB7; --c-purple-l: #EEEDFE; --c-purple-d: #26215C;
+  --c-blue:    #185FA5; --c-blue-l:   #E6F1FB; --c-blue-d:   #042C53;
+  --c-amber:   #BA7517; --c-amber-l:  #FAEEDA; --c-amber-d:  #412402;
+  --c-red:     #A32D2D; --c-red-l:    #FCEBEB;
+  --c-green:   #0F6E56; --c-green-l:  #EAF3DE;
+  --c-gray:    #5F5E5A; --c-gray-l:   #F1EFE8;
+
+  --bg:        #FAFAF8;
+  --surface:   #F4F2EE;
+  --surface2:  #ECEAE4;
+  --border:    rgba(0,0,0,0.08);
+  --border2:   rgba(0,0,0,0.14);
+  --text:      #1A1A18;
+  --muted:     #6B6B66;
+  --faint:     #9A9A94;
+  --radius:    8px;
+  --radius-lg: 12px;
+  --font-serif:'Lora', Georgia, serif;
+  --font-sans: 'DM Sans', system-ui, sans-serif;
+  --font-mono: 'DM Mono', monospace;
+  --sidebar-w: 268px;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.06), 0 2px 8px rgba(0,0,0,0.04);
+  --shadow:    0 2px 8px rgba(0,0,0,0.08), 0 8px 24px rgba(0,0,0,0.05);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0F0F0D; --surface: #181816; --surface2: #222220;
+    --border: rgba(255,255,255,0.07); --border2: rgba(255,255,255,0.12);
+    --text: #EFEFE9; --muted: #9A9A90; --faint: #686864;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.3); --shadow: 0 4px 16px rgba(0,0,0,0.4);
+  }
+}
+
+/* ═══ RESET ═══ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--font-sans);
+  background: var(--bg);
+  color: var(--text);
+  font-size: 14px;
+  line-height: 1.65;
+  min-height: 100vh;
+  overflow-x: hidden;
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+h1,h2,h3,h4,h5 { font-family: var(--font-serif); font-weight: 500; line-height: 1.3; }
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 4px; }
+
+/* ═══ LAYOUT ═══ */
+.app { display: grid; grid-template-columns: var(--sidebar-w) 1fr; min-height: 100vh; width: 100%; overflow: hidden; }
+
+/* ═══ SIDEBAR ═══ */
+.sidebar {
+  background: var(--surface);
+  border-right: 0.5px solid var(--border2);
+  position: fixed;
+  top: 0; left: 0;
+  width: var(--sidebar-w);
+  height: 100vh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  z-index: 50;
+}
+.sidebar-brand {
+  padding: 1.4rem 1.2rem 1rem;
+  border-bottom: 0.5px solid var(--border);
+}
+.brand-eyebrow {
+  font-size: 9px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: .8px;
+  color: var(--c-teal);
+  margin-bottom: .3rem;
+}
+.brand-title {
+  font-family: var(--font-serif);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  line-height: 1.4;
+  margin-bottom: .2rem;
+}
+.brand-sub { font-size: 10px; color: var(--faint); line-height: 1.5; }
+
+.sidebar-nav { padding: .5rem .6rem; flex: 1; }
+.nav-group { margin-bottom: .15rem; }
+.nav-label {
+  font-size: 9px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: .6px;
+  color: var(--faint);
+  padding: .6rem .7rem .2rem;
+  display: block;
+}
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: .55rem;
+  padding: .42rem .7rem;
+  border-radius: 6px;
+  cursor: pointer;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 400;
+  border: none;
+  background: transparent;
+  width: 100%;
+  text-align: left;
+  transition: all .15s;
+  line-height: 1.4;
+}
+.nav-item:hover { background: var(--surface2); color: var(--text); }
+.nav-item.active {
+  background: var(--bg);
+  color: var(--text);
+  font-weight: 500;
+  box-shadow: var(--shadow-sm);
+}
+.nav-pip {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.nav-count {
+  margin-left: auto;
+  font-size: 9px;
+  background: var(--surface2);
+  border-radius: 8px;
+  padding: 1px 5px;
+  color: var(--faint);
+}
+.sidebar-footer {
+  padding: .8rem 1.2rem;
+  border-top: 0.5px solid var(--border);
+  font-size: 10px;
+  color: var(--faint);
+  line-height: 1.7;
+}
+
+/* ═══ MAIN ═══ */
+.main {
+  margin-left: var(--sidebar-w);
+  min-height: 100vh;
+  min-width: 0;
+  width: calc(100vw - var(--sidebar-w));
+  overflow-x: hidden;
+}
+.page {
+  display: none;
+  padding: 2.5rem 2.8rem;
+  max-width: 960px;
+  width: 100%;
+  box-sizing: border-box;
+  animation: fadeUp .22s ease;
+}
+.page.active { display: block; }
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* ═══ PAGE HEADER ═══ */
+.page-header { margin-bottom: 2rem; padding-bottom: 1.4rem; border-bottom: 0.5px solid var(--border2); }
+.page-eyebrow {
+  font-size: 10px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+  margin-bottom: .5rem;
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+}
+.page-title { font-size: 28px; font-weight: 600; margin-bottom: .5rem; }
+.page-desc { font-size: 14px; color: var(--muted); max-width: 640px; line-height: 1.7; word-break: normal; overflow-wrap: break-word; }
+.std-row { display: flex; gap: 6px; flex-wrap: wrap; margin-top: .9rem; }
+.std-pill {
+  font-size: 10px;
+  padding: 3px 9px;
+  border-radius: 10px;
+  border: 0.5px solid var(--border2);
+  color: var(--muted);
+  background: var(--surface);
+  font-family: var(--font-mono);
+}
+
+/* ═══ CARDS ═══ */
+.card {
+  background: var(--surface);
+  border: 0.5px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1.2rem 1.4rem;
+}
+.card-sm {
+  background: var(--surface);
+  border: 0.5px solid var(--border);
+  border-radius: var(--radius);
+  padding: .9rem 1rem;
+}
+.card-title {
+  font-size: 10px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: .4px;
+  color: var(--muted);
+  margin-bottom: .7rem;
+}
+
+/* ═══ GRIDS ═══ */
+.g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.g3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; }
+.g4 { display: grid; grid-template-columns: repeat(4,1fr); gap: .8rem; }
+.g5 { display: grid; grid-template-columns: repeat(5,1fr); gap: .7rem; }
+
+/* ═══ KPI CARDS ═══ */
+.kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px,1fr)); gap: .8rem; margin-bottom: 1.5rem; }
+.kpi {
+  background: var(--surface);
+  border: 0.5px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1rem;
+  text-align: center;
+}
+.kpi-num { font-size: 28px; font-weight: 500; font-family: var(--font-serif); margin-bottom: .2rem; }
+.kpi-label { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: .3px; }
+.kpi-sub { font-size: 10px; color: var(--faint); margin-top: .1rem; }
+
+/* ═══ TABS ═══ */
+.tab-nav {
+  display: flex;
+  gap: 2px;
+  border-bottom: 0.5px solid var(--border);
+  margin-bottom: 1.2rem;
+}
+.tab-btn {
+  padding: .5rem .95rem;
+  border-radius: var(--radius) var(--radius) 0 0;
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 400;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -0.5px;
+  font-family: var(--font-sans);
+  transition: all .15s;
+}
+.tab-btn:hover { color: var(--text); background: var(--surface); }
+.tab-btn.on { color: var(--text); font-weight: 500; border-bottom-color: var(--c-blue); background: var(--bg); }
+.tab-panel { display: none; }
+.tab-panel.on { display: block; }
+
+/* ═══ BADGES ═══ */
+.badge {
+  display: inline-block;
+  font-size: 10px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-weight: 500;
+}
+.b-must  { background: var(--c-red-l);    color: var(--c-red); }
+.b-should{ background: var(--c-amber-l);  color: var(--c-amber-d); }
+.b-could { background: var(--c-blue-l);   color: var(--c-blue-d); }
+.b-func  { background: var(--c-purple-l); color: var(--c-purple-d); }
+.b-nfunc { background: var(--c-green-l);  color: var(--c-green); }
+.b-ok    { background: var(--c-green-l);  color: var(--c-green); }
+.b-warn  { background: var(--c-amber-l);  color: var(--c-amber-d); }
+.b-err   { background: var(--c-red-l);    color: var(--c-red); }
+
+/* ═══ TABLES ═══ */
+.data-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.data-table th {
+  padding: 8px 12px;
+  text-align: left;
+  background: var(--surface);
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: .3px;
+  border-bottom: 0.5px solid var(--border2);
+}
+.data-table td {
+  padding: 7px 12px;
+  border-bottom: 0.5px solid var(--border);
+  vertical-align: top;
+}
+.data-table tr:last-child td { border-bottom: none; }
+.data-table tr:hover td { background: var(--surface); }
+.table-wrap { background: var(--surface); border: 0.5px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; }
+
+/* ═══ GHERKIN ═══ */
+.gherkin {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  background: var(--surface);
+  border: 0.5px solid var(--border);
+  border-radius: var(--radius);
+  padding: .75rem 1rem;
+  line-height: 2;
+}
+.g-given { color: var(--c-blue); }
+.g-when  { color: var(--c-amber); }
+.g-then  { color: var(--c-green); }
+.g-and   { color: var(--muted); }
+.g-tag   { color: var(--c-red); }
+
+/* ═══ LISTS ═══ */
+.dot-list { display: flex; flex-direction: column; gap: .3rem; }
+.dot-item {
+  display: flex;
+  gap: .55rem;
+  padding: .35rem 0;
+  font-size: 12px;
+  border-bottom: 0.5px solid var(--border);
+  align-items: flex-start;
+}
+.dot-item:last-child { border-bottom: none; }
+.dot { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; margin-top: 5px; }
+
+/* ═══ CHECKLIST ═══ */
+.chk-item {
+  display: flex;
+  gap: .7rem;
+  padding: .6rem .8rem;
+  border-radius: var(--radius);
+  cursor: pointer;
+  border: 0.5px solid var(--border);
+  background: var(--surface);
+  margin-bottom: .35rem;
+  align-items: flex-start;
+  transition: all .15s;
+}
+.chk-item:hover { border-color: var(--border2); }
+.chk-item.done { border-color: rgba(15,110,86,.3); background: rgba(15,110,86,.04); }
+.chk-box {
+  width: 17px; height: 17px;
+  border-radius: 4px;
+  border: 1.5px solid var(--border2);
+  flex-shrink: 0;
+  margin-top: 1px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 9px;
+  font-weight: 700;
+  color: transparent;
+  transition: all .15s;
+}
+.chk-item.done .chk-box { background: var(--c-green); border-color: var(--c-green); color: #fff; }
+.chk-text { flex: 1; font-size: 12px; }
+.chk-sev { font-size: 10px; padding: 1px 6px; border-radius: 3px; font-weight: 500; flex-shrink: 0; margin-top: 2px; }
+
+/* ═══ PROGRESS ═══ */
+.prog-wrap { display: flex; align-items: center; gap: .7rem; margin-top: .7rem; }
+.prog-bar { flex: 1; height: 5px; background: var(--surface2); border-radius: 3px; overflow: hidden; }
+.prog-fill { height: 100%; border-radius: 3px; background: var(--c-green); transition: width .4s ease; }
+.prog-label { font-size: 11px; color: var(--muted); min-width: 90px; text-align: right; }
+
+/* ═══ BARS ═══ */
+.bar-row { display: flex; align-items: center; gap: .8rem; margin-bottom: .5rem; }
+.bar-label { font-size: 11px; color: var(--muted); width: 110px; flex-shrink: 0; }
+.bar-track { flex: 1; height: 7px; background: var(--surface2); border-radius: 4px; overflow: hidden; }
+.bar-fill { height: 100%; border-radius: 4px; transition: width .8s ease; }
+.bar-val { font-size: 11px; font-weight: 500; min-width: 34px; text-align: right; }
+
+/* ═══ STEPPERS ═══ */
+.step-row { display: grid; grid-template-columns: 34px 1fr; gap: .65rem; margin-bottom: .4rem; position: relative; }
+.step-line { position: absolute; left: 16px; top: 36px; bottom: -6px; width: 1.5px; background: var(--border2); }
+.step-row:last-child .step-line { display: none; }
+.step-num { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 500; color: #fff; flex-shrink: 0; z-index: 1; }
+.step-body { padding: .5rem .8rem; background: var(--surface); border: 0.5px solid var(--border); border-radius: var(--radius); }
+.step-title { font-size: 12px; font-weight: 500; margin-bottom: .2rem; }
+.step-desc  { font-size: 11px; color: var(--muted); line-height: 1.5; }
+
+/* ═══ PHASE CARDS ═══ */
+.phase-card {
+  border-radius: var(--radius-lg);
+  padding: 1rem;
+  border: 0.5px solid var(--border);
+  cursor: pointer;
+  transition: all .2s;
+}
+.phase-card:hover { box-shadow: var(--shadow-sm); }
+.phase-label { font-size: 9px; font-weight: 500; text-transform: uppercase; letter-spacing: .4px; margin-bottom: .35rem; }
+.phase-name { font-family: var(--font-serif); font-size: 14px; font-weight: 600; margin-bottom: .4rem; }
+.phase-items { font-size: 11px; line-height: 1.8; }
+
+/* ═══ BUTTONS ═══ */
+.btn {
+  padding: .5rem 1.1rem;
+  border-radius: var(--radius);
+  border: 0.5px solid var(--border2);
+  background: transparent;
+  color: var(--text);
+  font-size: 12px;
+  cursor: pointer;
+  font-family: var(--font-sans);
+  transition: all .15s;
+}
+.btn:hover { background: var(--surface2); }
+.btn-primary { background: var(--c-blue); color: #fff; border-color: var(--c-blue); }
+.btn-primary:hover { opacity: .9; }
+.btn-sm { padding: .3rem .75rem; font-size: 11px; }
+
+/* ═══ INPUTS ═══ */
+input[type="text"], textarea {
+  width: 100%;
+  background: var(--surface);
+  border: 0.5px solid var(--border2);
+  border-radius: var(--radius);
+  padding: .55rem .8rem;
+  font-size: 13px;
+  color: var(--text);
+  font-family: var(--font-sans);
+  outline: none;
+  transition: border-color .15s;
+}
+input[type="text"]:focus, textarea:focus { border-color: var(--c-blue); }
+textarea { resize: vertical; line-height: 1.6; }
+
+/* ═══ MATRIX ═══ */
+.matrix-cell { height: 24px; border-radius: 3px; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 500; }
+.mc-h { background: rgba(15,110,86,.15);  color: var(--c-green); }
+.mc-m { background: rgba(186,117,23,.12); color: var(--c-amber); }
+.mc-l { background: var(--surface2);      color: var(--muted); }
+.mc-n { background: rgba(163,45,45,.08);  color: var(--c-red); }
+
+/* ═══ UAT BUTTONS ═══ */
+.uat-btn { padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: 500; cursor: pointer; border: 0.5px solid var(--border2); background: transparent; color: var(--muted); margin-right: 4px; transition: all .15s; font-family: var(--font-sans); }
+.uat-btn.pass  { background: rgba(15,110,86,.1);  border-color: rgba(15,110,86,.4);  color: var(--c-green); }
+.uat-btn.fail  { background: rgba(163,45,45,.08); border-color: rgba(163,45,45,.3);  color: var(--c-red); }
+.uat-btn.block { background: rgba(186,117,23,.1); border-color: rgba(186,117,23,.4); color: var(--c-amber); }
+
+/* ═══ DECISION CARDS ═══ */
+.dec-card { background: var(--surface); border: 0.5px solid var(--border); border-radius: var(--radius-lg); padding: .9rem; cursor: pointer; transition: all .2s; text-align: center; }
+.dec-card:hover { border-color: var(--border2); }
+.dec-card.sel { border-width: 1.5px; }
+
+/* ═══ TIMELINE ═══ */
+.tl-row { display: grid; grid-template-columns: 72px 1fr; gap: .8rem; margin-bottom: .4rem; }
+.tl-week { font-size: 11px; font-weight: 500; color: var(--muted); padding-top: .4rem; text-align: right; }
+.tl-card { background: var(--surface); border: 0.5px solid var(--border); border-radius: var(--radius); padding: .6rem .85rem; }
+.tl-title { font-size: 12px; font-weight: 500; margin-bottom: .15rem; }
+.tl-desc  { font-size: 11px; color: var(--muted); line-height: 1.4; }
+
+/* ═══ FIELD GROUPS ═══ */
+.field-group { margin-bottom: .85rem; }
+.field-label { font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: .4px; color: var(--muted); margin-bottom: .3rem; }
+.field-val { font-size: 13px; color: var(--text); background: var(--surface); border: 0.5px solid var(--border); border-radius: var(--radius); padding: .5rem .75rem; line-height: 1.5; }
+.field-mono { font-family: var(--font-mono); color: var(--c-blue); font-size: 12px; }
+
+/* ═══ IMPACT METERS ═══ */
+.impact-row { display: flex; align-items: center; gap: .7rem; margin-bottom: .45rem; }
+.impact-label { font-size: 11px; color: var(--muted); width: 110px; flex-shrink: 0; }
+.impact-track { flex: 1; height: 7px; background: var(--surface2); border-radius: 3px; overflow: hidden; }
+.impact-fill { height: 100%; border-radius: 3px; }
+.impact-val { font-size: 11px; font-weight: 500; min-width: 36px; text-align: right; }
+
+/* ═══ ROLES RACI ═══ */
+.raci-r { background: rgba(24,95,165,.1);  color: var(--c-blue);   font-weight: 700; }
+.raci-a { background: rgba(163,45,45,.1);  color: var(--c-red);    font-weight: 700; }
+.raci-c { background: rgba(186,117,23,.1); color: var(--c-amber);  font-weight: 500; }
+.raci-i { background: var(--surface2);     color: var(--muted);    font-weight: 400; }
+
+/* ═══ MADUREZ ═══ */
+.mat-q { display: flex; gap: .65rem; padding: .55rem 0; border-bottom: 0.5px solid var(--border); cursor: pointer; font-size: 12px; align-items: flex-start; }
+.mat-q:last-child { border-bottom: none; }
+.mat-radio { width: 18px; height: 18px; border-radius: 50%; border: 1.5px solid var(--border2); flex-shrink: 0; margin-top: 1px; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 700; color: transparent; transition: all .15s; }
+
+/* ═══ VERSION TIMELINE ═══ */
+.ver-row { display: grid; grid-template-columns: 36px 1fr; gap: .65rem; margin-bottom: .35rem; position: relative; }
+.ver-line { position: absolute; left: 17px; top: 28px; bottom: -6px; width: 1.5px; background: var(--border2); }
+.ver-row:last-child .ver-line { display: none; }
+.ver-dot { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; margin-top: 5px; }
+.ver-content { padding: .45rem .75rem; background: var(--surface); border: 0.5px solid var(--border); border-radius: var(--radius); }
+.ver-tag { font-family: var(--font-mono); font-size: 11px; color: var(--c-blue); margin-bottom: 2px; }
+.ver-title { font-size: 12px; font-weight: 500; margin-bottom: 1px; }
+.ver-meta  { font-size: 10px; color: var(--muted); }
+
+/* ═══ COLLAPSIBLE SECTIONS ═══ */
+.collapse-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: .65rem .9rem;
+  background: var(--surface);
+  border: 0.5px solid var(--border);
+  border-radius: var(--radius);
+  cursor: pointer;
+  margin-bottom: .35rem;
+  transition: background .15s;
+}
+.collapse-header:hover { background: var(--surface2); }
+.collapse-body { display: none; padding: .8rem 1rem; border: 0.5px solid var(--border); border-top: none; border-radius: 0 0 var(--radius) var(--radius); margin-bottom: .35rem; }
+.collapse-body.open { display: block; }
+.collapse-arrow { font-size: 11px; color: var(--faint); transition: transform .2s; }
+.collapse-arrow.open { transform: rotate(90deg); }
+
+/* ═══ MOBILE HAMBURGER ═══ */
+.hamburger {
+  display: none;
+  position: fixed; top: 14px; left: 14px; z-index: 200;
+  width: 36px; height: 36px;
+  background: var(--surface);
+  border: 0.5px solid var(--border2);
+  border-radius: var(--radius);
+  cursor: pointer;
+  align-items: center; justify-content: center;
+  flex-direction: column; gap: 4px;
+}
+.hamburger span { width: 16px; height: 1.5px; background: var(--text); border-radius: 1px; }
+
+@media (max-width: 860px) {
+  .app { grid-template-columns: 1fr; }
+  .sidebar { left: -280px; transition: left .25s; }
+  .sidebar.open { left: 0; box-shadow: var(--shadow); }
+  .main { margin-left: 0; }
+  .hamburger { display: flex; }
+  .page { padding: 1.5rem 1.2rem; padding-top: 4rem; }
+  .g2,.g3,.g4,.g5 { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<button class="hamburger" id="ham" onclick="document.getElementById('sidebar').classList.toggle('open')">
+  <span></span><span></span><span></span>
+</button>
+
+<div class="app">
+<!-- ══════════════ SIDEBAR ══════════════ -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-brand">
+    <div class="brand-eyebrow">Framework Metodológico Digital · v2.0</div>
+    <div class="brand-title">Descubrimiento y levantamiento de requisitos</div>
+    <div class="brand-sub">IEEE 29148 · BABOK v3 · IREB · ISO 25010</div>
+  </div>
+
+  <nav class="sidebar-nav">
+    <div class="nav-group">
+      <span class="nav-label">Inicio</span>
+      <button class="nav-item active" onclick="nav('home')"><div class="nav-pip" style="background:var(--c-gray)"></div>Dashboard ejecutivo</button>
+    </div>
+    <div class="nav-group">
+      <span class="nav-label">Capa estratégica</span>
+      <button class="nav-item" onclick="nav('principios')"><div class="nav-pip" style="background:var(--c-purple)"></div>Principios del framework</button>
+      <button class="nav-item" onclick="nav('gobernanza')"><div class="nav-pip" style="background:var(--c-purple)"></div>Gobernanza — puntos de control</button>
+    </div>
+    <div class="nav-group">
+      <span class="nav-label">Fase 1 · Elicitación</span>
+      <button class="nav-item" onclick="nav('eli-overview')"><div class="nav-pip" style="background:var(--c-teal)"></div>Visión general</button>
+      <button class="nav-item" onclick="nav('eli-stakeholders')"><div class="nav-pip" style="background:var(--c-teal)"></div>Mapa de stakeholders</button>
+      <button class="nav-item" onclick="nav('eli-tecnicas')"><div class="nav-pip" style="background:var(--c-teal)"></div>Técnicas <span class="nav-count">5</span></button>
+      <button class="nav-item" onclick="nav('eli-plantillas')"><div class="nav-pip" style="background:var(--c-teal)"></div>Plantillas de sesión</button>
+    </div>
+    <div class="nav-group">
+      <span class="nav-label">Fase 2 · Análisis</span>
+      <button class="nav-item" onclick="nav('ana-gap')"><div class="nav-pip" style="background:var(--c-purple)"></div>GAP Analysis</button>
+      <button class="nav-item" onclick="nav('ana-priorizacion')"><div class="nav-pip" style="background:var(--c-purple)"></div>MoSCoW · Kano</button>
+    </div>
+    <div class="nav-group">
+      <span class="nav-label">Fase 3 · Especificación</span>
+      <button class="nav-item" onclick="nav('srs-editor')"><div class="nav-pip" style="background:var(--c-blue)"></div>Editor SRS <span class="nav-count">12 RF</span></button>
+      <button class="nav-item" onclick="nav('srs-gherkin')"><div class="nav-pip" style="background:var(--c-blue)"></div>Constructor Gherkin</button>
+      <button class="nav-item" onclick="nav('srs-detector')"><div class="nav-pip" style="background:var(--c-blue)"></div>Detector de ambigüedad</button>
+      <button class="nav-item" onclick="nav('srs-glosario')"><div class="nav-pip" style="background:var(--c-blue)"></div>Glosario técnico</button>
+    </div>
+    <div class="nav-group">
+      <span class="nav-label">Fase 4 · Validación</span>
+      <button class="nav-item" onclick="nav('val-tecnicas')"><div class="nav-pip" style="background:var(--c-green)"></div>Técnicas de revisión</button>
+      <button class="nav-item" onclick="nav('val-log')"><div class="nav-pip" style="background:var(--c-green)"></div>Log de defectos</button>
+      <button class="nav-item" onclick="nav('val-uat')"><div class="nav-pip" style="background:var(--c-green)"></div>Simulador UAT</button>
+      <button class="nav-item" onclick="nav('val-baseline')"><div class="nav-pip" style="background:var(--c-green)"></div>Aprobación baseline</button>
+    </div>
+    <div class="nav-group">
+      <span class="nav-label">Fase 5 · Gestión cambios</span>
+      <button class="nav-item" onclick="nav('ccb-cr')"><div class="nav-pip" style="background:var(--c-amber)"></div>Simulador Change Request</button>
+      <button class="nav-item" onclick="nav('ccb-backlog')"><div class="nav-pip" style="background:var(--c-amber)"></div>Backlog de CRs</button>
+      <button class="nav-item" onclick="nav('ccb-versiones')"><div class="nav-pip" style="background:var(--c-amber)"></div>Control de versiones</button>
+    </div>
+    <div class="nav-group">
+      <span class="nav-label">Capa de ejecución</span>
+      <button class="nav-item" onclick="nav('roles-raci')"><div class="nav-pip" style="background:var(--c-gray)"></div>Roles y RACI</button>
+    </div>
+    <div class="nav-group">
+      <span class="nav-label">Capa de evaluación</span>
+      <button class="nav-item" onclick="nav('calidad')"><div class="nav-pip" style="background:var(--c-gray)"></div>Criterios de calidad</button>
+    </div>
+    <div class="nav-group">
+      <span class="nav-label">Cierre</span>
+      <button class="nav-item" onclick="nav('madurez')"><div class="nav-pip" style="background:var(--c-gray)"></div>Evaluador de madurez</button>
+      <button class="nav-item" onclick="nav('roadmap')"><div class="nav-pip" style="background:var(--c-gray)"></div>Hoja de ruta</button>
+    </div>
+  </nav>
+
+  <div class="sidebar-footer">
+    ISO/IEC/IEEE 29148:2018 · IEEE 1028:2008<br>
+    BABOK v3 · IREB CPRE · ISO/IEC 25010:2023<br>
+    ISO/IEC 12207:2017 · ISO/IEC 38500:2024
+  </div>
+</aside>
+
+<!-- ══════════════ MAIN ══════════════ -->
+<main class="main" id="mainContent"></main>
+</div>
+
+<script>
+/* ════════════════════════════════════════
+   NAVIGATION ENGINE
+════════════════════════════════════════ */
+function nav(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  const page = document.getElementById('page-' + id);
+  if (page) page.classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n => {
+    if (n.getAttribute('onclick') && n.getAttribute('onclick').includes("'" + id + "'"))
+      n.classList.add('active');
+  });
+  document.getElementById('sidebar').classList.remove('open');
+  window.scrollTo(0, 0);
+}
+
+function tabSel(prefix, idx, btn) {
+  const nav = btn.parentElement;
+  nav.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('on'));
+  btn.classList.add('on');
+  let i = 0, el = document.getElementById(prefix + '-' + i);
+  while (el) { el.classList.remove('on'); i++; el = document.getElementById(prefix + '-' + i); }
+  document.getElementById(prefix + '-' + idx).classList.add('on');
+}
+
+function toggleCollapse(id) {
+  const body = document.getElementById('cb-' + id);
+  const arrow = document.getElementById('ca-' + id);
+  body.classList.toggle('open');
+  arrow.classList.toggle('open');
+}
+
+/* ════════════════════════════════════════
+   PAGE BUILDER — renders all pages into DOM
+════════════════════════════════════════ */
+const main = document.getElementById('mainContent');
+
+/* ── PAGE REGISTRY ── */
+const pages = {};
+function reg(id, fn) { pages[id] = fn; }
+
+function buildAll() {
+  Object.entries(pages).forEach(([id, fn]) => {
+    const div = document.createElement('div');
+    div.className = 'page';
+    div.id = 'page-' + id;
+    div.innerHTML = fn();
+    main.appendChild(div);
+  });
+  // Init first page active
+  document.getElementById('page-home').classList.add('active');
+  // Run post-render inits
+  initDetector();
+  initGherkin();
+  initChecklists();
+  initUAT();
+  initMaturity();
+}
+
+/* ════════════════════════════════════════
+   DATA
+════════════════════════════════════════ */
+const RF = [
+  {id:'RF-001',title:'Autenticación SSO corporativo',pri:'Must',desc:'El sistema DEBE permitir inicio de sesión mediante el directorio corporativo (AD/LDAP) usando OAuth 2.0 / SAML 2.0. Las sesiones DEBEN expirar tras 8 horas de inactividad y generar registro de auditoría.',given:'el usuario tiene cuenta activa en el directorio',when:'ingresa sus credenciales SSO correctas',then:'el sistema autentica y redirige al dashboard en < 3 segundos',and:'la sesión queda registrada en el log inmutable'},
+  {id:'RF-002',title:'Formulario de solicitud digital',pri:'Must',desc:'El sistema DEBE proveer formulario digital con validación en tiempo real campo por campo. DEBE soportar guardado de borrador automático cada 60 segundos.',given:'el cliente accede al portal de solicitudes',when:'completa campos del formulario',then:'cada campo es validado en < 500ms con mensaje de error descriptivo'},
+  {id:'RF-003',title:'Consulta automática score crediticio',pri:'Must',desc:'El sistema DEBE consultar automáticamente el score crediticio del solicitante vía API de Datacrédito al recibir la solicitud, en menos de 5 segundos.',given:'la solicitud fue recibida correctamente',when:'el sistema inicia el procesamiento',then:'el score es consultado y almacenado en el expediente en < 5 segundos'},
+  {id:'RF-004',title:'Motor de decisión automática',pri:'Must',desc:'El sistema DEBE aplicar reglas de negocio configurables para emitir APROBADO, RECHAZADO o ESCALADO. Las reglas DEBEN configurarse sin desplegar código.',given:'el score y datos financieros están disponibles',when:'el motor aplica las reglas de decisión',then:'se emite decisión con código de resultado y trazabilidad en < 2 segundos'},
+  {id:'RF-005',title:'Notificación multicanal',pri:'Must',desc:'El sistema DEBE notificar el resultado por email, SMS y push en menos de 30 segundos. En caso de rechazo incluye código de motivo estandarizado.',given:'la decisión ha sido emitida',when:'transcurren menos de 30 segundos',then:'el cliente recibe notificación por todos sus canales activos'},
+  {id:'RF-006',title:'Dashboard de KPIs en tiempo real',pri:'Must',desc:'El sistema DEBE mostrar KPIs actualizados cada 5 minutos. Filtros por período, analista y producto.',given:'el usuario con rol Analista o Gerente accede al portal',when:'navega a la pantalla de dashboard',then:'visualiza KPIs actualizados en < 3 segundos'},
+  {id:'RNF-001',title:'Tiempo de respuesta del sistema',pri:'Must',desc:'El 95% de todas las solicitudes HTTP DEBEN tener tiempo de respuesta < 3 segundos bajo 500 usuarios concurrentes. El P99 no DEBE superar 8 segundos.',given:'el sistema está bajo carga de 500 usuarios concurrentes',when:'se ejecuta test de carga con Gatling durante 30 min',then:'P95 ≤ 3s y P99 ≤ 8s medido en el APM'},
+];
+
+const DEFECTS = [
+  {id:'DEF-001',sec:'RF-004',sev:'Bloqueante',desc:'El requisito no especifica los umbrales exactos del score para APROBADO / RECHAZADO / ESCALADO.',asig:'BA',est:'Abierto',impacto:'El motor de decisión no puede implementarse sin estos valores',res:''},
+  {id:'DEF-002',sec:'RNF-003',sev:'Bloqueante',desc:'El requisito de seguridad especifica "alta seguridad" sin citar estándar (NIST, ISO 27001).',asig:'BA + Arq.',est:'En revisión',impacto:'Sin especificación el equipo puede implementar controles insuficientes',res:'Pendiente reunión con CISO'},
+  {id:'DEF-003',sec:'RF-002',sev:'Mayor',desc:'El formulario no indica cuáles campos son obligatorios vs. opcionales.',asig:'BA',est:'Resuelto',impacto:'UX indecisa — diseño bloqueado',res:'Se añadió tabla de campos con tipo y obligatoriedad en v1.1'},
+  {id:'DEF-004',sec:'RNF-001',sev:'Mayor',desc:'El requisito de rendimiento no especifica la carga de usuarios concurrentes.',asig:'BA + QA',est:'Resuelto',impacto:'Plan de pruebas de rendimiento bloqueado',res:'Añadido: "bajo 500 VU concurrentes durante 30 min"'},
+  {id:'DEF-005',sec:'RF-012',sev:'Mayor',desc:'El flujo de escalación al comité no define el quórum mínimo de miembros.',asig:'BA',est:'Abierto',impacto:'Motor de flujo no puede validar si la votación es válida',res:''},
+  {id:'DEF-006',sec:'Glosario',sev:'Informativo',desc:'El término "Expediente digital" aparece 11 veces pero no está en el glosario.',asig:'BA',est:'Resuelto',impacto:'Ambigüedad de concepto entre stakeholders',res:'Término añadido al glosario en v1.1'},
+];
+
+const CR_DATA = [
+  {id:'CR-001',titulo:'Modificar umbral score de aprobación',origen:'Gerencia de Riesgo',fecha:'2025-04-10',tipo:'Modificación de regla',prioridad:'Alta',estado:'En análisis',desc:'El área de Riesgo solicita cambiar el umbral mínimo de score crediticio para aprobación automática de 650 a 680 puntos, luego de analizar la tasa de morosidad del Q1.',just:'La tasa de morosidad en créditos con score 650–679 fue del 18.5% en Q1, superando el límite del 12%. El ajuste reduciría la exposición en ~COP 4.2B anuales.',rfAfect:['RF-004','RF-002 (mensaje de rechazo)'],impactos:[{tipo:'Req.',id:'RF-004',desc:'Cambiar umbral de 650 a 680',sev:'alto'},{tipo:'Pruebas',id:'UAT-004',desc:'Re-ejecutar casos con nuevo umbral',sev:'med'}],esfuerzo:'2 días',costo:'COP 1.2M',riesgo:'Bajo',urgencia:'Alta',alcance:'Bajo',nivel:'Gerente de proyecto',rec:'Aprobar — cambio de alto valor, bajo riesgo.',dec:null},
+  {id:'CR-002',titulo:'Módulo de firma digital biométrica',origen:'VP Digital',fecha:'2025-04-12',tipo:'Nuevo requisito funcional',prioridad:'Media',estado:'Pendiente CCB',desc:'Se solicita agregar un módulo de firma biométrica para que los clientes aprobados acepten el crédito digitalmente, eliminando la necesidad de acudir a una sucursal.',just:'Reducir la tasa de abandono post-aprobación (actualmente 23%). Valor estimado: COP 12B adicionales en créditos desembolsados.',rfAfect:['RF-005','RF-009','RF-NUEVO-001'],impactos:[{tipo:'Nuevo RF',id:'RF-NUEVO-001',desc:'Módulo de firma biométrica completo',sev:'alto'},{tipo:'Cronograma',id:'Fase 1',desc:'Impacto: +6 semanas en el MVP',sev:'alto'},{tipo:'Presupuesto',id:'Budget',desc:'Costo adicional: COP 180M',sev:'alto'}],esfuerzo:'6 semanas',costo:'COP 180M',riesgo:'Alto',urgencia:'Media',alcance:'Alto',nivel:'CCB ordinario + Sponsor',rec:'Diferir a v2.0 — impacto alto en cronograma y presupuesto del MVP.',dec:null},
+  {id:'CR-003',titulo:'Extender sesión a 12 horas',origen:'Analistas de crédito',fecha:'2025-04-14',tipo:'Corrección de especificación',prioridad:'Alta',estado:'Aprobado',desc:'Los analistas trabajan turnos de 10 horas. La sesión de 8 horas los desconecta durante el turno, perdiendo formularios en progreso.',just:'Se registraron 47 incidencias de pérdida de datos en 3 semanas de pruebas UAT.',rfAfect:['RF-001'],impactos:[{tipo:'Req.',id:'RF-001',desc:'Cambiar tiempo de sesión de 8h a 12h',sev:'bajo'},{tipo:'RNF',id:'RNF-003',desc:'Validar con equipo de seguridad',sev:'med'}],esfuerzo:'0.5 días',costo:'COP 0.3M',riesgo:'Bajo',urgencia:'Alta',alcance:'Bajo',nivel:'Gerente de proyecto',rec:'Aprobado — PM firmó el 2025-04-15.',dec:'aprobado'},
+];
+
+const GLOSARIO = [
+  {name:'Baseline',def:'Versión congelada y aprobada de un artefacto. Todo cambio requiere aprobación del CCB.',cat:'Proceso'},
+  {name:'BDD',def:'Behaviour Driven Development — metodología que define comportamiento con escenarios Gherkin ejecutables.',cat:'Metodología'},
+  {name:'CCB',def:'Change Control Board — comité que aprueba o rechaza solicitudes de cambio al baseline.',cat:'Proceso'},
+  {name:'Gherkin',def:'Lenguaje de especificación estructurado en bloques Given-When-Then, legible por humanos y máquinas.',cat:'Metodología'},
+  {name:'MoSCoW',def:'Técnica de priorización: Must / Should / Could / Won\'t have en esta versión.',cat:'Metodología'},
+  {name:'RACI',def:'Matriz de responsabilidades: Responsable, Aprobador, Consultado, Informado.',cat:'Proceso'},
+  {name:'RPO',def:'Recovery Point Objective — máxima pérdida de datos admisible en un fallo, expresada en tiempo.',cat:'Técnico'},
+  {name:'RTO',def:'Recovery Time Objective — tiempo máximo para restaurar el servicio tras una interrupción.',cat:'Técnico'},
+  {name:'RTM',def:'Requirements Traceability Matrix — matriz que vincula cada requisito con su origen, diseño y pruebas.',cat:'Artefacto'},
+  {name:'SLA',def:'Service Level Agreement — acuerdo formal que define métricas de calidad del servicio.',cat:'Control'},
+  {name:'SRS',def:'Software Requirements Specification — documento formal IEEE 29148 que describe el sistema.',cat:'Artefacto'},
+  {name:'Trazabilidad',def:'Capacidad de vincular cada requisito con su origen, derivados (diseño, código) y sus pruebas.',cat:'Proceso'},
+  {name:'UAT',def:'User Acceptance Testing — pruebas de aceptación donde los usuarios validan que el sistema cumple sus necesidades.',cat:'Proceso'},
+  {name:'BPMN',def:'Business Process Model and Notation — estándar ISO 19510 para modelar procesos de negocio gráficamente.',cat:'Metodología'},
+  {name:'Score crediticio',def:'Puntuación 0–999 del historial crediticio calculada por burós con modelos estadísticos.',cat:'Dominio'},
+  {name:'SMART',def:'Criterio de calidad de requisitos: Específico, Medible, Alcanzable, Relevante, Temporal.',cat:'Calidad'},
+];
+
+const AMBIG_WORDS = [
+  {w:'rápido',sev:'high',msg:'Sin métrica de tiempo',fix:'Reemplazar con: "en menos de X segundos"'},
+  {w:'rápida',sev:'high',msg:'Sin métrica de tiempo',fix:'Usar tiempo concreto'},
+  {w:'fácil',sev:'high',msg:'Criterio subjetivo',fix:'"El usuario completa en < 2 pasos"'},
+  {w:'amigable',sev:'high',msg:'Sin criterio medible',fix:'WCAG 2.1 AA o tasa de error < 5%'},
+  {w:'adecuado',sev:'high',msg:'Término vago',fix:'Definir el criterio exacto'},
+  {w:'apropiado',sev:'high',msg:'Criterio no definido',fix:'Especificar qué lo hace apropiado'},
+  {w:'eficiente',sev:'medium',msg:'Sin métrica de eficiencia',fix:'N recursos para Y operaciones'},
+  {w:'suficiente',sev:'medium',msg:'Término relativo',fix:'Añadir cantidad concreta'},
+  {w:'robusto',sev:'medium',msg:'Sin criterio de robustez',fix:'Especificar disponibilidad o MTBF'},
+  {w:'etc',sev:'high',msg:'Lista incompleta',fix:'Enumerar todos los elementos'},
+  {w:'entre otros',sev:'high',msg:'Lista abierta',fix:'Listar todos los casos cubiertos'},
+  {w:'deberá',sev:'low',msg:'Modal incorrecto — usar DEBE (IEEE 29148)',fix:'Reemplazar con "DEBE"'},
+  {w:'podría',sev:'medium',msg:'Modal demasiado débil',fix:'DEBE para obligatorio, DEBERÍA para recomendado'},
+  {w:'varios',sev:'low',msg:'Cantidad indeterminada',fix:'Número exacto'},
+  {w:'muchos',sev:'low',msg:'Cantidad indeterminada',fix:'Usar número concreto'},
+  {w:'proporcionar',sev:'low',msg:'Verbo vago',fix:'Usar verbo específico: mostrar, calcular, enviar'},
+  {w:'manejar',sev:'low',msg:'Verbo vago',fix:'Especificar: procesar, validar, almacenar'},
+];
+
+const UAT_CASES = [
+  {id:'UAT-001',rfid:'RF-001',prio:'Crítico',title:'Login exitoso con SSO corporativo',given:'el analista tiene cuenta activa en el AD corporativo',when:'ingresa sus credenciales SSO correctas',then:'es redirigido al dashboard en < 3s y la sesión queda en el log'},
+  {id:'UAT-002',rfid:'RF-002',prio:'Crítico',title:'Envío de solicitud completa',given:'el cliente ha completado todos los campos obligatorios',when:'hace clic en Enviar solicitud',then:'aparece el número de radicado y recibe email de confirmación en < 60 segundos'},
+  {id:'UAT-003',rfid:'RF-003',prio:'Crítico',title:'Score consultado automáticamente',given:'la solicitud fue enviada correctamente',when:'el sistema la procesa',then:'el score de Datacrédito aparece en el expediente en < 5 segundos'},
+  {id:'UAT-004',rfid:'RF-004',prio:'Crítico',title:'Decisión automática — aprobación',given:'la solicitud tiene score 720 y ratio D/I 0.30',when:'el motor aplica las reglas',then:'el estado cambia a APROBADO con código RES-001'},
+  {id:'UAT-005',rfid:'RF-004',prio:'Alto',title:'Decisión automática — escalación',given:'la solicitud tiene score 630 y ratio D/I 0.38',when:'el motor aplica las reglas',then:'el estado cambia a ESCALADO y aparece en la cola del comité'},
+  {id:'UAT-006',rfid:'RF-005',prio:'Alto',title:'Notificación multicanal al cliente',given:'la decisión fue emitida',when:'transcurren menos de 30 segundos',then:'el cliente recibe email y SMS con el resultado'},
+  {id:'UAT-007',rfid:'RF-006',prio:'Alto',title:'Dashboard KPIs visible para gerente',given:'el gerente inicia sesión con su rol',when:'navega al dashboard principal',then:'los KPIs del día se cargan en < 3 segundos'},
+  {id:'UAT-008',rfid:'RNF-001',prio:'Medio',title:'Rendimiento bajo carga P95',given:'el sistema está bajo 500 usuarios concurrentes',when:'se ejecuta el test de carga con Gatling 30 min',then:'el P95 de tiempo de respuesta es ≤ 3 segundos'},
+];
+
+const MATURITY_PHASES = [
+  {name:'Fase 1 — Elicitación',color:'var(--c-teal)',qs:[
+    {t:'Usamos técnicas formales (entrevistas, talleres JAD) con guías documentadas',w:3},
+    {t:'Identificamos y clasificamos stakeholders con mapa influencia/interés antes de elicitar',w:3},
+    {t:'Registramos resultados en minutas estructuradas con IDs de requisito desde el inicio',w:2},
+    {t:'Tenemos plan de elicitación aprobado antes de comenzar las sesiones',w:2},
+    {t:'Hacemos sesiones de confirmación para validar lo capturado con los stakeholders',w:3},
+  ]},
+  {name:'Fase 2 — Análisis',color:'var(--c-purple)',qs:[
+    {t:'Modelamos procesos de negocio con BPMN antes de especificar requisitos',w:3},
+    {t:'Realizamos análisis de brechas As-Is vs. To-Be documentado',w:3},
+    {t:'Priorizamos requisitos con MoSCoW u otra técnica formal con el PO',w:2},
+    {t:'Producimos diagrama de contexto que delimita el sistema explícitamente',w:2},
+    {t:'Tenemos criterios de aceptación o métricas para cada requisito desde el análisis',w:3},
+  ]},
+  {name:'Fase 3 — Especificación',color:'var(--c-blue)',qs:[
+    {t:'Usamos plantilla de SRS basada en IEEE 29148 o equivalente formal',w:3},
+    {t:'Cada requisito tiene ID único, modal (DEBE/SHOULD) y criterio de verificación',w:3},
+    {t:'Usamos Gherkin/BDD para los criterios de aceptación de requisitos funcionales',w:2},
+    {t:'Mantenemos glosario técnico del dominio actualizado en el SRS',w:2},
+    {t:'El SRS tiene control de versiones y registro de cambios documentado',w:2},
+  ]},
+  {name:'Fase 4 — Validación',color:'var(--c-green)',qs:[
+    {t:'Realizamos revisiones formales (walkthrough o inspección) con personas distintas al autor',w:3},
+    {t:'Tenemos log de defectos con severidades y propietario para cada revisión',w:3},
+    {t:'El SRS es aprobado formalmente con acta firmada antes de comenzar el desarrollo',w:3},
+    {t:'Realizamos UAT con usuarios reales usando casos de prueba derivados del SRS',w:3},
+    {t:'Medimos la densidad de defectos por revisión y la usamos para mejorar el proceso',w:2},
+  ]},
+  {name:'Fase 5 — Gestión de cambios',color:'var(--c-amber)',qs:[
+    {t:'Existe proceso formal de Change Request con formulario y campos obligatorios',w:3},
+    {t:'Todo cambio al SRS baseline pasa por análisis de impacto antes de aprobarse',w:3},
+    {t:'Tenemos un CCB con roles y cadencia de reuniones definidos',w:3},
+    {t:'El SRS se re-versiona con cada cambio aprobado e implementado',w:2},
+    {t:'Los CR rechazados o diferidos quedan documentados con su rationale',w:2},
+  ]},
+];
+
+const VERSIONS = [
+  {tag:'v1.2',date:'2025-04-15',title:'Correcciones post-revisión stakeholders',crs:['CR-003'],changes:['RF-001: sesión extendida a 12h','Glosario actualizado'],color:'var(--c-blue)',current:true},
+  {tag:'v1.1',date:'2025-04-01',title:'Resolución defectos inspección formal',crs:[],changes:['RF-002: tabla de campos obligatorios añadida','RNF-001: carga 500 VU especificada'],color:'var(--c-purple)',current:false},
+  {tag:'v1.0',date:'2025-03-20',title:'Baseline aprobado y firmado',crs:[],changes:['Todas las secciones completas','RF-001 a RF-012 documentados'],color:'var(--c-green)',current:false},
+  {tag:'v0.5',date:'2025-03-01',title:'Primer borrador — RF principales',crs:[],changes:['RF-001 a RF-008 primer borrador'],color:'var(--c-gray)',current:false},
+];
+
+/* ════════════════════════════════════════
+   PAGE: HOME
+════════════════════════════════════════ */
+reg('home', () => `
+<div class="page-header">
+  <div class="page-eyebrow" style="color:var(--c-teal)">Framework Metodológico Digital · v2.0</div>
+  <h1 class="page-title">Descubrimiento y levantamiento de requisitos</h1>
+  <p class="page-desc">Sistema integrado de 5 fases para optimizar el proceso de ingeniería de requisitos en proyectos tecnológicos. Basado en estándares internacionales y diseñado como aporte de investigación de maestría.</p>
+  <div class="std-row">
+    <span class="std-pill">IEEE 29148:2018</span>
+    <span class="std-pill">IEEE 1028:2008</span>
+    <span class="std-pill">BABOK v3</span>
+    <span class="std-pill">IREB CPRE</span>
+    <span class="std-pill">ISO/IEC 25010:2023</span>
+    <span class="std-pill">ISO/IEC 12207:2017</span>
+    <span class="std-pill">ISO/IEC 38500:2024</span>
+  </div>
+</div>
+
+<div class="kpi-grid">
+  <div class="kpi"><div class="kpi-num" style="color:var(--c-teal)">5</div><div class="kpi-label">Fases</div><div class="kpi-sub">del ciclo de vida</div></div>
+  <div class="kpi"><div class="kpi-num" style="color:var(--c-purple)">4</div><div class="kpi-label">Capas</div><div class="kpi-sub">arquitectura del framework</div></div>
+  <div class="kpi"><div class="kpi-num" style="color:var(--c-blue)">7</div><div class="kpi-label">Estándares</div><div class="kpi-sub">internacionales</div></div>
+  <div class="kpi"><div class="kpi-num" style="color:var(--c-amber)">18</div><div class="kpi-label">Técnicas</div><div class="kpi-sub">documentadas</div></div>
+  <div class="kpi"><div class="kpi-num" style="color:var(--c-green)">30</div><div class="kpi-label">Criterios</div><div class="kpi-sub">de madurez</div></div>
+  <div class="kpi"><div class="kpi-num" style="color:var(--c-gray)">24</div><div class="kpi-label">Artefactos</div><div class="kpi-sub">producidos</div></div>
+</div>
+
+<!-- Las 5 fases -->
+<h3 style="font-family:var(--font-serif);font-size:14px;font-weight:500;margin-bottom:.8rem;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;font-size:11px">Las cinco fases — haz clic para explorar</h3>
+<div class="g5" style="margin-bottom:1.5rem">
+  <div class="phase-card" style="border-color:rgba(29,158,117,.3);background:var(--c-teal-l)" onclick="nav('eli-overview')">
+    <div class="phase-label" style="color:var(--c-teal-d)">Fase 1</div>
+    <div class="phase-name" style="color:var(--c-teal-d)">Elicitación</div>
+    <div class="phase-items" style="color:var(--c-green)">Entrevistas · JAD<br>Observación<br>Prototipado<br>BABOK · IREB</div>
+  </div>
+  <div class="phase-card" style="border-color:rgba(83,74,183,.3);background:var(--c-purple-l)" onclick="nav('ana-gap')">
+    <div class="phase-label" style="color:var(--c-purple-d)">Fase 2</div>
+    <div class="phase-name" style="color:var(--c-purple-d)">Análisis</div>
+    <div class="phase-items" style="color:var(--c-purple)">BPMN · GAP<br>Casos de uso<br>MoSCoW · Kano<br>ISO 19510</div>
+  </div>
+  <div class="phase-card" style="border-color:rgba(24,95,165,.3);background:var(--c-blue-l)" onclick="nav('srs-editor')">
+    <div class="phase-label" style="color:var(--c-blue-d)">Fase 3</div>
+    <div class="phase-name" style="color:var(--c-blue-d)">Especificación</div>
+    <div class="phase-items" style="color:var(--c-blue)">SRS IEEE 29148<br>Gherkin · BDD<br>RNF ISO 25010<br>Glosario</div>
+  </div>
+  <div class="phase-card" style="border-color:rgba(15,110,86,.3);background:var(--c-green-l)" onclick="nav('val-tecnicas')">
+    <div class="phase-label" style="color:var(--c-teal-d)">Fase 4</div>
+    <div class="phase-name" style="color:var(--c-teal-d)">Validación</div>
+    <div class="phase-items" style="color:var(--c-green)">Walkthrough<br>Fagan · UAT<br>Baseline<br>IEEE 1028</div>
+  </div>
+  <div class="phase-card" style="border-color:rgba(186,117,23,.3);background:var(--c-amber-l)" onclick="nav('ccb-cr')">
+    <div class="phase-label" style="color:var(--c-amber-d)">Transversal</div>
+    <div class="phase-name" style="color:var(--c-amber-d)">Gestión cambios</div>
+    <div class="phase-items" style="color:var(--c-amber)">Change Request<br>CCB formal<br>SRS versionado<br>ISO 12207</div>
+  </div>
+</div>
+
+<!-- Principios -->
+<div class="card" style="margin-bottom:1rem">
+  <div class="card-title">5 principios fundacionales</div>
+  <div class="dot-list">
+    <div class="dot-item"><div class="dot" style="background:var(--c-teal)"></div><div><strong style="font-weight:500">Trazabilidad bidireccional</strong> — cada requisito vincula la necesidad de negocio con el código y su prueba de verificación</div></div>
+    <div class="dot-item"><div class="dot" style="background:var(--c-purple)"></div><div><strong style="font-weight:500">Calidad antes que cantidad</strong> — 10 requisitos bien escritos valen más que 50 ambiguos que generan retrabajo</div></div>
+    <div class="dot-item"><div class="dot" style="background:var(--c-blue)"></div><div><strong style="font-weight:500">Verificabilidad como filtro</strong> — si un requisito no puede probarse, no existe como requisito</div></div>
+    <div class="dot-item"><div class="dot" style="background:var(--c-amber)"></div><div><strong style="font-weight:500">Control de cambios siempre activo</strong> — ningún cambio al baseline sin análisis de impacto y aprobación formal</div></div>
+    <div class="dot-item"><div class="dot" style="background:var(--c-green)"></div><div><strong style="font-weight:500">Stakeholders como fuente primaria</strong> — el analista facilita y documenta; nunca asume ni inventa requisitos</div></div>
+  </div>
+</div>
+
+<!-- Flujo de artefactos -->
+<div class="card">
+  <div class="card-title">Flujo de artefactos entre fases</div>
+  <div style="display:flex;align-items:center;gap:.5rem;overflow-x:auto;padding:.5rem 0">
+    ${[{fase:'Elicitación',color:'var(--c-teal)',a1:'Minuta sesión',a2:'Mapa stakeholders'},{fase:'Análisis',color:'var(--c-purple)',a1:'BPMN To-Be',a2:'Matriz MoSCoW'},{fase:'Especificación',color:'var(--c-blue)',a1:'SRS v1.0',a2:'Gherkin · Glosario'},{fase:'Validación',color:'var(--c-green)',a1:'SRS aprobado',a2:'Log defectos'},{fase:'G. cambios',color:'var(--c-amber)',a1:'SRS versionado',a2:'CR log activo'}].map((f,i,arr) => `
+    <div style="background:var(--bg);border:0.5px solid var(--border);border-radius:var(--radius);padding:.65rem .85rem;text-align:center;min-width:110px;flex-shrink:0">
+      <div style="font-size:9px;font-weight:500;text-transform:uppercase;letter-spacing:.3px;color:${f.color};margin-bottom:.2rem">${f.fase}</div>
+      <div style="font-size:12px;font-weight:500;margin-bottom:.15rem">${f.a1}</div>
+      <div style="font-size:10px;color:var(--muted)">${f.a2}</div>
+    </div>${i < arr.length-1 ? '<div style="color:var(--faint);font-size:18px;flex-shrink:0">›</div>' : ''}`).join('')}
+  </div>
+</div>
+`);
+
+/* ════════════════════════════════════════
+   PAGE: PRINCIPIOS
+════════════════════════════════════════ */
+reg('principios', () => `
+<div class="page-header">
+  <div class="page-eyebrow" style="color:var(--c-purple)">● Capa estratégica</div>
+  <h1 class="page-title">Principios del framework</h1>
+  <p class="page-desc">Los seis principios rectores no son independientes entre sí. Los tres primeros —trazabilidad, verificabilidad y calidad mínima garantizada— definen los atributos que el proceso debe producir. Los tres siguientes —colaboración estructurada, adaptabilidad contextual y documentación útil— definen cómo debe operar para producirlos.</p>
+  <div class="std-row">
+    <span class="std-pill">ISO/IEC/IEEE 29148:2018</span>
+    <span class="std-pill">ISO/IEC 25010:2023</span>
+    <span class="std-pill">ISO 9241-210:2019</span>
+    <span class="std-pill">BABOK v3</span>
+  </div>
+</div>
+<div style="margin-bottom:.8rem;padding:.65rem 1rem;background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius);font-size:12px;color:var(--muted)">
+  Haz clic en cualquier principio para expandir su definición y referencias bibliográficas.
+</div>
+<div id="principios-list"></div>
+`);
+
+function initPrincipios() {
+  var el = document.getElementById('principios-list');
+  if (!el) return;
+  var data = [
+    {num:'P1',color:'#1D9E75',bg:'#E1F5EE',
+     nombre:'Trazabilidad de extremo a extremo',
+     resumen:'Todo requisito rastreable desde su origen en el descubrimiento hasta su verificación en pruebas.',
+     desc:'Establece que todo requisito debe poder rastrearse desde su origen en el descubrimiento del problema hasta su verificación en las pruebas de aceptación, incorporando la distinción de trazabilidad pre-RS (Pre-Requirements Specification) y trazabilidad post-RS (Post-Requirements Specification). La matriz de trazabilidad de requisitos (RTM) se inicia desde la Fase 1 del proceso y se mantiene como artefacto activo durante todo el ciclo de vida del producto.',
+     como:'La RTM vincula cada requisito con su stakeholder de origen, su historia de usuario, su criterio de aceptación Gherkin, su elemento de diseño y su caso de prueba. Ningún requisito puede cerrar el PC4 sin enlace completo en la RTM.',
+     refs:['Gotel & Finkelstein (1994) — distinción pre-RS / post-RS','ISO/IEC/IEEE 29148:2018 — atributos de trazabilidad exigidos','IEEE 1028:2008 — verificación de trazabilidad en revisiones formales']},
+    {num:'P2',color:'#185FA5',bg:'#E6F1FB',
+     nombre:'Verificabilidad',
+     resumen:'Cada requisito debe poder comprobarse objetivamente mediante prueba, inspección o análisis.',
+     desc:'Determina que cada requisito funcional y no funcional debe formularse de manera que su cumplimiento pueda ser objetivamente comprobado, apoyándose en criterios de aceptación testables en formato BDD/Gherkin. Este principio cierra la brecha entre la especificación y las pruebas de aceptación, identificada como uno de los cuellos de botella más recurrentes en la literatura revisada.',
+     como:'El detector de ambigüedad del framework identifica términos no verificables en tiempo real. Los criterios de aceptación en formato Gherkin (Given/When/Then) son el instrumento operacional. Un requisito que no puede expresarse en Gherkin no supera el checklist del PC3.',
+     refs:['North (2006) — Behaviour Driven Development','Hoy & Xu (2023) — criterios de aceptación testables','ISO/IEC/IEEE 29148:2018 §5.2.5 — verificabilidad como atributo obligatorio']},
+    {num:'P3',color:'#534AB7',bg:'#EEEDFE',
+     nombre:'Calidad mínima garantizada',
+     resumen:'Todo artefacto debe cumplir atributos de calidad verificables antes de avanzar a la siguiente fase.',
+     desc:'Exige que todo artefacto generado en el proceso cumpla con los siete atributos de calidad verificables: claridad, completitud, consistencia, corrección, necesidad, verificabilidad y trazabilidad, conforme a los criterios de la ISO/IEC/IEEE 29148:2018, operacionalizados mediante el modelo de calidad de la ISO/IEC 25010:2023 y evaluados a través del instrumento de checklist definido en el framework.',
+     como:'Los puntos de control PC3 y PC4 son las compuertas de enforcement de este principio. Ninguna fase puede comenzar sin que los artefactos anteriores hayan superado el checklist con los umbrales mínimos establecidos.',
+     refs:['ISO/IEC/IEEE 29148:2018 — criterios de calidad de requisitos','ISO/IEC 25010:2023 — modelo de calidad del producto software','IEEE 1028:2008 — inspección formal como mecanismo de verificación']},
+    {num:'P4',color:'#0F6E56',bg:'#EAF3DE',
+     nombre:'Colaboración estructurada',
+     resumen:'El descubrimiento de requisitos es un proceso social que requiere participación activa de todos los interesados.',
+     desc:'Fundamentado en que el descubrimiento de requerimientos es esencialmente un proceso social que requiere la participación activa y coordinada de todos los interesados del proyecto desde las etapas más tempranas. El framework formaliza esta colaboración a través del mapa de stakeholders, la matriz RACI, los cinco roles diferenciados y las técnicas de elicitación colaborativa de la Fase 1.',
+     como:'El mapa de influencia × interés define la estrategia de participación para cada stakeholder. La RACI establece quién tiene autoridad de aprobación en cada artefacto, evitando que la responsabilidad quede difusa entre varios actores.',
+     refs:['ISO 9241-210:2019 — diseño centrado en el ser humano','Franch et al. (2023) — prácticas estandarizadas de elicitación colaborativa','BABOK v3 §2 — elicitación y colaboración como área de conocimiento']},
+    {num:'P5',color:'#BA7517',bg:'#FAEEDA',
+     nombre:'Adaptabilidad contextual',
+     resumen:'El framework se ajusta al tamaño del proyecto y nivel de madurez sin sacrificar la calidad mínima.',
+     desc:'Establece que el framework debe poder ajustarse al tamaño del proyecto, al tipo de metodología adoptada (ágil, predictiva o híbrida) y al nivel de madurez organizacional sin sacrificar los criterios de calidad mínimos. En proyectos de alta complejidad o contextos regulados las cinco fases se aplican en su totalidad; en proyectos de menor escala algunas actividades pueden simplificarse sin abandonar los principios que las fundamentan.',
+     como:'El evaluador de madurez identifica el nivel actual del equipo. La hoja de ruta de implementación ofrece un plan de adopción progresiva en tres niveles, evitando que la implementación genere resistencia organizacional.',
+     refs:['Pujiharto et al. (2024) — flexibilidad y adaptación en IR orientada a Industria 5.0','ISO/IEC 12207:2017 §6 — adaptación del ciclo de vida del software','IREB CPRE — niveles de aplicación según contexto del proyecto']},
+    {num:'P6',color:'#5F5E5A',bg:'#F1EFE8',
+     nombre:'Documentación útil y trazable',
+     resumen:'Los artefactos existen porque un rol los necesita para decidir o actuar, no para cumplir un procedimiento.',
+     desc:'Orienta la generación de artefactos hacia la utilidad operativa, evitando la acumulación de documentación burocrática inservible que constituye uno de los problemas más frecuentes identificados en la literatura. Cada artefacto definido en el framework existe porque un rol específico lo necesita para tomar una decisión o ejecutar una actividad concreta, y su ausencia tiene consecuencias medibles en la calidad del proceso.',
+     como:'Los artefactos mínimos por fase están alineados con los criterios de salida de los puntos de control. Ningún artefacto aparece en la RACI sin un Accountable definido que responda por su calidad y completitud.',
+     refs:['Franch et al. (2023) — documentación excesiva como antipatrón recurrente','Mello & Fontoura (2022) — costo de la documentación innecesaria en proyectos ágiles','Mendoza (2020) — principio de documentación suficiente']},
+  ];
+
+  el.innerHTML = data.map(function(p) {
+    var refs = p.refs.map(function(r) {
+      return '<div style="display:flex;gap:6px;font-size:11px;color:var(--muted);padding:4px 0;border-bottom:0.5px solid var(--border)">'
+        + '<div style="width:5px;height:5px;border-radius:50%;background:'+p.color+';flex-shrink:0;margin-top:5px"></div>'
+        + r + '</div>';
+    }).join('');
+
+    return '<div style="margin-bottom:.4rem;border:0.5px solid var(--border);border-radius:12px;overflow:hidden">'
+      + '<div onclick="var b=document.getElementById(\'pb-'+p.num+'\');var a=document.getElementById(\'pa-'+p.num+'\');'
+        + 'var open=b.style.display===\'block\';b.style.display=open?\'none\':\'block\';a.style.transform=open?\'none\':\'rotate(90deg)\';" '
+        + 'style="display:grid;grid-template-columns:44px 1fr 28px;gap:.7rem;align-items:center;padding:.75rem 1rem;background:var(--surface);cursor:pointer">'
+        + '<div style="width:34px;height:34px;border-radius:50%;background:'+p.color+';display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;color:#fff">'
+        + p.num+'</div>'
+        + '<div>'
+          + '<div style="font-size:13px;font-weight:500;font-family:Lora,serif;color:var(--text)">'+p.nombre+'</div>'
+          + '<div style="font-size:11px;color:var(--muted);margin-top:1px">'+p.resumen+'</div>'
+        + '</div>'
+        + '<div id="pa-'+p.num+'" style="font-size:14px;color:var(--faint);transition:transform .2s;text-align:center">›</div>'
+      + '</div>'
+      + '<div id="pb-'+p.num+'" style="display:none;padding:1rem 1.2rem;border-top:0.5px solid var(--border);background:var(--bg)">'
+        + '<p style="font-size:13px;line-height:1.75;margin-bottom:.9rem;color:var(--text)">'+p.desc+'</p>'
+        + '<div style="background:'+p.bg+';border-radius:8px;padding:.7rem .9rem;margin-bottom:.9rem">'
+          + '<div style="font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.4px;color:'+p.color+';margin-bottom:.3rem">Cómo lo operacionaliza el framework</div>'
+          + '<div style="font-size:12px;line-height:1.65;color:var(--text)">'+p.como+'</div>'
+        + '</div>'
+        + '<div style="font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.4px;color:var(--muted);margin-bottom:.4rem">Referencias bibliográficas</div>'
+        + refs
+      + '</div>'
+    + '</div>';
+  }).join('');
+}
+
+
+/* ════════════════════════════════════════
+   PAGE: GOBERNANZA
+════════════════════════════════════════ */
+reg('gobernanza', () => `
+<div class="page-header">
+  <div class="page-eyebrow" style="color:var(--c-purple)">● Capa estratégica</div>
+  <h1 class="page-title">Gobernanza — puntos de control</h1>
+  <p class="page-desc">Los 4 puntos de control son compuertas de calidad formales ubicadas entre fases consecutivas. Ninguna fase puede comenzar sin que el punto de control anterior haya sido aprobado.</p>
+  <div class="std-row"><span class="std-pill">ISO/IEC 38500:2024</span><span class="std-pill">ISO/IEC 12207:2017</span><span class="std-pill">IEEE 1028:2008</span></div>
+</div>
+
+<div style="margin-bottom:1.2rem">
+  ${[
+    {num:'PC1',color:'var(--c-teal)',entre:'Fase 1 → Fase 2',aprueba:'PO + Analista',ready:['Stakeholders mapeados y clasificados por cuadrante','Objetivos de negocio documentados','Supuestos y restricciones registrados','Al menos un acta de sesión firmada'],done:['Mapa de stakeholders aprobado','Objetivos vinculados a estrategia organizacional','Actas firmadas por participantes clave']},
+    {num:'PC2',color:'var(--c-purple)',entre:'Fase 2 → Fase 3',aprueba:'PO + Rep. usuario',ready:['Backlog inicial con ≥ 80% de necesidades priorizadas','Análisis GAP completado','Necesidades clasificadas por tipo (F/NF)'],done:['PO/analista aprueba backlog','Usuarios confirman comprensión de necesidades','Modelos BPMN y de contexto revisados']},
+    {num:'PC3',color:'var(--c-blue)',entre:'Fase 3 → Fase 4',aprueba:'PO + QA + Arq./LT',ready:['Checklist de calidad aplicado','RTM inicial completa','HU con AC testables aprobados por QA','RNF con umbrales validados por Arq.'],done:['Umbrales de calidad alcanzados','Artefactos en repositorio digital','Firmas de aprobación formales']},
+    {num:'PC4',color:'var(--c-green)',entre:'Fase 4 → Fase 5',aprueba:'PO + QA + Arq./LT + Rep. usuario',ready:['Defectos críticos resueltos','UAT completado','RTM post-RS completa','Plan de validación cerrado'],done:['Baseline del SRS aprobado y publicado','Log de defectos cerrado','Equipo notificado','Control de cambios activado']},
+  ].map(pc => `
+  <div style="display:grid;grid-template-columns:100px 1fr;gap:.8rem;margin-bottom:.6rem">
+    <div style="background:${pc.color};border-radius:var(--radius-lg);padding:1rem;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center">
+      <div style="font-family:var(--font-serif);font-size:22px;font-weight:600;color:#fff">${pc.num}</div>
+      <div style="font-size:10px;color:rgba(255,255,255,.8);margin-top:.2rem">${pc.entre}</div>
+    </div>
+    <div class="card">
+      <div style="display:flex;align-items:center;gap:.6rem;margin-bottom:.6rem;flex-wrap:wrap">
+        <span style="font-size:12px;font-weight:500">Aprueba:</span>
+        <span class="badge b-func">${pc.aprueba}</span>
+      </div>
+      <div class="g2">
+        <div>
+          <div class="card-title" style="color:var(--c-red)">Definition of Ready</div>
+          ${pc.ready.map(r => `<div class="dot-item"><div class="dot" style="background:var(--c-red)"></div>${r}</div>`).join('')}
+        </div>
+        <div>
+          <div class="card-title" style="color:var(--c-green)">Definition of Done</div>
+          ${pc.done.map(d => `<div class="dot-item"><div class="dot" style="background:var(--c-green)"></div>${d}</div>`).join('')}
+        </div>
+      </div>
+    </div>
+  </div>`).join('')}
+</div>
+
+<div class="card" style="background:rgba(15,110,86,.04);border-color:rgba(15,110,86,.2);font-size:12px;color:var(--muted);line-height:1.6">
+  Los puntos de control operacionalizan los principios de evaluación, dirección y monitoreo de la ISO/IEC 38500:2024 en el nivel de proceso, fundamentándose en la ISO/IEC/IEEE 12207:2017 y en el proceso de aprobación formal del SRS descrito en IEEE 1028:2008.
+</div>
+`);
+
+/* ════════════════════════════════════════
+   PAGE: ELICITACIÓN OVERVIEW
+════════════════════════════════════════ */
+reg('eli-overview', () => `
+<div class="page-header">
+  <div class="page-eyebrow" style="color:var(--c-teal)">● Fase 1 — Elicitación</div>
+  <h1 class="page-title">Descubrimiento de requisitos</h1>
+  <p class="page-desc">Proceso de identificar, capturar y documentar las necesidades reales de los stakeholders usando técnicas formales. Primera y más crítica fase del ciclo de vida.</p>
+  <div class="std-row"><span class="std-pill">BABOK v3</span><span class="std-pill">IREB CPRE</span><span class="std-pill">ISO 9241-210:2019</span></div>
+</div>
+
+<div class="g5" style="margin-bottom:1.2rem">
+  ${['Preparación','Ejecución','Documentación','Confirmación'].map((s,i) => `
+  <div class="card-sm" style="border-left:3px solid var(--c-teal)">
+    <div style="font-size:10px;font-weight:500;color:var(--c-teal);margin-bottom:.3rem">Paso ${i+1}</div>
+    <div style="font-size:13px;font-weight:500;font-family:var(--font-serif)">${s}</div>
+  </div>`).join('')}
+</div>
+
+<div class="g2" style="margin-bottom:1rem">
+  <div class="card">
+    <div class="card-title">Checklist pre-sesión</div>
+    <div id="pre-checklist"></div>
+    <div class="prog-wrap"><div class="prog-bar"><div class="prog-fill" id="pre-fill" style="width:0%"></div></div><div class="prog-label" id="pre-label">0 / 6</div></div>
+  </div>
+  <div class="card">
+    <div class="card-title">Checklist post-sesión</div>
+    <div id="post-checklist"></div>
+    <div class="prog-wrap"><div class="prog-bar"><div class="prog-fill" id="post-fill" style="width:0%"></div></div><div class="prog-label" id="post-label">0 / 6</div></div>
+  </div>
+</div>
+
+<div class="g2">
+  <div class="card">
+    <div class="card-title">Artefactos que produce</div>
+    ${['Minuta estructurada de elicitación','Mapa de stakeholders (influencia × interés)','Plan de sesión estructurado','Lista de supuestos y restricciones','Customer Journey Map (si aplica)'].map(a => `<div class="dot-item"><div class="dot" style="background:var(--c-teal)"></div>${a}</div>`).join('')}
+  </div>
+  <div class="card">
+    <div class="card-title">Estándares que la respaldan</div>
+    ${[{s:'BABOK v3 §2',d:'Elicitación y colaboración'},
+       {s:'IREB CPRE',d:'Técnicas de elicitación formal'},
+       {s:'ISO 9241-210:2019',d:'Diseño centrado en el usuario'},
+       {s:'ISO/IEC/IEEE 29148:2018',d:'Planificación de la elicitación'}
+    ].map(e => `<div class="dot-item"><div class="dot" style="background:var(--c-blue)"></div><div><span style="font-family:var(--font-mono);color:var(--c-blue);font-size:11px">${e.s}</span> — ${e.d}</div></div>`).join('')}
+  </div>
+</div>
+`);
+
+/* ════════════════════════════════════════
+   PAGE: STAKEHOLDERS
+════════════════════════════════════════ */
+reg('eli-stakeholders', () => `
+<div class="page-header">
+  <div class="page-eyebrow" style="color:var(--c-teal)">● Fase 1 — Elicitación</div>
+  <h1 class="page-title">Mapa de stakeholders</h1>
+  <p class="page-desc">Clasificación por influencia e interés para definir la estrategia de comunicación y las técnicas de elicitación más adecuadas para cada perfil.</p>
+</div>
+<div class="g2" style="margin-bottom:1rem">
+  ${[
+    {t:'Alta influencia / Alto interés',est:'Gestionar de cerca',color:'var(--c-purple)',actors:['Product Owner','Gerente de negocio','Usuario clave'],tecnicas:['Entrevistas 1:1 profundas','Talleres JAD','Prototipado colaborativo']},
+    {t:'Alta influencia / Bajo interés',est:'Mantener satisfecho',color:'var(--c-red)',actors:['Director TI','CFO / Sponsor','Comité ejecutivo'],tecnicas:['Entrevistas de alto nivel','Cuestionarios','Resúmenes ejecutivos']},
+    {t:'Baja influencia / Alto interés',est:'Informar regularmente',color:'var(--c-blue)',actors:['Usuario final','Equipo QA','Área legal'],tecnicas:['Grupos focales','Cuestionarios online','Demos de avance']},
+    {t:'Baja influencia / Bajo interés',est:'Monitorear',color:'var(--c-gray)',actors:['Soporte técnico','Proveedor externo'],tecnicas:['Análisis documental','Consulta puntual']},
+  ].map(s => `
+  <div class="card" style="border-left:3px solid ${s.color}">
+    <div style="font-size:12px;font-weight:500;margin-bottom:.2rem;font-family:var(--font-serif)">${s.t}</div>
+    <div style="font-size:11px;font-weight:500;color:${s.color};margin-bottom:.6rem;text-transform:uppercase;letter-spacing:.3px;font-size:10px">${s.est}</div>
+    <div class="card-title">Actores típicos</div>
+    <div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:.7rem">${s.actors.map(a => `<span class="badge" style="background:${s.color}18;color:${s.color}">${a}</span>`).join('')}</div>
+    <div class="card-title">Técnicas recomendadas</div>
+    ${s.tecnicas.map(t => `<div class="dot-item"><div class="dot" style="background:${s.color}"></div>${t}</div>`).join('')}
+  </div>`).join('')}
+</div>
+`);
+
+/* ════════════════════════════════════════
+   PAGE: TÉCNICAS ELICITACIÓN
+════════════════════════════════════════ */
+reg('eli-tecnicas', () => `
+<div class="page-header">
+  <div class="page-eyebrow" style="color:var(--c-teal)">● Fase 1 — Elicitación</div>
+  <h1 class="page-title">Técnicas de elicitación</h1>
+  <p class="page-desc">Guía de las 5 técnicas principales con criterios de selección, fases de ejecución y banco de preguntas.</p>
+</div>
+
+<div class="tab-nav" id="tec-nav">
+  ${['Entrevista 1:1','Taller JAD','Observación','Prototipado','Análisis documental'].map((t,i) => `<button class="tab-btn${i===0?' on':''}" onclick="tabSel('tec',${i},this)">${t}</button>`).join('')}
+</div>
+
+${[
+  {name:'Entrevista 1:1',color:'var(--c-teal)',ref:'BABOK v3 · IREB CPRE',desc:'Conversación estructurada con un stakeholder para descubrir necesidades, restricciones y expectativas. La técnica más poderosa para requisitos complejos.',cuando:['Requisitos ambiguos o poco definidos','Stakeholders con conocimiento único','Proyectos de alta criticidad'],noHacer:['Con más de 20 stakeholders (usar encuesta)','Cuando el tiempo disponible es menor a 30 min'],mets:[{l:'Profundidad',v:90},{l:'Costo',v:65},{l:'Escalabilidad',v:25}],preguntas:['¿Cuál es su principal objetivo con este sistema?','¿Qué problema estamos resolviendo hoy?','¿Puede darme un ejemplo concreto de cuándo eso falla?','¿Qué criterio usaría para decir que esto está listo?']},
+  {name:'Taller JAD',color:'var(--c-purple)',ref:'BABOK v3 · Design Thinking',desc:'Sesión facilitada con múltiples stakeholders que trabajan juntos para definir y priorizar requisitos. Reduce ciclos de revisión al alinear perspectivas en tiempo real.',cuando:['Conflictos entre áreas de negocio','Definición de alcance inicial','Cuando se requiere consenso rápido'],noHacer:['Con más de 15 personas sin co-facilitador','Con stakeholders con conflictos personales graves'],mets:[{l:'Profundidad',v:75},{l:'Costo',v:80},{l:'Escalabilidad',v:55}],preguntas:['¿Cuál es el objetivo que todos acordamos lograr hoy?','¿Alguien tiene una perspectiva diferente?','¿Podemos priorizar esto con la técnica MoSCoW?']},
+  {name:'Observación contextual',color:'var(--c-blue)',ref:'IREB CPRE · UX Research',desc:'El analista observa a usuarios realizando tareas reales en su entorno. Revela requisitos implícitos que los usuarios no saben que tienen.',cuando:['Usuarios con dificultad para articular necesidades','Procesos con muchas excepciones no documentadas','Sistemas de reemplazo o migración'],noHacer:['En procesos confidenciales sin protocolo de privacidad','Cuando el usuario se inhibe con observadores'],mets:[{l:'Profundidad',v:85},{l:'Costo',v:55},{l:'Escalabilidad',v:20}],preguntas:['¿Cuánto tiempo dedica normalmente a esta tarea?','¿Hay excepciones frecuentes en este proceso?','¿Qué herramienta le ahorraría más tiempo?']},
+  {name:'Prototipado rápido',color:'var(--c-amber)',ref:'Evolutionary prototyping',desc:'Creación de representaciones visuales del sistema para que los stakeholders validen interfaces y flujos antes de codificar.',cuando:['Interfaces complejas o novedosas','Cuando el stakeholder no puede describir lo que quiere','Para reducir cambios costosos tardíos'],noHacer:['Para requisitos puramente de backend','Si el stakeholder puede confundir prototipo con producto'],mets:[{l:'Profundidad',v:70},{l:'Costo',v:70},{l:'Escalabilidad',v:45}],preguntas:['¿Esto representa el flujo que describió?','¿Falta algo importante en esta pantalla?','¿Es intuitivo el recorrido hacia el objetivo?']},
+  {name:'Análisis documental',color:'var(--c-gray)',ref:'BABOK v3 · Bajo costo',desc:'Revisión sistemática de documentos existentes para extraer requisitos implícitos y restricciones del sistema actual.',cuando:['Proyectos de modernización o migración','Sin disponibilidad de stakeholders','Para entender restricciones regulatorias'],noHacer:['Como técnica única — siempre complementar','Cuando los documentos tienen más de 2 años sin revisión'],mets:[{l:'Profundidad',v:45},{l:'Costo',v:20},{l:'Escalabilidad',v:85}],preguntas:['¿Qué tan actualizado está este documento?','¿Qué procesos describe que deben preservarse?','¿Qué restricciones legales menciona?']},
+].map((t,i) => `
+<div class="tab-panel${i===0?' on':''}" id="tec-${i}">
+  <div class="card" style="border-left:3px solid ${t.color}">
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:.7rem;flex-wrap:wrap;gap:.5rem">
+      <div><div style="font-size:15px;font-weight:500;font-family:var(--font-serif);margin-bottom:.3rem">${t.name}</div><div style="font-size:12px;color:var(--muted);max-width:560px;line-height:1.6">${t.desc}</div></div>
+      <span class="badge b-func">${t.ref}</span>
+    </div>
+    ${t.mets.map(m => `<div class="bar-row"><div class="bar-label">${m.l}</div><div class="bar-track"><div class="bar-fill" style="width:${m.v}%;background:${t.color}"></div></div><div class="bar-val" style="color:${t.color}">${m.v}%</div></div>`).join('')}
+    <div class="g2" style="margin-top:.8rem">
+      <div><div class="card-title">Cuándo usar</div>${t.cuando.map(c => `<div class="dot-item"><div class="dot" style="background:${t.color}"></div>${c}</div>`).join('')}</div>
+      <div><div class="card-title">Cuándo NO usar</div>${t.noHacer.map(c => `<div class="dot-item"><div class="dot" style="background:var(--c-red)"></div>${c}</div>`).join('')}</div>
+    </div>
+    <div style="margin-top:.8rem"><div class="card-title">Banco de preguntas clave</div>${t.preguntas.map(q => `<div class="dot-item"><div class="dot" style="background:var(--c-blue)"></div>${q}</div>`).join('')}</div>
+  </div>
+</div>`).join('')}
+`);
+
+/* ════════════════════════════════════════
+   PAGE: PLANTILLAS
+════════════════════════════════════════ */
+reg('eli-plantillas', () => `
+<div class="page-header">
+  <div class="page-eyebrow" style="color:var(--c-teal)">● Fase 1 — Elicitación</div>
+  <h1 class="page-title">Plantillas de sesión</h1>
+  <p class="page-desc">Agenda tipo, minuta estructurada y guía de preguntas lista para usar en sesiones de elicitación.</p>
+</div>
+
+<div class="tab-nav">
+  <button class="tab-btn on" onclick="tabSel('plt',0,this)">Agenda 90 min</button>
+  <button class="tab-btn" onclick="tabSel('plt',1,this)">Minuta de sesión</button>
+  <button class="tab-btn" onclick="tabSel('plt',2,this)">Guía de preguntas</button>
+</div>
+
+<div class="tab-panel on" id="plt-0">
+  <div class="card">
+    <div class="card-title">Agenda tipo — sesión de elicitación (90 minutos)</div>
+    ${[
+      {n:1,c:'var(--c-teal)',t:'Apertura y contexto (0–10 min)',d:'Presentación del objetivo, roles, reglas de la sesión y consentimiento de grabación'},
+      {n:2,c:'var(--c-teal)',t:'Situación actual As-Is (10–30 min)',d:'¿Cómo funciona el proceso hoy? Puntos de dolor, workarounds y excepciones frecuentes'},
+      {n:3,c:'var(--c-teal)',t:'Situación deseada To-Be (30–60 min)',d:'¿Qué necesita el nuevo sistema? Funcionalidades, prioridades y criterios de éxito'},
+      {n:4,c:'var(--c-purple)',t:'Restricciones y dependencias (60–75 min)',d:'Normativas, integraciones existentes, limitaciones técnicas, plazos no negociables'},
+      {n:5,c:'var(--c-gray)',t:'Cierre y acuerdos (75–90 min)',d:'Resumen de lo capturado, pendientes, próximos pasos y firma de participación'},
+    ].map((s,i,arr) => `
+    <div class="step-row">${i<arr.length-1?'<div class="step-line"></div>':''}
+      <div class="step-num" style="background:${s.c}">${s.n}</div>
+      <div class="step-body"><div class="step-title">${s.t}</div><div class="step-desc">${s.d}</div></div>
+    </div>`).join('')}
+  </div>
+</div>
+
+<div class="tab-panel" id="plt-1">
+  <div class="card">
+    <div class="card-title">Minuta estructurada de elicitación</div>
+    <div class="g2" style="margin-bottom:.8rem">
+      <div class="field-group"><div class="field-label">Proyecto</div><div class="field-val">[Nombre del proyecto]</div></div>
+      <div class="field-group"><div class="field-label">ID de sesión</div><div class="field-val field-mono">[ELI-001]</div></div>
+      <div class="field-group"><div class="field-label">Fecha y hora</div><div class="field-val">[DD/MM/AAAA · HH:MM]</div></div>
+      <div class="field-group"><div class="field-label">Analista responsable</div><div class="field-val">[Nombre del BA]</div></div>
+    </div>
+    <div class="card-title">Requisitos capturados</div>
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead><tr><th>ID</th><th>Descripción</th><th>Prioridad</th><th>Estado</th></tr></thead>
+        <tbody>
+          <tr><td style="font-family:var(--font-mono);color:var(--c-blue)">RF-001</td><td>Login con SSO corporativo</td><td><span class="badge b-must">Must</span></td><td><span class="badge b-ok">Confirmado</span></td></tr>
+          <tr><td style="font-family:var(--font-mono);color:var(--c-blue)">RF-002</td><td>Dashboard con KPIs en tiempo real</td><td><span class="badge b-must">Must</span></td><td><span class="badge b-warn">Ambiguo</span></td></tr>
+          <tr><td style="font-family:var(--font-mono);color:var(--c-blue)">RNF-001</td><td>Tiempo de respuesta menor a 3 segundos</td><td><span class="badge b-must">Must</span></td><td><span class="badge">Pendiente</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="tab-panel" id="plt-2">
+  <div class="g2">
+    ${[
+      {cat:'Apertura',color:'var(--c-teal)',qs:['¿Cuál es su principal objetivo con este sistema?','¿Qué problema estamos resolviendo para usted hoy?','¿Cómo describiría el flujo ideal de su trabajo?']},
+      {cat:'Profundización',color:'var(--c-purple)',qs:['¿Puede darme un ejemplo concreto de cuándo eso falla?','¿Qué pasaría si no tuviéramos esa funcionalidad?','¿Quién más se ve afectado cuando eso ocurre?']},
+      {cat:'Validación',color:'var(--c-blue)',qs:['Si entiendo bien, usted necesita… ¿es correcto?','¿Qué criterio usaría para decir que esto está listo?','¿Hay algún escenario que no hayamos considerado?']},
+      {cat:'Restricciones',color:'var(--c-amber)',qs:['¿Existe algún sistema con el que deba integrarse?','¿Hay normas o regulaciones que deban cumplirse?','¿Cuáles son los plazos no negociables?']},
+    ].map(q => `
+    <div class="card">
+      <div class="card-title" style="color:${q.color}">${q.cat}</div>
+      ${q.qs.map(p => `<div class="dot-item"><div class="dot" style="background:${q.color}"></div>${p}</div>`).join('')}
+    </div>`).join('')}
+  </div>
+</div>
+`);
+
+/* ════════════════════════════════════════
+   PAGE: GAP ANALYSIS
+════════════════════════════════════════ */
+reg('ana-gap', () => `
+<div class="page-header">
+  <div class="page-eyebrow" style="color:var(--c-purple)">● Fase 2 — Análisis</div>
+  <h1 class="page-title">GAP Analysis — As-Is vs. To-Be</h1>
+  <p class="page-desc">Mapa de brechas entre el proceso actual y el proceso futuro. Cada brecha genera uno o más requisitos documentados.</p>
+  <div class="std-row"><span class="std-pill">ISO 19510 (BPMN 2.0)</span><span class="std-pill">BABOK v3</span></div>
+</div>
+
+<div class="g2" style="margin-bottom:1rem">
+  <div class="card" style="border-left:3px solid var(--c-red)">
+    <div class="card-title" style="color:var(--c-red)">Proceso actual (As-Is)</div>
+    ${['Cliente llena formulario en papel','Analista transcribe al sistema manualmente','Consulta manual al buró de crédito','Reunión semanal del comité de aprobación','Notificación por carta física'].map((s,i) => `<div class="dot-item"><div class="dot" style="background:var(--c-red)"></div><div>${s}</div></div>`).join('')}
+  </div>
+  <div class="card" style="border-left:3px solid var(--c-green)">
+    <div class="card-title" style="color:var(--c-green)">Proceso futuro (To-Be)</div>
+    ${['Cliente completa formulario digital con validación','Datos migrados automáticamente al sistema','Score consultado en tiempo real vía API','Decisión automática en < 2 horas','Notificación inmediata multicanal'].map((s,i) => `<div class="dot-item"><div class="dot" style="background:var(--c-green)"></div><div>${s}</div></div>`).join('')}
+  </div>
+</div>
+
+<div class="card-title" style="margin-bottom:.6rem">Brechas identificadas y requisitos generados</div>
+${[
+  {t:'Formulario manual → Digital',tipo:'Automatización',imp:85,req:['RF-010: Formulario digital con validación','RNF-003: Disponibilidad 99.9%']},
+  {t:'Doble captura → Flujo unificado',tipo:'Eliminación',imp:90,req:['RF-011: Integración formulario-CRM','RNF-004: Latencia < 500ms']},
+  {t:'Consulta manual → API tiempo real',tipo:'Integración',imp:80,req:['RF-003: Integración API buró','RNF-005: SLA < 3s']},
+  {t:'Reunión semanal → Motor decisión',tipo:'Optimización',imp:95,req:['RF-004: Motor de reglas configurable','RF-005: Flujo de escalación']},
+].map(g => `
+<div class="card-sm" style="margin-bottom:.5rem">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.5rem;flex-wrap:wrap;gap:.4rem">
+    <div style="font-size:13px;font-weight:500;font-family:var(--font-serif)">${g.t}</div>
+    <div style="display:flex;align-items:center;gap:.6rem">
+      <span class="badge b-func">${g.tipo}</span>
+      <span style="font-size:11px;font-weight:500;color:var(--c-green)">Impacto ${g.imp}%</span>
+    </div>
+  </div>
+  <div style="display:flex;flex-wrap:wrap;gap:4px">${g.req.map(r => `<span style="font-size:10px;font-family:var(--font-mono);padding:2px 7px;border-radius:4px;background:var(--c-blue-l);color:var(--c-blue-d)">${r}</span>`).join('')}</div>
+</div>`).join('')}
+`);
+
+/* ════════════════════════════════════════
+   PAGE: PRIORIZACIÓN
+════════════════════════════════════════ */
+reg('ana-priorizacion', () => `
+<div class="page-header">
+  <div class="page-eyebrow" style="color:var(--c-purple)">● Fase 2 — Análisis</div>
+  <h1 class="page-title">Priorización — MoSCoW y Kano</h1>
+  <p class="page-desc">Técnicas formales para ordenar los requisitos por valor de negocio y satisfacción del usuario.</p>
+</div>
+
+<div class="tab-nav">
+  <button class="tab-btn on" onclick="tabSel('prio',0,this)">Matriz MoSCoW</button>
+  <button class="tab-btn" onclick="tabSel('prio',1,this)">Modelo de Kano</button>
+</div>
+
+<div class="tab-panel on" id="prio-0">
+  <div class="g4" style="margin-bottom:1rem">
+    ${[{n:8,l:'Must have',c:'var(--c-red)'},{n:5,l:'Should have',c:'var(--c-amber)'},{n:4,l:'Could have',c:'var(--c-blue)'},{n:3,l:"Won't have",c:'var(--c-gray)'}].map(k => `<div class="kpi"><div class="kpi-num" style="color:${k.c}">${k.n}</div><div class="kpi-label">${k.l}</div></div>`).join('')}
+  </div>
+  <div class="g2">
+    ${[
+      {t:'Must have',color:'var(--c-red)',def:'Sin esto el sistema no funciona. No negociable para el MVP.',reqs:['RF-001 · Login con SSO corporativo','RF-002 · Dashboard con KPIs','RF-003 · Consulta automática score','RNF-001 · Rendimiento P95 < 3s']},
+      {t:'Should have',color:'var(--c-amber)',def:'Importante pero no crítico para el lanzamiento inicial.',reqs:['RF-010 · Notificaciones push','RF-011 · Filtros avanzados','RF-012 · Historial de auditoría']},
+      {t:'Could have',color:'var(--c-blue)',def:'Deseable. Se puede diferir a fase 2 sin impacto crítico.',reqs:['RF-020 · Tema oscuro/claro','RF-021 · Análisis predictivo básico']},
+      {t:"Won't have (esta versión)",color:'var(--c-gray)',def:'Fuera del alcance del release actual. Documentado para versiones futuras.',reqs:['RF-030 · Integración redes sociales','RF-031 · Motor de IA generativa']},
+    ].map(m => `
+    <div class="card-sm" style="border-left:3px solid ${m.color}">
+      <div style="font-size:13px;font-weight:500;color:${m.color};margin-bottom:.2rem">${m.t}</div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:.6rem;line-height:1.5">${m.def}</div>
+      ${m.reqs.map(r => `<div class="dot-item"><div class="dot" style="background:${m.color}"></div><span style="font-family:var(--font-mono);font-size:11px">${r}</span></div>`).join('')}
+    </div>`).join('')}
+  </div>
+</div>
+
+<div class="tab-panel" id="prio-1">
+  <div class="g3">
+    ${[
+      {t:'Básicos (Must-be)',color:'var(--c-red)',desc:'Si no están el usuario queda insatisfecho. Su presencia no genera satisfacción extra.',ej:['Login seguro','No perder datos','Disponibilidad 99%']},
+      {t:'Desempeño (One-dimensional)',color:'var(--c-blue)',desc:'A más de esta funcionalidad, más satisfacción. Relación lineal.',ej:['Velocidad de carga','Más filtros','Más formatos de exportación']},
+      {t:'Atractivos (Delighters)',color:'var(--c-green)',desc:'El usuario no los espera, pero cuando los descubre generan alta satisfacción.',ej:['Sugerencias inteligentes','Personalización automática','Modo offline']},
+    ].map(k => `
+    <div class="card" style="border-left:3px solid ${k.color}">
+      <div style="font-size:13px;font-weight:500;color:${k.color};margin-bottom:.4rem;font-family:var(--font-serif)">${k.t}</div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:.6rem;line-height:1.5">${k.desc}</div>
+      <div style="display:flex;flex-wrap:wrap;gap:4px">${k.ej.map(e => `<span class="badge" style="background:${k.color}18;color:${k.color}">${e}</span>`).join('')}</div>
+    </div>`).join('')}
+  </div>
+</div>
+`);
+
+/* ════════════════════════════════════════
+   PAGE: SRS EDITOR
+════════════════════════════════════════ */
+reg('srs-editor', () => `
+<div class="page-header">
+  <div class="page-eyebrow" style="color:var(--c-blue)">● Fase 3 — Especificación</div>
+  <h1 class="page-title">Editor SRS — IEEE 29148:2018</h1>
+  <p class="page-desc">Documento de Especificación de Requisitos de Software completo con todas sus secciones y criterios de aceptación Gherkin.</p>
+  <div class="std-row"><span class="std-pill">IEEE 29148:2018</span><span class="std-pill">ISO/IEC 25010:2023</span></div>
+</div>
+
+<div class="tab-nav">
+  <button class="tab-btn on" onclick="tabSel('srs',0,this)">Portada y alcance</button>
+  <button class="tab-btn" onclick="tabSel('srs',1,this)">Req. funcionales (RF)</button>
+  <button class="tab-btn" onclick="tabSel('srs',2,this)">Req. no funcionales (RNF)</button>
+  <button class="tab-btn" onclick="tabSel('srs',3,this)">Supuestos y restricciones</button>
+</div>
+
+<div class="tab-panel on" id="srs-0">
+  <div class="card">
+    <div style="font-size:10px;color:var(--faint);font-family:var(--font-mono);margin-bottom:.8rem">SRS-SGC-2025 · v1.2 · En revisión</div>
+    <div class="g2">
+      <div class="field-group"><div class="field-label">Nombre del proyecto</div><div class="field-val">Sistema de gestión de créditos — SGC</div></div>
+      <div class="field-group"><div class="field-label">ID documento</div><div class="field-val field-mono">SRS-SGC-2025-v1.2</div></div>
+      <div class="field-group"><div class="field-label">Estado actual</div><div class="field-val" style="color:var(--c-amber)">En revisión formal</div></div>
+      <div class="field-group"><div class="field-label">Fecha de corte</div><div class="field-val">2025-04-01</div></div>
+    </div>
+    <div class="field-group"><div class="field-label">Propósito del sistema</div><div class="field-val">El SGC automatizará el proceso de evaluación, aprobación y seguimiento de solicitudes de crédito, reduciendo el ciclo de aprobación de 5–7 días a menos de 2 horas para el 80% de los casos estándar.</div></div>
+    <div class="g2">
+      <div class="field-group"><div class="field-label">En alcance</div><div class="field-val">Solicitud digital · score automático · motor de decisión · notificaciones multicanal · reportería · auditoría completa</div></div>
+      <div class="field-group"><div class="field-label">Fuera de alcance</div><div class="field-val">App móvil nativa · redes sociales · módulo cobranza · análisis predictivo avanzado</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="tab-panel" id="srs-1">
+  ${RF.filter(r => r.id.startsWith('RF')).map(r => `
+  <div class="card-sm" style="margin-bottom:.6rem;border-left:3px solid var(--c-blue)">
+    <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.4rem;flex-wrap:wrap">
+      <span style="font-family:var(--font-mono);color:var(--c-blue);font-size:11px;font-weight:500">${r.id}</span>
+      <span class="badge b-func">Funcional</span>
+      <span class="badge b-must" style="margin-left:auto">${r.pri}</span>
+    </div>
+    <div style="font-size:14px;font-weight:500;font-family:var(--font-serif);margin-bottom:.35rem">${r.title}</div>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:.55rem;line-height:1.6">${r.desc}</div>
+    <div class="gherkin"><span class="g-given">Given</span> ${r.given}<br><span class="g-when">When</span> ${r.when}<br><span class="g-then">Then</span> ${r.then}${r.and?`<br><span class="g-and">And</span> ${r.and}`:''}</div>
+  </div>`).join('')}
+</div>
+
+<div class="tab-panel" id="srs-2">
+  ${[
+    {cat:'Rendimiento · ISO 25010 §4.8',color:'var(--c-blue)',attrs:[{n:'Tiempo respuesta web',v:'P95 < 3s, P99 < 8s bajo 500 VU',m:'Gatling load test'},{n:'Throughput sostenido',v:'> 200 transacciones/segundo',m:'JMeter'},{n:'Tiempo de decisión',v:'< 2s para el 90% de los casos',m:'APM Datadog'}]},
+    {cat:'Disponibilidad · ISO 25010 §4.4',color:'var(--c-green)',attrs:[{n:'Disponibilidad operativa',v:'99.5% Lun–Sáb 6:00–22:00',m:'Uptime Robot'},{n:'RTO',v:'< 30 minutos ante fallo crítico',m:'Drill de recuperación'},{n:'RPO',v:'< 1 hora — backup cada hora',m:'Test restauración'}]},
+    {cat:'Seguridad · ISO 25010 §4.5',color:'var(--c-red)',attrs:[{n:'Cifrado en reposo',v:'AES-256 para datos PII y financieros',m:'Auditoría cifrado'},{n:'Cifrado en tránsito',v:'TLS 1.3 obligatorio',m:'SSL Labs A+'},{n:'Autenticación',v:'MFA obligatorio para roles Gerente y Auditor',m:'Test penetración'}]},
+    {cat:'Mantenibilidad · ISO 25010 §4.6',color:'var(--c-purple)',attrs:[{n:'Cobertura de pruebas',v:'Mínimo 80% unitario',m:'SonarQube'},{n:'Documentación API',v:'OpenAPI 3.0 — 100% endpoints',m:'Swagger UI'}]},
+  ].map(n => `
+  <div class="card-sm" style="margin-bottom:.6rem">
+    <div style="font-size:12px;font-weight:500;color:${n.color};margin-bottom:.5rem">${n.cat}</div>
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead><tr><th>Atributo</th><th>Valor objetivo</th><th>Método verificación</th></tr></thead>
+        <tbody>${n.attrs.map(a => `<tr><td>${a.n}</td><td style="font-weight:500">${a.v}</td><td style="color:var(--muted)">${a.m}</td></tr>`).join('')}</tbody>
+      </table>
+    </div>
+  </div>`).join('')}
+</div>
+
+<div class="tab-panel" id="srs-3">
+  <div class="g2">
+    <div class="card">
+      <div class="card-title">Supuestos</div>
+      ${['La API de Datacrédito estará disponible antes del Sprint 3','El directorio corporativo soporta integración SAML 2.0','Los usuarios finales tienen correo corporativo activo','La infraestructura de nube estará lista en Sprint 0'].map((s,i) => `<div class="dot-item"><div class="dot" style="background:var(--c-blue)"></div><div><span style="font-family:var(--font-mono);color:var(--c-blue);font-size:10px">SA-00${i+1}</span> ${s}</div></div>`).join('')}
+    </div>
+    <div class="card">
+      <div class="card-title">Restricciones</div>
+      ${[{t:'Presupuesto',v:'COP 850M en 12 meses'},{t:'Plazo MVP',v:'6 meses desde firma'},{t:'Tecnología',v:'Stack aprobado por TI'},{t:'Regulación',v:'Circular SFC 026/2021'}].map(r => `<div class="dot-item"><div class="dot" style="background:var(--c-amber)"></div><div style="display:flex;justify-content:space-between;width:100%"><span style="color:var(--muted)">${r.t}</span><span style="font-weight:500">${r.v}</span></div></div>`).join('')}
+    </div>
+  </div>
+</div>
+`);
+
+/* ════════════════════════════════════════
+   PAGE: GHERKIN CONSTRUCTOR
+════════════════════════════════════════ */
+reg('srs-gherkin', () => `
+<div class="page-header">
+  <div class="page-eyebrow" style="color:var(--c-blue)">● Fase 3 — Especificación</div>
+  <h1 class="page-title">Constructor Gherkin / BDD</h1>
+  <p class="page-desc">Construye criterios de aceptación en formato Gherkin. Escribe en los campos y el escenario se genera automáticamente.</p>
+</div>
+
+<div class="g2">
+  <div class="card">
+    <div class="card-title">Construye tu escenario</div>
+    <div style="display:flex;flex-direction:column;gap:.5rem">
+      <div><div class="field-label">Feature</div><input type="text" id="gh-feature" value="Aprobación automática de crédito" oninput="updateGherkin()"></div>
+      <div><div class="field-label">Nombre del escenario</div><input type="text" id="gh-name" value="Solicitud aprobada con score suficiente" oninput="updateGherkin()"></div>
+      <div><div class="field-label">Tag</div><input type="text" id="gh-tag" value="@smoke @RF-004" oninput="updateGherkin()"></div>
+      <div><div class="field-label">Given (contexto)</div><input type="text" id="gh-given" value="el cliente ha completado el formulario de solicitud" oninput="updateGherkin()"></div>
+      <div><div class="field-label">When (acción)</div><input type="text" id="gh-when" value="el sistema consulta el score y obtiene 720" oninput="updateGherkin()"></div>
+      <div><div class="field-label">Then (resultado)</div><input type="text" id="gh-then" value="la solicitud es APROBADA y el cliente recibe notificación en menos de 30 segundos" oninput="updateGherkin()"></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">Gherkin generado</div>
+    <div class="gherkin" id="gh-output" style="min-height:200px"></div>
+    <div style="margin-top:1rem">
+      <div class="card-title">Patrones correctos</div>
+      ${[['Un escenario = un comportamiento','Si el título tiene "y", sepáralo en dos'],['Given en tiempo pasado','"el usuario HA iniciado sesión" no "inicia sesión"'],['Then con resultado observable','Debe ser verificable por un sistema o persona']].map(p => `<div class="dot-item"><div class="dot" style="background:var(--c-green)"></div><div><strong style="font-weight:500">${p[0]}</strong> — ${p[1]}</div></div>`).join('')}
+    </div>
+  </div>
+</div>
+`);
+
+/* ════════════════════════════════════════
+   PAGE: DETECTOR AMBIGÜEDAD
+════════════════════════════════════════ */
+reg('srs-detector', () => `
+<div class="page-header">
+  <div class="page-eyebrow" style="color:var(--c-blue)">● Fase 3 — Especificación</div>
+  <h1 class="page-title">Detector de ambigüedad</h1>
+  <p class="page-desc">Analiza tus requisitos en tiempo real e identifica términos vagos, modales incorrectos y problemas de calidad según IEEE 29148.</p>
+</div>
+
+<div class="g2">
+  <div class="card">
+    <div class="card-title">Escribe o pega tu requisito</div>
+    <textarea id="req-input" rows="5" oninput="runDetector()" style="margin-bottom:.7rem">El sistema deberá ser rápido y proporcionar una interfaz amigable para que el usuario pueda realizar las tareas fácilmente en un tiempo adecuado.</textarea>
+    <div style="display:flex;align-items:center;gap:.8rem;padding-top:.7rem;border-top:0.5px solid var(--border)">
+      <div style="font-size:28px;font-weight:500;font-family:var(--font-serif)" id="det-score">0</div>
+      <div style="font-size:11px;color:var(--muted);width:40px">/ 100</div>
+      <div style="flex:1;height:6px;background:var(--surface2);border-radius:3px;overflow:hidden"><div style="height:100%;border-radius:3px;transition:width .5s" id="det-fill"></div></div>
+      <div style="font-size:12px;font-weight:500;min-width:80px" id="det-label">Calidad baja</div>
+    </div>
+    <div style="margin-top:.8rem">
+      <div class="card-title">Ejemplos rápidos</div>
+      <div style="display:flex;flex-wrap:wrap;gap:4px">
+        <button class="btn btn-sm" onclick="setExample('El sistema deberá ser rápido y fácil de usar.')">Malo: vago</button>
+        <button class="btn btn-sm" onclick="setExample('El sistema DEBE responder el 95% de las peticiones en menos de 3 segundos bajo 500 usuarios concurrentes, medido con Gatling.')">Bueno: preciso</button>
+        <button class="btn btn-sm" onclick="setExample('El sistema manejará varios formatos de archivo de manera eficiente.')">Malo: ambiguo</button>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">Problemas detectados</div>
+    <div id="det-issues"></div>
+    <div style="margin-top:.8rem">
+      <div class="card-title">Sugerencia mejorada</div>
+      <div id="det-sugg" style="font-size:12px;background:rgba(15,110,86,.05);border:0.5px solid rgba(15,110,86,.2);border-radius:var(--radius);padding:.65rem .8rem;color:var(--text);line-height:1.6;min-height:50px"></div>
+    </div>
+  </div>
+</div>
+
+<div style="margin-top:1.5rem">
+  <h3 style="font-family:var(--font-serif);font-size:16px;font-weight:500;margin-bottom:.8rem">8 reglas de escritura de requisitos</h3>
+  <div class="g2">
+    ${[
+      {r:'R1',c:'var(--c-red)',n:'Usar el modal correcto (IEEE 29148 §5.2)',b:'El sistema podrá permitir exportar reportes.',g:'El sistema DEBE permitir exportar reportes a PDF y XLSX.'},
+      {r:'R2',c:'var(--c-blue)',n:'Un requisito = una capacidad',b:'DEBE autenticar usuarios y registrar la sesión.',g:'RF-001: DEBE autenticar. RF-002: DEBE registrar la sesión.'},
+      {r:'R3',c:'var(--c-green)',n:'Verbos activos y específicos',b:'El sistema manejará los errores de forma adecuada.',g:'El sistema DEBE mostrar mensaje de error en < 1 segundo.'},
+      {r:'R4',c:'var(--c-amber)',n:'Todo atributo de calidad necesita métrica',b:'El sistema debe ser altamente disponible.',g:'El sistema DEBE tener disponibilidad ≥ 99.5% Lun–Sáb 6–22h.'},
+      {r:'R5',c:'var(--c-purple)',n:'Especificar el sujeto explícitamente',b:'Se deben validar los campos del formulario.',g:'El sistema DEBE validar cada campo en tiempo real (< 500ms).'},
+      {r:'R6',c:'var(--c-gray)',n:'Sin negativos dobles ni condicionales vagos',b:'No deberá fallar excepto cuando no haya conexión.',g:'DEBE mostrar estado "Sin conexión" y encolar operaciones.'},
+      {r:'R7',c:'var(--c-red)',n:'Listas explícitas — sin "etc." ni "entre otros"',b:'Debe exportar a PDF, Excel, etc.',g:'DEBE exportar a: PDF, XLSX, CSV y JSON exclusivamente.'},
+      {r:'R8',c:'var(--c-blue)',n:'Criterio de verificación obligatorio',b:'El sistema debe notificar al usuario.',g:'Given decisión / When 30s / Then notificación por email Y SMS.'},
+    ].map(r => `
+    <div class="card-sm" style="border-left:3px solid ${r.c}">
+      <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.4rem">
+        <div style="width:22px;height:22px;border-radius:50%;background:${r.c};display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:500;color:#fff;flex-shrink:0">${r.r}</div>
+        <div style="font-size:12px;font-weight:500">${r.n}</div>
+      </div>
+      <div style="background:rgba(163,45,45,.04);border-radius:4px;padding:.35rem .55rem;font-size:11px;font-family:var(--font-mono);margin-bottom:.3rem;color:var(--muted)">✗ ${r.b}</div>
+      <div style="background:rgba(15,110,86,.04);border-radius:4px;padding:.35rem .55rem;font-size:11px;font-family:var(--font-mono);color:var(--muted)">✓ ${r.g}</div>
+    </div>`).join('')}
+  </div>
+</div>
+`);
+
+/* ════════════════════════════════════════
+   PAGE: GLOSARIO
+════════════════════════════════════════ */
+reg('srs-glosario', () => `
+<div class="page-header">
+  <div class="page-eyebrow" style="color:var(--c-blue)">● Fase 3 — Especificación</div>
+  <h1 class="page-title">Glosario técnico</h1>
+  <p class="page-desc">Biblioteca de términos del dominio con búsqueda y filtros por categoría.</p>
+</div>
+<div style="display:flex;align-items:center;gap:.7rem;margin-bottom:.8rem">
+  <input type="text" id="glos-search" placeholder="Buscar término..." oninput="filterGlos()" style="flex:1">
+</div>
+<div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:.8rem" id="glos-filters"></div>
+<div id="glos-terms"></div>
+`);
+
+/* ════════════════════════════════════════
+   PAGE: TÉCNICAS VALIDACIÓN
+════════════════════════════════════════ */
+reg('val-tecnicas', () => `
+<div class="page-header">
+  <div class="page-eyebrow" style="color:var(--c-green)">● Fase 4 — Validación</div>
+  <h1 class="page-title">Técnicas de revisión formal</h1>
+  <p class="page-desc">Las cuatro técnicas según IEEE 1028 con fases, roles y criterios de entrada/salida.</p>
+  <div class="std-row"><span class="std-pill">IEEE 1028:2008</span><span class="std-pill">IEEE 29148 §6.3</span></div>
+</div>
+
+<div class="tab-nav">
+  <button class="tab-btn on" onclick="tabSel('val',0,this)">Walkthrough</button>
+  <button class="tab-btn" onclick="tabSel('val',1,this)">Inspección Fagan</button>
+  <button class="tab-btn" onclick="tabSel('val',2,this)">Revisión técnica</button>
+  <button class="tab-btn" onclick="tabSel('val',3,this)">UAT</button>
+</div>
+
+${[
+  {name:'Walkthrough de requisitos',ref:'IEEE 1028 §5.3',color:'var(--c-blue)',desc:'El autor guía al grupo para detectar problemas tempranamente. La técnica más informal pero más rápida.',mets:[{l:'Formalidad',v:30},{l:'Eficacia detección',v:55},{l:'Costo',v:25}],fases:[{n:1,t:'Preparación (1–2 días antes)',d:'Distribuir el documento. Cada revisor lo lee y anota preguntas.'},{n:2,t:'Reunión (2–4 horas)',d:'Autor presenta sección por sección. Secretario registra observaciones.'},{n:3,t:'Seguimiento',d:'Autor resuelve observaciones y actualiza el documento.'}],entrada:'Borrador completo o sección lista para revisión',salida:'Lista de observaciones documentada · Autor tiene plan de resolución'},
+  {name:'Inspección Fagan',ref:'IEEE 1028 §5.4 · Fagan 1976',color:'var(--c-red)',desc:'La técnica más rigurosa. Proceso estructurado en 6 fases con roles definidos, métricas de densidad de defectos y criterio formal de re-inspección.',mets:[{l:'Formalidad',v:95},{l:'Eficacia detección',v:90},{l:'Costo',v:80}],fases:[{n:1,t:'Planificación',d:'El moderador define alcance, selecciona revisores y distribuye materiales.'},{n:2,t:'Visión general (Overview)',d:'El autor presenta el contexto del documento al equipo inspector.'},{n:3,t:'Preparación individual',d:'Cada inspector lee el documento de forma independiente usando el checklist.'},{n:4,t:'Reunión de inspección (máx. 2h)',d:'El moderador dirige. El lector parafrasea. Los inspectores reportan defectos.'},{n:5,t:'Reescritura',d:'El autor corrige todos los defectos Mayores.'},{n:6,t:'Seguimiento (Follow-up)',d:'El moderador verifica. Si densidad supera umbral → re-inspección.'}],entrada:'Documento completo · Checklist preparado · Revisores confirmados',salida:'Densidad defectos < 0.3/pág · 0 Mayores sin resolver · Moderador firma'},
+  {name:'Revisión técnica formal',ref:'IEEE 1028 §5.2',color:'var(--c-purple)',desc:'Revisión estructurada por pares enfocada en corrección técnica. Menos formal que Fagan pero con criterios de salida definidos y acta firmada.',mets:[{l:'Formalidad',v:65},{l:'Eficacia detección',v:75},{l:'Costo',v:50}],fases:[{n:1,t:'Preparación',d:'Distribución con checklist técnico. Revisores preparan preguntas de viabilidad.'},{n:2,t:'Reunión técnica (1–3 horas)',d:'Revisión sistemática. Equipo técnico evalúa viabilidad y consistencia.'},{n:3,t:'Decisión colegiada',d:'Aprobado / Aprobado con condiciones / Rechazado.'},{n:4,t:'Seguimiento',d:'Autor resuelve condiciones. Líder técnico verifica y cierra el acta.'}],entrada:'SRS con auto-revisión aprobada · Arquitectura preliminar disponible',salida:'Acta firmada · Condiciones con fecha de resolución · 0 issues de viabilidad abiertos'},
+  {name:'UAT — Prueba de aceptación de usuario',ref:'IEEE 29148 §6.3.4 · BABOK v3',color:'var(--c-green)',desc:'Los usuarios finales validan que el sistema implementado cumple sus necesidades reales, ejecutando casos de prueba en entorno representativo.',mets:[{l:'Formalidad',v:60},{l:'Eficacia validación',v:92},{l:'Costo',v:65}],fases:[{n:1,t:'Planificación del UAT',d:'Definir alcance, criterios, usuarios, entorno y datos de prueba.'},{n:2,t:'Diseño de casos de prueba',d:'Casos derivados de los criterios de aceptación del SRS y Gherkin.'},{n:3,t:'Ejecución del UAT',d:'Usuarios ejecutan cada caso. QA registra resultados sin influir.'},{n:4,t:'Gestión de defectos',d:'Bloqueantes detienen el lanzamiento. Mayores resueltos antes del go-live.'},{n:5,t:'Sign-off de aceptación',d:'Todos los criterios pasan. Usuario clave firma el documento de aceptación.'}],entrada:'Pruebas de sistema sin defectos bloqueantes · Ambiente UAT estable',salida:'100% casos críticos pasan · 0 Bloqueantes · Acta firmada · Go-live aprobado'},
+].map((t,i) => `
+<div class="tab-panel${i===0?' on':''}" id="val-${i}">
+  <div class="card" style="border-left:3px solid ${t.color}">
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:.7rem;flex-wrap:wrap;gap:.5rem">
+      <div><div style="font-size:15px;font-weight:500;font-family:var(--font-serif);margin-bottom:.3rem">${t.name}</div><div style="font-size:12px;color:var(--muted);max-width:560px;line-height:1.6">${t.desc}</div></div>
+      <span class="badge b-func">${t.ref}</span>
+    </div>
+    ${t.mets.map(m => `<div class="bar-row"><div class="bar-label">${m.l}</div><div class="bar-track"><div class="bar-fill" style="width:${m.v}%;background:${t.color}"></div></div><div class="bar-val" style="color:${t.color}">${m.v}%</div></div>`).join('')}
+    <div style="margin-top:.8rem">
+      <div class="card-title">Fases de ejecución</div>
+      ${t.fases.map((f,fi,fa) => `<div class="step-row">${fi<fa.length-1?'<div class="step-line"></div>':''}<div class="step-num" style="background:${t.color}">${f.n}</div><div class="step-body"><div class="step-title">${f.t}</div><div class="step-desc">${f.d}</div></div></div>`).join('')}
+    </div>
+    <div class="g2" style="margin-top:.8rem">
+      <div style="background:rgba(163,45,45,.04);border:0.5px solid rgba(163,45,45,.2);border-radius:var(--radius);padding:.6rem .8rem"><div style="font-size:10px;font-weight:500;color:var(--c-red);text-transform:uppercase;letter-spacing:.3px;margin-bottom:.3rem">Criterio de entrada</div><div style="font-size:11px">${t.entrada}</div></div>
+      <div style="background:rgba(15,110,86,.04);border:0.5px solid rgba(15,110,86,.2);border-radius:var(--radius);padding:.6rem .8rem"><div style="font-size:10px;font-weight:500;color:var(--c-green);text-transform:uppercase;letter-spacing:.3px;margin-bottom:.3rem">Criterio de salida</div><div style="font-size:11px">${t.salida}</div></div>
+    </div>
+  </div>
+</div>`).join('')}
+`);
+
+/* ════════════════════════════════════════
+   PAGE: LOG DEFECTOS
+════════════════════════════════════════ */
+reg('val-log', () => `
+<div class="page-header">
+  <div class="page-eyebrow" style="color:var(--c-green)">● Fase 4 — Validación</div>
+  <h1 class="page-title">Log de defectos</h1>
+  <p class="page-desc">Registro oficial de defectos detectados en la inspección formal. Haz clic en cualquier fila para ver el detalle completo.</p>
+</div>
+<div class="kpi-grid" id="def-kpis"></div>
+<div class="table-wrap" style="margin-bottom:1rem">
+  <table class="data-table">
+    <thead><tr><th>ID</th><th>Sección</th><th>Severidad</th><th>Descripción</th><th>Asignado</th><th>Estado</th></tr></thead>
+    <tbody id="def-body"></tbody>
+  </table>
+</div>
+<div id="def-detail"></div>
+`);
+
+/* ════════════════════════════════════════
+   PAGE: SIMULADOR UAT
+════════════════════════════════════════ */
+reg('val-uat', () => `
+<div class="page-header">
+  <div class="page-eyebrow" style="color:var(--c-green)">● Fase 4 — Validación</div>
+  <h1 class="page-title">Simulador UAT</h1>
+  <p class="page-desc">Marca cada caso como Pasó / Falló / Bloqueado. El indicador GO/NO-GO se actualiza en tiempo real.</p>
+</div>
+<div class="g4" style="margin-bottom:1rem" id="uat-summary"></div>
+<div id="uat-cases"></div>
+<div class="card" style="background:rgba(15,110,86,.04);border-color:rgba(15,110,86,.2);margin-top:.8rem;font-size:12px;color:var(--muted)">
+  Go-live requiere: 100% casos Críticos en Pasó · 0 defectos Bloqueantes · Acta firmada por el usuario clave.
+</div>
+`);
+
+/* ════════════════════════════════════════
+   PAGE: APROBACIÓN BASELINE
+════════════════════════════════════════ */
+reg('val-baseline', () => `
+<div class="page-header">
+  <div class="page-eyebrow" style="color:var(--c-green)">● Fase 4 — Validación</div>
+  <h1 class="page-title">Proceso de aprobación del baseline</h1>
+  <p class="page-desc">Los 7 pasos formales para convertir el SRS en el baseline aprobado del proyecto según IEEE 29148 e IEEE 1028.</p>
+</div>
+${[
+  {n:1,c:'var(--c-green)',t:'Auto-revisión del autor (BA)',d:'BA aplica checklist formal antes de enviar a revisión externa.',ieee:'IEEE 29148 §6.2',entry:'SRS con todas las secciones completas',exit:'Checklist ≥ 85% · 0 ítems Bloqueantes abiertos'},
+  {n:2,c:'var(--c-green)',t:'Walkthrough técnico',d:'Presentación ante el equipo técnico para detectar inviabilidades.',ieee:'IEEE 1028 §5.3',entry:'Auto-revisión firmada por el BA',exit:'Acta firmada · Todas las observaciones registradas'},
+  {n:3,c:'var(--c-blue)',t:'Revisión de stakeholders de negocio',d:'Stakeholders verifican que el SRS refleja fielmente sus necesidades.',ieee:'IEEE 29148 §6.3',entry:'Observaciones técnicas resueltas',exit:'PO firma acta de conformidad'},
+  {n:4,c:'var(--c-purple)',t:'Inspección formal (IEEE 1028)',d:'Inspector independiente aplica checklist y registra defectos.',ieee:'IEEE 1028 §5.4',entry:'SRS v1.0 con aprobación de negocio',exit:'Reporte de inspección completado · Defectos clasificados'},
+  {n:5,c:'var(--c-amber)',t:'Resolución de defectos',d:'El BA resuelve todos los defectos Mayores sin excepción.',ieee:'IEEE 1028 §5.4.7',entry:'Reporte de inspección con log completo',exit:'0 defectos Mayores abiertos'},
+  {n:6,c:'var(--c-red)',t:'Aprobación y firma del baseline',d:'Sponsor + PO + Arquitecto firman el acta de aprobación.',ieee:'IEEE 29148 §6.4',entry:'0 Mayores abiertos · Inspector confirma',exit:'Acta firmada · Número de baseline asignado · CCB activado'},
+  {n:7,c:'var(--c-gray)',t:'Publicación y gestión del baseline',d:'SRS publicado en el repositorio oficial con tag de versión.',ieee:'IEEE 29148 §6.5',entry:'Acta de baseline firmada',exit:'SRS accesible con tag · Equipo notificado · CCB activo'},
+].map((s,i,arr) => `
+<div class="step-row" style="margin-bottom:.5rem">${i<arr.length-1?'<div class="step-line"></div>':''}
+  <div class="step-num" style="background:${s.c};width:36px;height:36px">${s.n}</div>
+  <div class="card-sm" style="flex:1">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.3rem;flex-wrap:wrap;gap:.4rem">
+      <div style="font-size:13px;font-weight:500;font-family:var(--font-serif)">${s.t}</div>
+      <span style="font-size:10px;background:var(--c-purple-l);color:var(--c-purple-d);padding:2px 7px;border-radius:3px;font-family:var(--font-mono)">${s.ieee}</span>
+    </div>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:.5rem">${s.d}</div>
+    <div class="g2">
+      <div style="background:rgba(163,45,45,.04);border-radius:5px;padding:.4rem .6rem"><div style="font-size:9px;font-weight:500;color:var(--c-red);text-transform:uppercase;letter-spacing:.3px;margin-bottom:2px">Entrada</div><div style="font-size:11px">${s.entry}</div></div>
+      <div style="background:rgba(15,110,86,.04);border-radius:5px;padding:.4rem .6rem"><div style="font-size:9px;font-weight:500;color:var(--c-green);text-transform:uppercase;letter-spacing:.3px;margin-bottom:2px">Salida</div><div style="font-size:11px">${s.exit}</div></div>
+    </div>
+  </div>
+</div>`).join('')}
+`);
+
+/* ════════════════════════════════════════
+   PAGE: CHANGE REQUEST SIMULADOR
+════════════════════════════════════════ */
+reg('ccb-cr', () => `
+<div class="page-header">
+  <div class="page-eyebrow" style="color:var(--c-amber)">● Fase 5 — Gestión de cambios</div>
+  <h1 class="page-title">Simulador de Change Request</h1>
+  <p class="page-desc">Selecciona un CR para ver el formulario, análisis de impacto y tomar la decisión del CCB.</p>
+  <div class="std-row"><span class="std-pill">ISO 12207</span><span class="std-pill">IEEE 29148 §6.4</span></div>
+</div>
+<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1rem" id="cr-selector"></div>
+<div class="tab-nav">
+  <button class="tab-btn on" onclick="tabSel('crt',0,this)">Formulario CR</button>
+  <button class="tab-btn" onclick="tabSel('crt',1,this)">Análisis de impacto</button>
+  <button class="tab-btn" onclick="tabSel('crt',2,this)">Decisión CCB</button>
+</div>
+<div class="tab-panel on" id="crt-0" data-crform="true"></div>
+<div class="tab-panel" id="crt-1" data-crimpact="true"></div>
+<div class="tab-panel" id="crt-2" data-crccb="true"></div>
+`);
+
+/* ════════════════════════════════════════
+   PAGE: BACKLOG CRs
+════════════════════════════════════════ */
+reg('ccb-backlog', () => `
+<div class="page-header">
+  <div class="page-eyebrow" style="color:var(--c-amber)">● Fase 5 — Gestión de cambios</div>
+  <h1 class="page-title">Backlog de Change Requests</h1>
+  <p class="page-desc">Registro completo de todos los CRs del proyecto con estado, urgencia e impacto.</p>
+</div>
+<div class="kpi-grid">
+  ${[{n:10,l:'Total CRs',c:'var(--c-gray)'},{n:4,l:'Aprobados',c:'var(--c-green)'},{n:3,l:'En revisión',c:'var(--c-amber)'},{n:2,l:'Diferidos',c:'var(--c-blue)'},{n:1,l:'Rechazados',c:'var(--c-red)'}].map(k => `<div class="kpi"><div class="kpi-num" style="color:${k.c}">${k.n}</div><div class="kpi-label">${k.l}</div></div>`).join('')}
+</div>
+<div class="table-wrap">
+  <table class="data-table">
+    <thead><tr><th>ID</th><th>Descripción</th><th>Origen</th><th>Tipo</th><th>Urgencia</th><th>Impacto</th><th>Estado</th></tr></thead>
+    <tbody>
+      ${[
+        {id:'CR-001',d:'Cambiar umbral score a 680',o:'Gerencia Riesgo',t:'Modificación regla',u:'Alta',i:'Bajo',e:'En análisis'},
+        {id:'CR-002',d:'Módulo firma digital biométrica',o:'VP Digital',t:'Nuevo requisito',u:'Media',i:'Alto',e:'Pendiente CCB'},
+        {id:'CR-003',d:'Extender sesión a 12 horas',o:'Usuarios finales',t:'Corrección especif.',u:'Alta',i:'Bajo',e:'Aprobado'},
+        {id:'CR-004',d:'Agregar export a CSV',o:'Gerencia Ops.',t:'Mejora funcional',u:'Baja',i:'Bajo',e:'Diferido'},
+        {id:'CR-005',d:'Reporte regulatorio SFC 026',o:'Cumplimiento',t:'Nuevo requisito',u:'Alta',i:'Medio',e:'Aprobado'},
+        {id:'CR-006',d:'Integración con scoring propio',o:'Gerencia Riesgo',t:'Nueva integración',u:'Baja',i:'Alto',e:'Rechazado'},
+        {id:'CR-007',d:'Aumentar retención logs a 10 años',o:'Auditoría',t:'Modificación RNF',u:'Media',i:'Bajo',e:'Aprobado'},
+        {id:'CR-008',d:'Modo mantenimiento con aviso',o:'Operaciones TI',t:'Nueva funcionalidad',u:'Media',i:'Bajo',e:'Aprobado'},
+        {id:'CR-009',d:'Dashboard móvil responsive',o:'Gerentes',t:'Mejora UX',u:'Baja',i:'Medio',e:'Diferido'},
+        {id:'CR-010',d:'Validación cédula en formulario',o:'Operaciones',t:'Corrección especif.',u:'Media',i:'Bajo',e:'En análisis'},
+      ].map(c => {
+        const urgCss={Alta:'b-err',Media:'b-warn',Baja:'b-could'};
+        const impCss={Alto:'b-err',Medio:'b-warn',Bajo:'b-ok'};
+        const estCss={Aprobado:'b-ok','Pendiente CCB':'b-func','En análisis':'b-warn',Diferido:'',Rechazado:'b-err'};
+        return `<tr><td style="font-family:var(--font-mono);color:var(--c-blue);font-size:11px">${c.id}</td><td>${c.d}</td><td style="color:var(--muted)">${c.o}</td><td style="color:var(--muted)">${c.t}</td><td><span class="badge ${urgCss[c.u]||''}">${c.u}</span></td><td><span class="badge ${impCss[c.i]||''}">${c.i}</span></td><td><span class="badge ${estCss[c.e]||''}">${c.e}</span></td></tr>`;
+      }).join('')}
+    </tbody>
+  </table>
+</div>
+`);
+
+/* ════════════════════════════════════════
+   PAGE: CONTROL DE VERSIONES
+════════════════════════════════════════ */
+reg('ccb-versiones', () => `
+<div class="page-header">
+  <div class="page-eyebrow" style="color:var(--c-amber)">● Fase 5 — Gestión de cambios</div>
+  <h1 class="page-title">Control de versiones del SRS</h1>
+  <p class="page-desc">Historial completo de versiones del SRS baseline con los CRs implementados en cada una.</p>
+</div>
+<div style="margin-bottom:1.5rem">
+  ${VERSIONS.map((v,i) => `
+  <div class="ver-row">${i<VERSIONS.length-1?'<div class="ver-line"></div>':''}
+    <div><div class="ver-dot" style="background:${v.color};margin-left:12px"></div></div>
+    <div class="ver-content">
+      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+        <span class="ver-tag">${v.tag}</span>
+        ${v.current?'<span style="font-size:10px;padding:2px 7px;border-radius:8px;background:var(--c-green-l);color:var(--c-green);font-weight:500">Versión actual</span>':''}
+        ${v.crs.map(c => `<span style="font-size:10px;padding:1px 6px;border-radius:3px;background:var(--c-amber-l);color:var(--c-amber-d);font-family:var(--font-mono)">${c}</span>`).join('')}
+      </div>
+      <div class="ver-title">${v.title}</div>
+      <div class="ver-meta">${v.date}</div>
+      <div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:.3rem">${v.changes.map(c => `<span style="font-size:10px;padding:2px 7px;border-radius:4px;background:var(--surface2);color:var(--muted)">${c}</span>`).join('')}</div>
+    </div>
+  </div>`).join('')}
+</div>
+
+<h3 style="font-family:var(--font-serif);font-size:15px;font-weight:500;margin-bottom:.8rem">Reglas del Change Control Board</h3>
+<div class="card">
+  ${[
+    {r:'Todo cambio al SRS baseline requiere CR documentado',ref:'IEEE 29148 §6.4'},
+    {r:'Ningún cambio se implementa sin decisión formal del CCB',ref:'ISO 12207'},
+    {r:'El análisis de impacto es obligatorio antes de la decisión',ref:'BABOK v3 §6.4'},
+    {r:'Toda decisión del CCB se registra con rationale',ref:'ISO 12207'},
+    {r:'Los CR rechazados se archivan — no se eliminan',ref:'Trazabilidad'},
+    {r:'El SRS se re-versiona con cada CR implementado',ref:'IEEE 29148'},
+    {r:'El equipo de desarrollo no puede actuar sin CR aprobado',ref:'Control de cambios'},
+  ].map(r => `<div class="dot-item"><div class="dot" style="background:var(--c-blue)"></div><div style="display:flex;justify-content:space-between;width:100%;gap:.5rem"><span>${r.r}</span><span style="font-size:10px;font-family:var(--font-mono);color:var(--faint);flex-shrink:0">${r.ref}</span></div></div>`).join('')}
+</div>
+`);
+
+/* ════════════════════════════════════════
+   PAGE: ROLES Y RACI
+════════════════════════════════════════ */
+reg('roles-raci', () => `
+<div class="page-header">
+  <div class="page-eyebrow" style="color:var(--c-gray)">● Capa de ejecución</div>
+  <h1 class="page-title">Roles y Matriz RACI</h1>
+  <p class="page-desc">Los 5 roles del framework, sus responsabilidades y la distribución formal de autoridad sobre los artefactos clave.</p>
+</div>
+
+<div class="tab-nav">
+  <button class="tab-btn on" onclick="tabSel('rol',0,this)">Roles del framework</button>
+  <button class="tab-btn" onclick="tabSel('rol',1,this)">Matriz RACI</button>
+</div>
+
+<div class="tab-panel on" id="rol-0">
+  ${[
+    {name:'Analista de requerimientos',init:'AR',color:'var(--c-teal)',title:'Líder del proceso',resp:'Liderar el proceso de elicitación, análisis y especificación; asegurar calidad, verificabilidad y trazabilidad; mantener la RTM y el registro de cambios.',fases:'Todas las fases — rol principal'},
+    {name:'Dueño del producto (PO)',init:'PO',color:'var(--c-blue)',title:'Representante del negocio',resp:'Representar las necesidades del negocio; priorizar el backlog conforme al valor estratégico; aprobar los criterios de aceptación y el baseline.',fases:'Fases 1, 2, 3, 4 y 5 — aprueba en PC1, PC2 y PC4'},
+    {name:'Representante del usuario',init:'RU',color:'var(--c-purple)',title:'Voz del dominio',resp:'Aportar conocimiento del dominio y necesidades reales de uso; validar que los requisitos correspondan a sus expectativas y contextos operativos.',fases:'Fases 1 y 2 — aprueba en PC2'},
+    {name:'Arquitecto / Líder técnico',init:'AT',color:'var(--c-red)',title:'Guardián técnico',resp:'Evaluar viabilidad técnica; identificar restricciones de arquitectura; especificar y validar los RNF; vincular decisiones de diseño a la RTM.',fases:'Fases 2, 3 y 4 — aprueba en PC3 y PC4'},
+    {name:'Responsable de calidad (QA)',init:'QA',color:'var(--c-green)',title:'Garante de verificabilidad',resp:'Verificar que los criterios de aceptación sean testeables; aplicar el checklist de calidad; vincular requisitos con casos de prueba; monitorear métricas de cobertura.',fases:'Fases 3, 4 y 5 — aprueba en PC3 y PC4'},
+  ].map(r => `
+  <div class="card-sm" style="margin-bottom:.5rem;display:flex;gap:.9rem;align-items:flex-start">
+    <div style="width:42px;height:42px;border-radius:50%;background:${r.color}22;border:1.5px solid ${r.color};display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;color:${r.color};flex-shrink:0">${r.init}</div>
+    <div>
+      <div style="font-size:13px;font-weight:500;font-family:var(--font-serif)">${r.name}</div>
+      <div style="font-size:10px;font-weight:500;color:${r.color};text-transform:uppercase;letter-spacing:.3px;margin-bottom:.3rem">${r.title}</div>
+      <div style="font-size:12px;color:var(--muted);line-height:1.5;margin-bottom:.3rem">${r.resp}</div>
+      <span class="badge b-func">${r.fases}</span>
+    </div>
+  </div>`).join('')}
+</div>
+
+<div class="tab-panel" id="rol-1">
+  <div style="margin-bottom:.6rem;font-size:12px;color:var(--muted)">
+    <span style="background:rgba(24,95,165,.1);color:var(--c-blue);padding:2px 7px;border-radius:3px;font-weight:700;margin-right:6px">R</span>Responsable
+    <span style="background:rgba(163,45,45,.1);color:var(--c-red);padding:2px 7px;border-radius:3px;font-weight:700;margin:0 6px">A</span>Aprobador
+    <span style="background:rgba(186,117,23,.1);color:var(--c-amber);padding:2px 7px;border-radius:3px;font-weight:500;margin-right:6px">C</span>Consultado
+    <span style="background:var(--surface2);color:var(--muted);padding:2px 7px;border-radius:3px;margin-right:6px">I</span>Informado
+  </div>
+  <div class="table-wrap">
+    <table class="data-table">
+      <thead><tr><th>Artefacto</th><th>Analista</th><th>PO</th><th>Rep. usuario</th><th>Arq./LT</th><th>QA</th></tr></thead>
+      <tbody>
+        ${[
+          ['Minuta y plan de sesión','R','I','C','I','I'],
+          ['Mapa de stakeholders','R','A','C','I','I'],
+          ['Diagrama BPMN / contexto','R','C','C','A','I'],
+          ['Casos de uso UML','R','C','C','C','I'],
+          ['Análisis GAP As-Is/To-Be','R','A','C','C','I'],
+          ['Backlog priorizado (MoSCoW)','R','A','C','C','I'],
+          ['Historia de usuario (HU)','R','A','C','I','C'],
+          ['Criterio de aceptación (AC)','R','A','C','I','A'],
+          ['Requisito no funcional (RNF)','R','C','I','A','C'],
+          ['Glosario técnico','R','I','C','A','I'],
+          ['SRS (IEEE 29148)','R','A','C','A','C'],
+          ['Checklist de calidad SRS','R','I','I','C','A'],
+          ['RTM (pre-RS y post-RS)','A','I','I','C','R'],
+          ['Plan de validación / UAT','C','C','I','A','R'],
+          ['Log de defectos','C','I','I','C','A'],
+          ['Acta de aprobación del baseline','C','A','I','C','C'],
+          ['Formulario CR / análisis impacto','R','A','I','C','C'],
+          ['Acta de cierre del CR','R','C','I','I','A'],
+        ].map(row => {
+          const css={R:'raci-r',A:'raci-a',C:'raci-c',I:'raci-i'};
+          return `<tr><td style="font-weight:500">${row[0]}</td>${row.slice(1).map(v=>`<td><span class="badge ${css[v]||''}" style="min-width:22px;text-align:center">${v}</span></td>`).join('')}</tr>`;
+        }).join('')}
+      </tbody>
+    </table>
+  </div>
+</div>
+`);
+
+/* ════════════════════════════════════════
+   PAGE: CRITERIOS DE CALIDAD
+════════════════════════════════════════ */
+reg('calidad', () => `
+<div class="page-header">
+  <div class="page-eyebrow" style="color:var(--c-gray)">● Capa de evaluación</div>
+  <h1 class="page-title">Criterios de calidad mínimos</h1>
+  <p class="page-desc">Los 7 criterios que deben cumplir los requisitos para ser considerados aptos para el desarrollo. Derivados de la ISO/IEC/IEEE 29148:2018 y el modelo de calidad ISO/IEC 25010:2023.</p>
+  <div class="std-row"><span class="std-pill">ISO/IEC 25010:2023</span><span class="std-pill">IEEE 29148:2018</span></div>
+</div>
+<div class="table-wrap" style="margin-bottom:1.2rem">
+  <table class="data-table">
+    <thead><tr><th>Criterio</th><th>Definición operacional</th><th>Métrica</th><th>Umbral mínimo</th></tr></thead>
+    <tbody>
+      ${[
+        {c:'Claridad',def:'Expresado en lenguaje preciso sin términos sujetos a múltiples interpretaciones; verificado mediante revisión entre pares',met:'% HU sin términos ambiguos detectados en revisión',u:'≥ 90%',color:'var(--c-teal)'},
+        {c:'Completitud',def:'Describe suficientemente el comportamiento esperado incluyendo condiciones de entrada, procesamiento y resultado',met:'% HU con criterio de aceptación definido',u:'≥ 95%',color:'var(--c-blue)'},
+        {c:'Verificabilidad',def:'Puede comprobarse mediante pruebas, inspección o análisis; preferiblemente en formato Dado–Cuando–Entonces (BDD/Gherkin)',met:'% AC formulados en formato testable',u:'≥ 85%',color:'var(--c-purple)'},
+        {c:'Trazabilidad',def:'Vinculable a su origen en el descubrimiento y a sus elementos de verificación; enlace completo en la RTM: origen → HU/RNF → diseño → prueba',met:'% requisitos con enlace completo en RTM',u:'≥ 90%',color:'var(--c-green)'},
+        {c:'Consistencia',def:'No contradice ni duplica otros requisitos del conjunto; coherente con objetivos del negocio y restricciones del sistema',met:'% requisitos sin conflictos en revisión de backlog',u:'≥ 95%',color:'var(--c-amber)'},
+        {c:'Necesidad',def:'Responde a una necesidad real del negocio o del usuario, vinculable a un objetivo organizacional documentado en la Fase 1',met:'% requisitos con objetivo de negocio en RTM',u:'≥ 90%',color:'var(--c-red)'},
+        {c:'Cuantificación de RNF',def:'Los requisitos no funcionales se especifican con umbral numérico medible y método de verificación conforme a ISO/IEC 25010:2023',met:'% RNF con umbral y método de verificación definidos',u:'≥ 80%',color:'var(--c-gray)'},
+      ].map(r => `<tr>
+        <td><span style="font-weight:500;color:${r.color}">${r.c}</span></td>
+        <td style="color:var(--muted)">${r.def}</td>
+        <td style="font-size:11px;color:var(--muted)">${r.met}</td>
+        <td><span class="badge b-ok" style="font-size:12px">${r.u}</span></td>
+      </tr>`).join('')}
+    </tbody>
+  </table>
+</div>
+
+<div class="card" style="background:rgba(15,110,86,.03);border-color:rgba(15,110,86,.2);font-size:12px;color:var(--muted);line-height:1.7">
+  El cumplimiento de estos criterios se verifica mediante el checklist de calidad aplicado en el PC3 y se monitorea de forma continua durante la Fase 5. El criterio de Cuantificación de RNF complementa los seis criterios base aplicando el modelo de calidad de la ISO/IEC 25010:2023 específicamente a los requisitos no funcionales, cuya naturaleza requiere una forma de medición diferenciada.
+</div>
+`);
+
+/* ════════════════════════════════════════
+   PAGE: EVALUADOR DE MADUREZ
+════════════════════════════════════════ */
+reg('madurez', () => `
+<div class="page-header">
+  <div class="page-eyebrow" style="color:var(--c-gray)">● Cierre — Consolidación</div>
+  <h1 class="page-title">Evaluador de madurez</h1>
+  <p class="page-desc">30 criterios ponderados en 5 fases. Marca los que tu equipo ya practica para obtener tu nivel de madurez y las brechas específicas.</p>
+  <div class="std-row"><span class="std-pill">IREB CPRE</span><span class="std-pill">CMMI-DEV L2-L3</span><span class="std-pill">IEEE 29148</span></div>
+</div>
+
+<div style="display:flex;align-items:center;gap:1rem;padding:1rem;background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius-lg);margin-bottom:1.2rem">
+  <div style="width:64px;height:64px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-direction:column;border:2px solid var(--border2);flex-shrink:0;transition:border-color .4s" id="mat-circle">
+    <div style="font-size:22px;font-weight:500;font-family:var(--font-serif)" id="mat-score">0</div>
+    <div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.3px">/ 100</div>
+  </div>
+  <div style="flex:1">
+    <div style="font-size:14px;font-weight:500;font-family:var(--font-serif);margin-bottom:2px" id="mat-level">Completa el cuestionario</div>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:.4rem" id="mat-desc">Responde las preguntas de cada fase para obtener tu nivel de madurez actual.</div>
+    <div style="height:6px;background:var(--surface2);border-radius:3px;overflow:hidden"><div style="height:100%;border-radius:3px;transition:width .5s,background .4s" id="mat-fill" style="width:0%"></div></div>
+  </div>
+  <button class="btn btn-sm" onclick="resetMaturity()">Reiniciar</button>
+</div>
+<div id="mat-questions"></div>
+`);
+
+/* ════════════════════════════════════════
+   PAGE: HOJA DE RUTA
+════════════════════════════════════════ */
+reg('roadmap', () => `
+<div class="page-header">
+  <div class="page-eyebrow" style="color:var(--c-gray)">● Cierre — Consolidación</div>
+  <h1 class="page-title">Hoja de ruta de implementación</h1>
+  <p class="page-desc">Plan concreto para pasar de nivel inicial a proceso optimizado en el equipo.</p>
+</div>
+<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1rem">
+  ${['Nivel 1 → 2 (Inicial)','Nivel 2 → 3 (Gestionado)','Nivel 3 → 4 (Definido)'].map((l,i) => `<button class="btn btn-sm${i===0?' btn-primary':''}" onclick="setRoadmap(${i},this)">${l}</button>`).join('')}
+</div>
+<div id="roadmap-content"></div>
+`);
+
+/* ════════════════════════════════════════
+   INTERACTIVE LOGIC
+════════════════════════════════════════ */
+
+// ── CHECKLISTS ──
+const PRE_ITEMS = ['Confirmar asistencia de stakeholders con 48h de anticipación','Enviar agenda con objetivo claro de la sesión','Preparar guía de preguntas personalizada','Revisar documentación existente del área','Configurar herramienta de grabación','Definir alcance y límites de la sesión'];
+const POST_ITEMS = ['Transcribir notas dentro de las 24h siguientes','Etiquetar cada hallazgo con ID único','Clasificar: funcional / no funcional / restricción','Marcar requisitos ambiguos para clarificación','Enviar borrador al stakeholder para revisión','Actualizar la matriz de trazabilidad'];
+const preChecked = new Set(), postChecked = new Set();
+
+function initChecklists() {
+  setTimeout(() => {
+    buildChklst('pre-checklist', PRE_ITEMS, preChecked, 'togglePre', 'pre-fill', 'pre-label');
+    buildChklst('post-checklist', POST_ITEMS, postChecked, 'togglePost', 'post-fill', 'post-label');
+  }, 100);
+}
+function buildChklst(elId, items, set, fn, fillId, labelId) {
+  const el = document.getElementById(elId);
+  if (!el) return;
+  el.innerHTML = items.map((t, i) => `<div class="chk-item${set.has(i)?' done':''}" id="${fn}-${i}" onclick="${fn}(${i})"><div class="chk-box">${set.has(i)?'✓':''}</div><div class="chk-text">${t}</div></div>`).join('');
+  const pct = Math.round(set.size / items.length * 100);
+  const fill = document.getElementById(fillId);
+  const label = document.getElementById(labelId);
+  if (fill) fill.style.width = pct + '%';
+  if (label) label.textContent = set.size + ' / ' + items.length;
+}
+function togglePre(i) { preChecked.has(i)?preChecked.delete(i):preChecked.add(i); buildChklst('pre-checklist',PRE_ITEMS,preChecked,'togglePre','pre-fill','pre-label'); }
+function togglePost(i) { postChecked.has(i)?postChecked.delete(i):postChecked.add(i); buildChklst('post-checklist',POST_ITEMS,postChecked,'togglePost','post-fill','post-label'); }
+
+// ── GHERKIN CONSTRUCTOR ──
+function initGherkin() { setTimeout(updateGherkin, 100); }
+function updateGherkin() {
+  const f=v('gh-feature'), n=v('gh-name'), t=v('gh-tag'), g=v('gh-given'), w=v('gh-when'), th=v('gh-then');
+  const out = document.getElementById('gh-output');
+  if (out) out.innerHTML = `<span class="g-tag">${t}</span>\n<span style="color:var(--c-blue);font-weight:500">Feature:</span> <span style="color:var(--muted)">${f}</span>\n\n  <span style="color:var(--c-blue);font-weight:500">Scenario:</span> ${n}\n    <span class="g-given">Given</span> ${g}\n    <span class="g-when">When</span> ${w}\n    <span class="g-then">Then</span> ${th}`;
+}
+function v(id) { const el = document.getElementById(id); return el ? el.value : ''; }
+
+// ── DETECTOR ──
+function initDetector() { setTimeout(runDetector, 200); }
+function setExample(txt) { const el=document.getElementById('req-input'); if(el){el.value=txt;runDetector();} }
+function runDetector() {
+  const text = (document.getElementById('req-input')?.value || '').toLowerCase();
+  const issues = [];
+  let penalty = 0;
+  AMBIG_WORDS.forEach(a => { if (text.includes(a.w.toLowerCase())) { issues.push(a); penalty += a.sev==='high'?18:a.sev==='medium'?10:5; } });
+  if (!text.includes('debe') && !text.includes('must')) { issues.push({w:'[sin modal]',sev:'high',msg:'Falta DEBE/MUST (IEEE 29148 §5.2)',fix:'Iniciar con: "El sistema DEBE..."'}); penalty += 15; }
+  const score = Math.max(0, 100 - penalty);
+  const col = score>=70?'var(--c-green)':score>=40?'var(--c-amber)':'var(--c-red)';
+  const el1=document.getElementById('det-score'), el2=document.getElementById('det-fill'), el3=document.getElementById('det-label');
+  if(el1){el1.textContent=score;el1.style.color=col;}
+  if(el2){el2.style.width=score+'%';el2.style.background=col;}
+  if(el3){el3.textContent=score>=70?'Buena calidad':score>=40?'Mejorable':'Calidad baja';el3.style.color=col;}
+  const sevBg={high:'rgba(163,45,45,.06)',medium:'rgba(186,117,23,.05)',low:'var(--surface)'};
+  const sevCol={high:'var(--c-red)',medium:'var(--c-amber)',low:'var(--c-gray)'};
+  const issEl = document.getElementById('det-issues');
+  if(issEl) issEl.innerHTML = issues.length ? issues.map(i=>`<div style="background:${sevBg[i.sev]};border:0.5px solid ${sevCol[i.sev]}40;border-radius:var(--radius);padding:.5rem .7rem;margin-bottom:.3rem;font-size:11px"><div><strong style="color:${sevCol[i.sev]}">"${i.w}"</strong> — ${i.msg}</div><div style="color:var(--muted);margin-top:2px">${i.fix}</div></div>`).join('') : '<div style="color:var(--c-green);font-size:12px;padding:.5rem;background:rgba(15,110,86,.05);border-radius:var(--radius)">No se detectaron problemas. El requisito parece bien estructurado.</div>';
+  let sug = text;
+  const reps = {' rápido ':' en menos de 3 segundos ',' fácil ':' en menos de 2 pasos ',' amigable ':' conforme WCAG 2.1 AA ',' adecuado ':' definido según criterio [especificar] ',' deberá ':' DEBE ',' proporcionar ':' mostrar ',' manejar ':' procesar ',' varios ':' [N] ',' etc':' [listar todos]'};
+  Object.entries(reps).forEach(([b,g]) => { sug = sug.split(b).join(g); });
+  const suEl = document.getElementById('det-sugg');
+  if(suEl) suEl.textContent = score < 70 ? sug.trim() : 'El requisito tiene buena calidad. Considera añadir criterio de verificación Gherkin si aún no lo tiene.';
+}
+
+// ── GLOSARIO ──
+let glosFilter = 'Todos';
+function initGlosario() {
+  const cats = [...new Set(GLOSARIO.map(g => g.cat))];
+  const fEl = document.getElementById('glos-filters');
+  if(fEl) fEl.innerHTML = ['Todos',...cats].map(c => `<button class="btn btn-sm${c===glosFilter?' btn-primary':''}" onclick="setGlosFilter('${c}')">${c}</button>`).join('');
+  filterGlos();
+}
+function setGlosFilter(f) { glosFilter=f; initGlosario(); }
+function filterGlos() {
+  const q=(document.getElementById('glos-search')?.value||'').toLowerCase();
+  const filtered=GLOSARIO.filter(g=>(glosFilter==='Todos'||g.cat===glosFilter)&&(!q||g.name.toLowerCase().includes(q)||g.def.toLowerCase().includes(q)));
+  const el=document.getElementById('glos-terms');
+  if(!el)return;
+  el.innerHTML=filtered.map(g=>`<div style="display:grid;grid-template-columns:110px 1fr 70px;gap:.8rem;padding:.55rem .8rem;background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius);margin-bottom:.3rem"><div style="font-family:var(--font-mono);color:var(--c-blue);font-size:12px;font-weight:500;align-self:center">${g.name}</div><div style="font-size:12px;color:var(--muted);align-self:center">${g.def}</div><div style="align-self:center"><span class="badge">${g.cat}</span></div></div>`).join('');
+}
+
+// ── DEFECTS LOG ──
+let selDef = null;
+function initDefects() {
+  const kEl = document.getElementById('def-kpis');
+  if(kEl) {
+    const cnt = s => DEFECTS.filter(d=>d.sev===s).length;
+    kEl.innerHTML=[{n:cnt('Bloqueante'),l:'Bloqueantes',c:'var(--c-red)'},{n:cnt('Mayor'),l:'Mayores',c:'var(--c-amber)'},{n:cnt('Informativo')+DEFECTS.filter(d=>d.sev==='Menor').length,l:'Menores/Info',c:'var(--c-blue)'},{n:DEFECTS.filter(d=>d.est==='Abierto').length,l:'Abiertos',c:'var(--c-red)'}].map(k=>`<div class="kpi"><div class="kpi-num" style="color:${k.c}">${k.n}</div><div class="kpi-label">${k.l}</div></div>`).join('');
+  }
+  buildDefTable();
+}
+function buildDefTable() {
+  const sevCss={Bloqueante:'b-err',Mayor:'b-warn',Menor:'b-could',Informativo:''};
+  const estCss={Abierto:'b-err','En revisión':'b-warn',Resuelto:'b-ok'};
+  const tbody = document.getElementById('def-body');
+  if(!tbody) return;
+  tbody.innerHTML = DEFECTS.map((d,i)=>`<tr style="cursor:pointer${selDef===i?';background:var(--surface2)':''}" onclick="selDefect(${i})"><td style="font-family:var(--font-mono);color:var(--c-blue);font-size:11px">${d.id}</td><td style="font-family:var(--font-mono);font-size:11px;color:var(--muted)">${d.sec}</td><td><span class="badge ${sevCss[d.sev]}">${d.sev}</span></td><td>${d.desc.substring(0,70)}…</td><td style="font-size:11px;color:var(--muted)">${d.asig}</td><td><span class="badge ${estCss[d.est]||''}">${d.est}</span></td></tr>`).join('');
+  const det = document.getElementById('def-detail');
+  if(!det) return;
+  if(selDef===null){det.innerHTML='';return;}
+  const d = DEFECTS[selDef];
+  det.innerHTML=`<div class="card"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.8rem;flex-wrap:wrap;gap:.5rem"><div style="font-size:14px;font-weight:500;font-family:var(--font-serif)">${d.id} — ${d.sec}</div><div style="display:flex;gap:6px"><span class="badge ${['Bloqueante','Mayor'].includes(d.sev)?'b-err':'b-warn'}">${d.sev}</span><span class="badge ${d.est==='Resuelto'?'b-ok':d.est==='Abierto'?'b-err':'b-warn'}">${d.est}</span></div></div><div class="g2"><div><div class="card-title">Descripción completa</div><div style="font-size:12px;color:var(--muted);margin-bottom:.6rem">${d.desc}</div><div class="card-title">Impacto si no se resuelve</div><div style="font-size:12px;color:var(--c-red)">${d.impacto}</div></div><div><div class="card-title">Asignado a</div><div style="font-size:12px;color:var(--muted);margin-bottom:.6rem">${d.asig}</div><div class="card-title">Resolución documentada</div><div style="font-size:12px;color:var(--muted)">${d.res||'Pendiente de resolución'}</div></div></div></div>`;
+}
+function selDefect(i) { selDef = selDef===i ? null : i; buildDefTable(); }
+
+// ── UAT ──
+const uatResults = {};
+function initUAT() { setTimeout(() => { buildUATSummary(); buildUATCases(); }, 100); }
+function buildUATSummary() {
+  const p=Object.values(uatResults).filter(r=>r==='pass').length;
+  const f=Object.values(uatResults).filter(r=>r==='fail').length;
+  const b=Object.values(uatResults).filter(r=>r==='block').length;
+  const pend=UAT_CASES.length-p-f-b;
+  const cPass=UAT_CASES.filter((c,i)=>c.prio==='Crítico'&&uatResults[i]==='pass').length;
+  const cTotal=UAT_CASES.filter(c=>c.prio==='Crítico').length;
+  const go=f===0&&b===0&&cPass===cTotal&&pend===0;
+  const el=document.getElementById('uat-summary');
+  if(el) el.innerHTML=[{n:p,l:'Pasó',c:'var(--c-green)'},{n:f,l:'Falló',c:'var(--c-red)'},{n:b,l:'Bloqueado',c:'var(--c-amber)'},{n:go?'GO':'NO GO',l:'Decisión',c:go?'var(--c-green)':'var(--c-red)'}].map(k=>`<div class="kpi"><div class="kpi-num" style="color:${k.c}">${k.n}</div><div class="kpi-label">${k.l}</div></div>`).join('');
+}
+function buildUATCases() {
+  const el=document.getElementById('uat-cases');
+  if(!el) return;
+  el.innerHTML=UAT_CASES.map((c,i)=>{
+    const res=uatResults[i];
+    const prioCss=c.prio==='Crítico'?'b-err':c.prio==='Alto'?'b-warn':'b-could';
+    return `<div class="card-sm" style="margin-bottom:.5rem;border-left:3px solid ${res==='pass'?'var(--c-green)':res==='fail'?'var(--c-red)':res==='block'?'var(--c-amber)':'var(--border2)'}">
+      <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.4rem;flex-wrap:wrap">
+        <span style="font-family:var(--font-mono);color:var(--c-blue);font-size:11px;font-weight:500">${c.id}</span>
+        <span class="badge ${prioCss}">${c.prio}</span>
+        <span style="font-size:10px;font-family:var(--font-mono);color:var(--muted);margin-left:auto">${c.rfid}</span>
+      </div>
+      <div style="font-size:13px;font-weight:500;font-family:var(--font-serif);margin-bottom:.4rem">${c.title}</div>
+      <div class="gherkin"><span class="g-given">Given</span> ${c.given}<br><span class="g-when">When</span> ${c.when}<br><span class="g-then">Then</span> ${c.then}</div>
+      <div style="display:flex;gap:4px;margin-top:.5rem;align-items:center">
+        <button class="uat-btn${res==='pass'?' pass':''}" onclick="setUAT(${i},'pass')">Pasó</button>
+        <button class="uat-btn${res==='fail'?' fail':''}" onclick="setUAT(${i},'fail')">Falló</button>
+        <button class="uat-btn${res==='block'?' block':''}" onclick="setUAT(${i},'block')">Bloqueado</button>
+        ${res?`<span style="font-size:11px;color:${res==='pass'?'var(--c-green)':res==='fail'?'var(--c-red)':'var(--c-amber)'};margin-left:.3rem">${res==='pass'?'✓ Exitoso':res==='fail'?'✗ Defecto registrado':'⚠ Bloqueado'}</span>`:''}
+      </div>
+    </div>`;
+  }).join('');
+  buildUATSummary();
+}
+function setUAT(i,res) { uatResults[i]=uatResults[i]===res?undefined:res; buildUATCases(); }
+
+// ── CR SIMULATOR ──
+let selCR = 0;
+const ccbDecs = {};
+function initCR() {
+  const sel=document.getElementById('cr-selector');
+  if(!sel) return;
+  sel.innerHTML=CR_DATA.map((c,i)=>`<button class="btn btn-sm${i===selCR?' btn-primary':''}" onclick="selCRItem(${i})">${c.id}</button>`).join('');
+  buildCRForm(); buildCRImpact(); buildCRCCB();
+}
+function selCRItem(i) { selCR=i; initCR(); }
+function buildCRForm() {
+  const el=document.getElementById('crt-0'); if(!el)return;
+  const c=CR_DATA[selCR];
+  const priCss={Alta:'b-err',Media:'b-warn',Baja:'b-could'};
+  const estCss={'En análisis':'b-warn','Pendiente CCB':'b-func','Aprobado':'b-ok','Rechazado':'b-err','Diferido':''};
+  el.innerHTML=`<div class="card" style="margin-bottom:.8rem"><div class="g3"><div class="field-group"><div class="field-label">ID del CR</div><div class="field-val field-mono">${c.id}</div></div><div class="field-group"><div class="field-label">Fecha</div><div class="field-val">${c.fecha}</div></div><div class="field-group"><div class="field-label">Estado</div><div class="field-val"><span class="badge ${estCss[c.estado]||''}">${c.estado}</span></div></div><div class="field-group"><div class="field-label">Solicitante</div><div class="field-val">${c.origen}</div></div><div class="field-group"><div class="field-label">Tipo</div><div class="field-val">${c.tipo}</div></div><div class="field-group"><div class="field-label">Prioridad</div><div class="field-val"><span class="badge ${priCss[c.prioridad]||''}">${c.prioridad}</span></div></div></div><div class="field-group"><div class="field-label">Descripción</div><div class="field-val">${c.desc}</div></div><div class="field-group"><div class="field-label">Justificación de negocio</div><div class="field-val">${c.just}</div></div><div class="card-title">Artefactos afectados</div><div style="display:flex;flex-wrap:wrap;gap:4px">${c.rfAfect.map(r=>`<span style="font-size:10px;font-family:var(--font-mono);padding:2px 7px;border-radius:4px;background:var(--c-blue-l);color:var(--c-blue-d)">${r}</span>`).join('')}</div></div>`;
+}
+function buildCRImpact() {
+  const el=document.getElementById('crt-1'); if(!el)return;
+  const c=CR_DATA[selCR];
+  const mData=[{l:'Esfuerzo',v:c.riesgo==='Bajo'?25:85,col:c.riesgo==='Bajo'?'var(--c-green)':'var(--c-red)',txt:c.esfuerzo},{l:'Costo',v:c.costo.includes('0.3')?5:c.costo.includes('1.2')?15:90,col:c.costo.includes('180')?'var(--c-red)':'var(--c-green)',txt:c.costo},{l:'Riesgo',v:c.riesgo==='Bajo'?20:85,col:c.riesgo==='Bajo'?'var(--c-green)':'var(--c-red)',txt:c.riesgo},{l:'Urgencia',v:c.urgencia==='Alta'?80:c.urgencia==='Media'?50:25,col:c.urgencia==='Alta'?'var(--c-red)':'var(--c-amber)',txt:c.urgencia},{l:'Impacto alcance',v:c.alcance==='Alto'?85:20,col:c.alcance==='Alto'?'var(--c-red)':'var(--c-green)',txt:c.alcance}];
+  el.innerHTML=`<div class="card" style="margin-bottom:.8rem"><div class="card-title">Medidores de impacto</div>${mData.map(m=>`<div class="impact-row"><div class="impact-label">${m.l}</div><div class="impact-track"><div class="impact-fill" style="width:${m.v}%;background:${m.col}"></div></div><div class="impact-val" style="color:${m.col}">${m.txt}</div></div>`).join('')}</div><div class="card"><div class="card-title">Artefactos impactados</div>${c.impactos.map(i=>`<div style="display:grid;grid-template-columns:60px 80px 1fr 70px;gap:.5rem;padding:.4rem 0;border-bottom:0.5px solid var(--border);font-size:12px;align-items:center"><span style="color:var(--muted)">${i.tipo}</span><span style="font-family:var(--font-mono);color:var(--c-blue);font-size:10px">${i.id}</span><span>${i.desc}</span><span class="badge ${i.sev==='alto'?'b-err':i.sev==='med'?'b-warn':'b-ok'}">${i.sev==='alto'?'Alto':i.sev==='med'?'Medio':'Bajo'}</span></div>`).join('')}<div style="margin-top:.7rem;font-size:12px;font-weight:500">${c.rec}</div></div>`;
+}
+function buildCRCCB() {
+  const el=document.getElementById('crt-2'); if(!el)return;
+  const c=CR_DATA[selCR];
+  const cur=ccbDecs[selCR]||c.dec;
+  const opts=[{k:'aprobado',t:'Aprobar',col:'var(--c-green)',next:'BA actualiza SRS · Equipo implementa · QA re-ejecuta casos afectados · PM cierra el CR'},{k:'rechazado',t:'Rechazar',col:'var(--c-red)',next:'Notificar al solicitante con rationale · Archivar CR · No se modifica el SRS'},{k:'diferido',t:'Diferir',col:'var(--c-amber)',next:'Registrar en backlog v.next · Notificar al solicitante con fecha estimada'}];
+  el.innerHTML=`<div class="card" style="margin-bottom:.8rem"><div class="field-val" style="margin-bottom:.8rem;font-style:italic">${c.rec}</div><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.8rem;margin-bottom:.8rem">${opts.map(o=>`<div class="dec-card${cur===o.k?' sel':''}" style="${cur===o.k?`border-color:${o.col};background:${o.col}14;border-width:1.5px`:''}" onclick="setCCBDec('${o.k}')"><div style="font-size:20px;color:${o.col};margin-bottom:.3rem">${o.k==='aprobado'?'✓':o.k==='rechazado'?'✕':'→'}</div><div style="font-size:13px;font-weight:500;color:${o.col};margin-bottom:.3rem;font-family:var(--font-serif)">${o.t}</div></div>`).join('')}</div>${cur?`<div style="background:${cur==='aprobado'?'rgba(15,110,86,.05)':cur==='rechazado'?'rgba(163,45,45,.05)':'rgba(186,117,23,.05)'};border:0.5px solid ${cur==='aprobado'?'rgba(15,110,86,.25)':cur==='rechazado'?'rgba(163,45,45,.25)':'rgba(186,117,23,.25)'};border-radius:var(--radius);padding:.7rem .9rem"><div style="font-size:12px;font-weight:500;color:${cur==='aprobado'?'var(--c-green)':cur==='rechazado'?'var(--c-red)':'var(--c-amber)'};margin-bottom:.3rem">Próximos pasos</div><div style="font-size:11px;color:var(--muted)">${opts.find(o=>o.k===cur)?.next}</div></div>`:''}`;
+}
+function setCCBDec(k) { ccbDecs[selCR]=ccbDecs[selCR]===k?null:k; buildCRCCB(); }
+
+// ── MATURITY ──
+const matAnswers = {};
+let matTotalW = 0;
+MATURITY_PHASES.forEach(p => p.qs.forEach(q => matTotalW += q.w));
+function initMaturity() {
+  setTimeout(() => {
+    const el = document.getElementById('mat-questions'); if(!el)return;
+    let idx=0;
+    el.innerHTML = MATURITY_PHASES.map(p => `
+      <div class="card-sm" style="margin-bottom:.7rem;border-left:3px solid ${p.color}">
+        <div style="font-size:13px;font-weight:500;font-family:var(--font-serif);margin-bottom:.6rem;color:${p.color}">${p.name}</div>
+        ${p.qs.map(q => { const i=idx++; return `<div class="mat-q" id="mq${i}" onclick="toggleMat(${i},${q.w})"><div class="mat-radio" id="mr${i}"></div><div style="flex:1">${q.t}</div><span style="font-size:10px;color:var(--faint);margin-left:.4rem">×${q.w}</span></div>`; }).join('')}
+      </div>`).join('');
+    updateMatScore();
+  }, 100);
+}
+function toggleMat(i, w) {
+  matAnswers[i] = !matAnswers[i];
+  const r=document.getElementById('mr'+i), q=document.getElementById('mq'+i);
+  if(r){r.style.background=matAnswers[i]?'var(--c-green)':'transparent';r.style.borderColor=matAnswers[i]?'var(--c-green)':'var(--border2)';r.textContent=matAnswers[i]?'✓':'';}
+  updateMatScore();
+}
+function updateMatScore() {
+  let earned=0;
+  MATURITY_PHASES.forEach((p,pi) => {
+    let off=0; MATURITY_PHASES.slice(0,pi).forEach(pp => off+=pp.qs.length);
+    p.qs.forEach((q,qi) => { if(matAnswers[off+qi]) earned+=q.w*10; });
+  });
+  const total=matTotalW*10, pct=Math.round(earned/total*100);
+  const level=pct>=80?{l:'Nivel 4 — Optimizado',d:'Proceso institucionalizado con mejora continua y métricas activas.',c:'var(--c-green)'}:pct>=60?{l:'Nivel 3 — Definido',d:'Proceso documentado y consistente. Enfócate en las brechas identificadas.',c:'var(--c-blue)'}:pct>=35?{l:'Nivel 2 — Gestionado',d:'El proceso existe pero no es consistente entre proyectos. Prioriza Especificación y Validación.',c:'var(--c-amber)'}:{l:'Nivel 1 — Inicial',d:'El proceso es informal o ad-hoc. Empieza por establecer plantillas básicas.',c:'var(--c-red)'};
+  const sc=document.getElementById('mat-score'),fl=document.getElementById('mat-fill'),lv=document.getElementById('mat-level'),ds=document.getElementById('mat-desc'),ci=document.getElementById('mat-circle');
+  if(sc){sc.textContent=pct;sc.style.color=level.c;}
+  if(fl){fl.style.width=pct+'%';fl.style.background=level.c;}
+  if(lv){lv.textContent=level.l;lv.style.color=level.c;}
+  if(ds) ds.textContent=level.d;
+  if(ci) ci.style.borderColor=level.c;
+}
+function resetMaturity() { Object.keys(matAnswers).forEach(k=>delete matAnswers[k]); initMaturity(); }
+
+// ── ROADMAP ──
+const ROADMAPS = [
+  {title:'Nivel 1 → 2 (Inicial a Gestionado)',color:'var(--c-red)',desc:'El equipo trabaja de manera ad-hoc. El objetivo es hacer el proceso visible y repetible a través de un proyecto piloto.',warning:'Error más común: implementar las cinco fases simultáneamente. Empieza por una sola práctica en la Elicitación y consolídala antes de avanzar.',sprints:[{t:'Semanas 1–2',n:'Diagnóstico y plantillas base',as:['Hacer el evaluador de madurez con todo el equipo','Seleccionar un proyecto piloto de mediano riesgo','Crear plantilla de minuta de elicitación','Definir formato mínimo de historia de usuario']},{t:'Semanas 3–6',n:'Primera elicitación estructurada',as:['Ejecutar entrevistas con guía de preguntas documentada','Construir mapa de stakeholders del proyecto piloto','Documentar hallazgos con IDs de requisito','Validar notas con los stakeholders entrevistados']},{t:'Semanas 7–10',n:'Especificación básica',as:['Aplicar plantilla de SRS simplificada','Escribir al menos 10 requisitos con criterio de aceptación','Hacer un walkthrough informal con el equipo técnico','Obtener firma de aprobación del PO sobre el borrador']}],exits:['1 SRS producido con la plantilla','Equipo piloto puede citar 3 beneficios concretos','Sponsor visible en al menos 1 sesión de elicitación']},
+  {title:'Nivel 2 → 3 (Gestionado a Definido)',color:'var(--c-amber)',desc:'El proceso existe en algunos proyectos pero no en todos. El objetivo es definirlo formalmente para que cualquier analista lo pueda seguir.',warning:'Error más común: documentar el proceso sin entrenar al equipo. Un proceso en un PDF que nadie lee no existe.',sprints:[{t:'Sprint 1–2',n:'Proceso de elicitación y análisis formal',as:['Documentar el proceso de elicitación como procedimiento oficial','Implementar análisis BPMN As-Is/To-Be como actividad obligatoria','Formalizar criterios de priorización MoSCoW con el PO']},{t:'Sprint 3–4',n:'SRS completo con BDD/Gherkin',as:['Adoptar IEEE 29148 como plantilla oficial del SRS','Implementar Gherkin para todos los criterios de aceptación','Aplicar checklist de detección de ambigüedades en cada SRS']},{t:'Sprint 5–6',n:'Proceso de validación formal',as:['Implementar walkthrough técnico como actividad obligatoria','Crear log de defectos con plantilla estandarizada','Realizar primera inspección formal con revisor independiente']}],exits:['100% proyectos del área usan plantilla SRS','≥ 60% criterios de aceptación en Gherkin','Cero SRS sin walkthrough formal']},
+  {title:'Nivel 3 → 4 (Definido a Optimizado)',color:'var(--c-blue)',desc:'El proceso está definido y es consistente. El siguiente salto es instrumentarlo con métricas reales para detectar cuellos de botella y mejorar basándose en datos.',warning:'Error más común: recopilar métricas sin usarlas para decisiones. Si las métricas no cambian nada, el equipo deja de reportarlas.',sprints:[{t:'Sprint 1–2',n:'Instrumentación de métricas',as:['Definir KPIs del proceso: tasa defectos, tiempo ciclo, % ambigüedades','Implementar dashboard de calidad del SRS por proyecto','Crear retrospectiva de proceso al final de cada fase']},{t:'Sprint 3–4',n:'Gestión de cambios avanzada',as:['Implementar CCB formal con cadencia y composición definidas','Activar matriz de trazabilidad completa (negocio → código → prueba)','Integrar el log de CRs con el sistema de gestión del proyecto']},{t:'Sprint 5–6',n:'Mejora continua y formación',as:['Implementar programa de certificación interna IREB para BAs','Crear biblioteca de lecciones aprendidas por tipo de proyecto','Publicar el framework internamente con guías de uso']}],exits:['< 0.3 defectos/página en inspecciones','< 5% tasa de ambigüedad en SRS','< 3 días tiempo promedio decisión CCB']},
+];
+let curRoadmap = 0;
+function setRoadmap(i, btn) {
+  curRoadmap=i;
+  btn.parentElement.querySelectorAll('.btn').forEach(b=>b.classList.remove('btn-primary'));
+  btn.classList.add('btn-primary');
+  buildRoadmap();
+}
+function buildRoadmap() {
+  const r=ROADMAPS[curRoadmap], el=document.getElementById('roadmap-content');
+  if(!el)return;
+  el.innerHTML=`
+    <div class="card" style="border-left:3px solid ${r.color};margin-bottom:1rem">
+      <div style="font-size:15px;font-weight:500;font-family:var(--font-serif);margin-bottom:.3rem;color:${r.color}">${r.title}</div>
+      <div style="font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:.6rem">${r.desc}</div>
+      <div style="background:rgba(186,117,23,.05);border:0.5px solid rgba(186,117,23,.2);border-radius:var(--radius);padding:.6rem .8rem;font-size:11px"><div style="font-size:10px;font-weight:500;color:var(--c-amber);text-transform:uppercase;letter-spacing:.3px;margin-bottom:3px">Trampa frecuente</div>${r.warning}</div>
+    </div>
+    ${r.sprints.map(s=>`
+    <div class="card-sm" style="margin-bottom:.5rem">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.5rem;flex-wrap:wrap;gap:.4rem">
+        <div style="font-size:13px;font-weight:500;font-family:var(--font-serif)">${s.n}</div>
+        <span class="badge b-func">${s.t}</span>
+      </div>
+      ${s.as.map(a=>`<div class="dot-item"><div class="dot" style="background:${r.color}"></div>${a}</div>`).join('')}
+    </div>`).join('')}
+    <div class="card" style="margin-top:.8rem;background:rgba(15,110,86,.03);border-color:rgba(15,110,86,.2)">
+      <div class="card-title" style="color:var(--c-green)">Indicadores de éxito del nivel</div>
+      ${r.exits.map(e=>`<div class="dot-item"><div class="dot" style="background:var(--c-green)"></div>${e}</div>`).join('')}
+    </div>`;
+}
+
+/* ════════════════════════════════════════
+   OBSERVER — init pages on first view
+════════════════════════════════════════ */
+const inited = new Set();
+function onPageShow(id) {
+  if (inited.has(id)) return;
+  inited.add(id);
+  if (id==='principios') setTimeout(initPrincipios, 50);
+  if (id==='srs-glosario') initGlosario();
+  if (id==='val-log') initDefects();
+  if (id==='ccb-cr') setTimeout(initCR, 50);
+  if (id==='roadmap') setTimeout(buildRoadmap, 50);
+}
+
+const origNav = nav;
+window.nav = function(id) {
+  origNav(id);
+  setTimeout(()=>onPageShow(id), 80);
+};
+// init home
+onPageShow('home');
+
+/* ════════════════════════════════════════
+   BOOT
+════════════════════════════════════════ */
+buildAll();
+</script>
+</body>
+</html>
