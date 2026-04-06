@@ -684,6 +684,8 @@ function buildAll() {
   initChecklists();
   initUAT();
   initMaturity();
+  setTimeout(initPrincipios, 100);
+  setTimeout(initTecnicas2, 120);
 }
 
 /* ════════════════════════════════════════
@@ -869,7 +871,7 @@ reg('home', () => `
 
 <!-- Principios -->
 <div class="card" style="margin-bottom:1rem">
-  <div class="card-title">5 principios fundacionales</div>
+  <div class="card-title">6 principios fundacionales</div>
   <div class="dot-list">
     <div class="dot-item"><div class="dot" style="background:var(--c-teal)"></div><div><strong style="font-weight:500">Trazabilidad bidireccional</strong> — cada requisito vincula la necesidad de negocio con el código y su prueba de verificación</div></div>
     <div class="dot-item"><div class="dot" style="background:var(--c-purple)"></div><div><strong style="font-weight:500">Calidad antes que cantidad</strong> — 10 requisitos bien escritos valen más que 50 ambiguos que generan retrabajo</div></div>
@@ -1080,6 +1082,52 @@ reg('eli-overview', () => `
        {s:'ISO 9241-210:2019',d:'Diseño centrado en el usuario'},
        {s:'ISO/IEC/IEEE 29148:2018',d:'Planificación de la elicitación'}
     ].map(e => `<div class="dot-item"><div class="dot" style="background:var(--c-blue)"></div><div><span style="font-family:var(--font-mono);color:var(--c-blue);font-size:11px">${e.s}</span> — ${e.d}</div></div>`).join('')}
+
+<div class="card" style="margin-top:1rem">
+  <div class="card-title">Flujo del proceso de elicitacion</div>
+  <p style="font-size:12px;color:var(--muted);margin-bottom:.8rem;line-height:1.6">Secuencia logica de actividades desde la preparacion hasta el cierre de la fase.</p>
+  <svg width="100%" viewBox="0 0 680 490" xmlns="http://www.w3.org/2000/svg">
+    <defs><marker id="ae" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>
+    <rect x="251" y="20" width="178" height="36" rx="18" fill="#F1EFE8" stroke="#888780" stroke-width="0.5"/>
+    <text x="340" y="38" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="12" fill="#444441">Inicio del proyecto</text>
+    <line x1="340" y1="56" x2="340" y2="84" stroke="#9A9A94" stroke-width="1" marker-end="url(#ae)"/>
+    <rect x="220" y="86" width="240" height="56" rx="10" fill="#E1F5EE" stroke="#1D9E75" stroke-width="1"/>
+    <text x="340" y="107" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="13" font-weight="500" fill="#085041">1. Preparacion</text>
+    <text x="340" y="125" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#0F6E56">Planear, identificar stakeholders</text>
+    <rect x="42" y="93" width="138" height="32" rx="7" fill="#E1F5EE" stroke="#1D9E75" stroke-width="0.5"/>
+    <text x="111" y="109" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#085041">Plan de elicitacion</text>
+    <line x1="180" y1="109" x2="218" y2="109" stroke="#1D9E75" stroke-width="0.5" marker-end="url(#ae)"/>
+    <line x1="340" y1="142" x2="340" y2="170" stroke="#9A9A94" stroke-width="1" marker-end="url(#ae)"/>
+    <rect x="220" y="172" width="240" height="56" rx="10" fill="#E1F5EE" stroke="#1D9E75" stroke-width="1"/>
+    <text x="340" y="193" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="13" font-weight="500" fill="#085041">2. Ejecucion</text>
+    <text x="340" y="211" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#0F6E56">Entrevistas, talleres, observacion</text>
+    <rect x="42" y="179" width="138" height="32" rx="7" fill="#E1F5EE" stroke="#1D9E75" stroke-width="0.5"/>
+    <text x="111" y="195" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#085041">Guias de entrevista</text>
+    <line x1="180" y1="195" x2="218" y2="195" stroke="#1D9E75" stroke-width="0.5" marker-end="url(#ae)"/>
+    <path d="M460 195 Q525 195 525 238 Q525 272 460 272" fill="none" stroke="#9A9A94" stroke-width="0.5" stroke-dasharray="3 3" marker-end="url(#ae)"/>
+    <text x="548" y="238" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="10" fill="#9A9A94">Gaps</text>
+    <text x="548" y="252" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="10" fill="#9A9A94">detectados</text>
+    <line x1="340" y1="228" x2="340" y2="256" stroke="#9A9A94" stroke-width="1" marker-end="url(#ae)"/>
+    <rect x="220" y="258" width="240" height="56" rx="10" fill="#E1F5EE" stroke="#1D9E75" stroke-width="1"/>
+    <text x="340" y="279" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="13" font-weight="500" fill="#085041">3. Documentacion</text>
+    <text x="340" y="297" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#0F6E56">Consolidar, estructurar hallazgos</text>
+    <rect x="42" y="265" width="138" height="32" rx="7" fill="#E1F5EE" stroke="#1D9E75" stroke-width="0.5"/>
+    <text x="111" y="281" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#085041">Notas / grabaciones</text>
+    <line x1="180" y1="281" x2="218" y2="281" stroke="#1D9E75" stroke-width="0.5" marker-end="url(#ae)"/>
+    <line x1="340" y1="314" x2="340" y2="342" stroke="#9A9A94" stroke-width="1" marker-end="url(#ae)"/>
+    <rect x="220" y="344" width="240" height="56" rx="10" fill="#EEEDFE" stroke="#534AB7" stroke-width="1"/>
+    <text x="340" y="365" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="13" font-weight="500" fill="#26215C">4. Confirmacion</text>
+    <text x="340" y="383" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#534AB7">Revision con stakeholders</text>
+    <rect x="42" y="351" width="138" height="32" rx="7" fill="#EEEDFE" stroke="#534AB7" stroke-width="0.5"/>
+    <text x="111" y="367" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#26215C">Acta de conformidad</text>
+    <line x1="180" y1="367" x2="218" y2="367" stroke="#534AB7" stroke-width="0.5" marker-end="url(#ae)"/>
+    <path d="M460 367 Q525 367 525 320 Q525 260 460 260" fill="none" stroke="#534AB7" stroke-width="0.5" stroke-dasharray="3 3" marker-end="url(#ae)"/>
+    <line x1="340" y1="400" x2="340" y2="428" stroke="#9A9A94" stroke-width="1" marker-end="url(#ae)"/>
+    <rect x="220" y="430" width="240" height="36" rx="10" fill="#F1EFE8" stroke="#888780" stroke-width="0.5"/>
+    <text x="340" y="448" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="12" fill="#2C2C2A">Entradas para analisis (Fase 2)</text>
+    <text x="28" y="72" font-family="DM Sans,sans-serif" font-size="10" fill="#9A9A94">Artefactos</text>
+  </svg>
+</div>
   </div>
 </div>
 `);
@@ -1118,35 +1166,165 @@ reg('eli-tecnicas', () => `
 <div class="page-header">
   <div class="page-eyebrow" style="color:var(--c-teal)">● Fase 1 — Elicitación</div>
   <h1 class="page-title">Técnicas de elicitación</h1>
-  <p class="page-desc">Guía de las 5 técnicas principales con criterios de selección, fases de ejecución y banco de preguntas.</p>
+  <p class="page-desc">Las 5 técnicas de mayor impacto con guías paso a paso, banco de preguntas por categoría, artefactos que producen y matriz de selección por contexto.</p>
 </div>
 
-<div class="tab-nav" id="tec-nav">
-  ${['Entrevista 1:1','Taller JAD','Observación','Prototipado','Análisis documental'].map((t,i) => `<button class="tab-btn${i===0?' on':''}" onclick="tabSel('tec',${i},this)">${t}</button>`).join('')}
+<div class="tab-nav" id="tec-nav2">
+  <button class="tab-btn on" onclick="tecSel2(0,this)">Entrevista 1:1</button>
+  <button class="tab-btn" onclick="tecSel2(1,this)">Taller JAD</button>
+  <button class="tab-btn" onclick="tecSel2(2,this)">Observación</button>
+  <button class="tab-btn" onclick="tecSel2(3,this)">Prototipado</button>
+  <button class="tab-btn" onclick="tecSel2(4,this)">Análisis documental</button>
 </div>
-
-${[
-  {name:'Entrevista 1:1',color:'var(--c-teal)',ref:'BABOK v3 · IREB CPRE',desc:'Conversación estructurada con un stakeholder para descubrir necesidades, restricciones y expectativas. La técnica más poderosa para requisitos complejos.',cuando:['Requisitos ambiguos o poco definidos','Stakeholders con conocimiento único','Proyectos de alta criticidad'],noHacer:['Con más de 20 stakeholders (usar encuesta)','Cuando el tiempo disponible es menor a 30 min'],mets:[{l:'Profundidad',v:90},{l:'Costo',v:65},{l:'Escalabilidad',v:25}],preguntas:['¿Cuál es su principal objetivo con este sistema?','¿Qué problema estamos resolviendo hoy?','¿Puede darme un ejemplo concreto de cuándo eso falla?','¿Qué criterio usaría para decir que esto está listo?']},
-  {name:'Taller JAD',color:'var(--c-purple)',ref:'BABOK v3 · Design Thinking',desc:'Sesión facilitada con múltiples stakeholders que trabajan juntos para definir y priorizar requisitos. Reduce ciclos de revisión al alinear perspectivas en tiempo real.',cuando:['Conflictos entre áreas de negocio','Definición de alcance inicial','Cuando se requiere consenso rápido'],noHacer:['Con más de 15 personas sin co-facilitador','Con stakeholders con conflictos personales graves'],mets:[{l:'Profundidad',v:75},{l:'Costo',v:80},{l:'Escalabilidad',v:55}],preguntas:['¿Cuál es el objetivo que todos acordamos lograr hoy?','¿Alguien tiene una perspectiva diferente?','¿Podemos priorizar esto con la técnica MoSCoW?']},
-  {name:'Observación contextual',color:'var(--c-blue)',ref:'IREB CPRE · UX Research',desc:'El analista observa a usuarios realizando tareas reales en su entorno. Revela requisitos implícitos que los usuarios no saben que tienen.',cuando:['Usuarios con dificultad para articular necesidades','Procesos con muchas excepciones no documentadas','Sistemas de reemplazo o migración'],noHacer:['En procesos confidenciales sin protocolo de privacidad','Cuando el usuario se inhibe con observadores'],mets:[{l:'Profundidad',v:85},{l:'Costo',v:55},{l:'Escalabilidad',v:20}],preguntas:['¿Cuánto tiempo dedica normalmente a esta tarea?','¿Hay excepciones frecuentes en este proceso?','¿Qué herramienta le ahorraría más tiempo?']},
-  {name:'Prototipado rápido',color:'var(--c-amber)',ref:'Evolutionary prototyping',desc:'Creación de representaciones visuales del sistema para que los stakeholders validen interfaces y flujos antes de codificar.',cuando:['Interfaces complejas o novedosas','Cuando el stakeholder no puede describir lo que quiere','Para reducir cambios costosos tardíos'],noHacer:['Para requisitos puramente de backend','Si el stakeholder puede confundir prototipo con producto'],mets:[{l:'Profundidad',v:70},{l:'Costo',v:70},{l:'Escalabilidad',v:45}],preguntas:['¿Esto representa el flujo que describió?','¿Falta algo importante en esta pantalla?','¿Es intuitivo el recorrido hacia el objetivo?']},
-  {name:'Análisis documental',color:'var(--c-gray)',ref:'BABOK v3 · Bajo costo',desc:'Revisión sistemática de documentos existentes para extraer requisitos implícitos y restricciones del sistema actual.',cuando:['Proyectos de modernización o migración','Sin disponibilidad de stakeholders','Para entender restricciones regulatorias'],noHacer:['Como técnica única — siempre complementar','Cuando los documentos tienen más de 2 años sin revisión'],mets:[{l:'Profundidad',v:45},{l:'Costo',v:20},{l:'Escalabilidad',v:85}],preguntas:['¿Qué tan actualizado está este documento?','¿Qué procesos describe que deben preservarse?','¿Qué restricciones legales menciona?']},
-].map((t,i) => `
-<div class="tab-panel${i===0?' on':''}" id="tec-${i}">
-  <div class="card" style="border-left:3px solid ${t.color}">
-    <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:.7rem;flex-wrap:wrap;gap:.5rem">
-      <div><div style="font-size:15px;font-weight:500;font-family:var(--font-serif);margin-bottom:.3rem">${t.name}</div><div style="font-size:12px;color:var(--muted);max-width:560px;line-height:1.6">${t.desc}</div></div>
-      <span class="badge b-func">${t.ref}</span>
-    </div>
-    ${t.mets.map(m => `<div class="bar-row"><div class="bar-label">${m.l}</div><div class="bar-track"><div class="bar-fill" style="width:${m.v}%;background:${t.color}"></div></div><div class="bar-val" style="color:${t.color}">${m.v}%</div></div>`).join('')}
-    <div class="g2" style="margin-top:.8rem">
-      <div><div class="card-title">Cuándo usar</div>${t.cuando.map(c => `<div class="dot-item"><div class="dot" style="background:${t.color}"></div>${c}</div>`).join('')}</div>
-      <div><div class="card-title">Cuándo NO usar</div>${t.noHacer.map(c => `<div class="dot-item"><div class="dot" style="background:var(--c-red)"></div>${c}</div>`).join('')}</div>
-    </div>
-    <div style="margin-top:.8rem"><div class="card-title">Banco de preguntas clave</div>${t.preguntas.map(q => `<div class="dot-item"><div class="dot" style="background:var(--c-blue)"></div>${q}</div>`).join('')}</div>
-  </div>
-</div>`).join('')}
+<div id="tecPanel2"></div>
 `);
+
+var TEC_DATA = [
+  {
+    name:'Entrevista 1:1',
+    color:'#1D9E75', bg:'#E1F5EE',
+    ref:'BABOK v3 · IEEE 29148',
+    intensidad:'Alta profundidad',
+    desc:'Conversación estructurada o semi-estructurada con un stakeholder para descubrir necesidades, restricciones y expectativas. Es la técnica más poderosa para requisitos complejos y contextos de alto impacto.',
+    mets:[{l:'Profundidad',v:90},{l:'Costo',v:65},{l:'Escalabilidad',v:25},{l:'Tiempo prep.',v:55}],
+    cuando:['Requisitos ambiguos o poco definidos','Stakeholders con conocimiento único','Proyectos de alta criticidad regulatoria','Cuando se necesita profundidad sobre amplitud'],
+    noHacer:['Con más de 20 stakeholders (usa encuesta)','Cuando el tiempo es menor a 30 min','Para requisitos técnicos básicos ya documentados'],
+    preguntas:{
+      apertura:['¿Cuál es su principal objetivo con este sistema?','¿Qué problema estamos resolviendo para usted hoy?','¿Cómo describiría el flujo ideal de su trabajo?'],
+      profundizacion:['¿Puede darme un ejemplo concreto de cuándo eso falla?','¿Qué pasaría si no tuviéramos esa funcionalidad?','¿Quién más se ve afectado cuando eso ocurre?'],
+      validacion:['Si entiendo bien, usted necesita… ¿es correcto?','¿Qué criterio usaría para decir que esto está listo?','¿Hay algún escenario que no hayamos considerado?']
+    },
+    artefactos:['Minuta de entrevista','Mapa de empatía','Lista de requisitos brutos','Grabación + transcripción']
+  },
+  {
+    name:'Taller JAD',
+    color:'#534AB7', bg:'#EEEDFE',
+    ref:'BABOK v3 · Design Thinking',
+    intensidad:'Consenso rápido',
+    desc:'Sesión facilitada con múltiples stakeholders que trabajan juntos para definir y priorizar requisitos. Reduce ciclos de revisión al alinear perspectivas contradictorias en tiempo real.',
+    mets:[{l:'Profundidad',v:75},{l:'Costo',v:80},{l:'Escalabilidad',v:55},{l:'Tiempo prep.',v:75}],
+    cuando:['Conflictos entre áreas de negocio','Definición de alcance inicial del proyecto','Cuando se requiere consenso rápido entre múltiples áreas'],
+    noHacer:['Con más de 15 personas sin co-facilitador','Con stakeholders con conflictos personales graves'],
+    preguntas:{
+      apertura:['¿Cuál es el objetivo que todos acordamos lograr hoy?','¿Qué haría que este taller sea un éxito para usted?'],
+      profundizacion:['¿Alguien tiene una perspectiva diferente sobre esto?','¿Podemos priorizar este tema con la técnica MoSCoW?','¿Hay dependencias que el grupo no ha mencionado?'],
+      validacion:['¿Estamos todos de acuerdo en esta definición?','¿Quién tiene autoridad para aprobar este acuerdo?']
+    },
+    artefactos:['Acta de taller firmada','Affinity diagram','Backlog inicial priorizado','Árbol de objetivos']
+  },
+  {
+    name:'Observación contextual',
+    color:'#185FA5', bg:'#E6F1FB',
+    ref:'IREB CPRE · UX Research',
+    intensidad:'Requisitos implícitos',
+    desc:'El analista observa a usuarios realizando tareas reales en su entorno natural. Revela requisitos implícitos que los usuarios no saben que tienen porque los dan por sentado.',
+    mets:[{l:'Profundidad',v:85},{l:'Costo',v:55},{l:'Escalabilidad',v:20},{l:'Tiempo prep.',v:40}],
+    cuando:['Usuarios con dificultad para articular sus necesidades','Procesos con muchas excepciones no documentadas','Sistemas de reemplazo o migración de sistemas legacy'],
+    noHacer:['En procesos confidenciales sin protocolo de privacidad','Cuando el usuario se inhibe con observadores presentes'],
+    preguntas:{
+      apertura:['¿Cuánto tiempo dedica normalmente a esta tarea?','¿Hay excepciones frecuentes en este proceso?'],
+      profundizacion:['¿Por qué hace ese paso de esa manera específica?','¿Qué herramienta le ahorraría más tiempo aquí?','¿Cuándo ocurre la última vez que esto falló?'],
+      validacion:['¿Este workaround es frecuente o excepcional?','¿Todas las personas del área hacen este paso igual?']
+    },
+    artefactos:['Notas de campo estructuradas','Customer Journey Map','Lista de pain points observados','Registro de workarounds detectados']
+  },
+  {
+    name:'Prototipado rápido',
+    color:'#BA7517', bg:'#FAEEDA',
+    ref:'Evolutionary prototyping',
+    intensidad:'Validación visual',
+    desc:'Creación de representaciones visuales del sistema (wireframes, mockups o clickable prototypes) para que los stakeholders validen interfaces y flujos antes de codificar.',
+    mets:[{l:'Profundidad',v:70},{l:'Costo',v:70},{l:'Escalabilidad',v:45},{l:'Tiempo prep.',v:80}],
+    cuando:['Interfaces complejas o completamente novedosas','Cuando el stakeholder no puede describir lo que quiere en palabras','Para reducir cambios costosos tardíos en el desarrollo'],
+    noHacer:['Para requisitos puramente de backend sin interfaz','Si el stakeholder puede confundir el prototipo con el producto final'],
+    preguntas:{
+      apertura:['¿Esto representa el flujo que describió?','¿Falta algo importante en esta pantalla?'],
+      profundizacion:['¿Es intuitivo el camino hacia su objetivo principal?','¿Qué elementos generan confusión en este diseño?','¿Qué información necesita ver primero al abrir esta pantalla?'],
+      validacion:['¿Usaría esta interfaz sin necesitar entrenamiento?','¿Hay pasos que sobran o que faltan en este flujo?']
+    },
+    artefactos:['Wireframes anotados','Clickable prototype','Lista de cambios solicitados','Acta de revisión del prototipo']
+  },
+  {
+    name:'Análisis documental',
+    color:'#5F5E5A', bg:'#F1EFE8',
+    ref:'BABOK v3 · Bajo costo',
+    intensidad:'Restricciones existentes',
+    desc:'Revisión sistemática de documentos existentes — manuales, actas, normativas, contratos, specs técnicas — para extraer requisitos implícitos y restricciones del sistema actual.',
+    mets:[{l:'Profundidad',v:45},{l:'Costo',v:20},{l:'Escalabilidad',v:85},{l:'Tiempo prep.',v:20}],
+    cuando:['Proyectos de modernización o migración de sistemas existentes','Cuando no hay disponibilidad de stakeholders clave','Para entender el contexto regulatorio o contractual'],
+    noHacer:['Como técnica única — siempre complementar con entrevistas','Cuando los documentos tienen más de 2 años sin revisión'],
+    preguntas:{
+      apertura:['¿Qué tan actualizado está este documento?','¿Quién es el dueño y validador oficial de este documento?'],
+      profundizacion:['¿Qué procesos describe que deben preservarse en el nuevo sistema?','¿Hay contradicciones con otros documentos del proyecto?'],
+      validacion:['¿Este documento refleja el estado actual o el estado ideal?','¿Qué restricciones legales menciona que son no negociables?']
+    },
+    artefactos:['Lista de requisitos extraídos','Inventario de restricciones regulatorias','Mapa de dependencias de sistemas','Glosario inicial del dominio']
+  },
+];
+
+function tecSel2(i, btn) {
+  var nav = document.getElementById('tec-nav2');
+  if (nav) nav.querySelectorAll('.tab-btn').forEach(function(b){b.classList.remove('on');});
+  if (btn) btn.classList.add('on');
+  buildTecPanel2(i);
+}
+
+function buildTecPanel2(i) {
+  var t = TEC_DATA[i];
+  var el = document.getElementById('tecPanel2');
+  if (!el) return;
+
+  var pregs = '';
+  var cats = ['apertura','profundizacion','validacion'];
+  var catNames = {'apertura':'Apertura','profundizacion':'Profundización','validacion':'Validación'};
+  cats.forEach(function(cat) {
+    pregs += '<div style="margin-bottom:.7rem">';
+    pregs += '<div style="font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.4px;color:var(--muted);margin-bottom:.4rem">'+catNames[cat]+'</div>';
+    t.preguntas[cat].forEach(function(q,qi) {
+      pregs += '<div style="display:flex;gap:8px;padding:5px 0;border-bottom:0.5px solid var(--border);font-size:12px"><span style="color:var(--faint);min-width:16px">'+(qi+1)+'</span><span>'+q+'</span></div>';
+    });
+    pregs += '</div>';
+  });
+
+  var arts = t.artefactos.map(function(a){
+    return '<span style="font-size:11px;padding:3px 9px;border-radius:8px;background:'+t.bg+';color:'+t.color+';display:inline-block;margin:2px">'+a+'</span>';
+  }).join('');
+
+  el.innerHTML = '<div class="card" style="border-left:3px solid '+t.color+'">'+
+    '<div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:.7rem;flex-wrap:wrap;gap:.5rem">'+
+      '<div>'+
+        '<div style="font-size:15px;font-weight:500;font-family:Lora,serif;margin-bottom:.3rem">'+t.name+'</div>'+
+        '<div style="font-size:12px;color:var(--muted);max-width:560px;line-height:1.6">'+t.desc+'</div>'+
+      '</div>'+
+      '<div style="display:flex;flex-direction:column;gap:4px;align-items:flex-end">'+
+        '<span class="badge b-func">'+t.ref+'</span>'+
+        '<span style="font-size:10px;padding:2px 8px;border-radius:4px;background:'+t.bg+';color:'+t.color+';font-weight:500">'+t.intensidad+'</span>'+
+      '</div>'+
+    '</div>'+
+    '<div style="margin-bottom:.8rem">'+
+      t.mets.map(function(m){
+        return '<div class="bar-row"><div class="bar-label">'+m.l+'</div><div class="bar-track"><div class="bar-fill" style="width:'+m.v+'%;background:'+t.color+'"></div></div><div class="bar-val" style="color:'+t.color+'">'+m.v+'%</div></div>';
+      }).join('')+
+    '</div>'+
+    '<div class="g2" style="margin-bottom:.8rem">'+
+      '<div><div class="card-title">Cuándo usar</div>'+
+        t.cuando.map(function(c){return '<div class="dot-item"><div class="dot" style="background:'+t.color+'"></div>'+c+'</div>';}).join('')+
+      '</div>'+
+      '<div><div class="card-title">Cuándo NO usar</div>'+
+        t.noHacer.map(function(c){return '<div class="dot-item"><div class="dot" style="background:var(--c-red)"></div>'+c+'</div>';}).join('')+
+      '</div>'+
+    '</div>'+
+    '<div style="margin-bottom:.8rem"><div class="card-title">Banco de preguntas — por momento de la sesión</div>'+pregs+'</div>'+
+    '<div><div class="card-title">Artefactos que produce esta técnica</div><div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:.3rem">'+arts+'</div></div>'+
+  '</div>';
+}
+
+function initTecnicas2() {
+  var el = document.getElementById('tecPanel2');
+  if (!el || el.innerHTML.trim()) return;
+  buildTecPanel2(0);
+}
+
 
 /* ════════════════════════════════════════
    PAGE: PLANTILLAS
@@ -2127,6 +2305,7 @@ function onPageShow(id) {
   if (inited.has(id)) return;
   inited.add(id);
   if (id==='principios') setTimeout(initPrincipios, 50);
+  if (id==='eli-tecnicas') setTimeout(initTecnicas2, 50);
   if (id==='srs-glosario') initGlosario();
   if (id==='val-log') initDefects();
   if (id==='ccb-cr') setTimeout(initCR, 50);
