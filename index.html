@@ -56,6 +56,9 @@ body {
   font-size: 14px;
   line-height: 1.65;
   min-height: 100vh;
+  overflow-x: hidden;
+  word-break: break-word;
+  overflow-wrap: break-word;
 }
 h1,h2,h3,h4,h5 { font-family: var(--font-serif); font-weight: 500; line-height: 1.3; }
 ::-webkit-scrollbar { width: 4px; height: 4px; }
@@ -63,7 +66,7 @@ h1,h2,h3,h4,h5 { font-family: var(--font-serif); font-weight: 500; line-height: 
 ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 4px; }
 
 /* ═══ LAYOUT ═══ */
-.app { display: grid; grid-template-columns: var(--sidebar-w) 1fr; min-height: 100vh; }
+.app { display: grid; grid-template-columns: var(--sidebar-w) 1fr; min-height: 100vh; width: 100%; overflow: hidden; }
 
 /* ═══ SIDEBAR ═══ */
 .sidebar {
@@ -160,11 +163,16 @@ h1,h2,h3,h4,h5 { font-family: var(--font-serif); font-weight: 500; line-height: 
 .main {
   margin-left: var(--sidebar-w);
   min-height: 100vh;
+  min-width: 0;
+  width: calc(100vw - var(--sidebar-w));
+  overflow-x: hidden;
 }
 .page {
   display: none;
   padding: 2.5rem 2.8rem;
   max-width: 960px;
+  width: 100%;
+  box-sizing: border-box;
   animation: fadeUp .22s ease;
 }
 .page.active { display: block; }
@@ -186,7 +194,7 @@ h1,h2,h3,h4,h5 { font-family: var(--font-serif); font-weight: 500; line-height: 
   gap: .5rem;
 }
 .page-title { font-size: 28px; font-weight: 600; margin-bottom: .5rem; }
-.page-desc { font-size: 14px; color: var(--muted); max-width: 640px; line-height: 1.7; }
+.page-desc { font-size: 14px; color: var(--muted); max-width: 640px; line-height: 1.7; word-break: normal; overflow-wrap: break-word; }
 .std-row { display: flex; gap: 6px; flex-wrap: wrap; margin-top: .9rem; }
 .std-pill {
   font-size: 10px;
@@ -892,25 +900,94 @@ reg('principios', () => `
 <div class="page-header">
   <div class="page-eyebrow" style="color:var(--c-purple)">● Capa estratégica</div>
   <h1 class="page-title">Principios del framework</h1>
-  <p class="page-desc">Los 6 principios fundacionales que guían todas las decisiones de diseño del framework. Cada principio tiene sustento en la literatura y en los estándares seleccionados.</p>
+  <p class="page-desc">Los seis principios rectores no son independientes entre sí. Los tres primeros —trazabilidad, verificabilidad y calidad mínima garantizada— definen los atributos que el proceso debe producir. Los tres siguientes —colaboración estructurada, adaptabilidad contextual y documentación útil— definen cómo debe operar para producirlos.</p>
+  <div class="std-row">
+    <span class="std-pill">ISO/IEC/IEEE 29148:2018</span>
+    <span class="std-pill">ISO/IEC 25010:2023</span>
+    <span class="std-pill">ISO 9241-210:2019</span>
+    <span class="std-pill">BABOK v3</span>
+  </div>
 </div>
-
-<div class="g2" style="margin-bottom:1rem">
-  ${[
-    {n:'Trazabilidad de extremo a extremo',color:'var(--c-teal)',desc:'Cada requisito debe poder vincularse hacia atrás (su origen en la elicitación) y hacia adelante (su diseño, código y prueba). La RTM es el instrumento que materializa este principio.',ref:'IEEE 29148 §5.2 · BABOK v3 §8.2'},
-    {n:'Verificabilidad',color:'var(--c-blue)',desc:'Un requisito que no puede ser comprobado mediante prueba, inspección o análisis no es un requisito válido — es una intención. El criterio de aceptación Gherkin es la forma operacional de este principio.',ref:'IEEE 29148 §5.2.5 · ISO 25010 §4'},
-    {n:'Calidad mínima garantizada',color:'var(--c-purple)',desc:'El framework no acepta requisitos que no superen los umbrales de los 7 criterios de calidad. Los puntos de control PC3 y PC4 son la instancia de enforcement de este principio.',ref:'ISO/IEC 25010:2023 · IEEE 29148 §6.2'},
-    {n:'Colaboración estructurada',color:'var(--c-green)',desc:'La elicitación no es una actividad del analista — es una co-construcción con stakeholders. La RACI, el mapa de stakeholders y los roles del framework formalizan esta colaboración.',ref:'BABOK v3 §2 · ISO 9241-210:2019'},
-    {n:'Adaptabilidad contextual',color:'var(--c-amber)',desc:'El framework puede aplicarse en su versión completa en contextos regulados o críticos, y en versiones simplificadas en proyectos de menor escala, sin abandonar los principios de calidad que lo fundamentan.',ref:'ISO/IEC 12207:2017 §6'},
-    {n:'Documentación útil y trazable',color:'var(--c-gray)',desc:'Todo artefacto que produce el framework existe porque un rol lo necesita para tomar una decisión o hacer su trabajo. No se produce documentación por cumplir — se produce porque genera valor.',ref:'BABOK v3 §8 · Agile Alliance'},
-  ].map(p => `
-  <div class="card" style="border-left:3px solid ${p.color}">
-    <div style="font-size:13px;font-weight:500;margin-bottom:.5rem;font-family:var(--font-serif)">${p.n}</div>
-    <div style="font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:.6rem">${p.desc}</div>
-    <div style="font-size:10px;font-family:var(--font-mono);color:var(--faint)">${p.ref}</div>
-  </div>`).join('')}
+<div style="margin-bottom:.8rem;padding:.65rem 1rem;background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius);font-size:12px;color:var(--muted)">
+  Haz clic en cualquier principio para expandir su definición y referencias bibliográficas.
 </div>
+<div id="principios-list"></div>
 `);
+
+function initPrincipios() {
+  var el = document.getElementById('principios-list');
+  if (!el) return;
+  var data = [
+    {num:'P1',color:'#1D9E75',bg:'#E1F5EE',
+     nombre:'Trazabilidad de extremo a extremo',
+     resumen:'Todo requisito rastreable desde su origen en el descubrimiento hasta su verificación en pruebas.',
+     desc:'Establece que todo requisito debe poder rastrearse desde su origen en el descubrimiento del problema hasta su verificación en las pruebas de aceptación, incorporando la distinción de trazabilidad pre-RS (Pre-Requirements Specification) y trazabilidad post-RS (Post-Requirements Specification). La matriz de trazabilidad de requisitos (RTM) se inicia desde la Fase 1 del proceso y se mantiene como artefacto activo durante todo el ciclo de vida del producto.',
+     como:'La RTM vincula cada requisito con su stakeholder de origen, su historia de usuario, su criterio de aceptación Gherkin, su elemento de diseño y su caso de prueba. Ningún requisito puede cerrar el PC4 sin enlace completo en la RTM.',
+     refs:['Gotel & Finkelstein (1994) — distinción pre-RS / post-RS','ISO/IEC/IEEE 29148:2018 — atributos de trazabilidad exigidos','IEEE 1028:2008 — verificación de trazabilidad en revisiones formales']},
+    {num:'P2',color:'#185FA5',bg:'#E6F1FB',
+     nombre:'Verificabilidad',
+     resumen:'Cada requisito debe poder comprobarse objetivamente mediante prueba, inspección o análisis.',
+     desc:'Determina que cada requisito funcional y no funcional debe formularse de manera que su cumplimiento pueda ser objetivamente comprobado, apoyándose en criterios de aceptación testables en formato BDD/Gherkin. Este principio cierra la brecha entre la especificación y las pruebas de aceptación, identificada como uno de los cuellos de botella más recurrentes en la literatura revisada.',
+     como:'El detector de ambigüedad del framework identifica términos no verificables en tiempo real. Los criterios de aceptación en formato Gherkin (Given/When/Then) son el instrumento operacional. Un requisito que no puede expresarse en Gherkin no supera el checklist del PC3.',
+     refs:['North (2006) — Behaviour Driven Development','Hoy & Xu (2023) — criterios de aceptación testables','ISO/IEC/IEEE 29148:2018 §5.2.5 — verificabilidad como atributo obligatorio']},
+    {num:'P3',color:'#534AB7',bg:'#EEEDFE',
+     nombre:'Calidad mínima garantizada',
+     resumen:'Todo artefacto debe cumplir atributos de calidad verificables antes de avanzar a la siguiente fase.',
+     desc:'Exige que todo artefacto generado en el proceso cumpla con los siete atributos de calidad verificables: claridad, completitud, consistencia, corrección, necesidad, verificabilidad y trazabilidad, conforme a los criterios de la ISO/IEC/IEEE 29148:2018, operacionalizados mediante el modelo de calidad de la ISO/IEC 25010:2023 y evaluados a través del instrumento de checklist definido en el framework.',
+     como:'Los puntos de control PC3 y PC4 son las compuertas de enforcement de este principio. Ninguna fase puede comenzar sin que los artefactos anteriores hayan superado el checklist con los umbrales mínimos establecidos.',
+     refs:['ISO/IEC/IEEE 29148:2018 — criterios de calidad de requisitos','ISO/IEC 25010:2023 — modelo de calidad del producto software','IEEE 1028:2008 — inspección formal como mecanismo de verificación']},
+    {num:'P4',color:'#0F6E56',bg:'#EAF3DE',
+     nombre:'Colaboración estructurada',
+     resumen:'El descubrimiento de requisitos es un proceso social que requiere participación activa de todos los interesados.',
+     desc:'Fundamentado en que el descubrimiento de requerimientos es esencialmente un proceso social que requiere la participación activa y coordinada de todos los interesados del proyecto desde las etapas más tempranas. El framework formaliza esta colaboración a través del mapa de stakeholders, la matriz RACI, los cinco roles diferenciados y las técnicas de elicitación colaborativa de la Fase 1.',
+     como:'El mapa de influencia × interés define la estrategia de participación para cada stakeholder. La RACI establece quién tiene autoridad de aprobación en cada artefacto, evitando que la responsabilidad quede difusa entre varios actores.',
+     refs:['ISO 9241-210:2019 — diseño centrado en el ser humano','Franch et al. (2023) — prácticas estandarizadas de elicitación colaborativa','BABOK v3 §2 — elicitación y colaboración como área de conocimiento']},
+    {num:'P5',color:'#BA7517',bg:'#FAEEDA',
+     nombre:'Adaptabilidad contextual',
+     resumen:'El framework se ajusta al tamaño del proyecto y nivel de madurez sin sacrificar la calidad mínima.',
+     desc:'Establece que el framework debe poder ajustarse al tamaño del proyecto, al tipo de metodología adoptada (ágil, predictiva o híbrida) y al nivel de madurez organizacional sin sacrificar los criterios de calidad mínimos. En proyectos de alta complejidad o contextos regulados las cinco fases se aplican en su totalidad; en proyectos de menor escala algunas actividades pueden simplificarse sin abandonar los principios que las fundamentan.',
+     como:'El evaluador de madurez identifica el nivel actual del equipo. La hoja de ruta de implementación ofrece un plan de adopción progresiva en tres niveles, evitando que la implementación genere resistencia organizacional.',
+     refs:['Pujiharto et al. (2024) — flexibilidad y adaptación en IR orientada a Industria 5.0','ISO/IEC 12207:2017 §6 — adaptación del ciclo de vida del software','IREB CPRE — niveles de aplicación según contexto del proyecto']},
+    {num:'P6',color:'#5F5E5A',bg:'#F1EFE8',
+     nombre:'Documentación útil y trazable',
+     resumen:'Los artefactos existen porque un rol los necesita para decidir o actuar, no para cumplir un procedimiento.',
+     desc:'Orienta la generación de artefactos hacia la utilidad operativa, evitando la acumulación de documentación burocrática inservible que constituye uno de los problemas más frecuentes identificados en la literatura. Cada artefacto definido en el framework existe porque un rol específico lo necesita para tomar una decisión o ejecutar una actividad concreta, y su ausencia tiene consecuencias medibles en la calidad del proceso.',
+     como:'Los artefactos mínimos por fase están alineados con los criterios de salida de los puntos de control. Ningún artefacto aparece en la RACI sin un Accountable definido que responda por su calidad y completitud.',
+     refs:['Franch et al. (2023) — documentación excesiva como antipatrón recurrente','Mello & Fontoura (2022) — costo de la documentación innecesaria en proyectos ágiles','Mendoza (2020) — principio de documentación suficiente']},
+  ];
+
+  el.innerHTML = data.map(function(p) {
+    var refs = p.refs.map(function(r) {
+      return '<div style="display:flex;gap:6px;font-size:11px;color:var(--muted);padding:4px 0;border-bottom:0.5px solid var(--border)">'
+        + '<div style="width:5px;height:5px;border-radius:50%;background:'+p.color+';flex-shrink:0;margin-top:5px"></div>'
+        + r + '</div>';
+    }).join('');
+
+    return '<div style="margin-bottom:.4rem;border:0.5px solid var(--border);border-radius:12px;overflow:hidden">'
+      + '<div onclick="var b=document.getElementById(\'pb-'+p.num+'\');var a=document.getElementById(\'pa-'+p.num+'\');'
+        + 'var open=b.style.display===\'block\';b.style.display=open?\'none\':\'block\';a.style.transform=open?\'none\':\'rotate(90deg)\';" '
+        + 'style="display:grid;grid-template-columns:44px 1fr 28px;gap:.7rem;align-items:center;padding:.75rem 1rem;background:var(--surface);cursor:pointer">'
+        + '<div style="width:34px;height:34px;border-radius:50%;background:'+p.color+';display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;color:#fff">'
+        + p.num+'</div>'
+        + '<div>'
+          + '<div style="font-size:13px;font-weight:500;font-family:Lora,serif;color:var(--text)">'+p.nombre+'</div>'
+          + '<div style="font-size:11px;color:var(--muted);margin-top:1px">'+p.resumen+'</div>'
+        + '</div>'
+        + '<div id="pa-'+p.num+'" style="font-size:14px;color:var(--faint);transition:transform .2s;text-align:center">›</div>'
+      + '</div>'
+      + '<div id="pb-'+p.num+'" style="display:none;padding:1rem 1.2rem;border-top:0.5px solid var(--border);background:var(--bg)">'
+        + '<p style="font-size:13px;line-height:1.75;margin-bottom:.9rem;color:var(--text)">'+p.desc+'</p>'
+        + '<div style="background:'+p.bg+';border-radius:8px;padding:.7rem .9rem;margin-bottom:.9rem">'
+          + '<div style="font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.4px;color:'+p.color+';margin-bottom:.3rem">Cómo lo operacionaliza el framework</div>'
+          + '<div style="font-size:12px;line-height:1.65;color:var(--text)">'+p.como+'</div>'
+        + '</div>'
+        + '<div style="font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.4px;color:var(--muted);margin-bottom:.4rem">Referencias bibliográficas</div>'
+        + refs
+      + '</div>'
+    + '</div>';
+  }).join('');
+}
+
 
 /* ════════════════════════════════════════
    PAGE: GOBERNANZA
@@ -2049,6 +2126,7 @@ const inited = new Set();
 function onPageShow(id) {
   if (inited.has(id)) return;
   inited.add(id);
+  if (id==='principios') setTimeout(initPrincipios, 50);
   if (id==='srs-glosario') initGlosario();
   if (id==='val-log') initDefects();
   if (id==='ccb-cr') setTimeout(initCR, 50);
