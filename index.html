@@ -555,7 +555,7 @@ textarea { resize: vertical; line-height: 1.6; }
   <div class="sidebar-brand">
     <div class="brand-eyebrow">Framework Metodológico Digital · v2.0</div>
     <div class="brand-title">Descubrimiento y levantamiento de requisitos</div>
-    <div class="brand-sub">IEEE 29148 · BABOK v3 · IREB · ISO 25010</div>
+    <div class="brand-sub">IEEE 29148 · BABOK v3 · ISO 25010</div>
   </div>
 
   <nav class="sidebar-nav">
@@ -617,7 +617,7 @@ textarea { resize: vertical; line-height: 1.6; }
 
   <div class="sidebar-footer">
     ISO/IEC/IEEE 29148:2018 · IEEE 1028:2008<br>
-    BABOK v3 · IREB CPRE · ISO/IEC 25010:2023<br>
+    BABOK v3 · ISO/IEC 25010:2023<br>
     ISO/IEC 12207:2017 · ISO/IEC 38500:2024
   </div>
 </aside>
@@ -823,7 +823,6 @@ reg('home', () => `
     <span class="std-pill">IEEE 29148:2018</span>
     <span class="std-pill">IEEE 1028:2008</span>
     <span class="std-pill">BABOK v3</span>
-    <span class="std-pill">IREB CPRE</span>
     <span class="std-pill">ISO/IEC 25010:2023</span>
     <span class="std-pill">ISO/IEC 12207:2017</span>
     <span class="std-pill">ISO/IEC 38500:2024</span>
@@ -845,7 +844,7 @@ reg('home', () => `
   <div class="phase-card" style="border-color:rgba(29,158,117,.3);background:var(--c-teal-l)" onclick="nav('eli-overview')">
     <div class="phase-label" style="color:var(--c-teal-d)">Fase 1</div>
     <div class="phase-name" style="color:var(--c-teal-d)">Elicitación</div>
-    <div class="phase-items" style="color:var(--c-green)">Entrevistas · JAD<br>Observación<br>Prototipado<br>BABOK · IREB</div>
+    <div class="phase-items" style="color:var(--c-green)">Entrevistas · JAD<br>Observación<br>Prototipado<br>BABOK v3</div>
   </div>
   <div class="phase-card" style="border-color:rgba(83,74,183,.3);background:var(--c-purple-l)" onclick="nav('ana-gap')">
     <div class="phase-label" style="color:var(--c-purple-d)">Fase 2</div>
@@ -949,7 +948,7 @@ function initPrincipios() {
      resumen:'El framework se ajusta al tamaño del proyecto y nivel de madurez sin sacrificar la calidad mínima.',
      desc:'Establece que el framework debe poder ajustarse al tamaño del proyecto, al tipo de metodología adoptada (ágil, predictiva o híbrida) y al nivel de madurez organizacional sin sacrificar los criterios de calidad mínimos. En proyectos de alta complejidad o contextos regulados las cinco fases se aplican en su totalidad; en proyectos de menor escala algunas actividades pueden simplificarse sin abandonar los principios que las fundamentan.',
      como:'El evaluador de madurez identifica el nivel actual del equipo. La hoja de ruta de implementación ofrece un plan de adopción progresiva en tres niveles, evitando que la implementación genere resistencia organizacional.',
-     refs:['Pujiharto et al. (2024) — flexibilidad y adaptación en IR orientada a Industria 5.0','ISO/IEC 12207:2017 §6 — adaptación del ciclo de vida del software','IREB CPRE — niveles de aplicación según contexto del proyecto']},
+     refs:['Pujiharto et al. (2024) — flexibilidad y adaptación en IR orientada a Industria 5.0','ISO/IEC 12207:2017 §6 — adaptación del ciclo de vida del software','ISO/IEC 12207:2017 — adaptación contextual del proceso de requisitos']},
     {num:'P6',color:'#5F5E5A',bg:'#F1EFE8',
      nombre:'Documentación útil y trazable',
      resumen:'Los artefactos existen porque un rol los necesita para decidir o actuar, no para cumplir un procedimiento.',
@@ -1046,7 +1045,7 @@ reg('eli-overview', () => `
   <div class="page-eyebrow" style="color:var(--c-teal)">● Fase 1 — Elicitación</div>
   <h1 class="page-title">Descubrimiento de requisitos</h1>
   <p class="page-desc">Proceso de identificar, capturar y documentar las necesidades reales de los stakeholders usando técnicas formales. Primera y más crítica fase del ciclo de vida.</p>
-  <div class="std-row"><span class="std-pill">BABOK v3</span><span class="std-pill">IREB CPRE</span><span class="std-pill">ISO 9241-210:2019</span></div>
+  <div class="std-row"><span class="std-pill">BABOK v3</span><span class="std-pill">ISO 9241-210:2019</span></div>
 </div>
 
 <div class="g5" style="margin-bottom:1.2rem">
@@ -1078,7 +1077,7 @@ reg('eli-overview', () => `
   <div class="card">
     <div class="card-title">Estándares que la respaldan</div>
     ${[{s:'BABOK v3 §2',d:'Elicitación y colaboración'},
-       {s:'IREB CPRE',d:'Técnicas de elicitación formal'},
+       
        {s:'ISO 9241-210:2019',d:'Diseño centrado en el usuario'},
        {s:'ISO/IEC/IEEE 29148:2018',d:'Planificación de la elicitación'}
     ].map(e => `<div class="dot-item"><div class="dot" style="background:var(--c-blue)"></div><div><span style="font-family:var(--font-mono);color:var(--c-blue);font-size:11px">${e.s}</span> — ${e.d}</div></div>`).join('')}
@@ -1215,7 +1214,7 @@ var TEC_DATA = [
   {
     name:'Observación contextual',
     color:'#185FA5', bg:'#E6F1FB',
-    ref:'IREB CPRE · UX Research',
+    ref:'UX Research · ISO 9241-210:2019',
     intensidad:'Requisitos implícitos',
     desc:'El analista observa a usuarios realizando tareas reales en su entorno natural. Revela requisitos implícitos que los usuarios no saben que tienen porque los dan por sentado.',
     mets:[{l:'Profundidad',v:85},{l:'Costo',v:55},{l:'Escalabilidad',v:20},{l:'Tiempo prep.',v:40}],
@@ -1333,51 +1332,146 @@ reg('eli-plantillas', () => `
 <div class="page-header">
   <div class="page-eyebrow" style="color:var(--c-teal)">● Fase 1 — Elicitación</div>
   <h1 class="page-title">Plantillas de sesión</h1>
-  <p class="page-desc">Agenda tipo, minuta estructurada y guía de preguntas lista para usar en sesiones de elicitación.</p>
+  <p class="page-desc">Plan de sesión, minuta estructurada y guía de preguntas lista para usar en cualquier sesión de elicitación.</p>
 </div>
 
 <div class="tab-nav">
-  <button class="tab-btn on" onclick="tabSel('plt',0,this)">Agenda 90 min</button>
-  <button class="tab-btn" onclick="tabSel('plt',1,this)">Minuta de sesión</button>
+  <button class="tab-btn on" onclick="tabSel('plt',0,this)">Plan de sesión</button>
+  <button class="tab-btn" onclick="tabSel('plt',1,this)">Minuta de elicitación</button>
   <button class="tab-btn" onclick="tabSel('plt',2,this)">Guía de preguntas</button>
 </div>
 
 <div class="tab-panel on" id="plt-0">
-  <div class="card">
-    <div class="card-title">Agenda tipo — sesión de elicitación (90 minutos)</div>
+  <div class="card" style="margin-bottom:.8rem">
+    <div style="font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.5px;color:var(--c-teal);margin-bottom:.8rem">● Agenda tipo — sesión de elicitación (90 min)</div>
     ${[
-      {n:1,c:'var(--c-teal)',t:'Apertura y contexto (0–10 min)',d:'Presentación del objetivo, roles, reglas de la sesión y consentimiento de grabación'},
-      {n:2,c:'var(--c-teal)',t:'Situación actual As-Is (10–30 min)',d:'¿Cómo funciona el proceso hoy? Puntos de dolor, workarounds y excepciones frecuentes'},
-      {n:3,c:'var(--c-teal)',t:'Situación deseada To-Be (30–60 min)',d:'¿Qué necesita el nuevo sistema? Funcionalidades, prioridades y criterios de éxito'},
-      {n:4,c:'var(--c-purple)',t:'Restricciones y dependencias (60–75 min)',d:'Normativas, integraciones existentes, limitaciones técnicas, plazos no negociables'},
-      {n:5,c:'var(--c-gray)',t:'Cierre y acuerdos (75–90 min)',d:'Resumen de lo capturado, pendientes, próximos pasos y firma de participación'},
+      {rng:'0–10 min',  c:'var(--c-teal)',   t:'Apertura y contexto',          d:'Presentación del objetivo, roles, reglas de la sesión y consentimiento de grabación'},
+      {rng:'10–30 min', c:'var(--c-teal)',   t:'Situación actual (As-Is)',      d:'¿Cómo funciona el proceso hoy? Identificar puntos de dolor, workarounds y excepciones'},
+      {rng:'30–60 min', c:'var(--c-teal)',   t:'Situación deseada (To-Be)',     d:'¿Qué necesita que haga el nuevo sistema? Explorar funcionalidades, prioridades y criterios de éxito'},
+      {rng:'60–75 min', c:'var(--c-purple)', t:'Restricciones y dependencias',  d:'Normativas, integraciones existentes, limitaciones técnicas, plazos no negociables'},
+      {rng:'75–90 min', c:'var(--c-gray)',   t:'Cierre y acuerdos',             d:'Resumen de lo capturado, pendientes, próximos pasos y firma de participación'},
     ].map((s,i,arr) => `
-    <div class="step-row">${i<arr.length-1?'<div class="step-line"></div>':''}
-      <div class="step-num" style="background:${s.c}">${s.n}</div>
-      <div class="step-body"><div class="step-title">${s.t}</div><div class="step-desc">${s.d}</div></div>
+    <div style="display:grid;grid-template-columns:72px 1fr;gap:.6rem;margin-bottom:.35rem;position:relative">
+      ${i<arr.length-1?'<div style="position:absolute;left:107px;top:36px;bottom:-4px;width:1px;background:var(--border2)"></div>':''}
+      <div style="font-size:11px;font-weight:500;color:var(--muted);text-align:right;padding-top:.45rem;line-height:1.3">${s.rng}</div>
+      <div style="padding:.5rem .85rem;background:var(--bg);border:0.5px solid var(--border);border-radius:var(--radius)">
+        <div style="font-size:13px;font-weight:500;margin-bottom:.15rem;color:${s.c}">${s.t}</div>
+        <div style="font-size:12px;color:var(--muted);line-height:1.5">${s.d}</div>
+      </div>
     </div>`).join('')}
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:.7rem">
+    <div class="card-sm" style="border-left:3px solid var(--c-teal)">
+      <div class="card-title">Técnica</div>
+      <div style="font-size:13px;font-weight:500;color:var(--text)">Entrevista estructurada / Taller JAD</div>
+    </div>
+    <div class="card-sm" style="border-left:3px solid var(--c-teal)">
+      <div class="card-title">Duración recomendada</div>
+      <div style="font-size:13px;font-weight:500;color:var(--text)">60 – 120 minutos</div>
+    </div>
+    <div class="card-sm" style="border-left:3px solid var(--c-purple)">
+      <div class="card-title">Participantes ideales</div>
+      <div style="font-size:13px;font-weight:500;color:var(--text)">1–3 stakeholders + analista + facilitador</div>
+    </div>
+    <div class="card-sm" style="border-left:3px solid var(--c-purple)">
+      <div class="card-title">Material necesario</div>
+      <div style="font-size:13px;font-weight:500;color:var(--text)">Guía de preguntas, grabadora, pizarra / Miro</div>
+    </div>
   </div>
 </div>
 
 <div class="tab-panel" id="plt-1">
   <div class="card">
-    <div class="card-title">Minuta estructurada de elicitación</div>
-    <div class="g2" style="margin-bottom:.8rem">
+    <div style="font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.5px;color:var(--c-teal);margin-bottom:.9rem">● Minuta de elicitación</div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.7rem;margin-bottom:.9rem">
       <div class="field-group"><div class="field-label">Proyecto</div><div class="field-val">[Nombre del proyecto]</div></div>
       <div class="field-group"><div class="field-label">ID de sesión</div><div class="field-val field-mono">[ELI-001]</div></div>
       <div class="field-group"><div class="field-label">Fecha y hora</div><div class="field-val">[DD/MM/AAAA · HH:MM]</div></div>
       <div class="field-group"><div class="field-label">Analista responsable</div><div class="field-val">[Nombre del BA]</div></div>
+      <div class="field-group"><div class="field-label">Técnica utilizada</div><div class="field-val">[Entrevista / JAD / Observación]</div></div>
+      <div class="field-group"><div class="field-label">Lugar / modalidad</div><div class="field-val">[Presencial / Virtual]</div></div>
     </div>
-    <div class="card-title">Requisitos capturados</div>
-    <div class="table-wrap">
+
+    <div class="card-title" style="margin-bottom:.5rem">Participantes</div>
+    <div class="table-wrap" style="margin-bottom:.9rem">
       <table class="data-table">
-        <thead><tr><th>ID</th><th>Descripción</th><th>Prioridad</th><th>Estado</th></tr></thead>
+        <thead><tr><th>Nombre</th><th>Rol en el proyecto</th><th>Área</th><th>Participación</th></tr></thead>
         <tbody>
-          <tr><td style="font-family:var(--font-mono);color:var(--c-blue)">RF-001</td><td>Login con SSO corporativo</td><td><span class="badge b-must">Must</span></td><td><span class="badge b-ok">Confirmado</span></td></tr>
-          <tr><td style="font-family:var(--font-mono);color:var(--c-blue)">RF-002</td><td>Dashboard con KPIs en tiempo real</td><td><span class="badge b-must">Must</span></td><td><span class="badge b-warn">Ambiguo</span></td></tr>
-          <tr><td style="font-family:var(--font-mono);color:var(--c-blue)">RNF-001</td><td>Tiempo de respuesta menor a 3 segundos</td><td><span class="badge b-must">Must</span></td><td><span class="badge">Pendiente</span></td></tr>
+          <tr><td>[Nombre]</td><td>Product Owner</td><td>[Área de negocio]</td><td><span class="badge b-ok">Confirmada</span></td></tr>
+          <tr><td>[Nombre]</td><td>Usuario clave</td><td>[Área operativa]</td><td><span class="badge b-ok">Confirmada</span></td></tr>
+          <tr><td>[Nombre]</td><td>Analista BA</td><td>TI / Proyecto</td><td><span class="badge b-func">Facilitador</span></td></tr>
         </tbody>
       </table>
+    </div>
+
+    <div class="field-group" style="margin-bottom:.9rem">
+      <div class="field-label">Objetivo de la sesión</div>
+      <div class="field-val">Identificar y documentar los requisitos funcionales del módulo de [nombre] desde la perspectiva del área de [nombre], validando el proceso actual y definiendo las necesidades del sistema futuro.</div>
+    </div>
+
+    <div class="card-title" style="margin-bottom:.5rem">Hallazgos y requisitos capturados</div>
+    <div class="table-wrap" style="margin-bottom:.9rem">
+      <table class="data-table">
+        <thead><tr><th>ID</th><th>Descripción del hallazgo / requisito</th><th>Tipo</th><th>Prioridad</th><th>Estado</th></tr></thead>
+        <tbody>
+          <tr><td style="font-family:var(--font-mono);color:var(--c-blue)">RF-001</td><td>Login con SSO corporativo (AD/LDAP)</td><td><span class="badge b-func">Funcional</span></td><td><span class="badge b-must">Must</span></td><td><span class="badge b-ok">Confirmado</span></td></tr>
+          <tr><td style="font-family:var(--font-mono);color:var(--c-blue)">RF-002</td><td>Dashboard con KPIs en tiempo real</td><td><span class="badge b-func">Funcional</span></td><td><span class="badge b-must">Must</span></td><td><span class="badge b-warn">Ambiguo</span></td></tr>
+          <tr><td style="font-family:var(--font-mono);color:var(--c-green)">RNF-001</td><td>Tiempo de respuesta menor a 3 segundos</td><td><span class="badge b-nfunc">No funcional</span></td><td><span class="badge b-must">Must</span></td><td><span class="badge">Pendiente</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="g2" style="margin-bottom:.9rem">
+      <div>
+        <div class="card-title">Supuestos identificados</div>
+        ${[
+          {id:'SA-001',t:'El directorio corporativo soporta integración SSO'},
+          {id:'SA-002',t:'El proveedor de API estará disponible para integración en Sprint 3'},
+          {id:'SA-003',t:'Los usuarios finales tienen correo corporativo activo'},
+        ].map(s => `<div class="dot-item"><div class="dot" style="background:var(--c-blue)"></div><div><span style="font-family:var(--font-mono);color:var(--c-blue);font-size:10px">${s.id}</span> ${s.t}</div></div>`).join('')}
+      </div>
+      <div>
+        <div class="card-title">Restricciones identificadas</div>
+        ${[
+          {id:'RC-001',t:'Presupuesto máximo definido por el sponsor'},
+          {id:'RC-002',t:'Stack tecnológico aprobado por el área de TI'},
+          {id:'RC-003',t:'Plazo de entrega MVP: 6 meses desde la firma'},
+        ].map(r => `<div class="dot-item"><div class="dot" style="background:var(--c-amber)"></div><div><span style="font-family:var(--font-mono);color:var(--c-amber);font-size:10px">${r.id}</span> ${r.t}</div></div>`).join('')}
+      </div>
+    </div>
+
+    <div class="g2" style="margin-bottom:.9rem">
+      <div>
+        <div class="card-title">Temas pendientes de aclaración</div>
+        ${[
+          'RF-002: definir qué KPIs específicos deben mostrarse',
+          'RNF-001: confirmar carga concurrente esperada',
+          'Integración con sistema CRM: confirmar disponibilidad de API',
+        ].map(p => `<div class="dot-item"><div class="dot" style="background:var(--c-red)"></div>${p}</div>`).join('')}
+      </div>
+      <div>
+        <div class="card-title">Próximos pasos acordados</div>
+        ${[
+          'BA envía borrador de minuta en 24 horas',
+          'PO revisa y confirma lista de KPIs (plazo: 3 días)',
+          'Siguiente sesión: [fecha acordada]',
+        ].map(p => `<div class="dot-item"><div class="dot" style="background:var(--c-green)"></div>${p}</div>`).join('')}
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:.7rem">
+      <div style="background:rgba(15,110,86,.04);border:0.5px solid rgba(15,110,86,.2);border-radius:var(--radius);padding:.7rem .9rem">
+        <div style="font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.4px;color:var(--c-green);margin-bottom:.3rem">Firma del stakeholder</div>
+        <div style="font-size:12px;color:var(--muted)">Confirmo que el contenido de esta minuta refleja fielmente lo discutido en la sesión.</div>
+        <div style="margin-top:.6rem;border-top:0.5px solid var(--border);padding-top:.4rem;font-size:11px;color:var(--faint)">Nombre: __________________ &nbsp;&nbsp; Fecha: __________</div>
+      </div>
+      <div style="background:rgba(24,95,165,.04);border:0.5px solid rgba(24,95,165,.2);border-radius:var(--radius);padding:.7rem .9rem">
+        <div style="font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.4px;color:var(--c-blue);margin-bottom:.3rem">Firma del analista responsable</div>
+        <div style="font-size:12px;color:var(--muted)">Certifico que los hallazgos fueron registrados con fidelidad y serán incorporados al proceso de especificación.</div>
+        <div style="margin-top:.6rem;border-top:0.5px solid var(--border);padding-top:.4rem;font-size:11px;color:var(--faint)">Nombre: __________________ &nbsp;&nbsp; Fecha: __________</div>
+      </div>
     </div>
   </div>
 </div>
@@ -1397,7 +1491,6 @@ reg('eli-plantillas', () => `
   </div>
 </div>
 `);
-
 /* ════════════════════════════════════════
    PAGE: GAP ANALYSIS
 ════════════════════════════════════════ */
@@ -2013,7 +2106,7 @@ reg('madurez', () => `
   <div class="page-eyebrow" style="color:var(--c-gray)">● Cierre — Consolidación</div>
   <h1 class="page-title">Evaluador de madurez</h1>
   <p class="page-desc">30 criterios ponderados en 5 fases. Marca los que tu equipo ya practica para obtener tu nivel de madurez y las brechas específicas.</p>
-  <div class="std-row"><span class="std-pill">IREB CPRE</span><span class="std-pill">CMMI-DEV L2-L3</span><span class="std-pill">IEEE 29148</span></div>
+  <div class="std-row"><span class="std-pill">CMMI-DEV L2-L3</span><span class="std-pill">IEEE 29148</span></div>
 </div>
 
 <div style="display:flex;align-items:center;gap:1rem;padding:1rem;background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius-lg);margin-bottom:1.2rem">
@@ -2265,7 +2358,7 @@ function resetMaturity() { Object.keys(matAnswers).forEach(k=>delete matAnswers[
 const ROADMAPS = [
   {title:'Nivel 1 → 2 (Inicial a Gestionado)',color:'var(--c-red)',desc:'El equipo trabaja de manera ad-hoc. El objetivo es hacer el proceso visible y repetible a través de un proyecto piloto.',warning:'Error más común: implementar las cinco fases simultáneamente. Empieza por una sola práctica en la Elicitación y consolídala antes de avanzar.',sprints:[{t:'Semanas 1–2',n:'Diagnóstico y plantillas base',as:['Hacer el evaluador de madurez con todo el equipo','Seleccionar un proyecto piloto de mediano riesgo','Crear plantilla de minuta de elicitación','Definir formato mínimo de historia de usuario']},{t:'Semanas 3–6',n:'Primera elicitación estructurada',as:['Ejecutar entrevistas con guía de preguntas documentada','Construir mapa de stakeholders del proyecto piloto','Documentar hallazgos con IDs de requisito','Validar notas con los stakeholders entrevistados']},{t:'Semanas 7–10',n:'Especificación básica',as:['Aplicar plantilla de SRS simplificada','Escribir al menos 10 requisitos con criterio de aceptación','Hacer un walkthrough informal con el equipo técnico','Obtener firma de aprobación del PO sobre el borrador']}],exits:['1 SRS producido con la plantilla','Equipo piloto puede citar 3 beneficios concretos','Sponsor visible en al menos 1 sesión de elicitación']},
   {title:'Nivel 2 → 3 (Gestionado a Definido)',color:'var(--c-amber)',desc:'El proceso existe en algunos proyectos pero no en todos. El objetivo es definirlo formalmente para que cualquier analista lo pueda seguir.',warning:'Error más común: documentar el proceso sin entrenar al equipo. Un proceso en un PDF que nadie lee no existe.',sprints:[{t:'Sprint 1–2',n:'Proceso de elicitación y análisis formal',as:['Documentar el proceso de elicitación como procedimiento oficial','Implementar análisis BPMN As-Is/To-Be como actividad obligatoria','Formalizar criterios de priorización MoSCoW con el PO']},{t:'Sprint 3–4',n:'SRS completo con BDD/Gherkin',as:['Adoptar IEEE 29148 como plantilla oficial del SRS','Implementar Gherkin para todos los criterios de aceptación','Aplicar checklist de detección de ambigüedades en cada SRS']},{t:'Sprint 5–6',n:'Proceso de validación formal',as:['Implementar walkthrough técnico como actividad obligatoria','Crear log de defectos con plantilla estandarizada','Realizar primera inspección formal con revisor independiente']}],exits:['100% proyectos del área usan plantilla SRS','≥ 60% criterios de aceptación en Gherkin','Cero SRS sin walkthrough formal']},
-  {title:'Nivel 3 → 4 (Definido a Optimizado)',color:'var(--c-blue)',desc:'El proceso está definido y es consistente. El siguiente salto es instrumentarlo con métricas reales para detectar cuellos de botella y mejorar basándose en datos.',warning:'Error más común: recopilar métricas sin usarlas para decisiones. Si las métricas no cambian nada, el equipo deja de reportarlas.',sprints:[{t:'Sprint 1–2',n:'Instrumentación de métricas',as:['Definir KPIs del proceso: tasa defectos, tiempo ciclo, % ambigüedades','Implementar dashboard de calidad del SRS por proyecto','Crear retrospectiva de proceso al final de cada fase']},{t:'Sprint 3–4',n:'Gestión de cambios avanzada',as:['Implementar CCB formal con cadencia y composición definidas','Activar matriz de trazabilidad completa (negocio → código → prueba)','Integrar el log de CRs con el sistema de gestión del proyecto']},{t:'Sprint 5–6',n:'Mejora continua y formación',as:['Implementar programa de certificación interna IREB para BAs','Crear biblioteca de lecciones aprendidas por tipo de proyecto','Publicar el framework internamente con guías de uso']}],exits:['< 0.3 defectos/página en inspecciones','< 5% tasa de ambigüedad en SRS','< 3 días tiempo promedio decisión CCB']},
+  {title:'Nivel 3 → 4 (Definido a Optimizado)',color:'var(--c-blue)',desc:'El proceso está definido y es consistente. El siguiente salto es instrumentarlo con métricas reales para detectar cuellos de botella y mejorar basándose en datos.',warning:'Error más común: recopilar métricas sin usarlas para decisiones. Si las métricas no cambian nada, el equipo deja de reportarlas.',sprints:[{t:'Sprint 1–2',n:'Instrumentación de métricas',as:['Definir KPIs del proceso: tasa defectos, tiempo ciclo, % ambigüedades','Implementar dashboard de calidad del SRS por proyecto','Crear retrospectiva de proceso al final de cada fase']},{t:'Sprint 3–4',n:'Gestión de cambios avanzada',as:['Implementar CCB formal con cadencia y composición definidas','Activar matriz de trazabilidad completa (negocio → código → prueba)','Integrar el log de CRs con el sistema de gestión del proyecto']},{t:'Sprint 5–6',n:'Mejora continua y formación',as:['Implementar programa de formación interna en ingeniería de requisitos','Crear biblioteca de lecciones aprendidas por tipo de proyecto','Publicar el framework internamente con guías de uso']}],exits:['< 0.3 defectos/página en inspecciones','< 5% tasa de ambigüedad en SRS','< 3 días tiempo promedio decisión CCB']},
 ];
 let curRoadmap = 0;
 function setRoadmap(i, btn) {
