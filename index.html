@@ -570,7 +570,7 @@ textarea { resize: vertical; line-height: 1.6; }
     </div>
     <div class="nav-group">
       <span class="nav-label">Fase 1 · Elicitación</span>
-      <button class="nav-item" onclick="nav('eli-overview')"><div class="nav-pip" style="background:var(--c-teal)"></div>Visión general</button>
+      <button class="nav-item" onclick="nav('eli-overview')"><div class="nav-pip" style="background:var(--c-teal)"></div>Visión general y flujo</button>
       <button class="nav-item" onclick="nav('eli-stakeholders')"><div class="nav-pip" style="background:var(--c-teal)"></div>Mapa de stakeholders</button>
       <button class="nav-item" onclick="nav('eli-tecnicas')"><div class="nav-pip" style="background:var(--c-teal)"></div>Técnicas <span class="nav-count">5</span></button>
       <button class="nav-item" onclick="nav('eli-plantillas')"><div class="nav-pip" style="background:var(--c-teal)"></div>Plantillas de sesión</button>
@@ -584,6 +584,7 @@ textarea { resize: vertical; line-height: 1.6; }
     </div>
     <div class="nav-group">
       <span class="nav-label">Fase 3 · Especificación</span>
+      <button class="nav-item" onclick="nav('srs-flujo')"><div class="nav-pip" style="background:var(--c-blue)"></div>Flujo de actividades</button>
       <button class="nav-item" onclick="nav('srs-editor')"><div class="nav-pip" style="background:var(--c-blue)"></div>Editor SRS <span class="nav-count">12 RF</span></button>
       <button class="nav-item" onclick="nav('srs-contexto')"><div class="nav-pip" style="background:var(--c-blue)"></div>Diagrama de contexto</button>
       <button class="nav-item" onclick="nav('srs-casos')"><div class="nav-pip" style="background:var(--c-blue)"></div>Casos de uso</button>
@@ -594,6 +595,7 @@ textarea { resize: vertical; line-height: 1.6; }
     </div>
     <div class="nav-group">
       <span class="nav-label">Fase 4 · Validación</span>
+      <button class="nav-item" onclick="nav('val-flujo')"><div class="nav-pip" style="background:var(--c-green)"></div>Flujo de actividades</button>
       <button class="nav-item" onclick="nav('val-tecnicas')"><div class="nav-pip" style="background:var(--c-green)"></div>Técnicas de revisión</button>
       <button class="nav-item" onclick="nav('val-log')"><div class="nav-pip" style="background:var(--c-green)"></div>Log de defectos</button>
       <button class="nav-item" onclick="nav('val-uat')"><div class="nav-pip" style="background:var(--c-green)"></div>Simulador UAT</button>
@@ -601,6 +603,7 @@ textarea { resize: vertical; line-height: 1.6; }
     </div>
     <div class="nav-group">
       <span class="nav-label">Fase 5 · Gestión cambios</span>
+      <button class="nav-item" onclick="nav('ccb-flujo')"><div class="nav-pip" style="background:var(--c-amber)"></div>Flujo de actividades</button>
       <button class="nav-item" onclick="nav('ccb-cr')"><div class="nav-pip" style="background:var(--c-amber)"></div>Simulador Change Request</button>
       <button class="nav-item" onclick="nav('ccb-backlog')"><div class="nav-pip" style="background:var(--c-amber)"></div>Backlog de CRs</button>
       <button class="nav-item" onclick="nav('ccb-versiones')"><div class="nav-pip" style="background:var(--c-amber)"></div>Control de versiones</button>
@@ -857,17 +860,17 @@ reg('home', () => `
     <div class="phase-name" style="color:var(--c-purple-d)">Análisis</div>
     <div class="phase-items" style="color:var(--c-purple)">BPMN · GAP<br>Casos de uso<br>MoSCoW · Kano<br>ISO 19510</div>
   </div>
-  <div class="phase-card" style="border-color:rgba(24,95,165,.3);background:var(--c-blue-l)" onclick="nav('srs-editor')">
+  <div class="phase-card" style="border-color:rgba(24,95,165,.3);background:var(--c-blue-l)" onclick="nav('srs-flujo')">
     <div class="phase-label" style="color:var(--c-blue-d)">Fase 3</div>
     <div class="phase-name" style="color:var(--c-blue-d)">Especificación</div>
     <div class="phase-items" style="color:var(--c-blue)">SRS IEEE 29148<br>Gherkin · BDD<br>RNF ISO 25010<br>Glosario</div>
   </div>
-  <div class="phase-card" style="border-color:rgba(15,110,86,.3);background:var(--c-green-l)" onclick="nav('val-tecnicas')">
+  <div class="phase-card" style="border-color:rgba(15,110,86,.3);background:var(--c-green-l)" onclick="nav('val-flujo')">
     <div class="phase-label" style="color:var(--c-teal-d)">Fase 4</div>
     <div class="phase-name" style="color:var(--c-teal-d)">Validación</div>
     <div class="phase-items" style="color:var(--c-green)">Walkthrough<br>Fagan · UAT<br>Baseline<br>IEEE 1028</div>
   </div>
-  <div class="phase-card" style="border-color:rgba(186,117,23,.3);background:var(--c-amber-l)" onclick="nav('ccb-cr')">
+  <div class="phase-card" style="border-color:rgba(186,117,23,.3);background:var(--c-amber-l)" onclick="nav('ccb-flujo')">
     <div class="phase-label" style="color:var(--c-amber-d)">Transversal</div>
     <div class="phase-name" style="color:var(--c-amber-d)">Gestión cambios</div>
     <div class="phase-items" style="color:var(--c-amber)">Change Request<br>CCB formal<br>SRS versionado<br>ISO 12207</div>
@@ -2507,6 +2510,142 @@ reg('srs-bpmn', () => `
 </div>
 `);
 
+/* ════════════════════════════════════════
+   PAGE: ESPECIFICACIÓN — FLUJO
+════════════════════════════════════════ */
+reg('srs-flujo', () => `
+<div class="page-header">
+  <div class="page-eyebrow" style="color:var(--c-blue)">● Fase 3 — Especificación</div>
+  <h1 class="page-title">Flujo de actividades de especificación</h1>
+  <p class="page-desc">Secuencia de seis actividades que transforman el backlog priorizado en un SRS formal, verificable y aprobado para iniciar el desarrollo.</p>
+  <div class="std-row"><span class="std-pill">IEEE 29148:2018</span><span class="std-pill">ISO/IEC 25010:2023</span><span class="std-pill">BDD/Gherkin</span></div>
+</div>
+
+<div class="tab-nav">
+  <button class="tab-btn on" onclick="tabSel('srsf',0,this)">Flujo de actividades</button>
+  <button class="tab-btn" onclick="tabSel('srsf',1,this)">Técnicas y artefactos</button>
+</div>
+
+<div class="tab-panel on" id="srsf-0">
+  <div class="card" style="margin-bottom:.8rem">
+    <div class="card-title">Secuencia de actividades — Fase 3</div>
+    <svg width="100%" viewBox="0 0 680 590" xmlns="http://www.w3.org/2000/svg">
+      <defs><marker id="asrs" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>
+
+      <!-- Start -->
+      <rect x="251" y="14" width="178" height="34" rx="17" fill="#F1EFE8" stroke="#888780" stroke-width="0.5"/>
+      <text x="340" y="31" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="12" fill="#444441">Backlog priorizado (Fase 2)</text>
+      <line x1="340" y1="48" x2="340" y2="74" stroke="#9A9A94" stroke-width="1" marker-end="url(#asrs)"/>
+
+      <!-- B1 -->
+      <rect x="210" y="76" width="260" height="54" rx="10" fill="#E6F1FB" stroke="#185FA5" stroke-width="1"/>
+      <text x="340" y="96" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="13" font-weight="500" fill="#042C53">B1. Estructura del SRS</text>
+      <text x="340" y="114" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#185FA5">Secciones IEEE 29148 · Glosario inicial</text>
+      <rect x="44" y="83" width="128" height="30" rx="7" fill="#E6F1FB" stroke="#185FA5" stroke-width="0.5"/>
+      <text x="108" y="98" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#042C53">Plantilla SRS v0.1</text>
+      <line x1="172" y1="98" x2="208" y2="98" stroke="#185FA5" stroke-width="0.5" marker-end="url(#asrs)"/>
+      <line x1="340" y1="130" x2="340" y2="156" stroke="#9A9A94" stroke-width="1" marker-end="url(#asrs)"/>
+
+      <!-- B2 -->
+      <rect x="210" y="158" width="260" height="54" rx="10" fill="#E6F1FB" stroke="#185FA5" stroke-width="1"/>
+      <text x="340" y="178" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="13" font-weight="500" fill="#042C53">B2. RF — Requisitos funcionales</text>
+      <text x="340" y="196" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#185FA5">ID · DEBE/SHOULD · Criterio de aceptación</text>
+      <rect x="44" y="165" width="128" height="30" rx="7" fill="#E6F1FB" stroke="#185FA5" stroke-width="0.5"/>
+      <text x="108" y="180" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#042C53">Historias de usuario</text>
+      <line x1="172" y1="180" x2="208" y2="180" stroke="#185FA5" stroke-width="0.5" marker-end="url(#asrs)"/>
+      <line x1="340" y1="212" x2="340" y2="238" stroke="#9A9A94" stroke-width="1" marker-end="url(#asrs)"/>
+
+      <!-- B3 -->
+      <rect x="210" y="240" width="260" height="54" rx="10" fill="#E6F1FB" stroke="#185FA5" stroke-width="1"/>
+      <text x="340" y="260" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="13" font-weight="500" fill="#042C53">B3. RNF — Requisitos no funcionales</text>
+      <text x="340" y="278" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#185FA5">ISO 25010 · Rendimiento · Seguridad · Usabilidad</text>
+      <rect x="44" y="247" width="128" height="30" rx="7" fill="#E6F1FB" stroke="#185FA5" stroke-width="0.5"/>
+      <text x="108" y="262" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#042C53">Criterios de calidad</text>
+      <line x1="172" y1="262" x2="208" y2="262" stroke="#185FA5" stroke-width="0.5" marker-end="url(#asrs)"/>
+      <line x1="340" y1="294" x2="340" y2="320" stroke="#9A9A94" stroke-width="1" marker-end="url(#asrs)"/>
+
+      <!-- B4 -->
+      <rect x="210" y="322" width="260" height="54" rx="10" fill="#E6F1FB" stroke="#185FA5" stroke-width="1"/>
+      <text x="340" y="342" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="13" font-weight="500" fill="#042C53">B4. Criterios Gherkin / BDD</text>
+      <text x="340" y="360" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#185FA5">Given · When · Then por cada RF crítico</text>
+      <rect x="44" y="329" width="128" height="30" rx="7" fill="#E6F1FB" stroke="#185FA5" stroke-width="0.5"/>
+      <text x="108" y="344" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#042C53">Escenarios Gherkin</text>
+      <line x1="172" y1="344" x2="208" y2="344" stroke="#185FA5" stroke-width="0.5" marker-end="url(#asrs)"/>
+      <line x1="340" y1="376" x2="340" y2="402" stroke="#9A9A94" stroke-width="1" marker-end="url(#asrs)"/>
+
+      <!-- B5 -->
+      <rect x="210" y="404" width="260" height="54" rx="10" fill="#E6F1FB" stroke="#185FA5" stroke-width="1"/>
+      <text x="340" y="424" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="13" font-weight="500" fill="#042C53">B5. Detector de ambigüedad</text>
+      <text x="340" y="442" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#185FA5">Revisar lenguaje vago · Aplicar checklist SMART</text>
+      <rect x="44" y="411" width="128" height="30" rx="7" fill="#E6F1FB" stroke="#185FA5" stroke-width="0.5"/>
+      <text x="108" y="426" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#042C53">SRS v1.0 depurado</text>
+      <line x1="172" y1="426" x2="208" y2="426" stroke="#185FA5" stroke-width="0.5" marker-end="url(#asrs)"/>
+      <line x1="340" y1="458" x2="340" y2="484" stroke="#9A9A94" stroke-width="1" marker-end="url(#asrs)"/>
+
+      <!-- B6 -->
+      <rect x="210" y="486" width="260" height="54" rx="10" fill="#EAF3DE" stroke="#3B6D11" stroke-width="1"/>
+      <text x="340" y="506" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="13" font-weight="500" fill="#173404">B6. Auto-revisión y cierre</text>
+      <text x="340" y="524" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#3B6D11">Checklist PC3 · RTM inicial · Firma BA</text>
+      <rect x="44" y="493" width="128" height="30" rx="7" fill="#EAF3DE" stroke="#3B6D11" stroke-width="0.5"/>
+      <text x="108" y="508" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#173404">SRS listo para revisión</text>
+      <line x1="172" y1="508" x2="208" y2="508" stroke="#3B6D11" stroke-width="0.5" marker-end="url(#asrs)"/>
+
+      <!-- Retrabajo loop -->
+      <path d="M 470 510 L 580 510 L 580 180 L 472 180" fill="none" stroke="#A32D2D" stroke-width="0.5" stroke-dasharray="4 3" marker-end="url(#asrs)"/>
+      <text x="593" y="348" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="10" fill="#A32D2D">Ambi-</text>
+      <text x="593" y="362" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="10" fill="#A32D2D">güedad</text>
+
+      <line x1="340" y1="540" x2="340" y2="566" stroke="#9A9A94" stroke-width="1" marker-end="url(#asrs)"/>
+      <!-- End -->
+      <rect x="210" y="568" width="260" height="34" rx="10" fill="#F1EFE8" stroke="#888780" stroke-width="0.5"/>
+      <text x="340" y="585" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="12" fill="#2C2C2A">Entrada para Validación (Fase 4)</text>
+
+      <text x="28" y="62" font-family="DM Sans,sans-serif" font-size="10" fill="#9A9A94">Artefactos</text>
+    </svg>
+  </div>
+</div>
+
+<div class="tab-panel" id="srsf-1">
+  <div class="g2" style="margin-bottom:1rem">
+    <div class="card">
+      <div class="card-title">Técnicas principales</div>
+      ${[
+        {t:'IEEE 29148:2018',d:'Estructura y atributos de calidad del SRS',color:'var(--c-blue)'},
+        {t:'Lenguaje natural controlado',d:'Modales DEBE / DEBERÍA / PUEDE correctamente usados',color:'var(--c-blue)'},
+        {t:'BDD / Gherkin',d:'Criterios de aceptación ejecutables: Given-When-Then',color:'var(--c-purple)'},
+        {t:'Detector de ambigüedad',d:'Identificar palabras vagas: rápido, fácil, adecuado, etc.',color:'var(--c-red)'},
+        {t:'Modelo ISO 25010',d:'Clasificar RNF por características de calidad',color:'var(--c-teal)'},
+        {t:'RTM — Matriz de trazabilidad',d:'Vincular cada RF con su origen de negocio y prueba',color:'var(--c-green)'},
+      ].map(t => `<div class="dot-item"><div class="dot" style="background:${t.color}"></div><div><strong style="font-size:12px;font-weight:500">${t.t}</strong><div style="font-size:11px;color:var(--muted)">${t.d}</div></div></div>`).join('')}
+    </div>
+    <div class="card">
+      <div class="card-title">Artefactos producidos</div>
+      ${[
+        {a:'SRS v1.0',d:'Documento completo con todas las secciones IEEE 29148',color:'var(--c-blue)'},
+        {a:'Historias de usuario + Gherkin',d:'RF con criterios de aceptación ejecutables',color:'var(--c-purple)'},
+        {a:'Catálogo RNF',d:'Requisitos no funcionales con umbrales medibles',color:'var(--c-blue)'},
+        {a:'Glosario técnico del dominio',d:'Definiciones acordadas entre negocio y TI',color:'var(--c-teal)'},
+        {a:'RTM inicial (pre-RS)',d:'Trazabilidad backlog → SRS completa',color:'var(--c-green)'},
+        {a:'Checklist PC3 firmado',d:'Punto de control: SRS listo para inspección formal',color:'var(--c-amber)'},
+      ].map(a => `<div class="dot-item"><div class="dot" style="background:${a.color}"></div><div><strong style="font-size:12px;font-weight:500">${a.a}</strong><div style="font-size:11px;color:var(--muted)">${a.d}</div></div></div>`).join('')}
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">Criterios de calidad del SRS — IEEE 29148 §5.2</div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:.6rem;margin-top:.5rem">
+      ${[
+        {q:'Correcto',d:'Cada requisito representa una necesidad real del sistema',c:'var(--c-teal)'},
+        {q:'No ambiguo',d:'Un único significado posible, verificable objetivamente',c:'var(--c-blue)'},
+        {q:'Completo',d:'Cubre todos los casos, escenarios y condiciones',c:'var(--c-purple)'},
+        {q:'Consistente',d:'Sin contradicciones entre requisitos del mismo SRS',c:'var(--c-green)'},
+        {q:'Trazable',d:'Vinculado a su origen y a su prueba de verificación',c:'var(--c-amber)'},
+        {q:'Verificable',d:'Puede comprobarse por prueba, inspección o análisis',c:'var(--c-red)'},
+      ].map(q => `<div style="background:var(--surface);border-left:3px solid ${q.c};border-radius:var(--radius);padding:.6rem .8rem"><div style="font-size:12px;font-weight:500;margin-bottom:2px">${q.q}</div><div style="font-size:11px;color:var(--muted)">${q.d}</div></div>`).join('')}
+    </div>
+  </div>
+</div>
+`);
+
 reg('srs-editor', () => `
 <div class="page-header">
   <div class="page-eyebrow" style="color:var(--c-blue)">● Fase 3 — Especificación</div>
@@ -2699,6 +2838,133 @@ reg('srs-glosario', () => `
 `);
 
 /* ════════════════════════════════════════
+   PAGE: VALIDACIÓN — FLUJO
+════════════════════════════════════════ */
+reg('val-flujo', () => `
+<div class="page-header">
+  <div class="page-eyebrow" style="color:var(--c-green)">● Fase 4 — Validación</div>
+  <h1 class="page-title">Flujo de actividades de validación</h1>
+  <p class="page-desc">Proceso formal para verificar que el SRS cumple los criterios de calidad, obtener la aprobación de los stakeholders y establecer el baseline del proyecto.</p>
+  <div class="std-row"><span class="std-pill">IEEE 1028:2008</span><span class="std-pill">IEEE 29148 §6.3</span><span class="std-pill">BABOK v3</span></div>
+</div>
+
+<div class="tab-nav">
+  <button class="tab-btn on" onclick="tabSel('valf',0,this)">Flujo de actividades</button>
+  <button class="tab-btn" onclick="tabSel('valf',1,this)">Técnicas y artefactos</button>
+</div>
+
+<div class="tab-panel on" id="valf-0">
+  <div class="card" style="margin-bottom:.8rem">
+    <div class="card-title">Secuencia de actividades — Fase 4</div>
+    <svg width="100%" viewBox="0 0 680 590" xmlns="http://www.w3.org/2000/svg">
+      <defs><marker id="avalf" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>
+
+      <!-- Start -->
+      <rect x="251" y="14" width="178" height="34" rx="17" fill="#F1EFE8" stroke="#888780" stroke-width="0.5"/>
+      <text x="340" y="31" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="12" fill="#444441">SRS v1.0 — PC3 superado</text>
+      <line x1="340" y1="48" x2="340" y2="74" stroke="#9A9A94" stroke-width="1" marker-end="url(#avalf)"/>
+
+      <!-- V1 -->
+      <rect x="210" y="76" width="260" height="54" rx="10" fill="#EAF3DE" stroke="#3B6D11" stroke-width="1"/>
+      <text x="340" y="96" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="13" font-weight="500" fill="#173404">V1. Walkthrough técnico</text>
+      <text x="340" y="114" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#3B6D11">Autor + equipo técnico · Viabilidad · Dudas</text>
+      <rect x="44" y="83" width="128" height="30" rx="7" fill="#EAF3DE" stroke="#3B6D11" stroke-width="0.5"/>
+      <text x="108" y="98" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#173404">Acta walkthrough</text>
+      <line x1="172" y1="98" x2="208" y2="98" stroke="#3B6D11" stroke-width="0.5" marker-end="url(#avalf)"/>
+      <line x1="340" y1="130" x2="340" y2="156" stroke="#9A9A94" stroke-width="1" marker-end="url(#avalf)"/>
+
+      <!-- V2 -->
+      <rect x="210" y="158" width="260" height="54" rx="10" fill="#EAF3DE" stroke="#3B6D11" stroke-width="1"/>
+      <text x="340" y="178" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="13" font-weight="500" fill="#173404">V2. Revisión de stakeholders</text>
+      <text x="340" y="196" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#3B6D11">Negocio valida que refleja sus necesidades reales</text>
+      <rect x="44" y="165" width="128" height="30" rx="7" fill="#EAF3DE" stroke="#3B6D11" stroke-width="0.5"/>
+      <text x="108" y="180" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#173404">Acta conformidad PO</text>
+      <line x1="172" y1="180" x2="208" y2="180" stroke="#3B6D11" stroke-width="0.5" marker-end="url(#avalf)"/>
+      <line x1="340" y1="212" x2="340" y2="238" stroke="#9A9A94" stroke-width="1" marker-end="url(#avalf)"/>
+
+      <!-- V3 -->
+      <rect x="210" y="240" width="260" height="54" rx="10" fill="#EAF3DE" stroke="#3B6D11" stroke-width="1"/>
+      <text x="340" y="260" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="13" font-weight="500" fill="#173404">V3. Inspección formal (Fagan)</text>
+      <text x="340" y="278" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#3B6D11">Inspector independiente · Checklist · Log defectos</text>
+      <rect x="44" y="247" width="128" height="30" rx="7" fill="#EAF3DE" stroke="#3B6D11" stroke-width="0.5"/>
+      <text x="108" y="262" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#173404">Reporte de inspección</text>
+      <line x1="172" y1="262" x2="208" y2="262" stroke="#3B6D11" stroke-width="0.5" marker-end="url(#avalf)"/>
+      <line x1="340" y1="294" x2="340" y2="320" stroke="#9A9A94" stroke-width="1" marker-end="url(#avalf)"/>
+
+      <!-- V4 -->
+      <rect x="210" y="322" width="260" height="54" rx="10" fill="#EAF3DE" stroke="#3B6D11" stroke-width="1"/>
+      <text x="340" y="342" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="13" font-weight="500" fill="#173404">V4. Resolución de defectos</text>
+      <text x="340" y="360" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#3B6D11">BA resuelve Mayores · Moderador verifica</text>
+      <rect x="44" y="329" width="128" height="30" rx="7" fill="#EAF3DE" stroke="#3B6D11" stroke-width="0.5"/>
+      <text x="108" y="344" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#173404">Log defectos cerrado</text>
+      <line x1="172" y1="344" x2="208" y2="344" stroke="#3B6D11" stroke-width="0.5" marker-end="url(#avalf)"/>
+      <line x1="340" y1="376" x2="340" y2="402" stroke="#9A9A94" stroke-width="1" marker-end="url(#avalf)"/>
+
+      <!-- V5 -->
+      <rect x="210" y="404" width="260" height="54" rx="10" fill="#EAF3DE" stroke="#3B6D11" stroke-width="1"/>
+      <text x="340" y="424" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="13" font-weight="500" fill="#173404">V5. UAT — Prueba de aceptación</text>
+      <text x="340" y="442" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#3B6D11">Usuarios ejecutan casos derivados del SRS</text>
+      <rect x="44" y="411" width="128" height="30" rx="7" fill="#EAF3DE" stroke="#3B6D11" stroke-width="0.5"/>
+      <text x="108" y="426" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#173404">Plan UAT + resultados</text>
+      <line x1="172" y1="426" x2="208" y2="426" stroke="#3B6D11" stroke-width="0.5" marker-end="url(#avalf)"/>
+      <line x1="340" y1="458" x2="340" y2="484" stroke="#9A9A94" stroke-width="1" marker-end="url(#avalf)"/>
+
+      <!-- V6 -->
+      <rect x="210" y="486" width="260" height="54" rx="10" fill="#E1F5EE" stroke="#1D9E75" stroke-width="1.5"/>
+      <text x="340" y="506" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="13" font-weight="500" fill="#085041">V6. Aprobación y baseline</text>
+      <text x="340" y="524" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#1D9E75">Sponsor + PO + Arq. firman · SRS publicado</text>
+      <rect x="44" y="493" width="128" height="30" rx="7" fill="#E1F5EE" stroke="#1D9E75" stroke-width="0.5"/>
+      <text x="108" y="508" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#085041">SRS baseline aprobado</text>
+      <line x1="172" y1="508" x2="208" y2="508" stroke="#1D9E75" stroke-width="0.5" marker-end="url(#avalf)"/>
+
+      <!-- Re-inspection loop -->
+      <path d="M 470 266 L 580 266 L 580 348 L 472 348" fill="none" stroke="#A32D2D" stroke-width="0.5" stroke-dasharray="4 3" marker-end="url(#avalf)"/>
+      <text x="592" y="304" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="10" fill="#A32D2D">Re-insp.</text>
+      <text x="592" y="318" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="10" fill="#A32D2D">si umbral</text>
+
+      <line x1="340" y1="540" x2="340" y2="566" stroke="#9A9A94" stroke-width="1" marker-end="url(#avalf)"/>
+      <rect x="210" y="568" width="260" height="34" rx="10" fill="#F1EFE8" stroke="#888780" stroke-width="0.5"/>
+      <text x="340" y="585" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="12" fill="#2C2C2A">CCB activo — Gestión de cambios (Fase 5)</text>
+
+      <text x="28" y="62" font-family="DM Sans,sans-serif" font-size="10" fill="#9A9A94">Artefactos</text>
+    </svg>
+  </div>
+</div>
+
+<div class="tab-panel" id="valf-1">
+  <div class="g2" style="margin-bottom:1rem">
+    <div class="card">
+      <div class="card-title">Técnicas de validación</div>
+      ${[
+        {t:'Walkthrough (IEEE 1028 §5.3)',d:'El autor guía la revisión. Rápido, informal, alto ROI en defectos tempranos',color:'var(--c-blue)'},
+        {t:'Inspección Fagan (IEEE 1028 §5.4)',d:'Proceso formal en 6 etapas con moderador independiente y métricas de densidad',color:'var(--c-red)'},
+        {t:'Revisión técnica formal',d:'Pares evalúan viabilidad técnica y consistencia arquitectónica',color:'var(--c-purple)'},
+        {t:'UAT — User Acceptance Testing',d:'Usuarios reales ejecutan casos derivados de los criterios Gherkin del SRS',color:'var(--c-green)'},
+        {t:'Checklist SMART (IEEE 29148)',d:'Verificar que cada requisito cumple los 6 atributos de calidad mínimos',color:'var(--c-teal)'},
+      ].map(t => `<div class="dot-item"><div class="dot" style="background:${t.color}"></div><div><strong style="font-size:12px;font-weight:500">${t.t}</strong><div style="font-size:11px;color:var(--muted)">${t.d}</div></div></div>`).join('')}
+    </div>
+    <div class="card">
+      <div class="card-title">Artefactos producidos</div>
+      ${[
+        {a:'Acta de walkthrough',d:'Observaciones del equipo técnico con fecha de resolución',color:'var(--c-blue)'},
+        {a:'Acta de conformidad PO',d:'Firma de que el SRS refleja las necesidades del negocio',color:'var(--c-green)'},
+        {a:'Reporte de inspección formal',d:'Densidad de defectos, lista clasificada por severidad',color:'var(--c-red)'},
+        {a:'Log de defectos cerrado',d:'0 defectos Mayores abiertos al finalizar la fase',color:'var(--c-amber)'},
+        {a:'Plan UAT y resultados',d:'Casos de prueba ejecutados con resultado Pasó/Falló',color:'var(--c-green)'},
+        {a:'Acta de aprobación del baseline',d:'SRS v1.0 firmado por Sponsor + PO + Arquitecto',color:'var(--c-teal)'},
+      ].map(a => `<div class="dot-item"><div class="dot" style="background:${a.color}"></div><div><strong style="font-size:12px;font-weight:500">${a.a}</strong><div style="font-size:11px;color:var(--muted)">${a.d}</div></div></div>`).join('')}
+    </div>
+  </div>
+  <div class="card" style="background:rgba(15,110,86,.03);border-color:rgba(15,110,86,.2)">
+    <div class="card-title" style="color:var(--c-green)">Criterios de salida — PC4 (Definition of Done)</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:.5rem">
+      ${['0 defectos Bloqueantes o Mayores abiertos','100% casos UAT críticos en estado Pasó','RTM post-RS completa y verificada','Acta firmada por todos los aprobadores','SRS publicado con número de baseline asignado','CCB activado y equipo notificado'].map(c => `<div class="dot-item"><div class="dot" style="background:var(--c-green)"></div>${c}</div>`).join('')}
+    </div>
+  </div>
+</div>
+`);
+
+/* ════════════════════════════════════════
    PAGE: TÉCNICAS VALIDACIÓN
 ════════════════════════════════════════ */
 reg('val-tecnicas', () => `
@@ -2808,6 +3074,146 @@ ${[
     </div>
   </div>
 </div>`).join('')}
+`);
+
+/* ════════════════════════════════════════
+   PAGE: GESTIÓN DE CAMBIOS — FLUJO
+════════════════════════════════════════ */
+reg('ccb-flujo', () => `
+<div class="page-header">
+  <div class="page-eyebrow" style="color:var(--c-amber)">● Fase 5 — Gestión de cambios</div>
+  <h1 class="page-title">Flujo de actividades de gestión de cambios</h1>
+  <p class="page-desc">Proceso formal para gestionar toda modificación al SRS baseline: desde la recepción de la solicitud hasta el versionado del artefacto actualizado.</p>
+  <div class="std-row"><span class="std-pill">ISO/IEC 12207:2017</span><span class="std-pill">IEEE 29148 §6.5</span><span class="std-pill">PMBOK — Change Control</span></div>
+</div>
+
+<div class="tab-nav">
+  <button class="tab-btn on" onclick="tabSel('ccbf',0,this)">Flujo de actividades</button>
+  <button class="tab-btn" onclick="tabSel('ccbf',1,this)">Técnicas y artefactos</button>
+</div>
+
+<div class="tab-panel on" id="ccbf-0">
+  <div class="card" style="margin-bottom:.8rem">
+    <div class="card-title">Ciclo de vida de un Change Request</div>
+    <svg width="100%" viewBox="0 0 680 620" xmlns="http://www.w3.org/2000/svg">
+      <defs><marker id="accbf" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>
+
+      <!-- Start -->
+      <rect x="251" y="14" width="178" height="34" rx="17" fill="#F1EFE8" stroke="#888780" stroke-width="0.5"/>
+      <text x="340" y="31" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="12" fill="#444441">SRS baseline activo</text>
+      <line x1="340" y1="48" x2="340" y2="74" stroke="#9A9A94" stroke-width="1" marker-end="url(#accbf)"/>
+
+      <!-- C1 -->
+      <rect x="210" y="76" width="260" height="54" rx="10" fill="#FAEEDA" stroke="#BA7517" stroke-width="1"/>
+      <text x="340" y="96" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="13" font-weight="500" fill="#412402">C1. Recepción del Change Request</text>
+      <text x="340" y="114" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#BA7517">Formulario CR · ID asignado · Clasificación inicial</text>
+      <rect x="44" y="83" width="128" height="30" rx="7" fill="#FAEEDA" stroke="#BA7517" stroke-width="0.5"/>
+      <text x="108" y="98" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#412402">Formulario CR registrado</text>
+      <line x1="172" y1="98" x2="208" y2="98" stroke="#BA7517" stroke-width="0.5" marker-end="url(#accbf)"/>
+      <line x1="340" y1="130" x2="340" y2="156" stroke="#9A9A94" stroke-width="1" marker-end="url(#accbf)"/>
+
+      <!-- C2 -->
+      <rect x="210" y="158" width="260" height="54" rx="10" fill="#FAEEDA" stroke="#BA7517" stroke-width="1"/>
+      <text x="340" y="178" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="13" font-weight="500" fill="#412402">C2. Análisis de impacto</text>
+      <text x="340" y="196" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#BA7517">Costo · Esfuerzo · Riesgo · RF/RNF afectados</text>
+      <rect x="44" y="165" width="128" height="30" rx="7" fill="#FAEEDA" stroke="#BA7517" stroke-width="0.5"/>
+      <text x="108" y="180" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#412402">Matriz de impacto</text>
+      <line x1="172" y1="180" x2="208" y2="180" stroke="#BA7517" stroke-width="0.5" marker-end="url(#accbf)"/>
+      <line x1="340" y1="212" x2="340" y2="238" stroke="#9A9A94" stroke-width="1" marker-end="url(#accbf)"/>
+
+      <!-- C3 — Decision gateway -->
+      <polygon points="340,240 420,276 340,312 260,276" fill="#FAEEDA" stroke="#BA7517" stroke-width="1"/>
+      <text x="340" y="272" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" font-weight="500" fill="#412402">C3. CCB</text>
+      <text x="340" y="288" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="10" fill="#BA7517">Decisión</text>
+      <line x1="340" y1="312" x2="340" y2="338" stroke="#9A9A94" stroke-width="1" marker-end="url(#accbf)"/>
+
+      <!-- Rechazado path left -->
+      <line x1="260" y1="276" x2="120" y2="276" stroke="#A32D2D" stroke-width="0.5" marker-end="url(#accbf)"/>
+      <text x="190" y="265" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="10" fill="#A32D2D">Rechazado</text>
+      <rect x="44" y="258" width="76" height="36" rx="7" fill="#FCEBEB" stroke="#A32D2D" stroke-width="0.5"/>
+      <text x="82" y="272" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="10" fill="#791F1F">Archivar CR</text>
+      <text x="82" y="286" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="10" fill="#A32D2D">Notificar</text>
+
+      <!-- Diferido path right -->
+      <line x1="420" y1="276" x2="560" y2="276" stroke="#888780" stroke-width="0.5" marker-end="url(#accbf)"/>
+      <text x="490" y="265" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="10" fill="#5F5E5A">Diferido</text>
+      <rect x="560" y="258" width="96" height="36" rx="7" fill="#F1EFE8" stroke="#888780" stroke-width="0.5"/>
+      <text x="608" y="272" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="10" fill="#444441">Backlog v.next</text>
+      <text x="608" y="286" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="10" fill="#5F5E5A">Fecha est.</text>
+
+      <!-- Aprobado -->
+      <text x="355" y="328" font-family="DM Sans,sans-serif" font-size="10" fill="#0F6E56">Aprobado</text>
+
+      <!-- C4 -->
+      <rect x="210" y="340" width="260" height="54" rx="10" fill="#FAEEDA" stroke="#BA7517" stroke-width="1"/>
+      <text x="340" y="360" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="13" font-weight="500" fill="#412402">C4. Actualización del SRS</text>
+      <text x="340" y="378" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#BA7517">BA actualiza secciones afectadas · RTM revisada</text>
+      <rect x="44" y="347" width="128" height="30" rx="7" fill="#FAEEDA" stroke="#BA7517" stroke-width="0.5"/>
+      <text x="108" y="362" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#412402">SRS actualizado</text>
+      <line x1="172" y1="362" x2="208" y2="362" stroke="#BA7517" stroke-width="0.5" marker-end="url(#accbf)"/>
+      <line x1="340" y1="394" x2="340" y2="420" stroke="#9A9A94" stroke-width="1" marker-end="url(#accbf)"/>
+
+      <!-- C5 -->
+      <rect x="210" y="422" width="260" height="54" rx="10" fill="#FAEEDA" stroke="#BA7517" stroke-width="1"/>
+      <text x="340" y="442" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="13" font-weight="500" fill="#412402">C5. Re-revisión del cambio</text>
+      <text x="340" y="460" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#BA7517">QA verifica · Pruebas afectadas re-ejecutadas</text>
+      <rect x="44" y="429" width="128" height="30" rx="7" fill="#FAEEDA" stroke="#BA7517" stroke-width="0.5"/>
+      <text x="108" y="444" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#412402">Reporte re-verificación</text>
+      <line x1="172" y1="444" x2="208" y2="444" stroke="#BA7517" stroke-width="0.5" marker-end="url(#accbf)"/>
+      <line x1="340" y1="476" x2="340" y2="502" stroke="#9A9A94" stroke-width="1" marker-end="url(#accbf)"/>
+
+      <!-- C6 -->
+      <rect x="210" y="504" width="260" height="54" rx="10" fill="#EAF3DE" stroke="#3B6D11" stroke-width="1.5"/>
+      <text x="340" y="524" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="13" font-weight="500" fill="#173404">C6. Nuevo baseline y publicación</text>
+      <text x="340" y="542" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#3B6D11">SRS v.nueva · Tag · Equipo notificado · CR cerrado</text>
+      <rect x="44" y="511" width="128" height="30" rx="7" fill="#EAF3DE" stroke="#3B6D11" stroke-width="0.5"/>
+      <text x="108" y="526" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#173404">SRS versionado</text>
+      <line x1="172" y1="526" x2="208" y2="526" stroke="#3B6D11" stroke-width="0.5" marker-end="url(#accbf)"/>
+
+      <line x1="340" y1="558" x2="340" y2="584" stroke="#9A9A94" stroke-width="1" marker-end="url(#accbf)"/>
+      <rect x="251" y="586" width="178" height="28" rx="14" fill="#F1EFE8" stroke="#888780" stroke-width="0.5"/>
+      <text x="340" y="600" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="12" fill="#444441">SRS actualizado activo</text>
+
+      <text x="28" y="62" font-family="DM Sans,sans-serif" font-size="10" fill="#9A9A94">Artefactos</text>
+    </svg>
+  </div>
+</div>
+
+<div class="tab-panel" id="ccbf-1">
+  <div class="g2" style="margin-bottom:1rem">
+    <div class="card">
+      <div class="card-title">Técnicas de gestión de cambios</div>
+      ${[
+        {t:'Formulario CR estandarizado',d:'Campos: origen, justificación, urgencia, alcance, RF afectados',color:'var(--c-amber)'},
+        {t:'Análisis de impacto',d:'Evalúa costo, esfuerzo, riesgo técnico y artefactos afectados',color:'var(--c-amber)'},
+        {t:'CCB — Change Control Board',d:'Comité con roles definidos, quórum y cadencia establecida',color:'var(--c-amber)'},
+        {t:'Control de versiones del SRS',d:'Versionado semántico: mayor.menor con changelog detallado',color:'var(--c-blue)'},
+        {t:'Gestión de configuración',d:'Repositorio central con acceso controlado y trazabilidad de cambios',color:'var(--c-purple)'},
+      ].map(t => `<div class="dot-item"><div class="dot" style="background:${t.color}"></div><div><strong style="font-size:12px;font-weight:500">${t.t}</strong><div style="font-size:11px;color:var(--muted)">${t.d}</div></div></div>`).join('')}
+    </div>
+    <div class="card">
+      <div class="card-title">Artefactos producidos</div>
+      ${[
+        {a:'Formulario Change Request (CR)',d:'Solicitud formal con ID, tipo, prioridad y justificación',color:'var(--c-amber)'},
+        {a:'Matriz de análisis de impacto',d:'RF/RNF afectados, esfuerzo estimado, riesgo valorado',color:'var(--c-amber)'},
+        {a:'Acta de decisión CCB',d:'Decisión: Aprobado / Rechazado / Diferido con rationale',color:'var(--c-amber)'},
+        {a:'SRS versionado (v.x.y)',d:'Documento actualizado con changelog y nueva firma',color:'var(--c-blue)'},
+        {a:'Log de CRs activo',d:'Registro histórico de todos los cambios al baseline',color:'var(--c-green)'},
+        {a:'Notificación a stakeholders',d:'Comunicación formal del cambio y su impacto en el proyecto',color:'var(--c-teal)'},
+      ].map(a => `<div class="dot-item"><div class="dot" style="background:${a.color}"></div><div><strong style="font-size:12px;font-weight:500">${a.a}</strong><div style="font-size:11px;color:var(--muted)">${a.d}</div></div></div>`).join('')}
+    </div>
+  </div>
+  <div class="card" style="background:rgba(186,117,23,.03);border-color:rgba(186,117,23,.2)">
+    <div class="card-title" style="color:var(--c-amber)">Niveles de autorización del CCB</div>
+    <div style="display:flex;flex-direction:column;gap:.5rem;margin-top:.5rem">
+      ${[
+        {nivel:'Bajo impacto',auth:'Gerente de proyecto',desc:'Cambios menores, sin impacto en cronograma o presupuesto',color:'var(--c-teal)'},
+        {nivel:'Medio impacto',auth:'CCB ordinario (PO + Arq. + PM)',desc:'Cambios que afectan alcance pero dentro del presupuesto',color:'var(--c-amber)'},
+        {nivel:'Alto impacto',auth:'CCB + Sponsor ejecutivo',desc:'Cambios que modifican cronograma, presupuesto o alcance crítico',color:'var(--c-red)'},
+      ].map(n => `<div style="display:grid;grid-template-columns:100px 140px 1fr;gap:.6rem;align-items:center;padding:.5rem .7rem;background:var(--surface);border-radius:var(--radius);border-left:3px solid ${n.color}"><span class="badge" style="background:var(--surface2)">${n.nivel}</span><span style="font-size:12px;font-weight:500">${n.auth}</span><span style="font-size:11px;color:var(--muted)">${n.desc}</span></div>`).join('')}
+    </div>
+  </div>
+</div>
 `);
 
 /* ════════════════════════════════════════
