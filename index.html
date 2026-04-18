@@ -621,6 +621,18 @@ textarea { resize: vertical; line-height: 1.6; }
       <button class="nav-item" onclick="nav('madurez')"><div class="nav-pip" style="background:var(--c-gray)"></div>Evaluador de madurez</button>
       <button class="nav-item" onclick="nav('roadmap')"><div class="nav-pip" style="background:var(--c-gray)"></div>Hoja de ruta</button>
     </div>
+
+    <div class="nav-group" style="margin-top:.4rem;border-top:0.5px solid var(--border2);padding-top:.6rem">
+      <span class="nav-label" style="color:var(--c-teal)">● Aplicación en campo</span>
+      <button class="nav-item" onclick="nav('campo-proyecto')"><div class="nav-pip" style="background:var(--c-teal)"></div>Contexto del proyecto</button>
+      <button class="nav-item" onclick="nav('campo-stakeholders')"><div class="nav-pip" style="background:var(--c-teal)"></div>Stakeholders reales</button>
+      <button class="nav-item" onclick="nav('campo-sesiones')"><div class="nav-pip" style="background:var(--c-teal)"></div>Sesiones de elicitación</button>
+      <button class="nav-item" onclick="nav('campo-requisitos')"><div class="nav-pip" style="background:var(--c-blue)"></div>Requisitos capturados</button>
+      <button class="nav-item" onclick="nav('campo-gap')"><div class="nav-pip" style="background:var(--c-purple)"></div>GAP Analysis real</button>
+      <button class="nav-item" onclick="nav('campo-defectos')"><div class="nav-pip" style="background:var(--c-green)"></div>Log de defectos real</button>
+      <button class="nav-item" onclick="nav('campo-crs')"><div class="nav-pip" style="background:var(--c-amber)"></div>Change Requests reales</button>
+      <button class="nav-item" onclick="nav('campo-resultados')"><div class="nav-pip" style="background:var(--c-purple)"></div>Resultados y análisis</button>
+    </div>
   </nav>
 
   <div class="sidebar-footer">
@@ -3719,6 +3731,691 @@ function buildRoadmap() {
 }
 
 /* ════════════════════════════════════════
+   APLICACIÓN EN CAMPO — STORAGE ENGINE
+   Todo se guarda en localStorage automáticamente
+════════════════════════════════════════ */
+const CAMPO_KEY = 'fw_campo_v1';
+function loadCampo() {
+  try { return JSON.parse(localStorage.getItem(CAMPO_KEY)) || defaultCampo(); }
+  catch(e) { return defaultCampo(); }
+}
+function saveCampo(d) { localStorage.setItem(CAMPO_KEY, JSON.stringify(d)); }
+function defaultCampo() {
+  return {
+    proyecto: { nombre:'', empresa:'', sector:'', descripcion:'', objetivo:'', autor:'', director:'', fecha:'' },
+    stakeholders: [],
+    sesiones: [],
+    requisitos: [],
+    gap: { asIs:'', toBe:'', brechas:[] },
+    defectos: [],
+    crs: []
+  };
+}
+let CAMPO = loadCampo();
+function sc() { saveCampo(CAMPO); }
+
+function campoExportJSON() {
+  const blob = new Blob([JSON.stringify(CAMPO, null, 2)], {type:'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'campo_' + (CAMPO.proyecto.nombre||'proyecto').replace(/\s+/g,'-') + '.json';
+  a.click();
+}
+function campoImportJSON(e) {
+  const file = e.target.files[0]; if(!file) return;
+  const r = new FileReader();
+  r.onload = ev => {
+    try { CAMPO = JSON.parse(ev.target.result); sc(); alert('Datos importados. Recargando...'); location.reload(); }
+    catch(err) { alert('Archivo JSON inválido'); }
+  };
+  r.readAsText(file);
+}
+function campoClearAll() {
+  if(!confirm('¿Eliminar todos los datos del campo? Esta acción no se puede deshacer.')) return;
+  localStorage.removeItem(CAMPO_KEY); location.reload();
+}
+
+/* helper UI */
+function campoSavedMsg(id) {
+  const el = document.getElementById(id);
+  if(el) { el.style.display='block'; setTimeout(()=>el.style.display='none', 2200); }
+}
+function campoField(label, id, value='', placeholder='', type='text', opts=null) {
+  if(opts) {
+    return `<div><label style="font-size:11px;color:var(--muted);display:block;margin-bottom:3px">${label}</label>
+    <select id="${id}" style="width:100%">${opts.map(o=>`<option${o===value?' selected':''}>${o}</option>`).join('')}</select></div>`;
+  }
+  if(type==='textarea') {
+    return `<div><label style="font-size:11px;color:var(--muted);display:block;margin-bottom:3px">${label}</label>
+    <textarea id="${id}" rows="3" style="width:100%;resize:vertical" placeholder="${placeholder}">${value||''}</textarea></div>`;
+  }
+  return `<div><label style="font-size:11px;color:var(--muted);display:block;margin-bottom:3px">${label}</label>
+  <input type="${type}" id="${id}" value="${value||''}" placeholder="${placeholder}" style="width:100%"></div>`;
+}
+
+/* ════ CAMPO: PROYECTO ════ */
+reg('campo-proyecto', () => `
+<div class="page-header">
+  <div class="page-eyebrow" style="color:var(--c-teal)">● Aplicación en campo</div>
+  <h1 class="page-title">Contexto del proyecto real</h1>
+  <p class="page-desc">Define el contexto de la empresa y el sistema donde aplicarás el framework. Esta información sirve como base para el capítulo de aplicación de tu tesis.</p>
+</div>
+<div id="cp-mount"></div>
+`);
+function initCampoProyecto() {
+  const el = document.getElementById('cp-mount');
+  if(!el||el.innerHTML.trim()) return;
+  const p = CAMPO.proyecto;
+  el.innerHTML = `
+<div class="card" style="margin-bottom:1rem">
+  <div class="card-title">Datos del proyecto y empresa</div>
+  <div class="g2" style="gap:.7rem;margin-bottom:.7rem">
+    ${campoField('Nombre del proyecto / sistema *','cp-nom',p.nombre,'Ej: Sistema de gestión de nómina')}
+    ${campoField('Empresa / organización','cp-emp',p.empresa,'Nombre de la empresa donde aplicas')}
+    ${campoField('Sector / industria','cp-sec',p.sector,'Ej: Sector financiero, salud, retail...')}
+    ${campoField('Fecha de inicio de aplicación','cp-fecha',p.fecha,'','date')}
+    ${campoField('Autor / investigador','cp-autor',p.autor,'Tu nombre completo')}
+    ${campoField('Director de tesis','cp-dir',p.director,'Nombre del director')}
+  </div>
+  ${campoField('Descripción del sistema de software analizado','cp-desc',p.descripcion,'Describe el sistema: qué hace, qué área lo usa, qué problema resuelve...','textarea')}
+  <div style="margin-top:.7rem">
+  ${campoField('Objetivo de aplicación del framework en este proyecto','cp-obj',p.objetivo,'¿Qué buscas demostrar aplicando el framework aquí? ¿Qué hipótesis validas?','textarea')}
+  </div>
+</div>
+<div style="display:flex;gap:.6rem;flex-wrap:wrap">
+  <button class="btn btn-primary" onclick="saveCampoProyecto()">Guardar</button>
+  <button class="btn" onclick="campoExportJSON()">↓ Exportar JSON</button>
+  <label class="btn" style="cursor:pointer">↑ Importar JSON<input type="file" accept=".json" onchange="campoImportJSON(event)" style="display:none"></label>
+  <button class="btn" style="color:var(--c-red)" onclick="campoClearAll()">✕ Limpiar datos</button>
+</div>
+<div id="cp-ok" style="margin-top:.6rem;font-size:12px;color:var(--c-green);display:none">✓ Guardado correctamente</div>`;
+}
+function saveCampoProyecto() {
+  const g = id => document.getElementById(id)?.value?.trim()||'';
+  CAMPO.proyecto = { nombre:g('cp-nom'), empresa:g('cp-emp'), sector:g('cp-sec'),
+    fecha:g('cp-fecha'), autor:g('cp-autor'), director:g('cp-dir'),
+    descripcion:document.getElementById('cp-desc')?.value||'',
+    objetivo:document.getElementById('cp-obj')?.value||'' };
+  sc(); campoSavedMsg('cp-ok');
+}
+
+/* ════ CAMPO: STAKEHOLDERS ════ */
+reg('campo-stakeholders', () => `
+<div class="page-header">
+  <div class="page-eyebrow" style="color:var(--c-teal)">● Aplicación en campo · Fase 1</div>
+  <h1 class="page-title">Stakeholders reales del proyecto</h1>
+  <p class="page-desc">Registra y clasifica a todas las personas involucradas en el sistema de la empresa. El cuadrante influencia × interés se actualiza en tiempo real.</p>
+</div>
+<div id="csk-mount"></div>
+`);
+function initCampoSK() {
+  const el = document.getElementById('csk-mount');
+  if(!el||el.innerHTML.trim()) return; renderCampoSK();
+}
+function renderCampoSK() {
+  const el = document.getElementById('csk-mount'); if(!el) return;
+  const sks = CAMPO.stakeholders;
+  const quad = [
+    {q:'Gestionar de cerca',inf:'alta',int:'alto',c:'var(--c-green)',bg:'rgba(15,110,86,.05)'},
+    {q:'Mantener satisfecho',inf:'alta',int:'bajo',c:'var(--c-purple)',bg:'rgba(83,52,131,.05)'},
+    {q:'Informar regularmente',inf:'baja',int:'alto',c:'var(--c-blue)',bg:'rgba(24,95,165,.05)'},
+    {q:'Monitorear',inf:'baja',int:'bajo',c:'var(--c-gray)',bg:'rgba(95,94,90,.05)'},
+  ];
+  el.innerHTML = `
+<div class="card" style="margin-bottom:1rem">
+  <div class="card-title">Agregar stakeholder</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.6rem;margin-bottom:.6rem">
+    ${campoField('Nombre *','csk-nom','','Nombre completo')}
+    ${campoField('Cargo / Rol','csk-cargo','','Ej: Gerente de TI')}
+    ${campoField('Área / Departamento','csk-area','','Ej: Tecnología')}
+    ${campoField('Influencia','csk-inf','alta','','',[' ','alta','baja'])}
+    ${campoField('Interés','csk-int','alto','','',[' ','alto','bajo'])}
+    ${campoField('Técnica de elicitación','csk-tec','Entrevista estructurada','','',[
+      'Entrevista estructurada','Entrevista semi-estructurada','Taller JAD','Observación contextual',
+      'Cuestionario','Análisis documental','Prototipado','Focus Group'])}
+  </div>
+  <div style="margin-bottom:.6rem">${campoField('Expectativas / intereses clave','csk-exp','','¿Qué espera este stakeholder del nuevo sistema?','textarea')}</div>
+  <button class="btn btn-primary" onclick="addCampoSK()">+ Agregar</button>
+</div>
+
+<div class="g2" style="margin-bottom:1rem">
+  ${quad.map(q => {
+    const items = sks.filter(s=>s.inf===q.inf&&s.int===q.int);
+    return `<div class="card" style="border-left:3px solid ${q.c};background:${q.bg}">
+      <div style="font-size:12px;font-weight:500;color:${q.c};margin-bottom:.3rem">${q.q}</div>
+      <div style="font-size:10px;color:var(--muted);margin-bottom:.5rem">Influencia ${q.inf} · Interés ${q.int}</div>
+      ${items.length ? items.map(s=>`<div style="display:flex;align-items:center;justify-content:space-between;padding:4px 0;border-bottom:0.5px solid var(--border);font-size:12px">
+        <div><strong>${s.nombre}</strong><span style="color:var(--muted);font-size:11px;margin-left:.3rem">${s.cargo}</span></div>
+        <button onclick="rmCampoSK('${s.id}')" style="background:none;border:none;cursor:pointer;color:var(--c-red)">×</button>
+      </div>`).join('') : `<div style="font-size:11px;color:var(--faint);font-style:italic">Sin stakeholders</div>`}
+    </div>`;
+  }).join('')}
+</div>
+
+${sks.length ? `<div class="card"><div class="card-title">Lista completa (${sks.length})</div>
+<div style="overflow-x:auto"><table class="data-table"><thead><tr><th>Nombre</th><th>Cargo</th><th>Área</th><th>Cuadrante</th><th>Técnica</th><th>Expectativas</th><th></th></tr></thead>
+<tbody>${sks.map(s=>{
+  const qn = s.inf==='alta'&&s.int==='alto'?'Gestionar de cerca':s.inf==='alta'&&s.int==='bajo'?'Mantener satisfecho':s.inf==='baja'&&s.int==='alto'?'Informar':'Monitorear';
+  return `<tr><td><strong>${s.nombre}</strong></td><td>${s.cargo}</td><td>${s.area}</td><td style="font-size:11px">${qn}</td><td style="font-size:11px">${s.tecnica}</td><td style="font-size:11px;color:var(--muted);max-width:180px">${s.exp||'—'}</td><td><button onclick="rmCampoSK('${s.id}')" style="background:none;border:none;cursor:pointer;color:var(--c-red)">×</button></td></tr>`;
+}).join('')}</tbody></table></div></div>` : ''}`;
+}
+function addCampoSK() {
+  const g = id => document.getElementById(id)?.value?.trim()||'';
+  const nombre = g('csk-nom'); if(!nombre){alert('El nombre es obligatorio');return;}
+  CAMPO.stakeholders.push({ id:'SK'+Date.now(), nombre, cargo:g('csk-cargo'), area:g('csk-area'),
+    inf:g('csk-inf')||'baja', int:g('csk-int')||'bajo', tecnica:g('csk-tec'),
+    exp:document.getElementById('csk-exp')?.value||'' });
+  sc(); ['csk-nom','csk-cargo','csk-area','csk-exp'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});
+  document.getElementById('csk-mount').innerHTML=''; renderCampoSK();
+}
+function rmCampoSK(id) {
+  if(!confirm('¿Eliminar este stakeholder?'))return;
+  CAMPO.stakeholders=CAMPO.stakeholders.filter(s=>s.id!==id); sc();
+  document.getElementById('csk-mount').innerHTML=''; renderCampoSK();
+}
+
+/* ════ CAMPO: SESIONES ════ */
+reg('campo-sesiones', () => `
+<div class="page-header">
+  <div class="page-eyebrow" style="color:var(--c-teal)">● Aplicación en campo · Fase 1</div>
+  <h1 class="page-title">Sesiones de elicitación realizadas</h1>
+  <p class="page-desc">Registra cada sesión que realizas en la empresa: técnica usada, participantes, hallazgos y pendientes. Estos datos alimentan el análisis de resultados.</p>
+</div>
+<div id="cses-mount"></div>
+`);
+function initCampoSes() {
+  const el = document.getElementById('cses-mount');
+  if(!el||el.innerHTML.trim()) return; renderCampoSes();
+}
+function renderCampoSes() {
+  const el = document.getElementById('cses-mount'); if(!el) return;
+  const ses = CAMPO.sesiones;
+  const skNames = CAMPO.stakeholders.map(s=>s.nombre);
+  const durTotal = ses.reduce((a,s)=>a+(parseInt(s.duracion)||0),0);
+  el.innerHTML = `
+<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:.5rem;margin-bottom:1rem">
+  ${[{n:ses.length,l:'Sesiones',c:'var(--c-teal)'},{n:ses.filter(s=>s.estado==='Ejecutada'||s.estado==='Confirmada').length,l:'Ejecutadas',c:'var(--c-green)'},{n:durTotal,l:'Min. totales',c:'var(--c-purple)'},{n:ses.filter(s=>s.estado==='Planificada').length,l:'Planificadas',c:'var(--c-amber)'}].map(k=>`<div class="kpi"><div class="kpi-num" style="color:${k.c};font-size:18px">${k.n}</div><div class="kpi-label" style="font-size:10px">${k.l}</div></div>`).join('')}
+</div>
+<div class="card" style="margin-bottom:1rem">
+  <div class="card-title">Registrar sesión</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.6rem;margin-bottom:.6rem">
+    ${campoField('Nombre de la sesión *','cses-nom','','Ej: Entrevista gerente de TI')}
+    ${campoField('Fecha','cses-fecha',new Date().toISOString().slice(0,10),'','date')}
+    ${campoField('Técnica utilizada','cses-tec','Entrevista estructurada','','',[
+      'Entrevista estructurada','Entrevista semi-estructurada','Taller JAD',
+      'Observación contextual','Cuestionario','Análisis documental','Prototipado','Focus Group'])}
+    ${campoField('Participante principal','cses-part','','Stakeholder entrevistado')}
+    ${campoField('Duración (minutos)','cses-dur','60','','number')}
+    ${campoField('Estado','cses-est','Ejecutada','','',[' ','Planificada','Ejecutada','Confirmada'])}
+  </div>
+  <div style="margin-bottom:.5rem">${campoField('Objetivo de la sesión','cses-obj','','¿Qué se buscaba obtener?','textarea')}</div>
+  <div style="margin-bottom:.5rem">${campoField('Hallazgos y necesidades identificadas','cses-hall','','Anota los requisitos, puntos de dolor, restricciones y supuestos capturados...','textarea')}</div>
+  <div style="margin-bottom:.6rem">${campoField('Pendientes y próximos pasos','cses-pend','','Ej: Clarificar regla de negocio con el área de riesgo...','textarea')}</div>
+  <button class="btn btn-primary" onclick="addCampoSes()">+ Registrar sesión</button>
+</div>
+${ses.length ? ses.slice().reverse().map(s=>`
+<div class="card" style="margin-bottom:.6rem;border-left:3px solid var(--c-teal)">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.4rem;flex-wrap:wrap;gap:.4rem">
+    <div>
+      <div style="font-size:13px;font-weight:500;font-family:var(--font-serif)">${s.nombre}</div>
+      <div style="font-size:11px;color:var(--muted)">${s.fecha} · ${s.tecnica} · ${s.duracion} min · ${s.participante||'—'}</div>
+    </div>
+    <div style="display:flex;gap:.4rem;align-items:center">
+      <span class="badge ${s.estado==='Confirmada'?'b-ok':s.estado==='Ejecutada'?'b-func':'b-warn'}">${s.estado}</span>
+      <button onclick="rmCampoSes('${s.id}')" style="background:none;border:none;cursor:pointer;color:var(--c-red);font-size:16px">×</button>
+    </div>
+  </div>
+  ${s.objetivo?`<div style="font-size:12px;margin-bottom:.3rem"><strong>Objetivo:</strong> ${s.objetivo}</div>`:''}
+  ${s.hallazgos?`<div style="font-size:12px;color:var(--muted);line-height:1.6;background:var(--surface2);border-radius:6px;padding:.5rem .7rem;margin-bottom:.3rem;white-space:pre-wrap">${s.hallazgos}</div>`:''}
+  ${s.pendientes?`<div style="font-size:11px;color:var(--c-amber)"><strong>Pendientes:</strong> ${s.pendientes}</div>`:''}
+</div>`).join('') : '<div class="card" style="text-align:center;color:var(--muted);padding:2rem;font-size:13px">Sin sesiones registradas aún.</div>'}`;
+}
+function addCampoSes() {
+  const g = id => document.getElementById(id)?.value?.trim()||'';
+  const nombre = g('cses-nom'); if(!nombre){alert('El nombre es obligatorio');return;}
+  CAMPO.sesiones.push({ id:'SES'+Date.now(), nombre, fecha:g('cses-fecha'),
+    tecnica:g('cses-tec'), participante:g('cses-part'), duracion:g('cses-dur'),
+    estado:g('cses-est')||'Ejecutada',
+    objetivo:document.getElementById('cses-obj')?.value||'',
+    hallazgos:document.getElementById('cses-hall')?.value||'',
+    pendientes:document.getElementById('cses-pend')?.value||'' });
+  sc();
+  ['cses-nom','cses-part','cses-obj','cses-hall','cses-pend'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});
+  document.getElementById('cses-mount').innerHTML=''; renderCampoSes();
+}
+function rmCampoSes(id) {
+  if(!confirm('¿Eliminar esta sesión?'))return;
+  CAMPO.sesiones=CAMPO.sesiones.filter(s=>s.id!==id); sc();
+  document.getElementById('cses-mount').innerHTML=''; renderCampoSes();
+}
+
+/* ════ CAMPO: REQUISITOS ════ */
+reg('campo-requisitos', () => `
+<div class="page-header">
+  <div class="page-eyebrow" style="color:var(--c-blue)">● Aplicación en campo · Fase 1-3</div>
+  <h1 class="page-title">Requisitos capturados en campo</h1>
+  <p class="page-desc">Registra los requisitos reales identificados en las sesiones. Cada uno sigue el estándar IEEE 29148 con criterios Gherkin y trazabilidad al stakeholder origen.</p>
+</div>
+<div id="creq-mount"></div>
+`);
+function initCampoReq() {
+  const el = document.getElementById('creq-mount');
+  if(!el||el.innerHTML.trim()) return; renderCampoReq();
+}
+function nextCampoReqId(tipo) {
+  const n = CAMPO.requisitos.filter(r=>r.tipo===tipo).length+1;
+  return tipo+'-'+String(n).padStart(3,'0');
+}
+function renderCampoReq() {
+  const el = document.getElementById('creq-mount'); if(!el) return;
+  const reqs = CAMPO.requisitos;
+  const flt = window._campoReqFlt||'todos';
+  const rf=reqs.filter(r=>r.tipo==='RF').length, rnf=reqs.filter(r=>r.tipo==='RNF').length;
+  const must=reqs.filter(r=>r.prioridad==='Must').length;
+  const aprob=reqs.filter(r=>r.estado==='Aprobado').length;
+  const conG=reqs.filter(r=>r.given&&r.when&&r.then).length;
+  const skNames=CAMPO.stakeholders.map(s=>s.nombre);
+  const sesNames=CAMPO.sesiones.map(s=>s.nombre);
+  el.innerHTML = `
+<div style="display:grid;grid-template-columns:repeat(5,1fr);gap:.5rem;margin-bottom:1rem">
+  ${[{n:reqs.length,l:'Total',c:'var(--c-blue)'},{n:rf,l:'RF',c:'var(--c-purple)'},{n:rnf,l:'RNF',c:'var(--c-teal)'},{n:must,l:'Must',c:'var(--c-red)'},{n:conG,l:'Con Gherkin',c:'var(--c-green)'}].map(k=>`<div class="kpi"><div class="kpi-num" style="color:${k.c};font-size:18px">${k.n}</div><div class="kpi-label" style="font-size:10px">${k.l}</div></div>`).join('')}
+</div>
+<div class="card" style="margin-bottom:1rem">
+  <div class="card-title">Nuevo requisito</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:.6rem;margin-bottom:.6rem">
+    ${campoField('Tipo','creq-tipo','RF','','',[' ','RF','RNF','RC'])}
+    <div><label style="font-size:11px;color:var(--muted);display:block;margin-bottom:3px">ID (editable)</label>
+      <input type="text" id="creq-id" value="${nextCampoReqId('RF')}" style="width:100%;font-family:var(--font-mono)" oninput=""></div>
+    ${campoField('Prioridad MoSCoW','creq-pri','Must','','',[' ','Must','Should','Could',"Won't"])}
+    ${campoField('Estado','creq-est','Borrador','','',[' ','Borrador','En revisión','Aprobado','Ambiguo'])}
+  </div>
+  <div style="margin-bottom:.5rem"><label style="font-size:11px;color:var(--muted);display:block;margin-bottom:3px">Título *</label>
+    <input type="text" id="creq-tit" placeholder="Nombre corto del requisito" style="width:100%"></div>
+  <div style="margin-bottom:.5rem">${campoField('Descripción (usa DEBE / DEBERÍA / PUEDE)','creq-desc','','El sistema DEBE... bajo la condición... produciendo el resultado...','textarea')}</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.6rem;margin-bottom:.6rem">
+    ${campoField('Given — contexto','creq-given','','Dado que el usuario tiene sesión activa...')}
+    ${campoField('When — acción','creq-when','','Cuando selecciona la opción X...')}
+    ${campoField('Then — resultado esperado','creq-then','','Entonces el sistema muestra / calcula / envía...')}
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:.6rem">
+    <div><label style="font-size:11px;color:var(--muted);display:block;margin-bottom:3px">Stakeholder origen</label>
+      <input type="text" id="creq-orig" placeholder="¿Quién lo solicitó?" list="csk-dlist" style="width:100%">
+      <datalist id="csk-dlist">${skNames.map(n=>`<option value="${n}">`).join('')}</datalist></div>
+    <div><label style="font-size:11px;color:var(--muted);display:block;margin-bottom:3px">Sesión donde fue capturado</label>
+      <input type="text" id="creq-ses" placeholder="Nombre de la sesión" list="cses-dlist" style="width:100%">
+      <datalist id="cses-dlist">${sesNames.map(n=>`<option value="${n}">`).join('')}</datalist></div>
+  </div>
+  <button class="btn btn-primary" onclick="addCampoReq()">+ Agregar requisito</button>
+</div>
+
+<div style="display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:.7rem">
+  ${['todos','RF','RNF','Must','Aprobado','Ambiguo'].map(f=>`<button class="btn${flt===f?' btn-primary':''}" onclick="window._campoReqFlt='${f}';renderCampoReq()">${f==='todos'?'Todos ('+reqs.length+')':f}</button>`).join('')}
+</div>
+
+${(()=>{
+  let list = reqs;
+  if(flt==='RF'||flt==='RNF'||flt==='RC') list=reqs.filter(r=>r.tipo===flt);
+  else if(flt==='Must') list=reqs.filter(r=>r.prioridad==='Must');
+  else if(flt==='Aprobado') list=reqs.filter(r=>r.estado==='Aprobado');
+  else if(flt==='Ambiguo') list=reqs.filter(r=>r.estado==='Ambiguo');
+  if(!list.length) return '<div class="card" style="text-align:center;color:var(--muted);padding:1.5rem;font-size:13px">Sin requisitos en esta categoría.</div>';
+  return list.map(r=>{
+    const pc = r.prioridad==='Must'?'var(--c-red)':r.prioridad==='Should'?'var(--c-amber)':r.prioridad==='Could'?'var(--c-teal)':'var(--c-gray)';
+    const sc2 = r.estado==='Aprobado'?'b-ok':r.estado==='Ambiguo'?'b-err':r.estado==='En revisión'?'b-warn':'b-func';
+    return `<div class="card" style="margin-bottom:.5rem;border-left:3px solid ${pc}">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:.3rem;flex-wrap:wrap;gap:.4rem">
+        <div style="display:flex;align-items:center;gap:.4rem;flex-wrap:wrap">
+          <span style="font-family:var(--font-mono);font-size:12px;color:var(--c-blue);font-weight:500">${r.id}</span>
+          <span class="badge b-func" style="font-size:10px">${r.tipo}</span>
+          <span style="font-size:11px;background:${pc}18;color:${pc};border-radius:4px;padding:1px 7px;font-weight:500">${r.prioridad}</span>
+          <span class="badge ${sc2}" style="font-size:10px">${r.estado}</span>
+        </div>
+        <button onclick="rmCampoReq('${r.id}')" style="background:none;border:none;cursor:pointer;color:var(--c-red);font-size:16px">×</button>
+      </div>
+      <div style="font-size:13px;font-weight:500;margin-bottom:.3rem">${r.titulo}</div>
+      <div style="font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:.4rem">${r.descripcion}</div>
+      ${r.given||r.when||r.then?`<div style="background:var(--surface2);border-radius:6px;padding:.5rem .7rem;font-size:11px;font-family:var(--font-mono);line-height:1.8">
+        ${r.given?`<div><span style="color:var(--c-teal)">Dado que</span> ${r.given}</div>`:''}
+        ${r.when?`<div><span style="color:var(--c-purple)">Cuando</span> ${r.when}</div>`:''}
+        ${r.then?`<div><span style="color:var(--c-blue)">Entonces</span> ${r.then}</div>`:''}
+      </div>`:''}
+      ${r.origen||r.sesion?`<div style="font-size:11px;color:var(--faint);margin-top:.3rem">${r.origen?'Origen: '+r.origen:''} ${r.sesion?'· Sesión: '+r.sesion:''}</div>`:''}
+    </div>`;
+  }).join('');
+})()}`;
+}
+function addCampoReq() {
+  const g = id => document.getElementById(id)?.value?.trim()||'';
+  const tit = g('creq-tit'); if(!tit){alert('El título es obligatorio');return;}
+  CAMPO.requisitos.push({ id:g('creq-id')||nextCampoReqId(g('creq-tipo')||'RF'),
+    tipo:g('creq-tipo')||'RF', titulo:tit,
+    descripcion:document.getElementById('creq-desc')?.value||'',
+    prioridad:g('creq-pri')||'Must', estado:g('creq-est')||'Borrador',
+    given:g('creq-given'), when:g('creq-when'), then:g('creq-then'),
+    origen:g('creq-orig'), sesion:g('creq-ses'),
+    fecha:new Date().toISOString().slice(0,10) });
+  sc();
+  ['creq-tit','creq-desc','creq-given','creq-when','creq-then','creq-orig','creq-ses'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});
+  document.getElementById('creq-mount').innerHTML=''; renderCampoReq();
+}
+function rmCampoReq(id) {
+  if(!confirm('¿Eliminar?'))return;
+  CAMPO.requisitos=CAMPO.requisitos.filter(r=>r.id!==id); sc();
+  document.getElementById('creq-mount').innerHTML=''; renderCampoReq();
+}
+
+/* ════ CAMPO: GAP ANALYSIS ════ */
+reg('campo-gap', () => `
+<div class="page-header">
+  <div class="page-eyebrow" style="color:var(--c-purple)">● Aplicación en campo · Fase 2</div>
+  <h1 class="page-title">GAP Analysis del proyecto real</h1>
+  <p class="page-desc">Documenta la situación actual y deseada del proceso de negocio analizado. Las brechas identificadas alimentan directamente el backlog de requisitos.</p>
+</div>
+<div id="cgap-mount"></div>
+`);
+function initCampoGap() {
+  const el = document.getElementById('cgap-mount');
+  if(!el||el.innerHTML.trim()) return; renderCampoGap();
+}
+function renderCampoGap() {
+  const el = document.getElementById('cgap-mount'); if(!el) return;
+  const g = CAMPO.gap;
+  el.innerHTML = `
+<div class="g2" style="margin-bottom:1rem">
+  <div class="card">
+    <div class="card-title" style="color:var(--c-red)">Situación actual — As-Is</div>
+    <p style="font-size:11px;color:var(--muted);margin-bottom:.5rem">Describe cómo funciona el proceso HOY en la empresa, con sus limitaciones y problemas reales.</p>
+    <textarea id="cgap-asis" rows="9" style="width:100%;resize:vertical" placeholder="Ej: Actualmente el proceso de solicitud de crédito se realiza de forma manual en hojas de Excel. El analista tarda en promedio 3 días hábiles en procesar cada solicitud. No existe integración con el buró de crédito...">${g.asIs||''}</textarea>
+  </div>
+  <div class="card">
+    <div class="card-title" style="color:var(--c-green)">Situación deseada — To-Be</div>
+    <p style="font-size:11px;color:var(--muted);margin-bottom:.5rem">Describe cómo DEBERÍA funcionar con el nuevo sistema propuesto.</p>
+    <textarea id="cgap-tobe" rows="9" style="width:100%;resize:vertical" placeholder="Ej: Con el sistema propuesto, las solicitudes se procesarán en menos de 5 minutos de forma automatizada. La consulta al buró de crédito será en tiempo real...">${g.toBe||''}</textarea>
+  </div>
+</div>
+<button class="btn btn-primary" onclick="saveCampoGap()" style="margin-bottom:1rem">Guardar As-Is / To-Be</button>
+<div id="cgap-ok" style="display:none;font-size:12px;color:var(--c-green);margin-bottom:1rem">✓ Guardado</div>
+
+<div class="card">
+  <div class="card-title">Brechas identificadas (${g.brechas.length})</div>
+  <p style="font-size:11px;color:var(--muted);margin-bottom:.7rem">Cada brecha documentada aquí se convierte en uno o más requisitos en el SRS. Indica su prioridad para orientar el backlog.</p>
+  <div style="display:grid;grid-template-columns:1fr 1fr 90px 90px;gap:.5rem;align-items:end;margin-bottom:.5rem">
+    <div><label style="font-size:11px;color:var(--muted);display:block;margin-bottom:3px">Descripción de la brecha *</label>
+      <input type="text" id="cgap-desc" placeholder="Ej: No existe automatización del scoring crediticio" style="width:100%"></div>
+    <div><label style="font-size:11px;color:var(--muted);display:block;margin-bottom:3px">Impacto si no se resuelve</label>
+      <input type="text" id="cgap-imp" placeholder="Ej: Demora de 3 días por solicitud" style="width:100%"></div>
+    <div><label style="font-size:11px;color:var(--muted);display:block;margin-bottom:3px">Prioridad</label>
+      <select id="cgap-pri" style="width:100%"><option>Alta</option><option>Media</option><option>Baja</option></select></div>
+    <button class="btn btn-primary" style="margin-top:16px" onclick="addCampoBrecha()">+ Agregar</button>
+  </div>
+  ${g.brechas.length ? `<div style="overflow-x:auto"><table class="data-table"><thead><tr><th>ID</th><th>Brecha</th><th>Impacto</th><th>Prioridad</th><th></th></tr></thead>
+  <tbody>${g.brechas.map((b,i)=>`<tr>
+    <td style="font-family:var(--font-mono);color:var(--c-purple)">B-${String(i+1).padStart(2,'0')}</td>
+    <td>${b.desc}</td>
+    <td style="font-size:12px;color:var(--muted)">${b.impacto}</td>
+    <td><span class="badge ${b.pri==='Alta'?'b-err':b.pri==='Media'?'b-warn':'b-ok'}">${b.pri}</span></td>
+    <td><button onclick="rmCampoBrecha(${i})" style="background:none;border:none;cursor:pointer;color:var(--c-red)">×</button></td>
+  </tr>`).join('')}</tbody></table></div>` : '<div style="font-size:12px;color:var(--muted);font-style:italic;padding:.4rem 0">Sin brechas registradas.</div>'}
+</div>`;
+}
+function saveCampoGap() {
+  CAMPO.gap.asIs = document.getElementById('cgap-asis')?.value||'';
+  CAMPO.gap.toBe = document.getElementById('cgap-tobe')?.value||'';
+  sc(); campoSavedMsg('cgap-ok');
+}
+function addCampoBrecha() {
+  const desc = document.getElementById('cgap-desc')?.value?.trim();
+  if(!desc){alert('La descripción es obligatoria');return;}
+  CAMPO.gap.brechas.push({ desc, impacto:document.getElementById('cgap-imp')?.value||'', pri:document.getElementById('cgap-pri')?.value||'Alta' });
+  sc(); document.getElementById('cgap-mount').innerHTML=''; renderCampoGap();
+}
+function rmCampoBrecha(i) {
+  CAMPO.gap.brechas.splice(i,1); sc();
+  document.getElementById('cgap-mount').innerHTML=''; renderCampoGap();
+}
+
+/* ════ CAMPO: DEFECTOS ════ */
+reg('campo-defectos', () => `
+<div class="page-header">
+  <div class="page-eyebrow" style="color:var(--c-green)">● Aplicación en campo · Fase 4</div>
+  <h1 class="page-title">Log de defectos — revisión formal</h1>
+  <p class="page-desc">Registra los defectos encontrados al revisar el SRS. La densidad se calcula automáticamente y el sistema te indica si el SRS está listo para el baseline.</p>
+</div>
+<div id="cdef-mount"></div>
+`);
+function initCampoDef() {
+  const el = document.getElementById('cdef-mount');
+  if(!el||el.innerHTML.trim()) return; renderCampoDef();
+}
+function renderCampoDef() {
+  const el = document.getElementById('cdef-mount'); if(!el) return;
+  const defs = CAMPO.defectos; const reqs = CAMPO.requisitos;
+  const bloq=defs.filter(d=>d.sev==='Bloqueante').length;
+  const mayor=defs.filter(d=>d.sev==='Mayor').length;
+  const ab=defs.filter(d=>d.estado==='Abierto').length;
+  const dens=(reqs.length>0?(defs.length/reqs.length):0).toFixed(2);
+  const ok = ab===0 && parseFloat(dens)<0.3;
+  el.innerHTML = `
+<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:.5rem;margin-bottom:1rem">
+  ${[{n:defs.length,l:'Total defectos',c:'var(--c-blue)'},{n:bloq,l:'Bloqueantes',c:'var(--c-red)'},{n:mayor,l:'Mayores',c:'var(--c-amber)'},{n:ab,l:'Abiertos',c:ab>0?'var(--c-red)':'var(--c-green)'}].map(k=>`<div class="kpi"><div class="kpi-num" style="color:${k.c};font-size:18px">${k.n}</div><div class="kpi-label" style="font-size:10px">${k.l}</div></div>`).join('')}
+</div>
+<div class="card" style="margin-bottom:1rem;background:rgba(${ok?'15,110,86':'163,45,45'},.04);border-color:rgba(${ok?'15,110,86':'163,45,45'},.2)">
+  <div style="font-size:13px;font-weight:500;color:var(--${ok?'c-green':'c-red'});margin-bottom:.2rem">${ok?'✓ SRS listo para aprobación baseline':'⚠ SRS no puede aprobarse — resuelve los defectos abiertos primero'}</div>
+  <div style="font-size:11px;color:var(--muted)">Densidad actual: ${dens} defectos/requisito · Umbral Fagan aceptable: &lt; 0.30 · ${reqs.length} requisitos registrados</div>
+</div>
+<div class="card" style="margin-bottom:1rem">
+  <div class="card-title">Registrar defecto</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:.6rem;margin-bottom:.6rem">
+    <div><label style="font-size:11px;color:var(--muted);display:block;margin-bottom:3px">ID</label>
+      <input type="text" id="cdef-id" value="DEF-${String(defs.length+1).padStart(3,'0')}" style="width:100%;font-family:var(--font-mono)"></div>
+    <div><label style="font-size:11px;color:var(--muted);display:block;margin-bottom:3px">Requisito afectado</label>
+      <input type="text" id="cdef-sec" placeholder="Ej: RF-003" list="creq-dlist" style="width:100%">
+      <datalist id="creq-dlist">${reqs.map(r=>`<option value="${r.id}">`).join('')}</datalist></div>
+    ${campoField('Severidad','cdef-sev','Mayor','','',[' ','Bloqueante','Mayor','Menor','Informativo'])}
+    ${campoField('Estado','cdef-est','Abierto','','',[' ','Abierto','En revisión','Resuelto'])}
+  </div>
+  <div style="margin-bottom:.5rem">${campoField('Descripción del defecto *','cdef-desc','','¿Cuál es el problema encontrado en el requisito?','textarea')}</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:.6rem">
+    ${campoField('Impacto si no se resuelve','cdef-imp','','Ej: El motor de decisión no puede implementarse')}
+    ${campoField('Asignado a','cdef-asig','','Ej: BA, Arquitecto, QA')}
+  </div>
+  ${campoField('Resolución (si ya está resuelto)','cdef-res','','¿Cómo fue resuelto el defecto?')}
+  <div style="margin-top:.6rem"><button class="btn btn-primary" onclick="addCampoDef()">+ Registrar defecto</button></div>
+</div>
+${defs.length?`<div class="card"><div class="card-title">Registro completo (${defs.length})</div>
+<div style="overflow-x:auto"><table class="data-table"><thead><tr><th>ID</th><th>Requisito</th><th>Severidad</th><th>Descripción</th><th>Asignado</th><th>Estado</th><th>Resolución</th><th></th></tr></thead>
+<tbody>${defs.map(d=>`<tr>
+  <td style="font-family:var(--font-mono);color:var(--c-blue);font-size:11px">${d.id}</td>
+  <td style="font-family:var(--font-mono);font-size:11px">${d.sec}</td>
+  <td><span class="badge ${d.sev==='Bloqueante'?'b-err':d.sev==='Mayor'?'b-warn':d.sev==='Menor'?'b-func':'b-ok'}">${d.sev}</span></td>
+  <td style="font-size:12px;max-width:180px">${d.desc}</td>
+  <td style="font-size:11px">${d.asig||'—'}</td>
+  <td><span class="badge ${d.estado==='Resuelto'?'b-ok':d.estado==='En revisión'?'b-warn':'b-err'}">${d.estado}</span></td>
+  <td style="font-size:11px;color:var(--muted);max-width:140px">${d.res||'—'}</td>
+  <td><button onclick="rmCampoDef('${d.id}')" style="background:none;border:none;cursor:pointer;color:var(--c-red)">×</button></td>
+</tr>`).join('')}</tbody></table></div></div>`:''}`;
+}
+function addCampoDef() {
+  const g = id => document.getElementById(id)?.value?.trim()||'';
+  const desc = document.getElementById('cdef-desc')?.value?.trim(); if(!desc){alert('La descripción es obligatoria');return;}
+  CAMPO.defectos.push({ id:g('cdef-id'), sec:g('cdef-sec'), sev:g('cdef-sev')||'Mayor',
+    desc, imp:g('cdef-imp'), asig:g('cdef-asig'), estado:g('cdef-est')||'Abierto', res:g('cdef-res') });
+  sc(); document.getElementById('cdef-mount').innerHTML=''; renderCampoDef();
+}
+function rmCampoDef(id) {
+  if(!confirm('¿Eliminar?'))return;
+  CAMPO.defectos=CAMPO.defectos.filter(d=>d.id!==id); sc();
+  document.getElementById('cdef-mount').innerHTML=''; renderCampoDef();
+}
+
+/* ════ CAMPO: CHANGE REQUESTS ════ */
+reg('campo-crs', () => `
+<div class="page-header">
+  <div class="page-eyebrow" style="color:var(--c-amber)">● Aplicación en campo · Fase 5</div>
+  <h1 class="page-title">Change Requests del proyecto real</h1>
+  <p class="page-desc">Registra y gestiona cada solicitud de cambio al SRS baseline de tu proyecto. El log queda como evidencia para tu tesis.</p>
+</div>
+<div id="ccr-mount"></div>
+`);
+function initCampoCR() {
+  const el = document.getElementById('ccr-mount');
+  if(!el||el.innerHTML.trim()) return; renderCampoCR();
+}
+function renderCampoCR() {
+  const el = document.getElementById('ccr-mount'); if(!el) return;
+  const crs = CAMPO.crs;
+  const skNames = CAMPO.stakeholders.map(s=>s.nombre);
+  const reqIds = CAMPO.requisitos.map(r=>r.id);
+  const pend=crs.filter(c=>!c.dec||c.dec==='Pendiente CCB').length;
+  el.innerHTML = `
+<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:.5rem;margin-bottom:1rem">
+  ${[{n:crs.length,l:'Total CRs',c:'var(--c-amber)'},{n:pend,l:'Pendientes CCB',c:'var(--c-red)'},{n:crs.filter(c=>c.dec==='Aprobado').length,l:'Aprobados',c:'var(--c-green)'},{n:crs.filter(c=>c.dec==='Diferido').length,l:'Diferidos',c:'var(--c-gray)'}].map(k=>`<div class="kpi"><div class="kpi-num" style="color:${k.c};font-size:18px">${k.n}</div><div class="kpi-label" style="font-size:10px">${k.l}</div></div>`).join('')}
+</div>
+<div class="card" style="margin-bottom:1rem">
+  <div class="card-title">Nuevo Change Request</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.6rem;margin-bottom:.6rem">
+    <div><label style="font-size:11px;color:var(--muted);display:block;margin-bottom:3px">ID</label>
+      <input type="text" id="ccr-id" value="CR-${String(crs.length+1).padStart(3,'0')}" style="width:100%;font-family:var(--font-mono)"></div>
+    <div><label style="font-size:11px;color:var(--muted);display:block;margin-bottom:3px">Solicitante</label>
+      <input type="text" id="ccr-orig" placeholder="¿Quién lo solicita?" list="csk-dlist2" style="width:100%">
+      <datalist id="csk-dlist2">${skNames.map(n=>`<option value="${n}">`).join('')}</datalist></div>
+    ${campoField('Fecha','ccr-fecha',new Date().toISOString().slice(0,10),'','date')}
+    ${campoField('Tipo','ccr-tipo','Modificación de requisito','','',[' ','Modificación de requisito','Nuevo requisito','Eliminación de requisito','Corrección de especificación'])}
+    ${campoField('Prioridad','ccr-pri','Alta','','',[' ','Alta','Media','Baja'])}
+    ${campoField('Decisión CCB','ccr-dec','','','',[' ','Pendiente CCB','Aprobado','Rechazado','Diferido'])}
+  </div>
+  <div style="margin-bottom:.5rem"><label style="font-size:11px;color:var(--muted);display:block;margin-bottom:3px">Título *</label>
+    <input type="text" id="ccr-tit" placeholder="Describe brevemente el cambio solicitado" style="width:100%"></div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:.6rem">
+    ${campoField('Descripción del cambio','ccr-desc','','¿Qué se quiere cambiar y por qué?','textarea')}
+    ${campoField('Justificación de negocio','ccr-just','','¿Qué valor / problema resuelve este cambio?','textarea')}
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.6rem;margin-bottom:.6rem">
+    <div><label style="font-size:11px;color:var(--muted);display:block;margin-bottom:3px">Requisitos afectados</label>
+      <input type="text" id="ccr-rfs" placeholder="Ej: RF-004, RNF-001" style="width:100%"></div>
+    ${campoField('Esfuerzo estimado','ccr-esf','','Ej: 2 días, 1 sprint')}
+    ${campoField('Riesgo','ccr-ries','Medio','','',[' ','Alto','Medio','Bajo'])}
+  </div>
+  <button class="btn btn-primary" onclick="addCampoCR()">+ Registrar CR</button>
+</div>
+${crs.length?crs.slice().reverse().map(c=>{
+  const dc = c.dec==='Aprobado'?'var(--c-green)':c.dec==='Rechazado'?'var(--c-red)':c.dec==='Diferido'?'var(--c-amber)':'var(--c-gray)';
+  return `<div class="card" style="margin-bottom:.6rem;border-left:3px solid ${dc}">
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:.4rem;flex-wrap:wrap;gap:.4rem">
+      <div>
+        <span style="font-family:var(--font-mono);color:var(--c-amber);font-size:12px;font-weight:500">${c.id}</span>
+        <span style="font-size:11px;color:var(--muted);margin-left:.4rem">${c.fecha||''} · ${c.orig||''}</span>
+      </div>
+      <div style="display:flex;gap:.3rem;align-items:center">
+        <span class="badge ${c.dec==='Aprobado'?'b-ok':c.dec==='Rechazado'?'b-err':c.dec?'b-warn':'b-func'}">${c.dec||'Pendiente CCB'}</span>
+        <button onclick="rmCampoCR('${c.id}')" style="background:none;border:none;cursor:pointer;color:var(--c-red);font-size:16px">×</button>
+      </div>
+    </div>
+    <div style="font-size:13px;font-weight:500;margin-bottom:.3rem">${c.tit}</div>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:.3rem">${c.desc||''}</div>
+    ${c.rfs?`<div style="font-size:11px"><strong>Afecta:</strong> <span style="font-family:var(--font-mono);color:var(--c-blue)">${c.rfs}</span> · Esfuerzo: ${c.esf||'—'} · Riesgo: ${c.ries||'—'}</div>`:''}
+  </div>`;}).join(''):''}`;
+}
+function addCampoCR() {
+  const g = id => document.getElementById(id)?.value?.trim()||'';
+  const tit = g('ccr-tit'); if(!tit){alert('El título es obligatorio');return;}
+  CAMPO.crs.push({ id:g('ccr-id'), tit, orig:g('ccr-orig'), fecha:g('ccr-fecha'),
+    tipo:g('ccr-tipo'), pri:g('ccr-pri'), dec:g('ccr-dec'),
+    desc:document.getElementById('ccr-desc')?.value||'',
+    just:document.getElementById('ccr-just')?.value||'',
+    rfs:g('ccr-rfs'), esf:g('ccr-esf'), ries:g('ccr-ries') });
+  sc(); document.getElementById('ccr-mount').innerHTML=''; renderCampoCR();
+}
+function rmCampoCR(id) {
+  if(!confirm('¿Eliminar?'))return;
+  CAMPO.crs=CAMPO.crs.filter(c=>c.id!==id); sc();
+  document.getElementById('ccr-mount').innerHTML=''; renderCampoCR();
+}
+
+/* ════ CAMPO: RESULTADOS ════ */
+reg('campo-resultados', () => `
+<div class="page-header">
+  <div class="page-eyebrow" style="color:var(--c-purple)">● Aplicación en campo</div>
+  <h1 class="page-title">Resultados y análisis de la aplicación</h1>
+  <p class="page-desc">Métricas calculadas en tiempo real desde tus datos reales. Estas tablas y conclusiones son el insumo directo para el capítulo de resultados de tu tesis.</p>
+</div>
+<div id="cres-mount"></div>
+`);
+function initCampoRes() {
+  const el = document.getElementById('cres-mount');
+  if(!el||el.innerHTML.trim()) return; renderCampoRes();
+}
+function renderCampoRes() {
+  const el = document.getElementById('cres-mount'); if(!el) return;
+  const p=CAMPO.proyecto, sk=CAMPO.stakeholders, ses=CAMPO.sesiones;
+  const reqs=CAMPO.requisitos, defs=CAMPO.defectos, crs=CAMPO.crs, gap=CAMPO.gap;
+  const rf=reqs.filter(r=>r.tipo==='RF').length;
+  const rnf=reqs.filter(r=>r.tipo==='RNF').length;
+  const must=reqs.filter(r=>r.prioridad==='Must').length;
+  const should=reqs.filter(r=>r.prioridad==='Should').length;
+  const could=reqs.filter(r=>r.prioridad==='Could').length;
+  const aprobados=reqs.filter(r=>r.estado==='Aprobado').length;
+  const ambiguos=reqs.filter(r=>r.estado==='Ambiguo').length;
+  const conG=reqs.filter(r=>r.given&&r.when&&r.then).length;
+  const dens=reqs.length>0?(defs.length/reqs.length).toFixed(2):'0.00';
+  const cobG=reqs.length>0?Math.round(conG/reqs.length*100):0;
+  const pctAprob=reqs.length>0?Math.round(aprobados/reqs.length*100):0;
+  const durTotal=ses.reduce((a,s)=>a+(parseInt(s.duracion)||0),0);
+  const infAlt=sk.filter(s=>s.inf==='alta'&&s.int==='alto').length;
+  el.innerHTML = `
+<div class="card" style="margin-bottom:1rem">
+  <div class="card-title">Ficha del proyecto</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.4rem">
+    ${[['Proyecto',p.nombre||'—'],['Empresa',p.empresa||'—'],['Sector',p.sector||'—'],['Autor',p.autor||'—'],['Director',p.director||'—'],['Inicio',p.fecha||'—']].map(([l,v])=>`<div style="padding:.4rem 0;border-bottom:0.5px solid var(--border);font-size:12px"><span style="color:var(--muted)">${l}:</span> <strong>${v}</strong></div>`).join('')}
+  </div>
+</div>
+
+<div class="g2" style="margin-bottom:1rem">
+  <div class="card">
+    <div class="card-title">Indicadores de elicitación</div>
+    ${[['Stakeholders identificados',sk.length,'var(--c-teal)'],['Stakeholders alta influencia+interés',infAlt,'var(--c-green)'],['Sesiones realizadas',ses.length,'var(--c-purple)'],['Sesiones confirmadas',ses.filter(s=>s.estado==='Confirmada').length,'var(--c-green)'],['Tiempo total de sesiones (min)',durTotal,'var(--c-purple)'],['Brechas GAP identificadas',gap.brechas.length,'var(--c-amber)']].map(([l,v,c])=>`<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:0.5px solid var(--border);font-size:12px"><span>${l}</span><strong style="color:${c}">${v}</strong></div>`).join('')}
+  </div>
+  <div class="card">
+    <div class="card-title">Indicadores de especificación</div>
+    ${[['Total requisitos documentados',reqs.length,'var(--c-blue)'],['Requisitos funcionales (RF)',rf,'var(--c-purple)'],['Requisitos no funcionales (RNF)',rnf,'var(--c-teal)'],['Must Have',must+' ('+Math.round(must/Math.max(1,reqs.length)*100)+'%)','var(--c-red)'],['Con criterio Gherkin completo',conG+' ('+cobG+'%)','var(--c-blue)'],['Aprobados',aprobados+' ('+pctAprob+'%)','var(--c-green)'],['Ambiguos detectados',ambiguos,'var(--c-amber)']].map(([l,v,c])=>`<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:0.5px solid var(--border);font-size:12px"><span>${l}</span><strong style="color:${c}">${v}</strong></div>`).join('')}
+  </div>
+</div>
+
+<div class="g2" style="margin-bottom:1rem">
+  <div class="card">
+    <div class="card-title">Indicadores de validación</div>
+    ${[['Defectos registrados',defs.length,'var(--c-amber)'],['Bloqueantes',defs.filter(d=>d.sev==='Bloqueante').length,'var(--c-red)'],['Mayores',defs.filter(d=>d.sev==='Mayor').length,'var(--c-amber)'],['Defectos abiertos',defs.filter(d=>d.estado==='Abierto').length,defs.filter(d=>d.estado==='Abierto').length>0?'var(--c-red)':'var(--c-green)'],['Densidad defectos/requisito',dens+' (Fagan < 0.3)',parseFloat(dens)<0.3?'var(--c-green)':'var(--c-red)']].map(([l,v,c])=>`<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:0.5px solid var(--border);font-size:12px"><span>${l}</span><strong style="color:${c}">${v}</strong></div>`).join('')}
+  </div>
+  <div class="card">
+    <div class="card-title">Indicadores de gestión de cambios</div>
+    ${[['Change Requests registrados',crs.length,'var(--c-amber)'],['Pendientes CCB',crs.filter(c=>!c.dec||c.dec==='Pendiente CCB').length,'var(--c-red)'],['Aprobados',crs.filter(c=>c.dec==='Aprobado').length,'var(--c-green)'],['Rechazados',crs.filter(c=>c.dec==='Rechazado').length,'var(--c-gray)'],['Diferidos',crs.filter(c=>c.dec==='Diferido').length,'var(--c-amber)']].map(([l,v,c])=>`<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:0.5px solid var(--border);font-size:12px"><span>${l}</span><strong style="color:${c}">${v}</strong></div>`).join('')}
+  </div>
+</div>
+
+<div class="card" style="margin-bottom:1rem">
+  <div class="card-title">Distribución MoSCoW</div>
+  ${[[must,'Must','var(--c-red)'],[should,'Should','var(--c-amber)'],[could,'Could','var(--c-teal)'],[reqs.filter(r=>r.prioridad==="Won't").length,"Won't",'var(--c-gray)']].map(([v,l,c])=>`<div class="bar-row" style="margin-bottom:.4rem"><div class="bar-label">${l}</div><div class="bar-track"><div class="bar-fill" style="width:${reqs.length?Math.round(v/reqs.length*100):0}%;background:${c}"></div></div><div class="bar-val" style="color:${c}">${v} (${reqs.length?Math.round(v/reqs.length*100):0}%)</div></div>`).join('')}
+</div>
+
+<div class="card" style="margin-bottom:1rem;background:rgba(83,52,131,.03);border-color:rgba(83,52,131,.2)">
+  <div class="card-title" style="color:var(--c-purple)">Párrafos de conclusiones automáticas</div>
+  <div style="font-size:12px;line-height:1.9;color:var(--text)">
+    ${reqs.length===0?'<span style="color:var(--muted)">Registra requisitos para ver el análisis automático.</span>':`
+    <p style="margin-bottom:.6rem">En la aplicación del framework metodológico al proyecto "${p.nombre||'analizado'}" en la empresa "${p.empresa||'seleccionada'}" del sector ${p.sector||'identificado'}, se identificaron <strong>${sk.length} stakeholders</strong> distribuidos en los cuatro cuadrantes de influencia × interés. Se realizaron <strong>${ses.length} sesiones de elicitación</strong> con una duración total de ${durTotal} minutos, aplicando las técnicas formales definidas en el framework.</p>
+    <p style="margin-bottom:.6rem">Como resultado del proceso de elicitación y análisis, se documentaron <strong>${reqs.length} requisitos</strong>: ${rf} funcionales (${Math.round(rf/Math.max(1,reqs.length)*100)}%) y ${rnf} no funcionales (${Math.round(rnf/Math.max(1,reqs.length)*100)}%). La distribución MoSCoW indica que el ${Math.round(must/Math.max(1,reqs.length)*100)}% son Must Have, lo que ${must/Math.max(1,reqs.length)>0.6?'sugiere revisar el alcance del MVP':'refleja un alcance bien delimitado para la primera versión'}. Se identificaron ${gap.brechas.length} brechas en el GAP Analysis que fundamentan el backlog de requisitos.</p>
+    <p style="margin-bottom:.6rem">La cobertura de criterios de aceptación Gherkin alcanzó el <strong>${cobG}%</strong>, ${cobG>=80?'superando el umbral recomendado del 80% y evidenciando un alto nivel de verificabilidad, en cumplimiento del Principio P2 del framework':cobG>=50?'alcanzando un nivel aceptable aunque por debajo del 80% recomendado por IEEE 29148':'mostrando una brecha en la verificabilidad de los requisitos que debe resolverse antes de la validación'}.</p>
+    ${defs.length>0?`<p>En la fase de validación se registraron <strong>${defs.length} defectos</strong>, con una densidad de <strong>${dens} defectos por requisito</strong>. ${parseFloat(dens)<0.3?'Este resultado es inferior al umbral Fagan de 0.3, lo que indica una buena calidad del SRS y habilita la aprobación del baseline.':'Este valor supera el umbral Fagan de 0.3, lo que requiere una re-inspección del documento antes de aprobar el baseline.'}</p>`:''}
+    `}
+  </div>
+</div>
+
+<div style="display:flex;gap:.6rem;flex-wrap:wrap">
+  <button class="btn btn-primary" onclick="campoExportJSON()">↓ Exportar datos JSON (para tesis)</button>
+  <button class="btn" onclick="window.print()">🖨 Imprimir / PDF</button>
+</div>`;
+}
+
+/* ════════════════════════════════════════
    OBSERVER — init pages on first view
 ════════════════════════════════════════ */
 const inited = new Set();
@@ -3732,6 +4429,15 @@ function onPageShow(id) {
   if (id==='val-log') initDefects();
   if (id==='ccb-cr') setTimeout(initCR, 50);
   if (id==='roadmap') setTimeout(buildRoadmap, 50);
+  // Aplicación en campo
+  if (id==='campo-proyecto') setTimeout(initCampoProyecto, 50);
+  if (id==='campo-stakeholders') setTimeout(initCampoSK, 50);
+  if (id==='campo-sesiones') setTimeout(initCampoSes, 50);
+  if (id==='campo-requisitos') setTimeout(initCampoReq, 50);
+  if (id==='campo-gap') setTimeout(initCampoGap, 50);
+  if (id==='campo-defectos') setTimeout(initCampoDef, 50);
+  if (id==='campo-crs') setTimeout(initCampoCR, 50);
+  if (id==='campo-resultados') setTimeout(initCampoRes, 50);
 }
 
 const origNav = nav;
