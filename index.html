@@ -1186,7 +1186,7 @@ reg('eli-tecnicas', () => `
 <div class="page-header">
   <div class="page-eyebrow" style="color:var(--c-teal)">● Fase 1 — Elicitación</div>
   <h1 class="page-title">Técnicas de elicitación</h1>
-  <p class="page-desc">Las 5 técnicas de mayor impacto con guías paso a paso, banco de preguntas por momento de la sesión y artefactos que producen.</p>
+  <p class="page-desc">Las 5 técnicas de mayor impacto. Responde las preguntas guía, marca los artefactos producidos y registra los archivos adjuntos de cada técnica aplicada.</p>
 </div>
 <div id="eli-tec-mount"></div>
 `);
@@ -1195,182 +1195,307 @@ function initEliTecnicas() {
   var el = document.getElementById('eli-tec-mount');
   if (!el || el.innerHTML.trim()) return;
 
-  el.innerHTML = `<style>
-.tec-nav2{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1.2rem}
-.tec-btn2{padding:6px 14px;border-radius:20px;font-size:12px;font-weight:500;cursor:pointer;border:0.5px solid var(--border2);background:transparent;color:var(--muted);transition:all .2s}
-.tec-btn2.on{color:var(--text);border-color:var(--border2)}
-.tec-body2{display:none}
-.tec-body2.on{display:block}
-.tec-header2{display:flex;align-items:flex-start;gap:1rem;margin-bottom:1.2rem;padding-bottom:1rem;border-bottom:0.5px solid var(--border)}
-.tec-icon2{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
-.tec-meta2{flex:1}
-.tec-name2{font-size:15px;font-weight:500;font-family:var(--font-serif);color:var(--text);margin-bottom:3px}
-.tec-desc2{font-size:12px;color:var(--muted);line-height:1.5;margin-bottom:6px}
-.tec-tags2{display:flex;gap:5px;flex-wrap:wrap}
-.tag2{display:inline-block;font-size:10px;padding:2px 7px;border-radius:4px;font-weight:500}
-.tec-cols2{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem}
-.tec-section2{background:var(--surface);border-radius:8px;padding:.8rem}
-.tec-sec-title2{font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:.6rem}
-.tec-item2{font-size:12px;color:var(--text);padding:4px 0;display:flex;align-items:flex-start;gap:7px;border-bottom:0.5px solid var(--border)}
-.tec-item2:last-child{border-bottom:none}
-.ti-dot2{width:5px;height:5px;border-radius:50%;flex-shrink:0;margin-top:5px}
-.q-block2{background:var(--surface);border-radius:8px;padding:.8rem;margin-bottom:.8rem}
-.q-block-title2{font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:.6rem}
-.q-item2{font-size:12px;color:var(--text);padding:5px 0;border-bottom:0.5px solid var(--border);display:flex;gap:8px;align-items:flex-start}
-.q-item2:last-child{border-bottom:none}
-.q-num2{font-size:10px;font-weight:500;color:var(--muted);min-width:18px}
-.meter-row2{display:flex;align-items:center;gap:8px;margin-bottom:5px}
-.meter-label2{font-size:11px;color:var(--muted);width:80px;flex-shrink:0}
-.meter-track2{flex:1;height:6px;background:var(--surface2);border-radius:3px;overflow:hidden}
-.meter-fill2{height:100%;border-radius:3px}
-.meter-val2{font-size:11px;font-weight:500;min-width:28px;text-align:right}
-.artifact-row2{display:flex;gap:6px;flex-wrap:wrap;margin-top:.6rem}
-.artifact-pill2{font-size:11px;padding:3px 10px;border-radius:6px;border:0.5px solid var(--border2);color:var(--muted);background:var(--surface)}
-</style>
-<div class="tec-nav2" id="tecNav2"></div>
-<div id="tecContent2"></div>`;
-
   var tecnicas = [
-    {
-      id:'entrevista', label:'Entrevista 1:1',
-      icon:'💬', bg:'rgba(15,110,86,0.12)', iconColor:'#085041',
-      accentColor:'#0F6E56',
+    { id:'entrevista', label:'Entrevista 1:1', icon:'💬', bg:'rgba(15,110,86,0.12)', iconColor:'#085041', accentColor:'#0F6E56',
       tags:[{t:'BABOK v3',bg:'rgba(15,110,86,0.1)',c:'#085041'},{t:'IEEE 29148',bg:'rgba(15,110,86,0.1)',c:'#085041'},{t:'Alta profundidad',bg:'rgba(15,110,86,0.08)',c:'#0F6E56'}],
-      desc:'Conversación estructurada o semi-estructurada con un stakeholder para descubrir necesidades, restricciones y expectativas. Es la técnica más poderosa para requisitos complejos y contextos de alto impacto.',
+      desc:'Conversación estructurada o semi-estructurada con un stakeholder para descubrir necesidades, restricciones y expectativas. Técnica de mayor profundidad para requisitos complejos.',
       cuando:['Requisitos ambiguos o poco definidos','Stakeholders con conocimiento único','Proyectos de alta criticidad regulatoria','Cuando se necesita profundidad sobre amplitud'],
       noHacer:['Con más de 20 stakeholders (usa encuesta)','Cuando el tiempo es menor a 30 min','Para requisitos técnicos básicos ya documentados'],
+      metros:[{l:'Profundidad',v:90,c:'#0F6E56'},{l:'Costo',v:65,c:'#854F0B'},{l:'Escalabilidad',v:25,c:'#A32D2D'},{l:'Tiempo prep.',v:55,c:'#854F0B'}],
       preguntas:[
         {cat:'Apertura',items:['¿Cuál es su principal objetivo con este sistema?','¿Qué problema estamos resolviendo para usted hoy?','¿Cómo describiría el flujo ideal de su trabajo?']},
         {cat:'Profundización',items:['¿Puede darme un ejemplo concreto de cuándo eso falla?','¿Qué pasaría si no tuviéramos esa funcionalidad?','¿Quién más se ve afectado cuando eso ocurre?']},
         {cat:'Validación',items:['Si entiendo bien, usted necesita... ¿es correcto?','¿Qué criterio usaría para decir que esto está listo?','¿Hay algún escenario que no hayamos considerado?']},
       ],
-      metros:[{l:'Profundidad',v:90,c:'#0F6E56'},{l:'Costo',v:65,c:'#854F0B'},{l:'Escalabilidad',v:25,c:'#A32D2D'},{l:'Tiempo prep.',v:55,c:'#854F0B'}],
       artifacts:['Minuta de entrevista','Mapa de empatía','Lista de requisitos brutos','Grabación + transcripción']
     },
-    {
-      id:'taller', label:'Taller JAD',
-      icon:'👥', bg:'rgba(83,52,131,0.12)', iconColor:'#3C3489',
-      accentColor:'#534AB7',
+    { id:'taller', label:'Taller JAD', icon:'👥', bg:'rgba(83,52,131,0.12)', iconColor:'#3C3489', accentColor:'#534AB7',
       tags:[{t:'BABOK v3',bg:'rgba(83,52,131,0.1)',c:'#3C3489'},{t:'Alta sinergia',bg:'rgba(83,52,131,0.08)',c:'#534AB7'},{t:'Ágil',bg:'rgba(83,52,131,0.08)',c:'#534AB7'}],
-      desc:'Joint Application Design: sesión facilitada con múltiples stakeholders que trabajan juntos para definir y priorizar requisitos. Reduce ciclos de revisión al alinear perspectivas en tiempo real.',
-      cuando:['Conflictos entre áreas de negocio','Definición de alcance inicial del proyecto','Cuando se requiere consenso rápido','Proyectos con múltiples unidades de negocio'],
-      noHacer:['Con stakeholders con conflictos personales graves','Cuando el grupo supera 15 personas sin co-facilitador','Para requisitos muy técnicos que confunden al negocio'],
+      desc:'Sesión facilitada con múltiples stakeholders que trabajan juntos para definir y priorizar requisitos. Reduce ciclos de revisión al alinear perspectivas en tiempo real.',
+      cuando:['Conflictos entre áreas de negocio','Definición de alcance inicial','Cuando se requiere consenso rápido','Proyectos con múltiples unidades de negocio'],
+      noHacer:['Con stakeholders con conflictos personales graves','Grupo mayor de 15 personas sin co-facilitador','Para requisitos muy técnicos que confunden al negocio'],
+      metros:[{l:'Profundidad',v:75,c:'#534AB7'},{l:'Costo',v:80,c:'#854F0B'},{l:'Escalabilidad',v:55,c:'#3B6D11'},{l:'Tiempo prep.',v:75,c:'#854F0B'}],
       preguntas:[
-        {cat:'Apertura de taller',items:['¿Cuál es el objetivo que todos acordamos lograr hoy?','¿Qué haría que este taller fuera un éxito?','¿Qué restricciones deben respetarse sin negociación?']},
+        {cat:'Apertura del taller',items:['¿Cuál es el objetivo que todos acordamos lograr hoy?','¿Qué haría que este taller fuera un éxito?','¿Qué restricciones deben respetarse sin negociación?']},
         {cat:'Dinámica de grupo',items:['¿Alguien tiene una perspectiva diferente?','¿Podemos priorizar esto con la técnica MoSCoW?','¿Este requisito pertenece al MVP o a una fase 2?']},
         {cat:'Cierre',items:['¿Todos están de acuerdo con lo capturado?','¿Qué queda pendiente para resolver fuera del taller?','¿Quién valida el acta antes del siguiente sprint?']},
       ],
-      metros:[{l:'Profundidad',v:75,c:'#534AB7'},{l:'Costo',v:80,c:'#854F0B'},{l:'Escalabilidad',v:55,c:'#3B6D11'},{l:'Tiempo prep.',v:75,c:'#854F0B'}],
       artifacts:['Agenda del taller','Tablero de affinity mapping','Matriz MoSCoW','Acta de acuerdos y decisiones']
     },
-    {
-      id:'observacion', label:'Observación',
-      icon:'👁', bg:'rgba(24,95,165,0.1)', iconColor:'#0C447C',
-      accentColor:'#185FA5',
+    { id:'observacion', label:'Observación', icon:'👁', bg:'rgba(24,95,165,0.1)', iconColor:'#0C447C', accentColor:'#185FA5',
       tags:[{t:'Contextual Inquiry',bg:'rgba(24,95,165,0.1)',c:'#0C447C'},{t:'UX Research',bg:'rgba(24,95,165,0.08)',c:'#185FA5'},{t:'ISO 9241-210',bg:'rgba(24,95,165,0.08)',c:'#185FA5'}],
-      desc:'El analista observa a los usuarios realizando sus tareas reales en su entorno de trabajo. Revela requisitos implícitos que los usuarios no saben que tienen — no verbalizados pero esenciales.',
-      cuando:['Usuarios con dificultad para articular necesidades','Procesos con muchas excepciones no documentadas','Sistemas de reemplazo (migración / modernización)','Cuando los documentos actuales no reflejan la realidad'],
-      noHacer:['En procesos confidenciales sin protocolo de privacidad','Cuando el usuario se inhibe con observadores presentes','Para procesos que ocurren raramente o de forma irregular'],
+      desc:'El analista observa a los usuarios realizando sus tareas reales en su entorno. Revela requisitos implícitos no verbalizados pero esenciales.',
+      cuando:['Usuarios con dificultad para articular necesidades','Procesos con muchas excepciones no documentadas','Sistemas de reemplazo o modernización','Cuando los documentos no reflejan la realidad'],
+      noHacer:['En procesos confidenciales sin protocolo de privacidad','Cuando el usuario se inhibe con observadores','Para procesos que ocurren raramente'],
+      metros:[{l:'Profundidad',v:85,c:'#185FA5'},{l:'Costo',v:55,c:'#3B6D11'},{l:'Escalabilidad',v:20,c:'#A32D2D'},{l:'Tiempo prep.',v:40,c:'#3B6D11'}],
       preguntas:[
         {cat:'Antes de observar',items:['¿Cuánto tiempo dedica a esta tarea normalmente?','¿Hay excepciones que suelen ocurrir en este proceso?','¿Qué hace cuando el sistema falla o no tiene lo que necesita?']},
         {cat:'Durante la observación',items:['(Silencio activo — no interrumpir el flujo natural)','Si algo es confuso: ¿Podría explicar por qué hace eso?','Anotar: ¿qué hace diferente a lo documentado?']},
-        {cat:'Post-observación',items:['¿Qué fue lo más frustrante de lo que acabamos de ver?','¿Hay pasos que quisiera eliminar si pudiera?','¿Qué herramienta o función le ahorraría más tiempo?']},
+        {cat:'Post-observación',items:['¿Qué fue lo más frustrante de lo que vimos?','¿Hay pasos que quisiera eliminar si pudiera?','¿Qué función le ahorraría más tiempo?']},
       ],
-      metros:[{l:'Profundidad',v:85,c:'#185FA5'},{l:'Costo',v:55,c:'#3B6D11'},{l:'Escalabilidad',v:20,c:'#A32D2D'},{l:'Tiempo prep.',v:40,c:'#3B6D11'}],
       artifacts:['Diario de observación','Mapa de flujo actual (as-is)','Lista de puntos de dolor','Fotos / videos del proceso']
     },
-    {
-      id:'prototipo', label:'Prototipado',
-      icon:'🖼', bg:'rgba(244,162,97,0.1)', iconColor:'#633806',
-      accentColor:'#BA7517',
+    { id:'prototipo', label:'Prototipado', icon:'🖼', bg:'rgba(244,162,97,0.1)', iconColor:'#633806', accentColor:'#BA7517',
       tags:[{t:'Evolutionary prototyping',bg:'rgba(244,162,97,0.1)',c:'#633806'},{t:'UX/UI',bg:'rgba(244,162,97,0.08)',c:'#BA7517'},{t:'Validación rápida',bg:'rgba(244,162,97,0.08)',c:'#BA7517'}],
-      desc:'Creación de representaciones visuales (wireframes, mockups o prototipos funcionales) del sistema propuesto para que los stakeholders validen interfaces y flujos antes de codificar.',
-      cuando:['Interfaces de usuario complejas o novedosas','Cuando el stakeholder no puede describir lo que quiere en palabras','Proyectos con alta incertidumbre de UX','Para reducir cambios costosos en etapas tardías'],
-      noHacer:['Para requisitos puramente de backend/integración','Cuando el stakeholder puede confundir prototipo con producto final','Si el tiempo para prototipar supera el de desarrollo'],
+      desc:'Representaciones visuales del sistema propuesto (wireframes, mockups) para que los stakeholders validen interfaces y flujos antes de codificar.',
+      cuando:['Interfaces complejas o novedosas','Stakeholder no puede describir lo que quiere en palabras','Alta incertidumbre de UX','Para reducir cambios costosos en etapas tardías'],
+      noHacer:['Para requisitos puramente de backend','Cuando el stakeholder confunde prototipo con producto','Si el tiempo prototipar supera el de desarrollo'],
+      metros:[{l:'Profundidad',v:70,c:'#BA7517'},{l:'Costo',v:70,c:'#854F0B'},{l:'Escalabilidad',v:45,c:'#854F0B'},{l:'Tiempo prep.',v:80,c:'#854F0B'}],
       preguntas:[
         {cat:'Revisión de pantallas',items:['¿Esto representa el flujo que describió antes?','¿Falta algo importante en esta pantalla?','¿Qué tan seguido usaría esta función?']},
-        {cat:'Evaluación de UX',items:['¿Es intuitivo el recorrido desde aquí hasta el objetivo?','¿Qué acciones espera realizar que no ve disponibles?','¿Qué elementos generan confusión o duda?']},
+        {cat:'Evaluación de UX',items:['¿Es intuitivo el recorrido hasta el objetivo?','¿Qué acciones espera que no ve disponibles?','¿Qué elementos generan confusión?']},
         {cat:'Priorización',items:['¿Qué es imprescindible para la primera versión?','¿Cuáles pantallas son opcionales para el MVP?','¿Cuál es su flujo más crítico del día a día?']},
       ],
-      metros:[{l:'Profundidad',v:70,c:'#BA7517'},{l:'Costo',v:70,c:'#854F0B'},{l:'Escalabilidad',v:45,c:'#854F0B'},{l:'Tiempo prep.',v:80,c:'#854F0B'}],
       artifacts:['Wireframes / mockups','Flujo de navegación','Notas de revisión con stakeholder','Registro de cambios solicitados']
     },
-    {
-      id:'docanalysis', label:'Análisis documental',
-      icon:'📄', bg:'rgba(95,94,90,0.1)', iconColor:'#444441',
-      accentColor:'#5F5E5A',
+    { id:'docanalysis', label:'Análisis documental', icon:'📄', bg:'rgba(95,94,90,0.1)', iconColor:'#444441', accentColor:'#5F5E5A',
       tags:[{t:'BABOK v3',bg:'rgba(95,94,90,0.08)',c:'#444441'},{t:'Bajo costo',bg:'rgba(95,94,90,0.06)',c:'#5F5E5A'},{t:'Sistemas legados',bg:'rgba(95,94,90,0.06)',c:'#5F5E5A'}],
-      desc:'Revisión sistemática de documentos existentes (manuales, reportes, flujos, contratos, normativas) para extraer requisitos implícitos y restricciones del sistema actual.',
-      cuando:['Proyectos de modernización o migración','Cuando no hay disponibilidad de stakeholders clave','Para entender restricciones regulatorias y normativas','Como punto de partida antes de entrevistas'],
-      noHacer:['Como técnica única: siempre complementar con entrevistas','Cuando los documentos tienen más de 2 años sin revisión','Si los documentos son inconsistentes entre sí sin resolverlo'],
+      desc:'Revisión sistemática de documentos existentes (manuales, flujos, contratos, normativas) para extraer requisitos implícitos y restricciones del sistema actual.',
+      cuando:['Proyectos de modernización o migración','Sin disponibilidad de stakeholders clave','Para entender restricciones regulatorias','Como punto de partida antes de entrevistas'],
+      noHacer:['Como técnica única: siempre complementar','Documentos con más de 2 años sin revisión','Si los documentos son inconsistentes entre sí'],
+      metros:[{l:'Profundidad',v:45,c:'#5F5E5A'},{l:'Costo',v:20,c:'#3B6D11'},{l:'Escalabilidad',v:85,c:'#0F6E56'},{l:'Tiempo prep.',v:20,c:'#3B6D11'}],
       preguntas:[
         {cat:'Evaluación del documento',items:['¿Qué tan actualizado está este documento?','¿Quién es el propietario y con qué frecuencia se revisa?','¿Hay conflictos con otros documentos existentes?']},
         {cat:'Extracción de requisitos',items:['¿Qué procesos describe que deben preservarse?','¿Qué restricciones legales o técnicas menciona?','¿Qué excepciones o casos especiales documenta?']},
         {cat:'Validación con fuente',items:['¿Este documento refleja cómo se opera realmente hoy?','¿Hay pasos no documentados que todos conocen?','¿Qué ha cambiado desde que se escribió esto?']},
       ],
-      metros:[{l:'Profundidad',v:45,c:'#5F5E5A'},{l:'Costo',v:20,c:'#3B6D11'},{l:'Escalabilidad',v:85,c:'#0F6E56'},{l:'Tiempo prep.',v:20,c:'#3B6D11'}],
       artifacts:['Inventario de documentos fuente','Lista de requisitos extraídos','Mapa de restricciones regulatorias','Registro de inconsistencias detectadas']
     },
   ];
 
+  // init ELI store for each tecnica
+  tecnicas.forEach(function(t){ if(!ELI.tecnicas[t.id]) ELI.tecnicas[t.id]={respuestas:{},artefactos:{},adjuntos:{}}; });
+
+  var html = '<style>';
+  html += '.tec-nav2{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1.2rem}';
+  html += '.tec-btn2{padding:6px 14px;border-radius:20px;font-size:12px;font-weight:500;cursor:pointer;border:0.5px solid var(--border2);background:transparent;color:var(--muted);transition:all .2s}';
+  html += '.tec-btn2.on{color:var(--text);border-color:var(--border2)}';
+  html += '.tec-body2{display:none}.tec-body2.on{display:block}';
+  html += '.tec-header2{display:flex;align-items:flex-start;gap:1rem;margin-bottom:1rem;padding-bottom:1rem;border-bottom:0.5px solid var(--border)}';
+  html += '.tec-icon2{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}';
+  html += '.meter-row2{display:flex;align-items:center;gap:8px;margin-bottom:5px}';
+  html += '.meter-label2{font-size:11px;color:var(--muted);width:80px;flex-shrink:0}';
+  html += '.meter-track2{flex:1;height:5px;background:var(--surface2);border-radius:3px;overflow:hidden}';
+  html += '.meter-fill2{height:100%;border-radius:3px}';
+  html += '.meter-val2{font-size:11px;font-weight:500;min-width:28px;text-align:right}';
+  html += '.tec-cols2{display:grid;grid-template-columns:1fr 1fr;gap:.8rem;margin-bottom:1rem}';
+  html += '.tec-section2{background:var(--surface);border-radius:8px;padding:.75rem}';
+  html += '.tec-sec-title2{font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:.5rem}';
+  html += '.tec-item2{font-size:12px;padding:4px 0;display:flex;align-items:flex-start;gap:7px;border-bottom:0.5px solid var(--border)}';
+  html += '.tec-item2:last-child{border-bottom:none}';
+  html += '.ti-dot2{width:5px;height:5px;border-radius:50%;flex-shrink:0;margin-top:5px}';
+  html += '.q-block2{background:var(--surface);border-radius:8px;padding:.75rem;margin-bottom:.7rem;border:0.5px solid var(--border)}';
+  html += '.q-block-title2{font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:.5rem;display:flex;justify-content:space-between;align-items:center}';
+  html += '.q-item2{padding:6px 0;border-bottom:0.5px solid var(--border)}';
+  html += '.q-item2:last-child{border-bottom:none}';
+  html += '.q-text2{font-size:12px;color:var(--text);margin-bottom:4px;display:flex;gap:6px;align-items:flex-start}';
+  html += '.q-num2{font-size:10px;font-weight:500;color:var(--muted);min-width:18px;padding-top:2px}';
+  html += '.q-resp2{width:100%;min-height:52px;background:rgba(0,0,0,0.02);border:0.5px solid var(--border);border-radius:6px;padding:6px 8px;font-size:12px;color:var(--text);font-family:var(--font-sans);resize:vertical;margin-top:4px;line-height:1.5}';
+  html += '.q-resp2:focus{outline:none;border-color:var(--c-teal)}';
+  html += '.art-section{background:var(--surface);border-radius:8px;padding:.75rem;margin-top:.8rem;border:0.5px solid var(--border)}';
+  html += '.art-item{display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:0.5px solid var(--border)}';
+  html += '.art-item:last-child{border-bottom:none}';
+  html += '.art-chk{width:16px;height:16px;border-radius:3px;border:1.5px solid var(--border2);flex-shrink:0;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:9px;transition:all .15s}';
+  html += '.art-chk.done{background:var(--c-teal);border-color:var(--c-teal);color:#fff}';
+  html += '.art-label{font-size:12px;flex:1}';
+  html += '.art-file{font-size:11px;color:var(--c-blue);background:rgba(24,95,165,0.06);border:0.5px solid rgba(24,95,165,0.2);border-radius:5px;padding:2px 8px;cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:200px}';
+  html += '.art-file-input{display:none}';
+  html += '.add-q-btn{font-size:11px;padding:3px 10px;border-radius:5px;border:0.5px solid var(--border2);background:transparent;color:var(--muted);cursor:pointer}';
+  html += '.add-q-btn:hover{color:var(--text);border-color:var(--c-teal)}';
+  html += '.save-indicator{font-size:11px;color:var(--c-green);margin-left:.5rem}';
+  html += '.del-q{font-size:14px;color:var(--muted);background:none;border:none;cursor:pointer;padding:0 4px;line-height:1}';
+  html += '.del-q:hover{color:var(--c-red)}';
+  html += '</style>';
+
+  html += '<div class="tec-nav2" id="tecNav2"></div><div id="tecContent2"></div>';
+  el.innerHTML = html;
+
   var nav2 = document.getElementById('tecNav2');
   var cont2 = document.getElementById('tecContent2');
 
-  tecnicas.forEach(function(t, i) {
-    var b = document.createElement('button');
-    b.className = 'tec-btn2' + (i===0 ? ' on' : '');
-    b.style.borderColor = i===0 ? t.accentColor : '';
-    b.style.color = i===0 ? t.accentColor : '';
-    b.textContent = t.label;
-    b.onclick = (function(idx){ return function(){ selTec2(idx); }; })(i);
-    nav2.appendChild(b);
+  tecnicas.forEach(function(tec, tidx) {
+    var btn = document.createElement('button');
+    btn.className = 'tec-btn2' + (tidx===0?' on':'');
+    btn.style.borderColor = tidx===0 ? tec.accentColor : '';
+    btn.style.color = tidx===0 ? tec.accentColor : '';
+    btn.textContent = tec.label;
+    btn.onclick = (function(idx){ return function(){ selTec2(idx); }; })(tidx);
+    nav2.appendChild(btn);
 
     var d = document.createElement('div');
-    d.className = 'tec-body2' + (i===0 ? ' on' : '');
-    d.id = 'tb2-' + i;
-    d.innerHTML =
-      '<div class="tec-header2">' +
-        '<div class="tec-icon2" style="background:'+t.bg+';color:'+t.iconColor+'">'+t.icon+'</div>' +
-        '<div class="tec-meta2">' +
-          '<div class="tec-name2">'+t.label+'</div>' +
-          '<div class="tec-desc2">'+t.desc+'</div>' +
-          '<div class="tec-tags2">'+t.tags.map(function(tg){ return '<span class="tag2" style="background:'+tg.bg+';color:'+tg.c+'">'+tg.t+'</span>'; }).join('')+'</div>' +
-        '</div>' +
-      '</div>' +
-      '<div style="margin-bottom:.8rem">' +
-        t.metros.map(function(m){ return '<div class="meter-row2"><div class="meter-label2">'+m.l+'</div><div class="meter-track2"><div class="meter-fill2" style="width:'+m.v+'%;background:'+m.c+'"></div></div><div class="meter-val2" style="color:'+m.c+'">'+m.v+'%</div></div>'; }).join('') +
-      '</div>' +
-      '<div class="tec-cols2">' +
-        '<div class="tec-section2"><div class="tec-sec-title2">Cuándo usar</div>' +
-          t.cuando.map(function(c){ return '<div class="tec-item2"><div class="ti-dot2" style="background:'+t.accentColor+'"></div>'+c+'</div>'; }).join('') +
-        '</div>' +
-        '<div class="tec-section2"><div class="tec-sec-title2">Cuándo NO usar</div>' +
-          t.noHacer.map(function(c){ return '<div class="tec-item2"><div class="ti-dot2" style="background:#A32D2D"></div>'+c+'</div>'; }).join('') +
-        '</div>' +
-      '</div>' +
-      t.preguntas.map(function(p){
-        return '<div class="q-block2"><div class="q-block-title2">'+p.cat+'</div>' +
-          p.items.map(function(q,j){ return '<div class="q-item2"><div class="q-num2">'+(j+1)+'</div><div>'+q+'</div></div>'; }).join('') +
-        '</div>';
-      }).join('') +
-      '<div><div class="tec-sec-title2">Artefactos que produce</div>' +
-        '<div class="artifact-row2">'+t.artifacts.map(function(a){ return '<span class="artifact-pill2">'+a+'</span>'; }).join('')+'</div>' +
-      '</div>';
+    d.className = 'tec-body2' + (tidx===0?' on':'');
+    d.id = 'tb2-' + tidx;
+
+    // Header
+    var hdr = '<div class="tec-header2">';
+    hdr += '<div class="tec-icon2" style="background:'+tec.bg+';color:'+tec.iconColor+'">'+tec.icon+'</div>';
+    hdr += '<div style="flex:1"><div style="font-size:15px;font-weight:500;font-family:var(--font-serif);margin-bottom:3px">'+tec.label+'</div>';
+    hdr += '<div style="font-size:12px;color:var(--muted);line-height:1.5;margin-bottom:6px">'+tec.desc+'</div>';
+    hdr += '<div style="display:flex;gap:5px;flex-wrap:wrap">'+tec.tags.map(function(tg){ return '<span style="display:inline-block;font-size:10px;padding:2px 7px;border-radius:4px;background:'+tg.bg+';color:'+tg.c+'">'+tg.t+'</span>'; }).join('')+'</div></div></div>';
+
+    // Meters
+    var met = '<div style="margin-bottom:.8rem">'+tec.metros.map(function(m){
+      return '<div class="meter-row2"><div class="meter-label2">'+m.l+'</div><div class="meter-track2"><div class="meter-fill2" style="width:'+m.v+'%;background:'+m.c+'"></div></div><div class="meter-val2" style="color:'+m.c+'">'+m.v+'%</div></div>';
+    }).join('')+'</div>';
+
+    // Cuando / No hacer
+    var cols = '<div class="tec-cols2">';
+    cols += '<div class="tec-section2"><div class="tec-sec-title2">Cuándo usar</div>'+tec.cuando.map(function(c){ return '<div class="tec-item2"><div class="ti-dot2" style="background:'+tec.accentColor+'"></div>'+c+'</div>'; }).join('')+'</div>';
+    cols += '<div class="tec-section2"><div class="tec-sec-title2">Cuándo NO usar</div>'+tec.noHacer.map(function(c){ return '<div class="tec-item2"><div class="ti-dot2" style="background:#A32D2D"></div>'+c+'</div>'; }).join('')+'</div>';
+    cols += '</div>';
+
+    // Questions with response areas
+    var qs = tec.preguntas.map(function(pg, pgIdx) {
+      var block = '<div class="q-block2">';
+      block += '<div class="q-block-title2"><span style="color:'+tec.accentColor+'">'+pg.cat+'</span>';
+      block += '<button class="add-q-btn" onclick="addEliQ(\''+tec.id+'\','+pgIdx+')">+ Pregunta</button></div>';
+      block += '<div id="qlist-'+tec.id+'-'+pgIdx+'"></div></div>';
+      return block;
+    }).join('');
+
+    // Artifacts with checkboxes
+    var art = '<div class="art-section">';
+    art += '<div class="tec-sec-title2" style="margin-bottom:.6rem">Artefactos producidos</div>';
+    art += '<div id="artlist-'+tec.id+'"></div>';
+    art += '<div style="margin-top:.5rem;font-size:11px;color:var(--muted)">Marca los artefactos que ya fueron producidos y adjunta el archivo si aplica.</div>';
+    art += '</div>';
+
+    // Save indicator
+    var saveRow = '<div style="display:flex;align-items:center;margin-top:.8rem;gap:.5rem">';
+    saveRow += '<button class="btn btn-sm" style="background:var(--c-teal);color:#fff;border-color:var(--c-teal)" onclick="saveEliTec(\''+tec.id+'\')">Guardar respuestas</button>';
+    saveRow += '<span class="save-indicator" id="eli-saved-'+tec.id+'"></span>';
+    saveRow += '</div>';
+
+    d.innerHTML = hdr + met + cols + qs + art + saveRow;
     cont2.appendChild(d);
+
+    // Render question lists
+    tec.preguntas.forEach(function(pg, pgIdx){
+      renderEliQList(tec.id, pgIdx, pg.items);
+    });
+    renderEliArtList(tec.id, tec.artifacts);
   });
 
   function selTec2(i) {
-    document.querySelectorAll('.tec-btn2').forEach(function(b, j) {
-      b.classList.toggle('on', i===j);
+    document.querySelectorAll('.tec-btn2').forEach(function(b,j){
+      b.classList.toggle('on',i===j);
       b.style.borderColor = i===j ? tecnicas[j].accentColor : '';
       b.style.color = i===j ? tecnicas[j].accentColor : '';
     });
-    document.querySelectorAll('.tec-body2').forEach(function(d, j) {
-      d.classList.toggle('on', i===j);
-    });
+    document.querySelectorAll('.tec-body2').forEach(function(d,j){ d.classList.toggle('on',i===j); });
   }
 }
 
+function renderEliQList(tecId, pgIdx, defaultItems) {
+  var el = document.getElementById('qlist-'+tecId+'-'+pgIdx); if(!el) return;
+  var stored = ELI.tecnicas[tecId] && ELI.tecnicas[tecId].respuestas ? ELI.tecnicas[tecId].respuestas : {};
+  // merge stored custom questions with defaults
+  var customKey = 'custom_'+tecId+'_'+pgIdx;
+  var extraQs = ELI.tecnicas[tecId] && ELI.tecnicas[tecId]['extraQ'] && ELI.tecnicas[tecId]['extraQ'][pgIdx] ? ELI.tecnicas[tecId]['extraQ'][pgIdx] : [];
+  var allItems = defaultItems.concat(extraQs);
+  el.innerHTML = allItems.map(function(q, qi){
+    var key = pgIdx+'_'+qi;
+    var val = stored[key]||'';
+    var isCustom = qi >= defaultItems.length;
+    return '<div class="q-item2">'
+      + '<div class="q-text2"><div class="q-num2">'+(qi+1)+'.</div>'
+      + '<div style="flex:1">'+q
+      + (isCustom?'<button class="del-q" onclick="delEliQ(\''+tecId+'\','+pgIdx+','+(qi-defaultItems.length)+')" title="Eliminar">×</button>':'')
+      + '</div></div>'
+      + '<textarea class="q-resp2" id="qr-'+tecId+'-'+pgIdx+'-'+qi+'" placeholder="Escribe tu respuesta aquí..." oninput="autoSaveEliQ(\''+tecId+'\','+pgIdx+','+qi+',this.value)">'+val+'</textarea>'
+      + '</div>';
+  }).join('');
+}
+
+function renderEliArtList(tecId, defaultArtifacts) {
+  var el = document.getElementById('artlist-'+tecId); if(!el) return;
+  var stored = ELI.tecnicas[tecId]||{artefactos:{},adjuntos:{}};
+  var extraArts = stored.extraArts||[];
+  var allArts = defaultArtifacts.concat(extraArts);
+  el.innerHTML = allArts.map(function(art, ai){
+    var done = stored.artefactos[ai]||false;
+    var adj = stored.adjuntos[ai]||'';
+    var isCustom = ai >= defaultArtifacts.length;
+    return '<div class="art-item">'
+      + '<div class="art-chk'+(done?' done':'')+'" id="artchk-'+tecId+'-'+ai+'" onclick="toggleEliArt(\''+tecId+'\','+ai+')">'+(done?'✓':'')+'</div>'
+      + '<div class="art-label">'+art+(isCustom?'<button class="del-q" onclick="delEliArt(\''+tecId+'\','+(ai-defaultArtifacts.length)+')" style="margin-left:4px">×</button>':'')+'</div>'
+      + '<label class="art-file" title="'+(adj||'Adjuntar archivo')+'">'+(adj ? adj.substring(adj.lastIndexOf('\\')+1).substring(adj.lastIndexOf('/')+1) : '📎 Adjuntar')+
+        '<input type="file" class="art-file-input" onchange="attachEliArt(\''+tecId+'\','+ai+',this)" accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.png,.zip"></label>'
+      + '</div>';
+  }).join('')
+  + '<div style="margin-top:.5rem;display:flex;gap:.5rem;align-items:center">'
+  + '<input type="text" id="new-art-'+tecId+'" placeholder="Nuevo artefacto..." style="flex:1;padding:5px 8px;font-size:12px">'
+  + '<button class="btn btn-sm" onclick="addEliArt(\''+tecId+'\')">+ Agregar</button>'
+  + '</div>';
+}
+
+function autoSaveEliQ(tecId, pgIdx, qi, val) {
+  if(!ELI.tecnicas[tecId]) ELI.tecnicas[tecId]={respuestas:{},artefactos:{},adjuntos:{}};
+  ELI.tecnicas[tecId].respuestas[pgIdx+'_'+qi] = val;
+  eliSave();
+}
+function saveEliTec(tecId) { eliSave(); eliSaved('eli-saved-'+tecId); }
+
+function toggleEliArt(tecId, ai) {
+  if(!ELI.tecnicas[tecId]) ELI.tecnicas[tecId]={respuestas:{},artefactos:{},adjuntos:{}};
+  ELI.tecnicas[tecId].artefactos[ai] = !ELI.tecnicas[tecId].artefactos[ai];
+  eliSave();
+  var el=document.getElementById('artchk-'+tecId+'-'+ai);
+  if(el){ el.classList.toggle('done',ELI.tecnicas[tecId].artefactos[ai]); el.textContent=ELI.tecnicas[tecId].artefactos[ai]?'✓':''; }
+}
+function attachEliArt(tecId, ai, input) {
+  if(!input.files||!input.files[0]) return;
+  var fname = input.files[0].name;
+  if(!ELI.tecnicas[tecId]) ELI.tecnicas[tecId]={respuestas:{},artefactos:{},adjuntos:{}};
+  ELI.tecnicas[tecId].adjuntos[ai] = fname;
+  eliSave();
+  var lbl = input.parentElement;
+  if(lbl) lbl.textContent = fname.length>22 ? fname.substring(0,20)+'…' : fname;
+}
+function addEliQ(tecId, pgIdx) {
+  var el = document.getElementById('new-q-'+tecId+'-'+pgIdx);
+  // use prompt if no inline input
+  var val = el ? el.value.trim() : prompt('Nueva pregunta:');
+  if(!val) return;
+  if(!ELI.tecnicas[tecId]) ELI.tecnicas[tecId]={respuestas:{},artefactos:{},adjuntos:{}};
+  if(!ELI.tecnicas[tecId].extraQ) ELI.tecnicas[tecId].extraQ={};
+  if(!ELI.tecnicas[tecId].extraQ[pgIdx]) ELI.tecnicas[tecId].extraQ[pgIdx]=[];
+  ELI.tecnicas[tecId].extraQ[pgIdx].push(val);
+  eliSave();
+  // find the tec definition
+  var tec = null;
+  [['entrevista',0],['taller',1],['observacion',2],['prototipo',3],['docanalysis',4]].forEach(function(pair){
+    if(pair[0]===tecId){ tec=pair; }
+  });
+  // rebuild
+  var mount = document.getElementById('eli-tec-mount');
+  if(mount){mount.innerHTML=''; initEliTecnicas();}
+}
+function delEliQ(tecId, pgIdx, extraIdx) {
+  if(!ELI.tecnicas[tecId]||!ELI.tecnicas[tecId].extraQ||!ELI.tecnicas[tecId].extraQ[pgIdx]) return;
+  ELI.tecnicas[tecId].extraQ[pgIdx].splice(extraIdx,1);
+  eliSave();
+  var mount = document.getElementById('eli-tec-mount');
+  if(mount){mount.innerHTML=''; initEliTecnicas();}
+}
+function addEliArt(tecId) {
+  var el = document.getElementById('new-art-'+tecId);
+  var val = el ? el.value.trim() : '';
+  if(!val) return;
+  if(!ELI.tecnicas[tecId]) ELI.tecnicas[tecId]={respuestas:{},artefactos:{},adjuntos:{}};
+  if(!ELI.tecnicas[tecId].extraArts) ELI.tecnicas[tecId].extraArts=[];
+  ELI.tecnicas[tecId].extraArts.push(val);
+  eliSave();
+  var mount = document.getElementById('eli-tec-mount');
+  if(mount){mount.innerHTML=''; initEliTecnicas();}
+}
+function delEliArt(tecId, extraIdx) {
+  if(!ELI.tecnicas[tecId]||!ELI.tecnicas[tecId].extraArts) return;
+  ELI.tecnicas[tecId].extraArts.splice(extraIdx,1);
+  eliSave();
+  var mount = document.getElementById('eli-tec-mount');
+  if(mount){mount.innerHTML=''; initEliTecnicas();}
+}
 
 /* ════════════════════════════════════════
    PAGE: PLANTILLAS
@@ -1379,165 +1504,290 @@ reg('eli-plantillas', () => `
 <div class="page-header">
   <div class="page-eyebrow" style="color:var(--c-teal)">● Fase 1 — Elicitación</div>
   <h1 class="page-title">Plantillas de sesión</h1>
-  <p class="page-desc">Plan de sesión, minuta estructurada y guía de preguntas lista para usar en cualquier sesión de elicitación.</p>
+  <p class="page-desc">Minuta de elicitación editable, gestión de RF / SA / RNF y guía de preguntas con áreas de respuesta. Todo se guarda automáticamente.</p>
 </div>
-
-<div class="tab-nav">
-  <button class="tab-btn on" onclick="tabSel('plt',0,this)">Plan de sesión</button>
-  <button class="tab-btn" onclick="tabSel('plt',1,this)">Minuta de elicitación</button>
-  <button class="tab-btn" onclick="tabSel('plt',2,this)">Guía de preguntas</button>
-</div>
-
-<div class="tab-panel on" id="plt-0">
-  <div class="card" style="margin-bottom:.8rem">
-    <div style="font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.5px;color:var(--c-teal);margin-bottom:.8rem">● Agenda tipo — sesión de elicitación (90 min)</div>
-    ${[
-      {rng:'0–10 min',  c:'var(--c-teal)',   t:'Apertura y contexto',          d:'Presentación del objetivo, roles, reglas de la sesión y consentimiento de grabación'},
-      {rng:'10–30 min', c:'var(--c-teal)',   t:'Situación actual (As-Is)',      d:'¿Cómo funciona el proceso hoy? Identificar puntos de dolor, workarounds y excepciones'},
-      {rng:'30–60 min', c:'var(--c-teal)',   t:'Situación deseada (To-Be)',     d:'¿Qué necesita que haga el nuevo sistema? Explorar funcionalidades, prioridades y criterios de éxito'},
-      {rng:'60–75 min', c:'var(--c-purple)', t:'Restricciones y dependencias',  d:'Normativas, integraciones existentes, limitaciones técnicas, plazos no negociables'},
-      {rng:'75–90 min', c:'var(--c-gray)',   t:'Cierre y acuerdos',             d:'Resumen de lo capturado, pendientes, próximos pasos y firma de participación'},
-    ].map((s,i,arr) => `
-    <div style="display:grid;grid-template-columns:72px 1fr;gap:.6rem;margin-bottom:.35rem;position:relative">
-      ${i<arr.length-1?'<div style="position:absolute;left:107px;top:36px;bottom:-4px;width:1px;background:var(--border2)"></div>':''}
-      <div style="font-size:11px;font-weight:500;color:var(--muted);text-align:right;padding-top:.45rem;line-height:1.3">${s.rng}</div>
-      <div style="padding:.5rem .85rem;background:var(--bg);border:0.5px solid var(--border);border-radius:var(--radius)">
-        <div style="font-size:13px;font-weight:500;margin-bottom:.15rem;color:${s.c}">${s.t}</div>
-        <div style="font-size:12px;color:var(--muted);line-height:1.5">${s.d}</div>
-      </div>
-    </div>`).join('')}
-  </div>
-
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:.7rem">
-    <div class="card-sm" style="border-left:3px solid var(--c-teal)">
-      <div class="card-title">Técnica</div>
-      <div style="font-size:13px;font-weight:500;color:var(--text)">Entrevista estructurada / Taller JAD</div>
-    </div>
-    <div class="card-sm" style="border-left:3px solid var(--c-teal)">
-      <div class="card-title">Duración recomendada</div>
-      <div style="font-size:13px;font-weight:500;color:var(--text)">60 – 120 minutos</div>
-    </div>
-    <div class="card-sm" style="border-left:3px solid var(--c-purple)">
-      <div class="card-title">Participantes ideales</div>
-      <div style="font-size:13px;font-weight:500;color:var(--text)">1–3 stakeholders + analista + facilitador</div>
-    </div>
-    <div class="card-sm" style="border-left:3px solid var(--c-purple)">
-      <div class="card-title">Material necesario</div>
-      <div style="font-size:13px;font-weight:500;color:var(--text)">Guía de preguntas, grabadora, pizarra / Miro</div>
-    </div>
-  </div>
-</div>
-
-<div class="tab-panel" id="plt-1">
-  <div class="card">
-    <div style="font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.5px;color:var(--c-teal);margin-bottom:.9rem">● Minuta de elicitación</div>
-
-    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.7rem;margin-bottom:.9rem">
-      <div class="field-group"><div class="field-label">Proyecto</div><div class="field-val">[Nombre del proyecto]</div></div>
-      <div class="field-group"><div class="field-label">ID de sesión</div><div class="field-val field-mono">[ELI-001]</div></div>
-      <div class="field-group"><div class="field-label">Fecha y hora</div><div class="field-val">[DD/MM/AAAA · HH:MM]</div></div>
-      <div class="field-group"><div class="field-label">Analista responsable</div><div class="field-val">[Nombre del BA]</div></div>
-      <div class="field-group"><div class="field-label">Técnica utilizada</div><div class="field-val">[Entrevista / JAD / Observación]</div></div>
-      <div class="field-group"><div class="field-label">Lugar / modalidad</div><div class="field-val">[Presencial / Virtual]</div></div>
-    </div>
-
-    <div class="card-title" style="margin-bottom:.5rem">Participantes</div>
-    <div class="table-wrap" style="margin-bottom:.9rem">
-      <table class="data-table">
-        <thead><tr><th>Nombre</th><th>Rol en el proyecto</th><th>Área</th><th>Participación</th></tr></thead>
-        <tbody>
-          <tr><td>[Nombre]</td><td>Product Owner</td><td>[Área de negocio]</td><td><span class="badge b-ok">Confirmada</span></td></tr>
-          <tr><td>[Nombre]</td><td>Usuario clave</td><td>[Área operativa]</td><td><span class="badge b-ok">Confirmada</span></td></tr>
-          <tr><td>[Nombre]</td><td>Analista BA</td><td>TI / Proyecto</td><td><span class="badge b-func">Facilitador</span></td></tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div class="field-group" style="margin-bottom:.9rem">
-      <div class="field-label">Objetivo de la sesión</div>
-      <div class="field-val">Identificar y documentar los requisitos funcionales del módulo de [nombre] desde la perspectiva del área de [nombre], validando el proceso actual y definiendo las necesidades del sistema futuro.</div>
-    </div>
-
-    <div class="card-title" style="margin-bottom:.5rem">Hallazgos y requisitos capturados</div>
-    <div class="table-wrap" style="margin-bottom:.9rem">
-      <table class="data-table">
-        <thead><tr><th>ID</th><th>Descripción del hallazgo / requisito</th><th>Tipo</th><th>Prioridad</th><th>Estado</th></tr></thead>
-        <tbody>
-          <tr><td style="font-family:var(--font-mono);color:var(--c-blue)">RF-001</td><td>Login con SSO corporativo (AD/LDAP)</td><td><span class="badge b-func">Funcional</span></td><td><span class="badge b-must">Must</span></td><td><span class="badge b-ok">Confirmado</span></td></tr>
-          <tr><td style="font-family:var(--font-mono);color:var(--c-blue)">RF-002</td><td>Dashboard con KPIs en tiempo real</td><td><span class="badge b-func">Funcional</span></td><td><span class="badge b-must">Must</span></td><td><span class="badge b-warn">Ambiguo</span></td></tr>
-          <tr><td style="font-family:var(--font-mono);color:var(--c-green)">RNF-001</td><td>Tiempo de respuesta menor a 3 segundos</td><td><span class="badge b-nfunc">No funcional</span></td><td><span class="badge b-must">Must</span></td><td><span class="badge">Pendiente</span></td></tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div class="g2" style="margin-bottom:.9rem">
-      <div>
-        <div class="card-title">Supuestos identificados</div>
-        ${[
-          {id:'SA-001',t:'El directorio corporativo soporta integración SSO'},
-          {id:'SA-002',t:'El proveedor de API estará disponible para integración en Sprint 3'},
-          {id:'SA-003',t:'Los usuarios finales tienen correo corporativo activo'},
-        ].map(s => `<div class="dot-item"><div class="dot" style="background:var(--c-blue)"></div><div><span style="font-family:var(--font-mono);color:var(--c-blue);font-size:10px">${s.id}</span> ${s.t}</div></div>`).join('')}
-      </div>
-      <div>
-        <div class="card-title">Restricciones identificadas</div>
-        ${[
-          {id:'RC-001',t:'Presupuesto máximo definido por el sponsor'},
-          {id:'RC-002',t:'Stack tecnológico aprobado por el área de TI'},
-          {id:'RC-003',t:'Plazo de entrega MVP: 6 meses desde la firma'},
-        ].map(r => `<div class="dot-item"><div class="dot" style="background:var(--c-amber)"></div><div><span style="font-family:var(--font-mono);color:var(--c-amber);font-size:10px">${r.id}</span> ${r.t}</div></div>`).join('')}
-      </div>
-    </div>
-
-    <div class="g2" style="margin-bottom:.9rem">
-      <div>
-        <div class="card-title">Temas pendientes de aclaración</div>
-        ${[
-          'RF-002: definir qué KPIs específicos deben mostrarse',
-          'RNF-001: confirmar carga concurrente esperada',
-          'Integración con sistema CRM: confirmar disponibilidad de API',
-        ].map(p => `<div class="dot-item"><div class="dot" style="background:var(--c-red)"></div>${p}</div>`).join('')}
-      </div>
-      <div>
-        <div class="card-title">Próximos pasos acordados</div>
-        ${[
-          'BA envía borrador de minuta en 24 horas',
-          'PO revisa y confirma lista de KPIs (plazo: 3 días)',
-          'Siguiente sesión: [fecha acordada]',
-        ].map(p => `<div class="dot-item"><div class="dot" style="background:var(--c-green)"></div>${p}</div>`).join('')}
-      </div>
-    </div>
-
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:.7rem">
-      <div style="background:rgba(15,110,86,.04);border:0.5px solid rgba(15,110,86,.2);border-radius:var(--radius);padding:.7rem .9rem">
-        <div style="font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.4px;color:var(--c-green);margin-bottom:.3rem">Firma del stakeholder</div>
-        <div style="font-size:12px;color:var(--muted)">Confirmo que el contenido de esta minuta refleja fielmente lo discutido en la sesión.</div>
-        <div style="margin-top:.6rem;border-top:0.5px solid var(--border);padding-top:.4rem;font-size:11px;color:var(--faint)">Nombre: __________________ &nbsp;&nbsp; Fecha: __________</div>
-      </div>
-      <div style="background:rgba(24,95,165,.04);border:0.5px solid rgba(24,95,165,.2);border-radius:var(--radius);padding:.7rem .9rem">
-        <div style="font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.4px;color:var(--c-blue);margin-bottom:.3rem">Firma del analista responsable</div>
-        <div style="font-size:12px;color:var(--muted)">Certifico que los hallazgos fueron registrados con fidelidad y serán incorporados al proceso de especificación.</div>
-        <div style="margin-top:.6rem;border-top:0.5px solid var(--border);padding-top:.4rem;font-size:11px;color:var(--faint)">Nombre: __________________ &nbsp;&nbsp; Fecha: __________</div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="tab-panel" id="plt-2">
-  <div class="g2">
-    ${[
-      {cat:'Apertura',color:'var(--c-teal)',qs:['¿Cuál es su principal objetivo con este sistema?','¿Qué problema estamos resolviendo para usted hoy?','¿Cómo describiría el flujo ideal de su trabajo?']},
-      {cat:'Profundización',color:'var(--c-purple)',qs:['¿Puede darme un ejemplo concreto de cuándo eso falla?','¿Qué pasaría si no tuviéramos esa funcionalidad?','¿Quién más se ve afectado cuando eso ocurre?']},
-      {cat:'Validación',color:'var(--c-blue)',qs:['Si entiendo bien, usted necesita… ¿es correcto?','¿Qué criterio usaría para decir que esto está listo?','¿Hay algún escenario que no hayamos considerado?']},
-      {cat:'Restricciones',color:'var(--c-amber)',qs:['¿Existe algún sistema con el que deba integrarse?','¿Hay normas o regulaciones que deban cumplirse?','¿Cuáles son los plazos no negociables?']},
-    ].map(q => `
-    <div class="card">
-      <div class="card-title" style="color:${q.color}">${q.cat}</div>
-      ${q.qs.map(p => `<div class="dot-item"><div class="dot" style="background:${q.color}"></div>${p}</div>`).join('')}
-    </div>`).join('')}
-  </div>
-</div>
+<div id="eli-plt-mount"></div>
 `);
+
+function initEliPlantillas() {
+  var el = document.getElementById('eli-plt-mount');
+  if(!el||el.innerHTML.trim()) return;
+  renderEliPlantillas();
+}
+
+function renderEliPlantillas() {
+  var el = document.getElementById('eli-plt-mount'); if(!el) return;
+  var m = ELI.minuta;
+
+  var styles = '<style>';
+  styles += '.plt-tab-nav{display:flex;gap:2px;border-bottom:0.5px solid var(--border);margin-bottom:1.2rem}';
+  styles += '.plt-tab-btn{padding:.5rem .95rem;border-radius:var(--radius) var(--radius) 0 0;border:none;background:transparent;color:var(--muted);font-size:12px;font-weight:400;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-0.5px;font-family:var(--font-sans);transition:all .15s}';
+  styles += '.plt-tab-btn:hover{color:var(--text);background:var(--surface)}';
+  styles += '.plt-tab-btn.on{color:var(--text);font-weight:500;border-bottom-color:var(--c-teal);background:var(--bg)}';
+  styles += '.plt-panel{display:none}.plt-panel.on{display:block}';
+  styles += '.eli-input{width:100%;background:var(--surface);border:0.5px solid var(--border2);border-radius:var(--radius);padding:.5rem .75rem;font-size:13px;color:var(--text);font-family:var(--font-sans);outline:none;transition:border-color .15s}';
+  styles += '.eli-input:focus{border-color:var(--c-teal)}';
+  styles += '.eli-ta{width:100%;background:var(--surface);border:0.5px solid var(--border2);border-radius:var(--radius);padding:.5rem .75rem;font-size:12px;color:var(--text);font-family:var(--font-sans);resize:vertical;line-height:1.6;outline:none;transition:border-color .15s}';
+  styles += '.eli-ta:focus{border-color:var(--c-teal)}';
+  styles += '.eli-label{font-size:11px;font-weight:500;color:var(--muted);display:block;margin-bottom:3px;text-transform:uppercase;letter-spacing:.3px}';
+  styles += '.eli-field{margin-bottom:.7rem}';
+  styles += '.req-row-edit{display:grid;gap:5px;align-items:center;padding:6px 0;border-bottom:0.5px solid var(--border)}';
+  styles += '.req-row-edit:last-child{border-bottom:none}';
+  styles += '.req-row-edit input,.req-row-edit select{background:var(--surface);border:0.5px solid var(--border2);border-radius:5px;padding:4px 7px;font-size:12px;color:var(--text);font-family:var(--font-sans);outline:none}';
+  styles += '.req-row-edit input:focus,.req-row-edit select:focus{border-color:var(--c-teal)}';
+  styles += '.del-row-btn{background:none;border:none;cursor:pointer;color:var(--muted);font-size:16px;padding:0 3px;line-height:1}';
+  styles += '.del-row-btn:hover{color:var(--c-red)}';
+  styles += '.save-bar{display:flex;align-items:center;gap:.5rem;margin-top:1rem;padding-top:.8rem;border-top:0.5px solid var(--border)}';
+  styles += '.pq-item{padding:7px 0;border-bottom:0.5px solid var(--border)}';
+  styles += '.pq-item:last-child{border-bottom:none}';
+  styles += '.pq-q{font-size:12px;font-weight:500;margin-bottom:4px;display:flex;gap:6px;align-items:flex-start}';
+  styles += '.pq-edit-inp{flex:1;background:var(--surface);border:0.5px solid var(--border2);border-radius:5px;padding:4px 7px;font-size:12px;color:var(--text);font-family:var(--font-sans);outline:none}';
+  styles += '.pq-edit-inp:focus{border-color:var(--c-teal)}';
+  styles += '.pq-resp{width:100%;min-height:48px;background:rgba(0,0,0,0.02);border:0.5px solid var(--border);border-radius:6px;padding:6px 8px;font-size:12px;color:var(--text);font-family:var(--font-sans);resize:vertical;margin-top:4px;line-height:1.5;outline:none}';
+  styles += '.pq-resp:focus{border-color:var(--c-teal)}';
+  styles += '.pq-cat-title{font-size:13px;font-weight:500;font-family:var(--font-serif);margin-bottom:.5rem;display:flex;justify-content:space-between;align-items:center}';
+  styles += '</style>';
+
+  var tabs = '<div class="plt-tab-nav">'
+    + '<button class="plt-tab-btn on" onclick="pltTab(0,this)">Plan de sesión</button>'
+    + '<button class="plt-tab-btn" onclick="pltTab(1,this)">Minuta editable</button>'
+    + '<button class="plt-tab-btn" onclick="pltTab(2,this)">Guía de preguntas</button>'
+    + '</div>';
+
+  // ── PANEL 0: Plan de sesión (informativo, sin cambios) ──────────────────
+  var panel0 = '<div class="plt-panel on" id="pltP0">';
+  panel0 += '<div class="card" style="margin-bottom:.8rem">';
+  panel0 += '<div style="font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.5px;color:var(--c-teal);margin-bottom:.8rem">● Agenda tipo — sesión de elicitación (90 min)</div>';
+  var agenda = [{rng:'0–10 min',c:'var(--c-teal)',t:'Apertura y contexto',d:'Presentación del objetivo, roles, reglas de la sesión y consentimiento de grabación'},{rng:'10–30 min',c:'var(--c-teal)',t:'Situación actual (As-Is)',d:'¿Cómo funciona el proceso hoy? Identificar puntos de dolor, workarounds y excepciones'},{rng:'30–60 min',c:'var(--c-teal)',t:'Situación deseada (To-Be)',d:'¿Qué necesita que haga el nuevo sistema? Explorar funcionalidades, prioridades y criterios de éxito'},{rng:'60–75 min',c:'var(--c-purple)',t:'Restricciones y dependencias',d:'Normativas, integraciones existentes, limitaciones técnicas, plazos no negociables'},{rng:'75–90 min',c:'var(--c-gray)',t:'Cierre y acuerdos',d:'Resumen de lo capturado, pendientes, próximos pasos y firma de participación'}];
+  agenda.forEach(function(s,i){ panel0 += '<div style="display:grid;grid-template-columns:72px 1fr;gap:.6rem;margin-bottom:.35rem;position:relative">'+(i<agenda.length-1?'<div style="position:absolute;left:107px;top:36px;bottom:-4px;width:1px;background:var(--border2)"></div>':'')+'<div style="font-size:11px;font-weight:500;color:var(--muted);text-align:right;padding-top:.45rem;line-height:1.3">'+s.rng+'</div><div style="padding:.5rem .85rem;background:var(--bg);border:0.5px solid var(--border);border-radius:var(--radius)"><div style="font-size:13px;font-weight:500;margin-bottom:.15rem;color:'+s.c+'">'+s.t+'</div><div style="font-size:12px;color:var(--muted);line-height:1.5">'+s.d+'</div></div></div>'; });
+  panel0 += '</div></div>';
+
+  // ── PANEL 1: Minuta editable ─────────────────────────────────────────────
+  var panel1 = '<div class="plt-panel" id="pltP1">';
+  panel1 += '<div class="card">';
+
+  // Datos generales
+  panel1 += '<div style="background:rgba(29,158,117,.06);border:0.5px solid rgba(29,158,117,.25);border-radius:var(--radius);padding:.55rem .8rem;font-size:11px;color:var(--c-teal);margin-bottom:.8rem;display:flex;align-items:center;gap:.5rem"><span>ⓘ</span><span>Los campos con ejemplos son <strong>editables</strong> — modifica, agrega o elimina según tu proyecto real. Los datos se guardan automáticamente.</span></div>';
+  panel1 += '<div class="card-title" style="color:var(--c-teal);margin-bottom:.8rem">● Datos generales de la sesión</div>';
+  panel1 += '<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.7rem;margin-bottom:.8rem">';
+  panel1 += '<div class="eli-field"><label class="eli-label">Proyecto</label><input class="eli-input" id="m-proyecto" value="'+escH(m.proyecto)+'" placeholder="Nombre del proyecto" oninput="eliMsave()"></div>';
+  panel1 += '<div class="eli-field"><label class="eli-label">ID de sesión</label><input class="eli-input" id="m-sesionId" value="'+escH(m.sesionId)+'" placeholder="ELI-001" style="font-family:var(--font-mono)" oninput="eliMsave()"></div>';
+  panel1 += '<div class="eli-field"><label class="eli-label">Fecha</label><input class="eli-input" type="date" id="m-fecha" value="'+escH(m.fecha)+'" oninput="eliMsave()"></div>';
+  panel1 += '<div class="eli-field"><label class="eli-label">Analista responsable</label><input class="eli-input" id="m-analista" value="'+escH(m.analista)+'" placeholder="Nombre del BA" oninput="eliMsave()"></div>';
+  panel1 += '<div class="eli-field"><label class="eli-label">Técnica utilizada</label><select class="eli-input" id="m-tecnica" onchange="eliMsave()"><option>Entrevista estructurada</option><option>Entrevista semi-estructurada</option><option>Taller JAD</option><option>Observación contextual</option><option>Cuestionario</option><option>Análisis documental</option><option>Prototipado</option></select></div>';
+  panel1 += '<div class="eli-field"><label class="eli-label">Lugar / modalidad</label><input class="eli-input" id="m-lugar" value="'+escH(m.lugar)+'" placeholder="Presencial / Virtual" oninput="eliMsave()"></div>';
+  panel1 += '</div>';
+  panel1 += '<div class="eli-field"><label class="eli-label">Objetivo de la sesión</label><textarea class="eli-ta" id="m-objetivo" rows="2" placeholder="Identifica y documenta los requisitos de..." oninput="eliMsave()">'+escH(m.objetivo)+'</textarea></div>';
+
+  // Participantes
+  panel1 += '<div class="card-title" style="margin-top:.8rem;margin-bottom:.5rem">Participantes</div>';
+  panel1 += '<div id="m-partic-list"></div>';
+  panel1 += '<button class="btn btn-sm" style="margin-top:.4rem" onclick="addEliPartic()">+ Participante</button>';
+
+  // RF tabla
+  panel1 += '<div class="card-title" style="margin-top:1rem;margin-bottom:.4rem">Requisitos funcionales (RF)</div>';
+  panel1 += '<div id="m-rf-list"></div>';
+  panel1 += '<button class="btn btn-sm" style="margin-top:.4rem;border-color:rgba(83,52,131,.4);color:var(--c-purple)" data-list="rfs" data-tipo="RF" onclick="addEliReq(this)">+ RF</button>';
+
+  // RNF tabla
+  panel1 += '<div class="card-title" style="margin-top:1rem;margin-bottom:.4rem">Requisitos no funcionales (RNF)</div>';
+  panel1 += '<div id="m-rnf-list"></div>';
+  panel1 += '<button class="btn btn-sm" style="margin-top:.4rem;border-color:rgba(15,110,86,.4);color:var(--c-teal)" data-list="rnfs" data-tipo="RNF" onclick="addEliReq(this)">+ RNF</button>';
+
+  // SA / RC en dos columnas
+  panel1 += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:.8rem;margin-top:1rem">';
+  panel1 += '<div><div class="card-title" style="margin-bottom:.4rem">Supuestos (SA)</div><div id="m-sa-list"></div><button class="btn btn-sm" style="margin-top:.4rem" data-list="sas" data-prefix="SA" onclick="addEliSimple(this)">+ Supuesto</button></div>';
+  panel1 += '<div><div class="card-title" style="margin-bottom:.4rem">Restricciones (RC)</div><div id="m-rc-list"></div><button class="btn btn-sm" style="margin-top:.4rem" data-list="rcs" data-prefix="RC" onclick="addEliSimple(this)">+ Restricción</button></div>';
+  panel1 += '</div>';
+
+  // Pendientes y próximos pasos
+  panel1 += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:.8rem;margin-top:1rem">';
+  panel1 += '<div class="eli-field"><label class="eli-label">Temas pendientes de aclaración</label><textarea class="eli-ta" id="m-pendientes" rows="3" placeholder="Un tema por línea..." oninput="eliMsave()">'+escH(m.pendientes)+'</textarea></div>';
+  panel1 += '<div class="eli-field"><label class="eli-label">Próximos pasos acordados</label><textarea class="eli-ta" id="m-proximos" rows="3" placeholder="Un paso por línea..." oninput="eliMsave()">'+escH(m.proximos)+'</textarea></div>';
+  panel1 += '</div>';
+
+  // Save bar
+  panel1 += '<div class="save-bar">';
+  panel1 += '<button class="btn" style="background:var(--c-teal);color:#fff;border-color:var(--c-teal)" onclick="saveEliMinuta()">Guardar minuta</button>';
+  panel1 += '<button class="btn btn-sm" style="margin-left:.5rem" onclick="eliRestoreEjemplos()">↺ Restaurar ejemplos</button>';
+  panel1 += '<button class="btn btn-sm" style="margin-left:.3rem;color:var(--c-red)" onclick="eliLimpiarMinuta()">✕ Limpiar</button>';
+  panel1 += '<span id="m-saved-msg" style="font-size:11px;color:var(--c-green);margin-left:.5rem"></span></div>';
+  panel1 += '</div></div>';
+
+  // ── PANEL 2: Guía de preguntas ──────────────────────────────────────────
+  var panel2 = '<div class="plt-panel" id="pltP2">';
+  var cats = Object.keys(ELI.preguntas);
+  var catColors = {Apertura:'var(--c-teal)',Profundización:'var(--c-purple)',Validación:'var(--c-blue)',Restricciones:'var(--c-amber)'};
+  panel2 += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">';
+  cats.forEach(function(cat){
+    var color = catColors[cat]||'var(--c-teal)';
+    panel2 += '<div class="card">';
+    panel2 += '<div class="pq-cat-title" style="color:'+color+'">'+cat;
+    panel2 += '<button class="btn btn-sm" onclick="addEliPQ(\''+cat+'\')">+ Pregunta</button></div>';
+    panel2 += '<div id="pq-'+cat.replace(/[^a-z]/gi,'')+'-list"></div>';
+    panel2 += '</div>';
+  });
+  panel2 += '</div>';
+  panel2 += '<div class="save-bar" style="margin-top:.8rem"><button class="btn" style="background:var(--c-blue);color:#fff;border-color:var(--c-blue)" onclick="saveEliPQ()">Guardar preguntas y respuestas</button>';
+  panel2 += '<span id="pq-saved-msg" style="font-size:11px;color:var(--c-green)"></span></div>';
+  panel2 += '</div>';
+
+  el.innerHTML = styles + tabs + panel0 + panel1 + panel2;
+
+  // Render all dynamic lists
+  renderEliPartics();
+  renderEliReqList('rfs');
+  renderEliReqList('rnfs');
+  renderEliSimpleList('sas');
+  renderEliSimpleList('rcs');
+  renderAllPQ();
+
+  // set select value
+  var sel = document.getElementById('m-tecnica');
+  if(sel && m.tecnica) sel.value = m.tecnica;
+}
+
+// ── helper: escape HTML ────────────────────────────────────────────────────
+function escH(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+// ── tab switching ──────────────────────────────────────────────────────────
+function pltTab(i, btn) {
+  document.querySelectorAll('.plt-tab-btn').forEach(function(b,j){ b.classList.toggle('on',j===i); });
+  document.querySelectorAll('.plt-panel').forEach(function(p,j){ p.classList.toggle('on',j===i); });
+}
+
+// ── auto-save minuta fields ────────────────────────────────────────────────
+function eliMsave() {
+  var g = function(id){ var e=document.getElementById(id); return e?e.value:''; };
+  ELI.minuta.proyecto = g('m-proyecto');
+  ELI.minuta.sesionId = g('m-sesionId');
+  ELI.minuta.fecha = g('m-fecha');
+  ELI.minuta.analista = g('m-analista');
+  ELI.minuta.tecnica = g('m-tecnica');
+  ELI.minuta.lugar = g('m-lugar');
+  ELI.minuta.objetivo = g('m-objetivo');
+  ELI.minuta.pendientes = g('m-pendientes');
+  ELI.minuta.proximos = g('m-proximos');
+  eliSave();
+}
+function saveEliMinuta() { eliMsave(); eliSaved('m-saved-msg'); }
+
+// ── participantes ──────────────────────────────────────────────────────────
+function renderEliPartics() {
+  var el = document.getElementById('m-partic-list'); if(!el) return;
+  var partics = ELI.minuta.participantes;
+  el.innerHTML = partics.map(function(p,i){
+    return '<div class="req-row-edit" style="grid-template-columns:1fr 1fr 1fr 120px 28px">'
+      + '<input value="'+escH(p.nombre)+'" placeholder="Nombre completo" oninput="ELI.minuta.participantes['+i+'].nombre=this.value;eliSave()">'
+      + '<input value="'+escH(p.rol)+'" placeholder="Rol en el proyecto" oninput="ELI.minuta.participantes['+i+'].rol=this.value;eliSave()">'
+      + '<input value="'+escH(p.area)+'" placeholder="Área" oninput="ELI.minuta.participantes['+i+'].area=this.value;eliSave()">'
+      + '<select onchange="ELI.minuta.participantes['+i+'].participacion=this.value;eliSave()">'
+      + ['Confirmada','Facilitador','Observador','Ausente'].map(function(o){ return '<option'+(p.participacion===o?' selected':'')+'>'+o+'</option>'; }).join('')
+      + '</select>'
+      + '<button class="del-row-btn" onclick="rmEliPartic('+i+')">×</button>'
+      + '</div>';
+  }).join('');
+}
+function addEliPartic() {
+  ELI.minuta.participantes.push({nombre:'',rol:'',area:'',participacion:'Confirmada'});
+  eliSave(); renderEliPartics();
+}
+function rmEliPartic(i) {
+  ELI.minuta.participantes.splice(i,1); eliSave(); renderEliPartics();
+}
+
+// ── RF / RNF ───────────────────────────────────────────────────────────────
+function renderEliReqList(listKey) {
+  var el = document.getElementById('m-'+listKey+'-list'); if(!el) return;
+  var list = ELI.minuta[listKey] || [];
+  var isRF = listKey==='rfs';
+  var color = isRF ? 'var(--c-purple)' : 'var(--c-teal)';
+  var hdr = '<div style="display:grid;grid-template-columns:70px 1fr 65px 70px 105px 28px;gap:4px;padding:3px 0 5px;font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.3px;border-bottom:0.5px solid var(--border2);margin-bottom:3px"><div>ID</div><div>Descripción</div><div>Tipo</div><div>Prior.</div><div>Estado</div><div></div></div>';
+  var rows = list.length ? list.map(function(r,i){
+    var lk = listKey;
+    return '<div class="req-row-edit" style="grid-template-columns:70px 1fr 65px 70px 105px 28px">'
+      + '<input value="'+escH(r.id)+'" style="font-family:var(--font-mono);color:'+color+';font-size:11px" oninput="ELI.minuta.'+lk+'['+i+'].id=this.value;eliSave()">'
+      + '<input value="'+escH(r.desc)+'" placeholder="Descripción..." oninput="ELI.minuta.'+lk+'['+i+'].desc=this.value;eliSave()">'
+      + '<select onchange="ELI.minuta.'+lk+'['+i+'].tipo=this.value;eliSave()">'+(isRF?['RF','SA','RC']:['RNF','SA','RC']).map(function(o){return'<option'+(r.tipo===o?' selected':'')+'>'+o+'</option>';}).join('')+'</select>'
+      + '<select onchange="ELI.minuta.'+lk+'['+i+'].prioridad=this.value;eliSave()">'+['Must','Should','Could'].map(function(o){return'<option'+(r.prioridad===o?' selected':'')+'>'+o+'</option>';}).join('')+'</select>'
+      + '<select onchange="ELI.minuta.'+lk+'['+i+'].estado=this.value;eliSave()">'+['Borrador','Confirmado','Ambiguo','En revisión','Aprobado','Pendiente'].map(function(o){return'<option'+(r.estado===o?' selected':'')+'>'+o+'</option>';}).join('')+'</select>'
+      + '<button class="del-row-btn" onclick="ELI.minuta.'+lk+'.splice('+i+',1);eliSave();renderEliReqList(\'' + lk + '\')">×</button>'
+      + '</div>';
+  }).join('') : '<div style="font-size:12px;color:var(--muted);font-style:italic;padding:.3rem 0">Sin registros.</div>';
+  el.innerHTML = hdr + rows;
+}
+
+function addEliReq(btn) {
+  var listKey = btn && btn.dataset ? btn.dataset.list : 'rfs';
+  var tipo = btn && btn.dataset ? btn.dataset.tipo : 'RF';
+  if(!listKey) listKey='rfs';
+  if(!tipo) tipo='RF';
+  if(!ELI.minuta[listKey]) ELI.minuta[listKey]=[];
+  var n = ELI.minuta[listKey].length+1;
+  ELI.minuta[listKey].push({id:tipo+'-'+String(n).padStart(3,'0'),desc:'',tipo:tipo,prioridad:'Must',estado:'Borrador'});
+  eliSave(); renderEliReqList(listKey);
+}
+function rmEliReq(listKey, i) {
+  ELI.minuta[listKey].splice(i,1); eliSave(); renderEliReqList(listKey);
+}
+
+// ── SA / RC simple lists ───────────────────────────────────────────────────
+function renderEliSimpleList(listKey) {
+  var el = document.getElementById('m-'+listKey+'-list'); if(!el) return;
+  var list = ELI.minuta[listKey] || [];
+  var color = listKey==='sas' ? 'var(--c-blue)' : 'var(--c-amber)';
+  var lk = listKey;
+  el.innerHTML = list.length ? list.map(function(item,i){
+    return '<div class="req-row-edit" style="grid-template-columns:65px 1fr 28px">'
+      + '<input value="'+escH(item.id)+'" style="font-family:var(--font-mono);color:'+color+';font-size:11px" oninput="ELI.minuta.'+lk+'['+i+'].id=this.value;eliSave()">'
+      + '<input value="'+escH(item.desc)+'" placeholder="Descripción..." oninput="ELI.minuta.'+lk+'['+i+'].desc=this.value;eliSave()">'
+      + '<button class="del-row-btn" onclick="ELI.minuta.'+lk+'.splice('+i+',1);eliSave();renderEliSimpleList(\'' + lk + '\')">×</button>'
+      + '</div>';
+  }).join('') : '<div style="font-size:12px;color:var(--muted);font-style:italic;padding:.3rem 0">Sin registros.</div>';
+}
+
+function addEliSimple(btn) {
+  var listKey = btn && btn.dataset ? btn.dataset.list : 'sas';
+  var prefix = btn && btn.dataset ? btn.dataset.prefix : 'SA';
+  if(!listKey) listKey='sas';
+  if(!prefix) prefix='SA';
+  if(!ELI.minuta[listKey]) ELI.minuta[listKey]=[];
+  var n = ELI.minuta[listKey].length+1;
+  ELI.minuta[listKey].push({id:prefix+'-'+String(n).padStart(3,'0'),desc:''});
+  eliSave(); renderEliSimpleList(listKey);
+}
+function rmEliSimple(listKey, i) {
+  ELI.minuta[listKey].splice(i,1); eliSave(); renderEliSimpleList(listKey);
+}
+
+// ── Guía de preguntas ──────────────────────────────────────────────────────
+function renderPQCat(cat) {
+  var key = cat.replace(/[^a-z]/gi,'');
+  var el = document.getElementById('pq-'+key+'-list'); if(!el) return;
+  var items = ELI.preguntas[cat]||[];
+  var catColors = {Apertura:'var(--c-teal)',Profundización:'var(--c-purple)',Validación:'var(--c-blue)',Restricciones:'var(--c-amber)'};
+  var color = catColors[cat]||'var(--c-teal)';
+  el.innerHTML = items.map(function(item,i){
+    return '<div class="pq-item">'
+      + '<div class="pq-q"><span style="font-size:10px;color:var(--muted);min-width:18px;padding-top:2px">'+(i+1)+'.</span>'
+      + '<input class="pq-edit-inp" value="'+escH(item.q)+'" placeholder="Pregunta..." oninput="ELI.preguntas[\''+cat+'\']['+i+'].q=this.value;eliSave()">'
+      + '<button class="del-row-btn" onclick="delEliPQ(\''+cat+'\','+i+')">×</button></div>'
+      + '<textarea class="pq-resp" rows="2" placeholder="Respuesta / hallazgo de la sesión..." oninput="ELI.preguntas[\''+cat+'\']['+i+'].r=this.value;eliSave()">'+escH(item.r)+'</textarea>'
+      + '</div>';
+  }).join('');
+}
+function renderAllPQ() {
+  Object.keys(ELI.preguntas).forEach(function(cat){ renderPQCat(cat); });
+}
+function addEliPQ(cat) {
+  if(!ELI.preguntas[cat]) ELI.preguntas[cat]=[];
+  ELI.preguntas[cat].push({q:'',r:''});
+  eliSave(); renderPQCat(cat);
+}
+function delEliPQ(cat, i) {
+  ELI.preguntas[cat].splice(i,1); eliSave(); renderPQCat(cat);
+}
+function saveEliPQ() { eliSave(); eliSaved('pq-saved-msg'); }
 /* ════════════════════════════════════════
    PAGE: GAP ANALYSIS
 ════════════════════════════════════════ */
@@ -3730,6 +3980,86 @@ function buildRoadmap() {
     </div>`;
 }
 
+
+/* ════════════════════════════════════════
+   ELI — STORAGE ENGINE (Fase 1 interactiva)
+   Persiste respuestas de técnicas, minuta y preguntas
+════════════════════════════════════════ */
+const ELI_KEY = 'fw_eli_v7';
+function loadELI() {
+  try { return JSON.parse(localStorage.getItem(ELI_KEY)) || defaultELI(); }
+  catch(e) { return defaultELI(); }
+}
+function saveELI() { localStorage.setItem(ELI_KEY, JSON.stringify(ELI)); }
+function defaultELI() {
+  return {
+    tecnicas: {},
+    minuta: {
+      proyecto:'', sesionId:'ELI-001', fecha:'', hora:'', analista:'', tecnica:'Entrevista estructurada',
+      lugar:'', objetivo:'',
+      participantes:[
+        {nombre:'', rol:'Product Owner', area:'Negocio', participacion:'Confirmada'},
+        {nombre:'', rol:'Usuario clave', area:'Operativo', participacion:'Confirmada'},
+        {nombre:'', rol:'Analista BA',   area:'TI / Proyecto', participacion:'Facilitador'},
+      ],
+      rfs:[
+        {id:'RF-001',desc:'Login con SSO corporativo (AD/LDAP)',tipo:'RF',prioridad:'Must',estado:'Confirmado'},
+        {id:'RF-002',desc:'Dashboard con KPIs en tiempo real',tipo:'RF',prioridad:'Must',estado:'Ambiguo'},
+        {id:'RF-003',desc:'Exportar reportes en PDF y Excel',tipo:'RF',prioridad:'Should',estado:'Borrador'},
+      ],
+      rnfs:[
+        {id:'RNF-001',desc:'Tiempo de respuesta menor a 3 segundos bajo 500 usuarios concurrentes',tipo:'RNF',prioridad:'Must',estado:'Borrador'},
+        {id:'RNF-002',desc:'Disponibilidad del sistema 99.5% mensual (excluye mantenimiento)',tipo:'RNF',prioridad:'Should',estado:'Borrador'},
+      ],
+      sas:[
+        {id:'SA-001',desc:'El directorio corporativo soporta integración SSO'},
+        {id:'SA-002',desc:'El proveedor de API estará disponible en Sprint 3'},
+        {id:'SA-003',desc:'Los usuarios finales tienen correo corporativo activo'},
+      ],
+      rcs:[
+        {id:'RC-001',desc:'Presupuesto máximo definido por el sponsor'},
+        {id:'RC-002',desc:'Stack tecnológico aprobado por el área de TI'},
+        {id:'RC-003',desc:'Plazo de entrega MVP: 6 meses desde la firma'},
+      ],
+      pendientes:'RF-002: definir qué KPIs específicos deben mostrarse\nRNF-001: confirmar carga concurrente esperada',
+      proximos:'BA envía borrador de minuta en 24 horas\nPO revisa y confirma lista de KPIs (plazo: 3 días)',
+    },
+    preguntas: {
+      Apertura:      [{q:'¿Cuál es su principal objetivo con este sistema?',r:''},{q:'¿Qué problema estamos resolviendo para usted hoy?',r:''},{q:'¿Cómo describiría el flujo ideal de su trabajo?',r:''}],
+      Profundización:[{q:'¿Puede darme un ejemplo concreto de cuándo eso falla?',r:''},{q:'¿Qué pasaría si no tuviéramos esa funcionalidad?',r:''},{q:'¿Quién más se ve afectado cuando eso ocurre?',r:''}],
+      Validación:    [{q:'Si entiendo bien, usted necesita… ¿es correcto?',r:''},{q:'¿Qué criterio usaría para decir que esto está listo?',r:''},{q:'¿Hay algún escenario que no hayamos considerado?',r:''}],
+      Restricciones: [{q:'¿Existe algún sistema con el que deba integrarse?',r:''},{q:'¿Hay normas o regulaciones que deban cumplirse?',r:''},{q:'¿Cuáles son los plazos no negociables?',r:''}],
+    }
+  };
+}
+let ELI = loadELI();
+function eliSave() { saveELI(); }
+function eliLimpiarMinuta() {
+  if(!confirm('¿Limpiar toda la minuta?')) return;
+  localStorage.removeItem('fw_eli_v7');
+  ELI = loadELI();
+  var m = document.getElementById('eli-plt-mount');
+  if(m){ m.innerHTML=''; initEliPlantillas(); }
+}
+function eliRestoreEjemplos() {
+  if(!confirm('¿Restaurar los datos de ejemplo? Esto reemplazará los datos actuales de la minuta.')) return;
+  var d = defaultELI();
+  ELI.minuta.rfs = d.minuta.rfs;
+  ELI.minuta.rnfs = d.minuta.rnfs;
+  ELI.minuta.sas = d.minuta.sas;
+  ELI.minuta.rcs = d.minuta.rcs;
+  ELI.minuta.participantes = d.minuta.participantes;
+  ELI.minuta.pendientes = d.minuta.pendientes;
+  ELI.minuta.proximos = d.minuta.proximos;
+  eliSave();
+  var mount = document.getElementById('eli-plt-mount');
+  if(mount){ mount.innerHTML=''; initEliPlantillas(); }
+}
+function eliSaved(id) {
+  const el=document.getElementById(id);
+  if(el){el.textContent='✓ Guardado';el.style.color='var(--c-green)';setTimeout(()=>{el.textContent='';},1800);}
+}
+
 /* ════════════════════════════════════════
    APLICACIÓN EN CAMPO — STORAGE ENGINE
    Todo se guarda en localStorage automáticamente
@@ -4425,6 +4755,7 @@ function onPageShow(id) {
   if (id==='principios') setTimeout(initPrincipios, 50);
   if (id==='ana-modelado') setTimeout(initAnaModelado, 50);
   if (id==='eli-tecnicas') setTimeout(initEliTecnicas, 50);
+  if (id==='eli-plantillas') setTimeout(initEliPlantillas, 50);
   if (id==='srs-glosario') initGlosario();
   if (id==='val-log') initDefects();
   if (id==='ccb-cr') setTimeout(initCR, 50);
