@@ -2295,7 +2295,13 @@ function initAnaModelado() {
 </div>
 
 <div class="mod-body2 on" id="amod0">
-  <div style="font-size:11px;color:var(--muted);margin-bottom:.8rem;line-height:1.6">El diagrama de contexto (nivel 0) delimita el sistema y muestra todos sus actores e interfaces externas. Haz clic en cualquier elemento para explorar los flujos.</div>
+  <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;flex-wrap:wrap;margin-bottom:.8rem">
+    <div style="font-size:11px;color:var(--muted);line-height:1.6;flex:1">El diagrama de contexto (nivel 0) delimita el sistema y muestra todos sus actores e interfaces externas. Haz clic en cualquier elemento para explorar los flujos.</div>
+    <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0">
+      <label style="cursor:pointer;display:inline-flex;align-items:center;gap:6px;padding:5px 11px;border-radius:var(--radius);border:0.5px solid rgba(186,117,23,.4);background:rgba(186,117,23,.06);font-size:11px;font-weight:500;color:var(--c-amber)">📎 Adjuntar mi diagrama<input type="file" accept=".pdf,.png,.jpg,.jpeg,.svg,.drawio,.vsdx" style="display:none" onchange="srsCtxAdj(this)"></label>
+      <span id="srs-ctx-adj-lbl" style="font-size:11px;color:var(--c-blue)"></span>
+    </div>
+  </div>
   <svg width="100%" viewBox="0 0 680 380">
     <defs>
       <marker id="arr2m" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
@@ -2367,13 +2373,8 @@ function initAnaModelado() {
 </div>
 
 <div class="mod-body2" id="amod1">
-  <div class="uc-grid2">
-    <div>
-      <div style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:6px">Casos de uso</div>
-      <div class="uc-list2" id="ucList2"></div>
-    </div>
-    <div id="ucDetail2"></div>
-  </div>
+  <div style="background:rgba(83,52,131,.07);border:0.5px solid rgba(83,52,131,.3);border-radius:var(--radius);padding:.5rem .8rem;font-size:11px;color:var(--c-purple);margin-bottom:.8rem">ⓘ Selecciona un caso de uso para editarlo. Usa + para agregar y × para eliminar.</div>
+  <div id="ana-uc-mount"></div>
 </div>
 
 <div class="mod-body2" id="amod2">
@@ -2482,43 +2483,132 @@ function initAnaModelado() {
   };
 }
 
+/* ANA storage ───────────────────────────────────────────────────────────── */
+const ANA_KEY = 'fw_ana_v1';
+function loadANA() { try { return JSON.parse(localStorage.getItem(ANA_KEY)) || defaultANA(); } catch(e){ return defaultANA(); } }
+function saveANA() { localStorage.setItem(ANA_KEY, JSON.stringify(ANA)); }
+function defaultANA() {
+  return {
+    gap: {
+      asIs: ['Cliente llena formulario en papel o Excel','Analista transcribe datos al sistema manualmente','Consulta manual al buró de crédito (1-2 días)','Reunión semanal del comité de aprobación','Notificación por carta física o llamada telefónica'],
+      toBe: ['Cliente completa formulario digital con validación en línea','Datos migrados automáticamente al sistema sin intervención','Score consultado en tiempo real vía API (< 3 seg)','Decisión automática en menos de 2 horas según reglas','Notificación inmediata multicanal: email, SMS y push'],
+      brechas: [
+        {titulo:'Formulario manual → Digital',tipo:'Automatización',impacto:85,reqs:'RF-010: Formulario digital con validación; RNF-003: Disponibilidad 99.9%'},
+        {titulo:'Doble captura → Flujo unificado',tipo:'Eliminación',impacto:90,reqs:'RF-011: Integración formulario-CRM; RNF-004: Latencia < 500ms'},
+        {titulo:'Consulta manual → API tiempo real',tipo:'Integración',impacto:80,reqs:'RF-003: Integración API buró; RNF-005: SLA < 3s'},
+        {titulo:'Reunión semanal → Motor de decisión',tipo:'Optimización',impacto:95,reqs:'RF-004: Motor de reglas configurable; RF-005: Flujo de escalación'},
+      ]
+    },
+    moscow: {
+      must:   [{id:'RF-001',desc:'Login con SSO corporativo (AD/LDAP)'},{id:'RF-002',desc:'Dashboard con KPIs en tiempo real'},{id:'RF-003',desc:'Consulta automática score crediticio vía API'},{id:'RF-004',desc:'Motor de decisión automática con reglas configurables'},{id:'RNF-001',desc:'Rendimiento: P95 < 3s bajo 500 usuarios concurrentes'}],
+      should: [{id:'RF-010',desc:'Notificaciones push multicanal al cliente'},{id:'RF-011',desc:'Filtros avanzados en reportes y dashboard'},{id:'RF-012',desc:'Historial de auditoría completo de decisiones'},{id:'RF-013',desc:'Integración con sistema CRM existente'}],
+      could:  [{id:'RF-020',desc:'Modo oscuro / claro configurable por usuario'},{id:'RF-021',desc:'Análisis predictivo básico de cartera'},{id:'RF-022',desc:'App móvil nativa iOS y Android'}],
+      wont:   [{id:'RF-030',desc:'Integración con redes sociales'},{id:'RF-031',desc:'Motor de IA generativa para decisiones'},{id:'RF-032',desc:'Marketplace de integraciones externas'}],
+    },
+    vxe: [
+      {req:'Login SSO',valor:95,esfuerzo:30},
+      {req:'Dashboard KPIs',valor:92,esfuerzo:65},
+      {req:'Motor de decisión',valor:90,esfuerzo:75},
+      {req:'Exportar PDF',valor:80,esfuerzo:25},
+      {req:'Notificaciones push',valor:72,esfuerzo:40},
+      {req:'Integración CRM',valor:85,esfuerzo:80},
+      {req:'Tema oscuro',valor:35,esfuerzo:20},
+      {req:'Motor IA generativa',valor:45,esfuerzo:90},
+    ]
+  };
+}
+let ANA = loadANA();
+function anaSave() { saveANA(); }
+function anaSaved(id){ var e=document.getElementById(id); if(e){e.textContent='✓ Guardado';setTimeout(function(){e.textContent='';},1800);} }
+function anaRestoreGAP(){ if(!confirm('¿Restaurar ejemplos del GAP?')) return; var d=defaultANA(); ANA.gap=d.gap; anaSave(); var m=document.getElementById('ana-gap-mount'); if(m){m.innerHTML=''; initAnaGap();} }
+function anaRestoreMoscow(){ if(!confirm('¿Restaurar ejemplos de MoSCoW?')) return; var d=defaultANA(); ANA.moscow=d.moscow; anaSave(); var m=document.getElementById('ana-mos-mount'); if(m){m.innerHTML=''; initAnaMoscow();} }
+function anaRestoreVxE(){ if(!confirm('¿Restaurar ejemplos de Valor vs. Esfuerzo?')) return; var d=defaultANA(); ANA.vxe=d.vxe; anaSave(); var m=document.getElementById('ana-vxe-mount'); if(m){m.innerHTML=''; initAnaVxE();} }
+
+/* ════════════════════════════════════════
+   PAGE: GAP ANALYSIS
+════════════════════════════════════════ */
 reg('ana-gap', () => `
 <div class="page-header">
   <div class="page-eyebrow" style="color:var(--c-purple)">● Fase 2 — Análisis</div>
   <h1 class="page-title">GAP Analysis — As-Is vs. To-Be</h1>
-  <p class="page-desc">Mapa de brechas entre el proceso actual y el proceso futuro. Cada brecha genera uno o más requisitos documentados.</p>
+  <p class="page-desc">Mapa de brechas entre el proceso actual y el proceso futuro. Cada brecha genera uno o más requisitos documentados. Los campos son editables.</p>
   <div class="std-row"><span class="std-pill">ISO 19510 (BPMN 2.0)</span><span class="std-pill">BABOK v3</span></div>
 </div>
-
-<div class="g2" style="margin-bottom:1rem">
-  <div class="card" style="border-left:3px solid var(--c-red)">
-    <div class="card-title" style="color:var(--c-red)">Proceso actual (As-Is)</div>
-    ${['Cliente llena formulario en papel','Analista transcribe al sistema manualmente','Consulta manual al buró de crédito','Reunión semanal del comité de aprobación','Notificación por carta física'].map((s,i) => `<div class="dot-item"><div class="dot" style="background:var(--c-red)"></div><div>${s}</div></div>`).join('')}
-  </div>
-  <div class="card" style="border-left:3px solid var(--c-green)">
-    <div class="card-title" style="color:var(--c-green)">Proceso futuro (To-Be)</div>
-    ${['Cliente completa formulario digital con validación','Datos migrados automáticamente al sistema','Score consultado en tiempo real vía API','Decisión automática en < 2 horas','Notificación inmediata multicanal'].map((s,i) => `<div class="dot-item"><div class="dot" style="background:var(--c-green)"></div><div>${s}</div></div>`).join('')}
-  </div>
-</div>
-
-<div class="card-title" style="margin-bottom:.6rem">Brechas identificadas y requisitos generados</div>
-${[
-  {t:'Formulario manual → Digital',tipo:'Automatización',imp:85,req:['RF-010: Formulario digital con validación','RNF-003: Disponibilidad 99.9%']},
-  {t:'Doble captura → Flujo unificado',tipo:'Eliminación',imp:90,req:['RF-011: Integración formulario-CRM','RNF-004: Latencia < 500ms']},
-  {t:'Consulta manual → API tiempo real',tipo:'Integración',imp:80,req:['RF-003: Integración API buró','RNF-005: SLA < 3s']},
-  {t:'Reunión semanal → Motor decisión',tipo:'Optimización',imp:95,req:['RF-004: Motor de reglas configurable','RF-005: Flujo de escalación']},
-].map(g => `
-<div class="card-sm" style="margin-bottom:.5rem">
-  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.5rem;flex-wrap:wrap;gap:.4rem">
-    <div style="font-size:13px;font-weight:500;font-family:var(--font-serif)">${g.t}</div>
-    <div style="display:flex;align-items:center;gap:.6rem">
-      <span class="badge b-func">${g.tipo}</span>
-      <span style="font-size:11px;font-weight:500;color:var(--c-green)">Impacto ${g.imp}%</span>
-    </div>
-  </div>
-  <div style="display:flex;flex-wrap:wrap;gap:4px">${g.req.map(r => `<span style="font-size:10px;font-family:var(--font-mono);padding:2px 7px;border-radius:4px;background:var(--c-blue-l);color:var(--c-blue-d)">${r}</span>`).join('')}</div>
-</div>`).join('')}
+<div id="ana-gap-mount"></div>
 `);
+
+function initAnaGap(){
+  var el=document.getElementById('ana-gap-mount'); if(!el||el.innerHTML.trim()) return;
+  renderAnaGap();
+}
+function renderAnaGap(){
+  var el=document.getElementById('ana-gap-mount'); if(!el) return;
+  var g=ANA.gap;
+  var css='<style>'
+    +'.gline{display:flex;align-items:flex-start;gap:6px;padding:5px 0;border-bottom:0.5px solid var(--border)}'
+    +'.gline:last-child{border-bottom:none}'
+    +'.ginp{flex:1;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:5px 8px;font-size:12px;color:var(--text);font-family:var(--font-sans);outline:none}'
+    +'.ginp:focus{border-color:var(--c-purple)}'
+    +'.gbdel{background:none;border:none;cursor:pointer;color:var(--muted);font-size:16px;padding:0 2px;line-height:1}'
+    +'.gbdel:hover{color:var(--c-red)}'
+    +'.brow{display:grid;grid-template-columns:1fr 110px 70px 1fr 28px;gap:5px;align-items:center;padding:6px 0;border-bottom:0.5px solid var(--border)}'
+    +'.brow:last-child{border-bottom:none}'
+    +'.brow input,.brow select{background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:4px 7px;font-size:12px;color:var(--text);font-family:var(--font-sans);outline:none}'
+    +'.brow input:focus,.brow select:focus{border-color:var(--c-purple)}'
+    +'</style>';
+
+  function escH(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
+  // As-Is list
+  var asIs='<div class="card" style="border-left:3px solid var(--c-red);margin-bottom:1rem">'
+    +'<div class="card-title" style="color:var(--c-red);margin-bottom:.5rem">Proceso actual (As-Is)</div>'
+    +g.asIs.map(function(s,i){
+      return '<div class="gline"><div style="width:5px;height:5px;border-radius:50%;background:var(--c-red);flex-shrink:0;margin-top:7px"></div>'
+        +'<input class="ginp" value="'+escH(s)+'" oninput="ANA.gap.asIs['+i+']=this.value;anaSave()">'
+        +'<button class="gbdel" onclick="ANA.gap.asIs.splice('+i+',1);anaSave();renderAnaGap()">×</button></div>';
+    }).join('')
+    +'<button class="btn btn-sm" style="margin-top:.5rem" onclick="ANA.gap.asIs.push(\'\');anaSave();renderAnaGap()">+ Paso As-Is</button>'
+    +'</div>';
+
+  // To-Be list
+  var toBe='<div class="card" style="border-left:3px solid var(--c-green);margin-bottom:1rem">'
+    +'<div class="card-title" style="color:var(--c-green);margin-bottom:.5rem">Proceso futuro (To-Be)</div>'
+    +g.toBe.map(function(s,i){
+      return '<div class="gline"><div style="width:5px;height:5px;border-radius:50%;background:var(--c-green);flex-shrink:0;margin-top:7px"></div>'
+        +'<input class="ginp" value="'+escH(s)+'" oninput="ANA.gap.toBe['+i+']=this.value;anaSave()">'
+        +'<button class="gbdel" onclick="ANA.gap.toBe.splice('+i+',1);anaSave();renderAnaGap()">×</button></div>';
+    }).join('')
+    +'<button class="btn btn-sm" style="margin-top:.5rem" onclick="ANA.gap.toBe.push(\'\');anaSave();renderAnaGap()">+ Paso To-Be</button>'
+    +'</div>';
+
+  // Brechas table
+  var tipos=['Automatización','Eliminación','Integración','Optimización','Simplificación','Nuevo proceso'];
+  var hdr='<div style="display:grid;grid-template-columns:1fr 110px 70px 1fr 28px;gap:5px;font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.3px;border-bottom:0.5px solid var(--border2);padding-bottom:4px;margin-bottom:3px">'
+    +'<span>Brecha</span><span>Tipo</span><span>Impacto</span><span>Requisitos generados</span><span></span></div>';
+  var brechas='<div class="card" style="margin-bottom:.8rem">'
+    +'<div class="card-title" style="margin-bottom:.5rem">Brechas identificadas y requisitos generados</div>'
+    +hdr
+    +g.brechas.map(function(b,i){
+      return '<div class="brow">'
+        +'<input value="'+escH(b.titulo)+'" placeholder="Descripción de la brecha..." oninput="ANA.gap.brechas['+i+'].titulo=this.value;anaSave()">'
+        +'<select onchange="ANA.gap.brechas['+i+'].tipo=this.value;anaSave()">'+tipos.map(function(t){return'<option'+(b.tipo===t?' selected':'')+'>'+t+'</option>';}).join('')+'</select>'
+        +'<input type="number" min="0" max="100" value="'+escH(String(b.impacto))+'" oninput="ANA.gap.brechas['+i+'].impacto=parseInt(this.value)||0;anaSave()" style="text-align:center">'
+        +'<input value="'+escH(b.reqs)+'" placeholder="RF-001, RNF-001..." oninput="ANA.gap.brechas['+i+'].reqs=this.value;anaSave()">'
+        +'<button class="gbdel" onclick="ANA.gap.brechas.splice('+i+',1);anaSave();renderAnaGap()">×</button>'
+        +'</div>';
+    }).join('')
+    +'<button class="btn btn-sm" style="margin-top:.6rem" onclick="ANA.gap.brechas.push({titulo:\'\',tipo:\'Automatización\',impacto:0,reqs:\'\'});anaSave();renderAnaGap()">+ Brecha</button>'
+    +'</div>';
+
+  var bar='<div style="display:flex;align-items:center;gap:.5rem;margin-top:.5rem">'
+    +'<button class="btn" style="background:var(--c-purple);color:#fff;border-color:var(--c-purple)" onclick="anaSave();anaSaved(\'gap-msg\')">Guardar GAP</button>'
+    +'<button class="btn btn-sm" onclick="anaRestoreGAP()">↺ Restaurar ejemplos</button>'
+    +'<span id="gap-msg" style="font-size:11px;color:var(--c-green)"></span></div>';
+
+  var tip='<div style="background:rgba(83,52,131,.07);border:0.5px solid rgba(83,52,131,.3);border-radius:var(--radius);padding:.5rem .8rem;font-size:11px;color:var(--c-purple);margin-bottom:1rem">ⓘ Todos los campos son editables. Modifica los ejemplos según el proceso real de tu proyecto.</div>';
+
+  el.innerHTML = css+tip+'<div class="g2" style="margin-bottom:.8rem">'+asIs+toBe+'</div>'+brechas+bar;
+}
 
 /* ════════════════════════════════════════
    PAGE: PRIORIZACIÓN
@@ -2527,55 +2617,38 @@ reg('ana-priorizacion', () => `
 <div class="page-header">
   <div class="page-eyebrow" style="color:var(--c-purple)">● Fase 2 — Análisis</div>
   <h1 class="page-title">Priorización de requisitos</h1>
-  <p class="page-desc">Tres técnicas formales y complementarias para ordenar los requisitos por valor de negocio, satisfacción del usuario e impacto vs. esfuerzo.</p>
+  <p class="page-desc">Técnicas formales para ordenar requisitos. Los ejemplos son editables — agrega, modifica o elimina según tu proyecto real.</p>
   <div class="std-row"><span class="std-pill">BABOK v3</span><span class="std-pill">IEEE 29148:2018</span></div>
 </div>
 
 <div class="tab-nav">
   <button class="tab-btn on" onclick="tabSel('prio',0,this)">MoSCoW</button>
   <button class="tab-btn" onclick="tabSel('prio',1,this)">Modelo de Kano</button>
-  <button class="tab-btn" onclick="tabSel('prio',2,this)">Valor vs. esfuerzo</button>
+  <button class="tab-btn" onclick="tabSel('prio',2,this)">Valor vs. Esfuerzo</button>
 </div>
 
 <div class="tab-panel on" id="prio-0">
-  <div class="g4" style="margin-bottom:1rem">
-    ${[{n:8,l:'Must have',c:'var(--c-red)'},{n:5,l:'Should have',c:'var(--c-amber)'},{n:4,l:'Could have',c:'var(--c-blue)'},{n:3,l:"Won't have",c:'var(--c-gray)'}].map(k => `<div class="kpi"><div class="kpi-num" style="color:${k.c}">${k.n}</div><div class="kpi-label">${k.l}</div></div>`).join('')}
-  </div>
-  <div class="card" style="margin-bottom:.8rem;font-size:12px;color:var(--muted);line-height:1.7;border-left:3px solid var(--c-purple)">
-    MoSCoW es una técnica de priorización colaborativa que clasifica los requisitos en cuatro categorías. Fue propuesta por Dai Clegg (1994) y es ampliamente adoptada en métodos ágiles y en el estándar BABOK v3. La clave no está en la categoría asignada, sino en el proceso de negociación con el PO para llegar al consenso.
-  </div>
-  <div class="g2">
-    ${[
-      {t:'Must have',color:'var(--c-red)',bg:'rgba(163,45,45,.05)',bc:'rgba(163,45,45,.2)',def:'Sin esto el sistema no funciona. No negociable para el MVP. Si cualquier Must falla, el lanzamiento falla.',reqs:['RF-001 · Login con SSO corporativo','RF-002 · Dashboard con KPIs','RF-003 · Consulta automática score','RNF-001 · Rendimiento P95 < 3s','RF-004 · Motor de decisión']},
-      {t:'Should have',color:'var(--c-amber)',bg:'rgba(186,117,23,.05)',bc:'rgba(186,117,23,.2)',def:'Importante pero no crítico para el lanzamiento. Se incluye si hay capacidad disponible en el sprint.',reqs:['RF-010 · Notificaciones push','RF-011 · Filtros avanzados en reportes','RF-012 · Historial de auditoría completo','RF-013 · Integración con sistema CRM']},
-      {t:'Could have',color:'var(--c-blue)',bg:'rgba(24,95,165,.04)',bc:'rgba(24,95,165,.18)',def:'Deseable. Diferible a fase 2 sin impacto crítico. Solo si no afecta el alcance ni el presupuesto.',reqs:['RF-020 · Tema oscuro / claro','RF-021 · Análisis predictivo básico','RF-022 · App móvil nativa iOS/Android']},
-      {t:"Won\'t have (esta versión)",color:'var(--c-gray)',bg:'var(--surface)',bc:'var(--border)',def:'Excluido del alcance actual. Documentado formalmente para futuras versiones. Evita el scope creep.',reqs:["RF-030 · Integración con redes sociales","RF-031 · Motor de IA generativa","RF-032 · Marketplace de integraciones"]},
-    ].map(m => `
-    <div style="border-radius:var(--radius-lg);padding:1rem;border:0.5px solid ${m.bc};background:${m.bg}">
-      <div style="font-size:13px;font-weight:500;color:${m.color};margin-bottom:.3rem;font-family:var(--font-serif)">${m.t}</div>
-      <div style="font-size:11px;color:var(--muted);margin-bottom:.6rem;line-height:1.5">${m.def}</div>
-      ${m.reqs.map(r => `<div style="display:flex;gap:.5rem;padding:3px 0;border-bottom:0.5px solid var(--border);font-size:11px"><div style="width:5px;height:5px;border-radius:50%;background:${m.color};flex-shrink:0;margin-top:4px"></div><span style="font-family:var(--font-mono)">${r}</span></div>`).join('')}
-    </div>`).join('')}
-  </div>
+  <div id="ana-mos-mount"></div>
 </div>
 
 <div class="tab-panel" id="prio-1">
   <div class="card" style="margin-bottom:.8rem;font-size:12px;color:var(--muted);line-height:1.7;border-left:3px solid var(--c-purple)">
     El modelo de Kano (Noriaki Kano, 1984) clasifica los atributos del producto según su impacto en la satisfacción del usuario. A diferencia de MoSCoW que ordena por urgencia, Kano ordena por tipo de valor percibido. Se aplica con encuestas funcionales/disfuncionales antes de la especificación.
   </div>
+  <div id="ana-kano-mount"></div>
   <div class="g3" style="margin-bottom:1rem">
     ${[
       {t:'Básicos (Must-be)',color:'var(--c-red)',bg:'rgba(163,45,45,.05)',bc:'rgba(163,45,45,.2)',
-       desc:'Si no están presentes el usuario queda insatisfecho. Su presencia no genera satisfacción extra — simplemente se esperan. Son el piso mínimo del producto.',
+       desc:'Si no están presentes el usuario queda insatisfecho. Su presencia no genera satisfacción extra — simplemente se esperan.',
        ej:['Login seguro y confiable','No perder datos del formulario','Disponibilidad del sistema 99%'],
        pregF:'¿Cómo se sentiría si el sistema tuviera [función]?',pregD:'¿Cómo se sentiría si el sistema NO tuviera [función]?'},
       {t:'Desempeño (One-dimensional)',color:'var(--c-blue)',bg:'rgba(24,95,165,.04)',bc:'rgba(24,95,165,.18)',
-       desc:'A más de esta funcionalidad, más satisfacción. Relación lineal y directa. Son los requisitos negociables en alcance y los que los usuarios piden explícitamente.',
+       desc:'A más de esta funcionalidad, más satisfacción. Relación lineal y directa. Son los que los usuarios piden explícitamente.',
        ej:['Velocidad de carga del dashboard','Cantidad de filtros en reportes','Formatos de exportación disponibles'],
        pregF:'¿Cómo se sentiría si el sistema fuera más rápido?',pregD:'¿Cómo se sentiría si el sistema fuera más lento?'},
       {t:'Atractivos (Delighters)',color:'var(--c-green)',bg:'rgba(15,110,86,.04)',bc:'rgba(15,110,86,.2)',
-       desc:'El usuario no los espera, pero cuando los descubre generan alta satisfacción y diferenciación. Su ausencia no genera insatisfacción. Son la fuente de ventaja competitiva.',
-       ej:['Sugerencias inteligentes de decisión','Personalización automática del dashboard','Modo offline con sincronización posterior'],
+       desc:'El usuario no los espera, pero cuando los descubre generan alta satisfacción. Su ausencia no genera insatisfacción.',
+       ej:['Sugerencias inteligentes de decisión','Dashboard personalizado automáticamente','Modo offline con sincronización posterior'],
        pregF:'¿Cómo se sentiría si el sistema sugiriera acciones proactivas?',pregD:'¿Cómo se sentiría si el sistema no lo hiciera?'},
     ].map(k => `
     <div style="border-radius:var(--radius-lg);padding:1rem;border:0.5px solid ${k.bc};background:${k.bg}">
@@ -2584,75 +2657,126 @@ reg('ana-priorizacion', () => `
       <div class="card-title">Ejemplos</div>
       ${k.ej.map(e => `<div style="display:flex;gap:.5rem;padding:3px 0;font-size:11px;border-bottom:0.5px solid var(--border)"><div style="width:5px;height:5px;border-radius:50%;background:${k.color};flex-shrink:0;margin-top:4px"></div>${e}</div>`).join('')}
       <div style="margin-top:.7rem;background:var(--surface);border-radius:var(--radius);padding:.55rem .7rem">
-        <div style="font-size:10px;font-weight:500;color:${k.color};text-transform:uppercase;letter-spacing:.3px;margin-bottom:.3rem">Pregunta funcional</div>
+        <div style="font-size:10px;font-weight:500;color:${k.color};text-transform:uppercase;margin-bottom:.3rem">Pregunta funcional</div>
         <div style="font-size:11px;color:var(--muted)">${k.pregF}</div>
-        <div style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.3px;margin-top:.4rem;margin-bottom:.3rem">Pregunta disfuncional</div>
+        <div style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;margin-top:.4rem;margin-bottom:.3rem">Pregunta disfuncional</div>
         <div style="font-size:11px;color:var(--muted)">${k.pregD}</div>
       </div>
     </div>`).join('')}
   </div>
-  <div class="card" style="font-size:12px;color:var(--muted)">
-    <div class="card-title">Escala de respuestas Kano</div>
-    <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:.4rem">
-      ${[['Me gusta','b-ok'],['Lo espero','b-func'],['Indiferente',''],['Lo acepto','b-warn'],['Me disgusta','b-err']].map(r => `<span class="badge ${r[1]}">${r[0]}</span>`).join('')}
-    </div>
-    <div style="margin-top:.6rem;line-height:1.6">La combinación de respuestas funcional + disfuncional determina la categoría. Si "me gusta que esté" y "me disgusta que no esté" → Desempeño. Si "me gusta que esté" pero "indiferente si no está" → Atractivo. Si "indiferente que esté" pero "me disgusta que no esté" → Básico.</div>
-  </div>
 </div>
-
 <div class="tab-panel" id="prio-2">
-  <div class="card" style="margin-bottom:.8rem;font-size:12px;color:var(--muted);line-height:1.7;border-left:3px solid var(--c-blue)">
-    La matriz de valor vs. esfuerzo posiciona cada requisito según el valor de negocio que entrega y el esfuerzo de implementación que requiere. Es la herramienta de decisión más directa para el sprint planning y complementa a MoSCoW con una dimensión técnica.
-  </div>
-  <div class="g2" style="margin-bottom:1rem">
-    ${[
-      {t:'Quick wins — Prioridad 1',color:'var(--c-green)',bg:'rgba(15,110,86,.05)',bc:'rgba(15,110,86,.2)',valor:'Alto',esfuerzo:'Bajo',desc:'Implementar primero. Generan credibilidad inmediata con stakeholders y valor visible desde el Sprint 1.',reqs:['Login SSO — alto valor, bajo esfuerzo técnico','Exportar PDF — funcionalidad esperada, código simple','Notificaciones push — alto impacto usuario, API disponible']},
-      {t:'Proyectos estratégicos — Prioridad 2',color:'var(--c-blue)',bg:'rgba(24,95,165,.04)',bc:'rgba(24,95,165,.18)',valor:'Alto',esfuerzo:'Alto',desc:'Planificar con cuidado. Imprescindibles a largo plazo pero requieren arquitectura y sprints dedicados.',reqs:['Dashboard KPIs — alto valor, integración compleja','Integración CRM — crítico, múltiples dependencias','Motor de decisión — core del negocio, lógica compleja']},
-      {t:'Fill-ins — Prioridad 3',color:'var(--c-amber)',bg:'rgba(186,117,23,.05)',bc:'rgba(186,117,23,.2)',valor:'Bajo',esfuerzo:'Bajo',desc:'Hacer si hay capacidad disponible. No bloquear otros elementos. Útiles para completar sprints cortos.',reqs:['Tema oscuro/claro — valor medio, esfuerzo mínimo','Tooltips de ayuda — UX menor, implementación simple']},
-      {t:'Evitar — Desconsiderar',color:'var(--c-red)',bg:'rgba(163,45,45,.05)',bc:'rgba(163,45,45,.2)',valor:'Bajo',esfuerzo:'Alto',desc:'Documentar como Won\'t Have. Reevaluar en futuras versiones. No justifica el costo de oportunidad.',reqs:['Motor de IA generativa — valor incierto, altísimo esfuerzo','Marketplace de integraciones — prematuro para v1.0']},
-    ].map(q => `
-    <div style="border-radius:var(--radius-lg);padding:1rem;border:0.5px solid ${q.bc};background:${q.bg}">
-      <div style="font-size:13px;font-weight:500;color:${q.color};margin-bottom:.2rem;font-family:var(--font-serif)">${q.t}</div>
-      <div style="display:flex;gap:6px;margin-bottom:.4rem">
-        <span class="badge" style="background:${q.bg};color:${q.color}">Valor: ${q.valor}</span>
-        <span class="badge" style="background:${q.bg};color:${q.color}">Esfuerzo: ${q.esfuerzo}</span>
-      </div>
-      <div style="font-size:11px;color:var(--muted);margin-bottom:.6rem;line-height:1.5">${q.desc}</div>
-      ${q.reqs.map(r => `<div style="display:flex;gap:.5rem;padding:3px 0;font-size:11px;border-bottom:0.5px solid var(--border)"><div style="width:5px;height:5px;border-radius:50%;background:${q.color};flex-shrink:0;margin-top:4px"></div>${r}</div>`).join('')}
-    </div>`).join('')}
-  </div>
-
-  <div class="card">
-    <div class="card-title">Tabla de posicionamiento</div>
-    <div class="table-wrap" style="margin-top:.5rem">
-      <table class="data-table">
-        <thead><tr><th>Requisito</th><th>Valor negocio</th><th>Esfuerzo</th><th>Cuadrante</th><th>Prioridad</th></tr></thead>
-        <tbody>
-          ${[
-            {n:'Login SSO',v:95,e:30,q:'Quick win',p:'P1',qc:'b-ok'},
-            {n:'Dashboard KPIs',v:92,e:65,q:'Estratégico',p:'P2',qc:'b-func'},
-            {n:'Motor decisión',v:90,e:75,q:'Estratégico',p:'P2',qc:'b-func'},
-            {n:'Exportar PDF',v:80,e:25,q:'Quick win',p:'P1',qc:'b-ok'},
-            {n:'Notificaciones push',v:72,e:40,q:'Quick win',p:'P1',qc:'b-ok'},
-            {n:'Integración CRM',v:85,e:80,q:'Estratégico',p:'P2',qc:'b-func'},
-            {n:'Tema oscuro',v:35,e:20,q:'Fill-in',p:'P3',qc:'b-warn'},
-            {n:'Motor IA',v:45,e:90,q:'Evitar',p:'—',qc:'b-err'},
-          ].map(r => `<tr>
-            <td style="font-weight:500">${r.n}</td>
-            <td><div style="display:flex;align-items:center;gap:6px"><div style="flex:1;height:6px;background:var(--surface2);border-radius:3px;overflow:hidden"><div style="height:100%;width:${r.v}%;background:${r.v>=75?'var(--c-green)':r.v>=55?'var(--c-blue)':'var(--c-amber)'};border-radius:3px"></div></div><span style="font-size:11px;min-width:28px">${r.v}%</span></div></td>
-            <td style="font-size:12px">${r.e}%</td>
-            <td><span class="badge ${r.qc}">${r.q}</span></td>
-            <td style="font-weight:500">${r.p}</td>
-          </tr>`).join('')}
-        </tbody>
-      </table>
-    </div>
-  </div>
+  <div id="ana-vxe-mount"></div>
 </div>
 `);
-/* ════════════════════════════════════════
-   PAGE: SRS EDITOR
-════════════════════════════════════════ */
+
+/* ── MoSCoW editable ── */
+function initAnaMoscow(){
+  var el=document.getElementById('ana-mos-mount'); if(!el||el.innerHTML.trim()) return;
+  renderAnaMoscow();
+}
+function renderAnaMoscow(){
+  var el=document.getElementById('ana-mos-mount'); if(!el) return;
+  var m=ANA.moscow;
+  function escH(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
+  var cats=[
+    {key:'must',  label:'Must have',           color:'var(--c-red)',   bg:'rgba(163,45,45,.05)',  bc:'rgba(163,45,45,.2)',  def:'Sin esto el sistema no funciona. No negociable para el MVP.'},
+    {key:'should',label:'Should have',          color:'var(--c-amber)', bg:'rgba(186,117,23,.05)', bc:'rgba(186,117,23,.2)', def:'Importante pero no crítico para el lanzamiento. Se incluye si hay capacidad.'},
+    {key:'could', label:'Could have',           color:'var(--c-blue)',  bg:'rgba(24,95,165,.04)',  bc:'rgba(24,95,165,.18)', def:'Deseable. Diferible a fase 2 sin impacto crítico.'},
+    {key:'wont',  label:"Won't have (esta v.)", color:'var(--c-gray)',  bg:'var(--surface)',       bc:'var(--border)',       def:'Excluido del alcance actual. Documentado para futuras versiones.'},
+  ];
+
+  // KPI row
+  var kpis='<div class="g4" style="margin-bottom:1rem">'
+    +cats.map(function(c){ return '<div class="kpi"><div class="kpi-num" style="color:'+c.color+';font-size:20px">'+m[c.key].length+'</div><div class="kpi-label">'+c.label+'</div></div>'; }).join('')
+    +'</div>';
+
+  var grid='<div class="g2">'
+    +cats.map(function(cat){
+      var list=m[cat.key];
+      var rows=list.map(function(r,i){
+        var k=cat.key;
+        return '<div style="display:flex;align-items:center;gap:5px;padding:4px 0;border-bottom:0.5px solid var(--border)">'
+          +'<input value="'+escH(r.id)+'" style="width:80px;flex-shrink:0;font-family:var(--font-mono);color:'+cat.color+';font-size:11px;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 6px;outline:none" oninput="ANA.moscow.'+k+'['+i+'].id=this.value;anaSave()">'
+          +'<input value="'+escH(r.desc)+'" style="flex:1;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 6px;font-size:12px;color:var(--text);font-family:var(--font-sans);outline:none" placeholder="Descripción..." oninput="ANA.moscow.'+k+'['+i+'].desc=this.value;anaSave()">'
+          +'<button style="background:none;border:none;cursor:pointer;color:var(--muted);font-size:15px;padding:0 2px;flex-shrink:0" onmouseover="this.style.color=\'var(--c-red)\'" onmouseout="this.style.color=\'var(--muted)\'" onclick="ANA.moscow.'+k+'.splice('+i+',1);anaSave();renderAnaMoscow()">×</button>'
+          +'</div>';
+      }).join('');
+      return '<div style="border-radius:var(--radius-lg);padding:1rem;border:0.5px solid '+cat.bc+';background:'+cat.bg+'">'
+        +'<div style="font-size:13px;font-weight:500;color:'+cat.color+';margin-bottom:.25rem;font-family:var(--font-serif)">'+cat.label+'</div>'
+        +'<div style="font-size:11px;color:var(--muted);margin-bottom:.6rem;line-height:1.5">'+cat.def+'</div>'
+        +rows
+        +'<button class="btn btn-sm" style="margin-top:.5rem;color:'+cat.color+';border-color:'+cat.color+'14" onclick="ANA.moscow.'+cat.key+'.push({id:\'ID-000\',desc:\'\'});anaSave();renderAnaMoscow()">+ Requisito</button>'
+        +'</div>';
+    }).join('')
+    +'</div>';
+
+  var bar='<div style="display:flex;align-items:center;gap:.5rem;margin-top:.8rem">'
+    +'<button class="btn" style="background:var(--c-purple);color:#fff;border-color:var(--c-purple)" onclick="anaSave();anaSaved(\'mos-msg\')">Guardar MoSCoW</button>'
+    +'<button class="btn btn-sm" onclick="anaRestoreMoscow()">↺ Restaurar ejemplos</button>'
+    +'<span id="mos-msg" style="font-size:11px;color:var(--c-green)"></span></div>';
+
+  var tip='<div style="background:rgba(83,52,131,.07);border:0.5px solid rgba(83,52,131,.3);border-radius:var(--radius);padding:.5rem .8rem;font-size:11px;color:var(--c-purple);margin-bottom:1rem">ⓘ Edita ID y descripción de cada requisito. Usa + para agregar y × para eliminar. Los cambios se guardan automáticamente.</div>';
+
+  el.innerHTML = tip+kpis+grid+bar;
+}
+
+/* ── Valor vs. Esfuerzo editable ── */
+function initAnaVxE(){
+  var el=document.getElementById('ana-vxe-mount'); if(!el||el.innerHTML.trim()) return;
+  renderAnaVxE();
+}
+function renderAnaVxE(){
+  var el=document.getElementById('ana-vxe-mount'); if(!el) return;
+  var list=ANA.vxe;
+  function escH(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
+  var tip='<div style="background:rgba(24,95,165,.06);border:0.5px solid rgba(24,95,165,.25);border-radius:var(--radius);padding:.5rem .8rem;font-size:11px;color:var(--c-blue);margin-bottom:1rem">ⓘ Edita el nombre, valor de negocio (0-100) y esfuerzo (0-100) de cada requisito. El cuadrante se calcula automáticamente.</div>';
+
+  var cuad=function(v,e){ if(v>=60&&e<60) return {q:'Quick win',c:'var(--c-green)',p:'P1'}; if(v>=60&&e>=60) return {q:'Estratégico',c:'var(--c-blue)',p:'P2'}; if(v<60&&e<60) return {q:'Fill-in',c:'var(--c-amber)',p:'P3'}; return {q:'Evitar',c:'var(--c-red)',p:'—'}; };
+
+  var hdr='<div style="display:grid;grid-template-columns:1fr 140px 140px 110px 50px 24px;gap:8px;font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.3px;border-bottom:0.5px solid var(--border2);padding-bottom:4px;margin-bottom:3px">'
+    +'<span>Requisito</span><span>Valor negocio</span><span>Esfuerzo</span><span>Cuadrante</span><span>Prior.</span><span></span></div>';
+
+  var rows=list.map(function(r,i){
+    var c=cuad(r.valor,r.esfuerzo);
+    return '<div style="display:grid;grid-template-columns:1fr 140px 140px 110px 50px 24px;gap:8px;align-items:center;padding:6px 0;border-bottom:0.5px solid var(--border)">'
+      +'<input value="'+escH(r.req)+'" style="background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:4px 7px;font-size:12px;color:var(--text);font-family:var(--font-sans);outline:none;width:100%" oninput="ANA.vxe['+i+'].req=this.value;anaSave()">'
+      +'<div style="display:flex;flex-direction:column;gap:2px">'
+        +'<input type="range" min="0" max="100" value="'+r.valor+'" style="width:100%;height:4px;accent-color:var(--c-green)" oninput="ANA.vxe['+i+'].valor=parseInt(this.value);anaSave();renderAnaVxE()">'
+        +'<span style="font-size:11px;font-weight:500;color:var(--c-green);text-align:center">'+r.valor+'%</span></div>'
+      +'<div style="display:flex;flex-direction:column;gap:2px">'
+        +'<input type="range" min="0" max="100" value="'+r.esfuerzo+'" style="width:100%;height:4px;accent-color:var(--c-red)" oninput="ANA.vxe['+i+'].esfuerzo=parseInt(this.value);anaSave();renderAnaVxE()">'
+        +'<span style="font-size:11px;font-weight:500;color:var(--c-red);text-align:center">'+r.esfuerzo+'%</span></div>'
+      +'<span style="font-size:10px;font-weight:500;color:'+c.c+'">'+c.q+'</span>'
+      +'<span style="font-size:12px;font-weight:500;color:'+c.c+'">'+c.p+'</span>'
+      +'<button style="background:none;border:none;cursor:pointer;color:var(--muted);font-size:15px;padding:0" onmouseover="this.style.color=\'var(--c-red)\'" onmouseout="this.style.color=\'var(--muted)\'" onclick="ANA.vxe.splice('+i+',1);anaSave();renderAnaVxE()">×</button>'
+      +'</div>';
+  }).join('');
+
+  // Legend
+  var leg='<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:.6rem;margin:1rem 0">'
+    +[{q:'Quick win',c:'var(--c-green)',d:'Valor alto · Esfuerzo bajo → Implementar primero'},
+      {q:'Estratégico',c:'var(--c-blue)',d:'Valor alto · Esfuerzo alto → Planificar con cuidado'},
+      {q:'Fill-in',c:'var(--c-amber)',d:'Valor bajo · Esfuerzo bajo → Si hay capacidad disponible'},
+      {q:'Evitar',c:'var(--c-red)',d:'Valor bajo · Esfuerzo alto → Documentar como Won\'t Have'}
+    ].map(function(q){
+      return '<div style="border-radius:var(--radius);padding:.6rem;border:0.5px solid var(--border);background:var(--surface)">'
+        +'<div style="font-size:12px;font-weight:500;color:'+q.c+';margin-bottom:.2rem">'+q.q+'</div>'
+        +'<div style="font-size:11px;color:var(--muted);line-height:1.4">'+q.d+'</div></div>';
+    }).join('')
+    +'</div>';
+
+  var bar='<div style="display:flex;align-items:center;gap:.5rem;margin-top:.5rem">'
+    +'<button class="btn btn-sm" onclick="ANA.vxe.push({req:\'\',valor:50,esfuerzo:50});anaSave();renderAnaVxE()">+ Requisito</button>'
+    +'<button class="btn" style="background:var(--c-blue);color:#fff;border-color:var(--c-blue)" onclick="anaSave();anaSaved(\'vxe-msg\')">Guardar</button>'
+    +'<button class="btn btn-sm" onclick="anaRestoreVxE()">↺ Restaurar ejemplos</button>'
+    +'<span id="vxe-msg" style="font-size:11px;color:var(--c-green)"></span></div>';
+
+  el.innerHTML = tip+'<div class="card" style="margin-bottom:.8rem"><div class="card-title" style="margin-bottom:.6rem">Posicionamiento Valor vs. Esfuerzo</div>'+hdr+rows+'</div>'+leg+bar;
+}
+
 /* ════════════════════════════════════════
    PAGE: DIAGRAMA DE CONTEXTO
 ════════════════════════════════════════ */
@@ -2667,7 +2791,7 @@ reg('srs-contexto', () => `
 <div class="tab-nav">
   <button class="tab-btn on" onclick="tabSel('ctx',0,this)">Diagrama interactivo</button>
   <button class="tab-btn" onclick="tabSel('ctx',1,this)">Elementos clave</button>
-  <button class="tab-btn" onclick="tabSel('ctx',2,this)">Plantilla</button>
+  <button class="tab-btn" onclick="tabSel('ctx',2,this);setTimeout(initSrsCtxPlt,60)">Plantilla</button>
 </div>
 
 <div class="tab-panel on" id="ctx-0">
@@ -2751,28 +2875,8 @@ reg('srs-contexto', () => `
 </div>
 
 <div class="tab-panel" id="ctx-2">
-  <div class="card">
-    <div class="card-title">Plantilla de documentación del diagrama de contexto</div>
-    <div class="g2" style="margin-bottom:.8rem">
-      <div class="field-group"><div class="field-label">Nombre del sistema</div><div class="field-val">[Nombre completo del sistema]</div></div>
-      <div class="field-group"><div class="field-label">Versión del diagrama</div><div class="field-val field-mono">[CTX-001 · v1.0]</div></div>
-    </div>
-    <div class="card-title" style="margin-bottom:.5rem">Actores externos identificados</div>
-    <div class="table-wrap" style="margin-bottom:.8rem">
-      <table class="data-table">
-        <thead><tr><th>Actor</th><th>Tipo</th><th>Flujos de entrada al sistema</th><th>Flujos de salida del sistema</th></tr></thead>
-        <tbody>
-          <tr><td style="font-weight:500">Cliente solicitante</td><td><span class="badge b-func">Persona</span></td><td>Solicitud de crédito, documentos</td><td>Decisión crediticia, notificación</td></tr>
-          <tr><td style="font-weight:500">API Datacrédito</td><td><span class="badge b-nfunc">Sistema ext.</span></td><td>Score crediticio, historial</td><td>Consulta de score</td></tr>
-          <tr><td style="font-weight:500">Core bancario</td><td><span class="badge b-nfunc">Sistema ext.</span></td><td>Datos financieros del cliente</td><td>Instrucción de desembolso</td></tr>
-          <tr><td style="font-weight:500">Analista de crédito</td><td><span class="badge b-func">Persona</span></td><td>Consultas, revisiones manuales</td><td>Reportes, logs de auditoría</td></tr>
-        </tbody>
-      </table>
-    </div>
-    <div class="card-title" style="margin-bottom:.5rem">Exclusiones explícitas del alcance</div>
-    ${['Módulo de cobranza — sistema independiente fuera del alcance','App móvil nativa — versión 2.0 del roadmap','Integración con redes sociales — Won\'t Have esta versión'].map(e => `<div class="dot-item"><div class="dot" style="background:var(--c-red)"></div>${e}</div>`).join('')}
-  </div>
-</div>
+  <div style="background:rgba(24,95,165,.06);border:0.5px solid rgba(24,95,165,.25);border-radius:var(--radius);padding:.5rem .8rem;font-size:11px;color:var(--c-blue);margin-bottom:.8rem">ⓘ Documenta los actores y exclusiones reales de tu sistema. Cambios guardados automáticamente.</div>
+  <div id="srs-ctx-plt"></div>
 `);
 
 /* ════════════════════════════════════════
@@ -2788,7 +2892,7 @@ reg('srs-casos', () => `
 
 <div class="tab-nav">
   <button class="tab-btn on" onclick="tabSel('cu',0,this)">Diagrama de casos de uso</button>
-  <button class="tab-btn" onclick="tabSel('cu',1,this)">Plantilla expandida</button>
+  <button class="tab-btn" onclick="tabSel('cu',1,this);setTimeout(initSrsCuPlt,60)">Plantilla expandida</button>
   <button class="tab-btn" onclick="tabSel('cu',2,this)">Elementos clave</button>
 </div>
 
@@ -2870,72 +2974,54 @@ reg('srs-casos', () => `
 </div>
 
 <div class="tab-panel" id="cu-1">
-  <div class="card">
-    <div class="card-title">Plantilla expandida — UC-01 Solicitar crédito</div>
-    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.7rem;margin-bottom:.8rem">
-      <div class="field-group"><div class="field-label">ID del caso de uso</div><div class="field-val field-mono">UC-01</div></div>
-      <div class="field-group"><div class="field-label">Nombre</div><div class="field-val">Solicitar crédito</div></div>
-      <div class="field-group"><div class="field-label">Actor principal</div><div class="field-val">Cliente solicitante</div></div>
-      <div class="field-group"><div class="field-label">Actores secundarios</div><div class="field-val">API Datacrédito · Core bancario</div></div>
-      <div class="field-group"><div class="field-label">Nivel</div><div class="field-val"><span class="badge b-func">Objetivo de usuario</span></div></div>
-      <div class="field-group"><div class="field-label">Prioridad</div><div class="field-val"><span class="badge b-must">Must have</span></div></div>
-    </div>
-    <div class="field-group"><div class="field-label">Precondición</div><div class="field-val">El cliente está autenticado en el sistema (UC-06). Tiene acceso al módulo de solicitudes.</div></div>
-    <div class="field-group"><div class="field-label">Postcondición exitosa</div><div class="field-val">La solicitud queda registrada con estado PENDIENTE y número de radicado asignado. El cliente recibe confirmación por email en menos de 60 segundos.</div></div>
-    <div class="field-group"><div class="field-label">Postcondición de fallo</div><div class="field-val">La solicitud no se procesa. El sistema muestra mensaje de error descriptivo y ofrece opciones de reintento.</div></div>
-    <div class="card-title" style="margin:.8rem 0 .5rem">Flujo principal (camino feliz)</div>
-    <div class="table-wrap" style="margin-bottom:.8rem">
-      <table class="data-table">
-        <thead><tr><th>Paso</th><th>Actor</th><th>Acción</th></tr></thead>
-        <tbody>
-          ${[
-            [1,'Cliente','Accede al portal de solicitudes y selecciona "Nueva solicitud de crédito"'],
-            [2,'Sistema','Presenta el formulario digital con validación en tiempo real'],
-            [3,'Cliente','Completa todos los campos obligatorios y adjunta documentación'],
-            [4,'Sistema','Valida los campos y envía la solicitud al motor de procesamiento'],
-            [5,'Sistema','Consulta el score crediticio vía API Datacrédito (UC-02)'],
-            [6,'Sistema','Ejecuta el motor de decisión automática (UC-03)'],
-            [7,'Sistema','Notifica el resultado al cliente por email y SMS (UC-04)'],
-            [8,'Cliente','Recibe la decisión con número de radicado y código de resultado'],
-          ].map(r => `<tr><td style="font-family:var(--font-mono);color:var(--c-blue)">${r[0]}</td><td style="font-weight:500;color:var(--muted)">${r[1]}</td><td>${r[2]}</td></tr>`).join('')}
-        </tbody>
-      </table>
-    </div>
-    <div class="g2">
-      <div>
-        <div class="card-title">Flujos alternativos</div>
-        ${['4a. Campo inválido: el sistema resalta el campo en rojo con mensaje de error. El cliente corrige y reenvía.','5a. API Datacrédito no disponible: el sistema reintenta 3 veces con backoff. Si falla, escala a revisión manual.','6a. Score en zona gris: el motor escala la solicitud al comité de crédito.'].map(f => `<div class="dot-item"><div class="dot" style="background:var(--c-amber)"></div><div style="font-size:11px">${f}</div></div>`).join('')}
-      </div>
-      <div>
-        <div class="card-title">Requisitos relacionados</div>
-        ${['RF-001: Autenticación SSO','RF-002: Formulario digital','RF-003: Consulta score','RF-004: Motor de decisión','RF-005: Notificación multicanal'].map(r => `<div class="dot-item"><div class="dot" style="background:var(--c-blue)"></div><span style="font-family:var(--font-mono);font-size:11px">${r}</span></div>`).join('')}
-      </div>
-    </div>
-  </div>
+  <div style="background:rgba(24,95,165,.06);border:0.5px solid rgba(24,95,165,.25);border-radius:var(--radius);padding:.5rem .8rem;font-size:11px;color:var(--c-blue);margin-bottom:.8rem">ⓘ Define los casos de uso reales de tu proyecto. Agrega, edita o elimina según tu sistema.</div>
+  <div id="srs-cu-plt"></div>
 </div>
 
 <div class="tab-panel" id="cu-2">
   <div class="g2">
-    ${[
-      {t:'Actor',color:'var(--c-teal)',icono:'Figura humana o rectángulo',desc:'Rol externo que interactúa con el sistema. Puede ser una persona, un sistema externo o un dispositivo. Un actor nunca forma parte del sistema que se está especificando.',regla:'Nombrar con el rol, no con el nombre real. Correcto: "Analista de crédito". Incorrecto: "Juan Pérez".'},
-      {t:'Caso de uso',color:'var(--c-blue)',icono:'Elipse con nombre',desc:'Describe una funcionalidad que el sistema ofrece a sus actores para alcanzar un objetivo concreto. El nombre siempre comienza con un verbo en infinitivo.',regla:'El nombre debe ser comprensible para el stakeholder. Correcto: "Solicitar crédito". Incorrecto: "Módulo_CRE_v2".'},
-      {t:'Relación de asociación',color:'var(--c-gray)',icono:'Línea continua',desc:'Conecta un actor con un caso de uso para indicar que el actor participa en esa funcionalidad. Es la relación más básica del diagrama.',regla:'Solo los actores se conectan con líneas de asociación. Los casos de uso no se conectan entre sí con asociación.'},
-      {t:'Relación include',color:'var(--c-purple)',icono:'Flecha punteada «include»',desc:'Indica que un caso de uso siempre incluye el comportamiento de otro. El caso incluido es obligatorio para que el caso base funcione.',regla:'Usar cuando el comportamiento incluido siempre ocurre. Si es opcional, usar extend. Ejemplo: "Solicitar crédito" siempre include "Autenticar usuario".'},
-      {t:'Relación extend',color:'var(--c-amber)',icono:'Flecha punteada «extend»',desc:'Indica que un caso de uso puede extender el comportamiento de otro en condiciones específicas. El comportamiento extendido es opcional.',regla:'Usar para flujos alternativos o excepcionales. Ejemplo: "Enviar recordatorio" extends "Gestionar solicitud" solo si la solicitud lleva más de 48h pendiente.'},
-      {t:'Límite del sistema',color:'var(--c-red)',icono:'Rectángulo o caja',desc:'Define qué está dentro y qué está fuera del alcance del sistema. Los casos de uso se colocan dentro del límite; los actores, fuera.',regla:'Todo lo que esté dentro del límite forma parte del alcance y debe estar en el SRS. Lo que quede fuera es responsabilidad de actores externos.'},
-    ].map(e => `
-    <div class="card-sm" style="border-left:3px solid ${e.color}">
-      <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.3rem">
-        <div style="font-size:13px;font-weight:500;font-family:var(--font-serif)">${e.t}</div>
-        <span style="font-size:10px;padding:1px 6px;border-radius:3px;background:${e.color}18;color:${e.color}">${e.icono}</span>
-      </div>
-      <div style="font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:.5rem">${e.desc}</div>
-      <div style="background:var(--surface);border-radius:var(--radius);padding:.45rem .65rem;font-size:11px;line-height:1.5">
-        <span style="font-size:9px;font-weight:500;text-transform:uppercase;letter-spacing:.3px;color:${e.color}">Regla</span><br>${e.regla}
-      </div>
-    </div>`).join('')}
+    <div class="card" style="border-left:3px solid var(--c-teal)">
+      <div style="font-size:13px;font-weight:500;color:var(--c-teal);margin-bottom:.4rem">Actor</div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:.5rem">Rol externo que interactúa con el sistema. Puede ser una persona, un sistema externo o un dispositivo. Un actor nunca forma parte del sistema que se está especificando.</div>
+      <div style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.3px;margin-bottom:.2rem">Regla</div>
+      <div style="font-size:11px;color:var(--text)">Nombrar con el rol, no con el nombre real. ✓ «Analista de crédito» ✗ «Juan Pérez»</div>
+    </div>
+    <div class="card" style="border-left:3px solid var(--c-blue)">
+      <div style="font-size:13px;font-weight:500;color:var(--c-blue);margin-bottom:.4rem">Caso de uso</div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:.5rem">Funcionalidad que el sistema ofrece a sus actores para alcanzar un objetivo concreto. El nombre siempre comienza con un verbo en infinitivo.</div>
+      <div style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.3px;margin-bottom:.2rem">Regla</div>
+      <div style="font-size:11px;color:var(--text)">✓ «Solicitar crédito», «Consultar saldo» ✗ «Crédito», «Sistema de pagos»</div>
+    </div>
+    <div class="card" style="border-left:3px solid var(--c-purple)">
+      <div style="font-size:13px;font-weight:500;color:var(--c-purple);margin-bottom:.4rem">Relación de asociación</div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:.5rem">Línea sólida entre un actor y un caso de uso. Indica que el actor participa directamente en la ejecución del caso de uso.</div>
+      <div style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.3px;margin-bottom:.2rem">Regla</div>
+      <div style="font-size:11px;color:var(--text)">Todo actor debe tener al menos una asociación. Un caso de uso sin actor es señal de un requisito técnico, no de negocio.</div>
+    </div>
+    <div class="card" style="border-left:3px solid var(--c-amber)">
+      <div style="font-size:13px;font-weight:500;color:var(--c-amber);margin-bottom:.4rem">«include» y «extend»</div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:.5rem"><strong>include</strong>: el caso base siempre invoca al incluido (comportamiento obligatorio). <strong>extend</strong>: el caso extensión se invoca solo bajo ciertas condiciones (comportamiento opcional).</div>
+      <div style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.3px;margin-bottom:.2rem">Regla</div>
+      <div style="font-size:11px;color:var(--text)">«Autenticar usuario» es include de casi todos. «Notificar por SMS» puede ser extend si el canal es opcional.</div>
+    </div>
   </div>
-</div>
+  <div class="card" style="margin-top:1rem">
+    <div class="card-title">Escala de complejidad recomendada</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.6rem;margin-top:.5rem">
+      <div style="background:rgba(15,110,86,.05);border-radius:var(--radius);padding:.65rem;border:0.5px solid rgba(15,110,86,.2)">
+        <div style="font-size:12px;font-weight:500;color:var(--c-green);margin-bottom:.2rem">Simple</div>
+        <div style="font-size:11px;color:var(--muted)">3–5 pasos, un actor, sin bifurcaciones. Ej: Consultar saldo, Ver perfil.</div>
+      </div>
+      <div style="background:rgba(186,117,23,.05);border-radius:var(--radius);padding:.65rem;border:0.5px solid rgba(186,117,23,.2)">
+        <div style="font-size:12px;font-weight:500;color:var(--c-amber);margin-bottom:.2rem">Medio</div>
+        <div style="font-size:11px;color:var(--muted)">5–9 pasos, 1–2 actores, 1–2 flujos alternativos. Ej: Solicitar crédito.</div>
+      </div>
+      <div style="background:rgba(163,45,45,.05);border-radius:var(--radius);padding:.65rem;border:0.5px solid rgba(163,45,45,.2)">
+        <div style="font-size:12px;font-weight:500;color:var(--c-red);margin-bottom:.2rem">Complejo</div>
+        <div style="font-size:11px;color:var(--muted)">9+ pasos, múltiples actores y flujos. Candidato a descomponer en sub-casos.</div>
+      </div>
+    </div>
+  </div>
 `);
 
 /* ════════════════════════════════════════
@@ -2947,7 +3033,11 @@ reg('srs-bpmn', () => `
   <h1 class="page-title">Guía BPMN 2.0</h1>
   <p class="page-desc">Business Process Model and Notation — estándar ISO 19510 para modelar procesos de negocio. En el framework se usa para construir los diagramas As-Is y To-Be de la Fase 2 y documentar los flujos que originan los requisitos.</p>
   <div class="std-row"><span class="std-pill">ISO 19510 (BPMN 2.0)</span><span class="std-pill">BABOK v3</span></div>
-</div>
+
+  <div style="display:flex;align-items:center;gap:.6rem;margin-top:.6rem;flex-wrap:wrap">
+    <label style="cursor:pointer;display:inline-flex;align-items:center;gap:6px;padding:5px 11px;border-radius:var(--radius);border:0.5px solid rgba(186,117,23,.4);background:rgba(186,117,23,.06);font-size:11px;font-weight:500;color:var(--c-amber)">📎 Adjuntar diagrama BPMN<input type="file" accept=".pdf,.png,.jpg,.bpmn,.xml,.drawio,.vsdx" style="display:none" onchange="srsBpmnAdj(this)"></label>
+    <span id="srs-bpmn-adj-lbl" style="font-size:11px;color:var(--c-blue)"></span>
+  </div></div>
 
 <div class="tab-nav">
   <button class="tab-btn on" onclick="tabSel('bpmn',0,this)">Elementos principales</button>
@@ -3196,78 +3286,10 @@ reg('srs-editor', () => `
 <div class="page-header">
   <div class="page-eyebrow" style="color:var(--c-blue)">● Fase 3 — Especificación</div>
   <h1 class="page-title">Editor SRS — IEEE 29148:2018</h1>
-  <p class="page-desc">Documento de Especificación de Requisitos de Software completo con todas sus secciones y criterios de aceptación Gherkin.</p>
+  <p class="page-desc">Documento de Especificación de Requisitos editable. Portada, RF con Gherkin, RNF, supuestos y restricciones.</p>
   <div class="std-row"><span class="std-pill">IEEE 29148:2018</span><span class="std-pill">ISO/IEC 25010:2023</span></div>
 </div>
-
-<div class="tab-nav">
-  <button class="tab-btn on" onclick="tabSel('srs',0,this)">Portada y alcance</button>
-  <button class="tab-btn" onclick="tabSel('srs',1,this)">Req. funcionales (RF)</button>
-  <button class="tab-btn" onclick="tabSel('srs',2,this)">Req. no funcionales (RNF)</button>
-  <button class="tab-btn" onclick="tabSel('srs',3,this)">Supuestos y restricciones</button>
-</div>
-
-<div class="tab-panel on" id="srs-0">
-  <div class="card">
-    <div style="font-size:10px;color:var(--faint);font-family:var(--font-mono);margin-bottom:.8rem">SRS-SGC-2025 · v1.2 · En revisión</div>
-    <div class="g2">
-      <div class="field-group"><div class="field-label">Nombre del proyecto</div><div class="field-val">Sistema de gestión de créditos — SGC</div></div>
-      <div class="field-group"><div class="field-label">ID documento</div><div class="field-val field-mono">SRS-SGC-2025-v1.2</div></div>
-      <div class="field-group"><div class="field-label">Estado actual</div><div class="field-val" style="color:var(--c-amber)">En revisión formal</div></div>
-      <div class="field-group"><div class="field-label">Fecha de corte</div><div class="field-val">2025-04-01</div></div>
-    </div>
-    <div class="field-group"><div class="field-label">Propósito del sistema</div><div class="field-val">El SGC automatizará el proceso de evaluación, aprobación y seguimiento de solicitudes de crédito, reduciendo el ciclo de aprobación de 5–7 días a menos de 2 horas para el 80% de los casos estándar.</div></div>
-    <div class="g2">
-      <div class="field-group"><div class="field-label">En alcance</div><div class="field-val">Solicitud digital · score automático · motor de decisión · notificaciones multicanal · reportería · auditoría completa</div></div>
-      <div class="field-group"><div class="field-label">Fuera de alcance</div><div class="field-val">App móvil nativa · redes sociales · módulo cobranza · análisis predictivo avanzado</div></div>
-    </div>
-  </div>
-</div>
-
-<div class="tab-panel" id="srs-1">
-  ${RF.filter(r => r.id.startsWith('RF')).map(r => `
-  <div class="card-sm" style="margin-bottom:.6rem;border-left:3px solid var(--c-blue)">
-    <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.4rem;flex-wrap:wrap">
-      <span style="font-family:var(--font-mono);color:var(--c-blue);font-size:11px;font-weight:500">${r.id}</span>
-      <span class="badge b-func">Funcional</span>
-      <span class="badge b-must" style="margin-left:auto">${r.pri}</span>
-    </div>
-    <div style="font-size:14px;font-weight:500;font-family:var(--font-serif);margin-bottom:.35rem">${r.title}</div>
-    <div style="font-size:12px;color:var(--muted);margin-bottom:.55rem;line-height:1.6">${r.desc}</div>
-    <div class="gherkin"><span class="g-given">Given</span> ${r.given}<br><span class="g-when">When</span> ${r.when}<br><span class="g-then">Then</span> ${r.then}${r.and?`<br><span class="g-and">And</span> ${r.and}`:''}</div>
-  </div>`).join('')}
-</div>
-
-<div class="tab-panel" id="srs-2">
-  ${[
-    {cat:'Rendimiento · ISO 25010 §4.8',color:'var(--c-blue)',attrs:[{n:'Tiempo respuesta web',v:'P95 < 3s, P99 < 8s bajo 500 VU',m:'Gatling load test'},{n:'Throughput sostenido',v:'> 200 transacciones/segundo',m:'JMeter'},{n:'Tiempo de decisión',v:'< 2s para el 90% de los casos',m:'APM Datadog'}]},
-    {cat:'Disponibilidad · ISO 25010 §4.4',color:'var(--c-green)',attrs:[{n:'Disponibilidad operativa',v:'99.5% Lun–Sáb 6:00–22:00',m:'Uptime Robot'},{n:'RTO',v:'< 30 minutos ante fallo crítico',m:'Drill de recuperación'},{n:'RPO',v:'< 1 hora — backup cada hora',m:'Test restauración'}]},
-    {cat:'Seguridad · ISO 25010 §4.5',color:'var(--c-red)',attrs:[{n:'Cifrado en reposo',v:'AES-256 para datos PII y financieros',m:'Auditoría cifrado'},{n:'Cifrado en tránsito',v:'TLS 1.3 obligatorio',m:'SSL Labs A+'},{n:'Autenticación',v:'MFA obligatorio para roles Gerente y Auditor',m:'Test penetración'}]},
-    {cat:'Mantenibilidad · ISO 25010 §4.6',color:'var(--c-purple)',attrs:[{n:'Cobertura de pruebas',v:'Mínimo 80% unitario',m:'SonarQube'},{n:'Documentación API',v:'OpenAPI 3.0 — 100% endpoints',m:'Swagger UI'}]},
-  ].map(n => `
-  <div class="card-sm" style="margin-bottom:.6rem">
-    <div style="font-size:12px;font-weight:500;color:${n.color};margin-bottom:.5rem">${n.cat}</div>
-    <div class="table-wrap">
-      <table class="data-table">
-        <thead><tr><th>Atributo</th><th>Valor objetivo</th><th>Método verificación</th></tr></thead>
-        <tbody>${n.attrs.map(a => `<tr><td>${a.n}</td><td style="font-weight:500">${a.v}</td><td style="color:var(--muted)">${a.m}</td></tr>`).join('')}</tbody>
-      </table>
-    </div>
-  </div>`).join('')}
-</div>
-
-<div class="tab-panel" id="srs-3">
-  <div class="g2">
-    <div class="card">
-      <div class="card-title">Supuestos</div>
-      ${['La API de Datacrédito estará disponible antes del Sprint 3','El directorio corporativo soporta integración SAML 2.0','Los usuarios finales tienen correo corporativo activo','La infraestructura de nube estará lista en Sprint 0'].map((s,i) => `<div class="dot-item"><div class="dot" style="background:var(--c-blue)"></div><div><span style="font-family:var(--font-mono);color:var(--c-blue);font-size:10px">SA-00${i+1}</span> ${s}</div></div>`).join('')}
-    </div>
-    <div class="card">
-      <div class="card-title">Restricciones</div>
-      ${[{t:'Presupuesto',v:'COP 850M en 12 meses'},{t:'Plazo MVP',v:'6 meses desde firma'},{t:'Tecnología',v:'Stack aprobado por TI'},{t:'Regulación',v:'Circular SFC 026/2021'}].map(r => `<div class="dot-item"><div class="dot" style="background:var(--c-amber)"></div><div style="display:flex;justify-content:space-between;width:100%"><span style="color:var(--muted)">${r.t}</span><span style="font-weight:500">${r.v}</span></div></div>`).join('')}
-    </div>
-  </div>
-</div>
+<div id="srs-editor-mount"></div>
 `);
 
 /* ════════════════════════════════════════
@@ -4090,7 +4112,38 @@ function filterGlos() {
   const filtered=GLOSARIO.filter(g=>(glosFilter==='Todos'||g.cat===glosFilter)&&(!q||g.name.toLowerCase().includes(q)||g.def.toLowerCase().includes(q)));
   const el=document.getElementById('glos-terms');
   if(!el)return;
-  el.innerHTML=filtered.map(g=>`<div style="display:grid;grid-template-columns:110px 1fr 70px;gap:.8rem;padding:.55rem .8rem;background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius);margin-bottom:.3rem"><div style="font-family:var(--font-mono);color:var(--c-blue);font-size:12px;font-weight:500;align-self:center">${g.name}</div><div style="font-size:12px;color:var(--muted);align-self:center">${g.def}</div><div style="align-self:center"><span class="badge">${g.cat}</span></div></div>`).join('');
+  el.innerHTML=filtered.map((g,fi)=>{
+    const realIdx=GLOSARIO.indexOf(g);
+    return `<div style="display:grid;grid-template-columns:120px 1fr 80px 60px;gap:.6rem;padding:.5rem .7rem;background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius);margin-bottom:.3rem;align-items:center">
+      <input value="${g.name.replace(/"/g,'&quot;')}" style="font-family:var(--font-mono);color:var(--c-blue);font-size:12px;font-weight:500;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 6px;outline:none;width:100%" oninput="GLOSARIO[${realIdx}].name=this.value;filterGlos()">
+      <input value="${g.def.replace(/"/g,'&quot;')}" style="font-size:12px;color:var(--muted);background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 6px;outline:none;width:100%" oninput="GLOSARIO[${realIdx}].def=this.value;filterGlos()">
+      <input value="${g.cat.replace(/"/g,'&quot;')}" style="font-size:11px;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 6px;outline:none;width:100%" oninput="GLOSARIO[${realIdx}].cat=this.value;initGlosario()">
+      <button style="background:none;border:none;cursor:pointer;color:var(--muted);font-size:15px" onclick="GLOSARIO.splice(${realIdx},1);initGlosario()">×</button>
+    </div>`;
+  }).join('');
+
+  // Add new term button at bottom
+  const addRow=document.getElementById('glos-add-row');
+  if(!addRow){
+    const addDiv=document.createElement('div');
+    addDiv.id='glos-add-row';
+    addDiv.style.cssText='display:flex;gap:.5rem;margin-top:.5rem;align-items:center';
+    addDiv.innerHTML='<input id="glos-new-name" placeholder="Término..." style="width:120px;background:var(--surface);border:0.5px solid var(--border2);border-radius:5px;padding:5px 8px;font-size:12px;color:var(--text);font-family:var(--font-mono);outline:none">'
+      +'<input id="glos-new-def" placeholder="Definición..." style="flex:1;background:var(--surface);border:0.5px solid var(--border2);border-radius:5px;padding:5px 8px;font-size:12px;color:var(--text);font-family:var(--font-sans);outline:none">'
+      +'<input id="glos-new-cat" placeholder="Categoría..." style="width:100px;background:var(--surface);border:0.5px solid var(--border2);border-radius:5px;padding:5px 8px;font-size:12px;color:var(--text);font-family:var(--font-sans);outline:none">'
+      +'<button class="btn btn-sm" style="background:var(--c-blue);color:#fff;border-color:var(--c-blue)" onclick="glosAddTerm()">+ Agregar</button>';
+    el.after(addDiv);
+  }
+}
+function glosAddTerm(){
+  const name=(document.getElementById('glos-new-name')?.value||'').trim();
+  const def=(document.getElementById('glos-new-def')?.value||'').trim();
+  const cat=(document.getElementById('glos-new-cat')?.value||'General').trim();
+  if(!name||!def){alert('El término y la definición son obligatorios.');return;}
+  GLOSARIO.push({name,def,cat});
+  ['glos-new-name','glos-new-def','glos-new-cat'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});
+  var addRow=document.getElementById('glos-add-row'); if(addRow) addRow.remove();
+  initGlosario();
 }
 
 // ── DEFECTS LOG ──
@@ -4343,6 +4396,429 @@ function eliSaved(id) {
   const el=document.getElementById(id);
   if(el){el.textContent='✓ Guardado';el.style.color='var(--c-green)';setTimeout(()=>{el.textContent='';},1800);}
 }
+
+
+/* ════════════════════════════════════════
+   SRS STORAGE — plantillas editables Fase 3
+════════════════════════════════════════ */
+const SRS_KEY = 'fw_srs_v1';
+function loadSRS(){ try{ return JSON.parse(localStorage.getItem(SRS_KEY))||defaultSRS(); }catch(e){ return defaultSRS(); } }
+function saveSRS(){ localStorage.setItem(SRS_KEY,JSON.stringify(SRS)); }
+function escHS(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function defaultSRS(){
+  return {
+    ctx:{ nombre:'', version:'', adjunto:'', actores:[
+      {nombre:'Cliente solicitante', tipo:'Persona',      entrada:'Solicitud de crédito, documentos', salida:'Decisión crediticia, notificación'},
+      {nombre:'API Datacrédito',     tipo:'Sistema ext.', entrada:'Score crediticio, historial',       salida:'Consulta de score'},
+      {nombre:'Core bancario',       tipo:'Sistema ext.', entrada:'Datos financieros del cliente',     salida:'Instrucción de desembolso'},
+      {nombre:'Analista de crédito', tipo:'Persona',      entrada:'Consultas, revisiones manuales',   salida:'Reportes, logs de auditoría'},
+    ], exclusiones:[
+      'Módulo de cobranza — sistema independiente fuera del alcance',
+      'App móvil nativa — versión 2.0 del roadmap',
+    ]},
+    casos:[
+      {id:'UC-01', nombre:'Solicitar crédito',  actor:'Cliente solicitante', actoresS:'API Datacrédito · Core bancario',
+       nivel:'Objetivo de usuario', prioridad:'Must have',
+       pre:'El cliente está autenticado (UC-06). Tiene acceso al módulo de solicitudes.',
+       postOk:'Solicitud registrada con estado PENDIENTE y radicado asignado. Cliente notificado en < 60s.',
+       postFail:'El sistema muestra error descriptivo y ofrece opciones de reintento.',
+       flujo:'1. Cliente accede y selecciona Nueva solicitud\n2. Sistema presenta formulario con validación\n3. Cliente completa campos y adjunta documentación\n4. Sistema valida y envía al motor de procesamiento\n5. Sistema consulta score vía API Datacrédito\n6. Motor emite decisión automática\n7. Cliente recibe notificación multicanal',
+       alt:'4a. Campo inválido: sistema resalta en rojo.\n5a. API no disponible: reintento x3, luego escala a manual.'},
+      {id:'UC-02', nombre:'Autenticar usuario', actor:'Usuario final', actoresS:'Directorio Activo',
+       nivel:'Subfunción', prioridad:'Must have',
+       pre:'Sistema disponible, usuario registrado en AD.',
+       postOk:'Sesión activa con token JWT (TTL 8h).',
+       postFail:'Error registrado. Máx. 3 intentos.',
+       flujo:'1. Usuario ingresa credenciales SSO\n2. Sistema valida contra AD\n3. Si válido: genera token y redirige\n4. Si inválido: muestra error',
+       alt:'Sesión expirada: redirigir a re-autenticación.'},
+    ],
+    bpmn:{ adjunto:'' },
+    portada:{ nombre:'', docId:'', estado:'Borrador', fecha:'', proposito:'', enAlcance:'', fueraAlcance:'' },
+    rfs:[
+      {id:'RF-001',titulo:'Autenticación SSO corporativo',prioridad:'Must',estado:'Aprobado',desc:'El sistema DEBE permitir login mediante AD/LDAP usando OAuth 2.0 / SAML 2.0. Sesiones expiran tras 8h de inactividad.',given:'el usuario tiene cuenta activa en el directorio',when:'ingresa sus credenciales SSO correctas',then:'el sistema autentica y redirige al dashboard en < 3 segundos'},
+      {id:'RF-002',titulo:'Formulario de solicitud digital',prioridad:'Must',estado:'Aprobado',desc:'El sistema DEBE proveer formulario con validación en tiempo real y guardado automático cada 60 segundos.',given:'el cliente accede al portal de solicitudes',when:'completa los campos del formulario',then:'cada campo es validado en < 500ms con mensaje de error descriptivo'},
+      {id:'RF-003',titulo:'Consulta score crediticio',prioridad:'Must',estado:'En revisión',desc:'El sistema DEBE consultar el score vía API Datacrédito al recibir la solicitud, en menos de 5 segundos.',given:'la solicitud fue recibida correctamente',when:'el sistema inicia el procesamiento',then:'el score es consultado y almacenado en el expediente en < 5 segundos'},
+    ],
+    rnfs:[
+      {id:'RNF-001',cat:'Rendimiento',atributo:'Tiempo de respuesta web',valor:'P95 < 3s bajo 500 usuarios concurrentes',metodo:'Gatling load test'},
+      {id:'RNF-002',cat:'Disponibilidad',atributo:'Disponibilidad operativa',valor:'99.5% Lun-Sáb 6:00-22:00',metodo:'Uptime Robot'},
+      {id:'RNF-003',cat:'Seguridad',atributo:'Autenticación fuerte',valor:'MFA obligatorio para roles Gerente y Auditor',metodo:'Test de penetración'},
+    ],
+    sas:[
+      {id:'SA-001',desc:'La API de Datacrédito estará disponible antes del Sprint 3'},
+      {id:'SA-002',desc:'El directorio corporativo soporta integración SAML 2.0'},
+      {id:'SA-003',desc:'Los usuarios finales tienen correo corporativo activo'},
+    ],
+    rcs:[
+      {id:'RC-001',t:'Presupuesto',v:'COP 850M en 12 meses'},
+      {id:'RC-002',t:'Plazo MVP',v:'6 meses desde la firma del contrato'},
+      {id:'RC-003',t:'Tecnología',v:'Stack aprobado por el área de TI'},
+    ],
+  };
+}
+let SRS = loadSRS();
+function srsSave(){ saveSRS(); }
+function srsSaved(id){ var e=document.getElementById(id); if(e){e.textContent='✓ Guardado';setTimeout(function(){e.textContent='';},1800);} }
+
+/* attach ctx */
+function srsCtxAdj(input){
+  if(!input.files||!input.files[0]) return;
+  var n=input.files[0].name; if(!SRS.ctx) SRS.ctx=defaultSRS().ctx;
+  SRS.ctx.adjunto=n; srsSave();
+  var el=document.getElementById('srs-ctx-adj-lbl'); if(el) el.textContent='✓ '+n;
+}
+/* attach bpmn */
+function srsBpmnAdj(input){
+  if(!input.files||!input.files[0]) return;
+  var n=input.files[0].name; if(!SRS.bpmn) SRS.bpmn={};
+  SRS.bpmn.adjunto=n; srsSave();
+  var el=document.getElementById('srs-bpmn-adj-lbl'); if(el) el.textContent='✓ '+n;
+}
+
+/* ── CTX plantilla ── */
+function initSrsCtxPlt(){
+  var el=document.getElementById('srs-ctx-plt'); if(!el||el.innerHTML.trim()) return;
+  renderSrsCtxPlt();
+}
+function renderSrsCtxPlt(){
+  var el=document.getElementById('srs-ctx-plt'); if(!el) return;
+  if(!SRS.ctx) SRS.ctx=defaultSRS().ctx;
+  var ctx=SRS.ctx; var actors=ctx.actores||[]; var excl=ctx.exclusiones||[];
+  var tipoOpts=['Persona','Sistema ext.','Sensor/Device','Servicio'];
+
+  function fi(lbl,key,ph){
+    return '<div><label style="font-size:11px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.3px;display:block;margin-bottom:2px">'+lbl+'</label>'
+      +'<input style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:5px 8px;font-size:12px;color:var(--text);font-family:var(--font-sans);outline:none" value="'+escHS(ctx[key]||'')+'" placeholder="'+ph+'" oninput="SRS.ctx.'+key+'=this.value;srsSave()"></div>';
+  }
+
+  var hdr='<div style="display:grid;grid-template-columns:1fr 100px 1fr 1fr 24px;gap:5px;font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.3px;border-bottom:0.5px solid var(--border2);padding-bottom:3px;margin-bottom:3px">'
+    +'<span>Actor</span><span>Tipo</span><span>Flujos de entrada</span><span>Flujos de salida</span><span></span></div>';
+
+  var aRows=actors.map(function(a,i){
+    return '<div style="display:grid;grid-template-columns:1fr 100px 1fr 1fr 24px;gap:5px;align-items:center;padding:5px 0;border-bottom:0.5px solid var(--border)">'
+      +'<input value="'+escHS(a.nombre||'')+'" placeholder="Nombre..." style="background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 6px;font-size:12px;color:var(--text);font-family:var(--font-sans);outline:none" oninput="SRS.ctx.actores['+i+'].nombre=this.value;srsSave()">'
+      +'<select style="background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 5px;font-size:11px;color:var(--text);font-family:var(--font-sans);outline:none" onchange="SRS.ctx.actores['+i+'].tipo=this.value;srsSave()">'+tipoOpts.map(function(o){return'<option'+(a.tipo===o?' selected':'')+'>'+o+'</option>';}).join('')+'</select>'
+      +'<input value="'+escHS(a.entrada||'')+'" placeholder="Flujos de entrada..." style="background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 6px;font-size:12px;color:var(--text);font-family:var(--font-sans);outline:none" oninput="SRS.ctx.actores['+i+'].entrada=this.value;srsSave()">'
+      +'<input value="'+escHS(a.salida||'')+'" placeholder="Flujos de salida..." style="background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 6px;font-size:12px;color:var(--text);font-family:var(--font-sans);outline:none" oninput="SRS.ctx.actores['+i+'].salida=this.value;srsSave()">'
+      +'<button style="background:none;border:none;cursor:pointer;color:var(--muted);font-size:15px" onclick="SRS.ctx.actores.splice('+i+',1);srsSave();renderSrsCtxPlt()">×</button>'
+      +'</div>';
+  }).join('');
+
+  var eRows=excl.map(function(e,i){
+    return '<div style="display:flex;gap:5px;align-items:center;padding:4px 0;border-bottom:0.5px solid var(--border)">'
+      +'<input value="'+escHS(e)+'" placeholder="Descripción de la exclusión..." style="flex:1;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 6px;font-size:12px;color:var(--text);font-family:var(--font-sans);outline:none" oninput="SRS.ctx.exclusiones['+i+']=this.value;srsSave()">'
+      +'<button style="background:none;border:none;cursor:pointer;color:var(--muted);font-size:15px;flex-shrink:0" onclick="SRS.ctx.exclusiones.splice('+i+',1);srsSave();renderSrsCtxPlt()">×</button>'
+      +'</div>';
+  }).join('');
+
+  el.innerHTML='<div class="card">'
+    +'<div class="card-title">Plantilla de documentación del diagrama de contexto</div>'
+    +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:.8rem">'+fi('Nombre del sistema','nombre','Nombre completo del sistema')+fi('Versión del diagrama','version','CTX-001 · v1.0')+'</div>'
+    +'<div class="card-title" style="margin-bottom:.4rem">Actores externos identificados</div>'
+    +hdr+aRows
+    +'<button class="btn btn-sm" style="margin-top:.5rem" onclick="SRS.ctx.actores=SRS.ctx.actores||[];SRS.ctx.actores.push({nombre:\'\',tipo:\'Persona\',entrada:\'\',salida:\'\'});srsSave();renderSrsCtxPlt()">+ Actor</button>'
+    +'<div class="card-title" style="margin-top:.8rem;margin-bottom:.4rem">Exclusiones explícitas del alcance</div>'
+    +(eRows||'<div style="font-size:12px;color:var(--muted);font-style:italic;padding:.3rem 0">Sin exclusiones.</div>')
+    +'<button class="btn btn-sm" style="margin-top:.4rem" onclick="SRS.ctx.exclusiones=SRS.ctx.exclusiones||[];SRS.ctx.exclusiones.push(\'\');srsSave();renderSrsCtxPlt()">+ Exclusión</button>'
+    +'<div style="display:flex;gap:.5rem;margin-top:.8rem;align-items:center">'
+    +'<button class="btn" style="background:var(--c-blue);color:#fff;border-color:var(--c-blue)" onclick="srsSave();srsSaved(\'srs-ctx-plt-msg\')">Guardar plantilla</button>'
+    +'<button class="btn btn-sm" onclick="SRS.ctx=defaultSRS().ctx;srsSave();var e=document.getElementById(\'srs-ctx-plt\');if(e){e.innerHTML=\'\';renderSrsCtxPlt();}">↺ Restaurar ejemplos</button>'
+    +'<span id="srs-ctx-plt-msg" style="font-size:11px;color:var(--c-green)"></span></div></div>';
+}
+
+/* ── CU plantilla ── */
+function initSrsCuPlt(){
+  var el=document.getElementById('srs-cu-plt'); if(!el||el.innerHTML.trim()) return;
+  window._srsCuSel=window._srsCuSel||0;
+  renderSrsCuPlt();
+}
+function renderSrsCuPlt(){
+  var el=document.getElementById('srs-cu-plt'); if(!el) return;
+  if(!SRS.casos||!SRS.casos.length){ SRS.casos=defaultSRS().casos; srsSave(); }
+  var sel=window._srsCuSel||0; if(sel>=SRS.casos.length) sel=0;
+
+  var list='<div style="display:flex;flex-direction:column;gap:4px">'
+    +SRS.casos.map(function(u,i){
+      var on=i===sel;
+      return '<div style="display:flex;align-items:center;gap:4px">'
+        +'<div style="flex:1;padding:6px 10px;border-radius:7px;font-size:12px;cursor:pointer;border:0.5px solid '+(on?'var(--c-blue)':'var(--border)')+';background:'+(on?'var(--bg)':'var(--surface)')+';font-weight:'+(on?'500':'400')+';color:'+(on?'var(--text)':'var(--muted)')+'" onclick="window._srsCuSel='+i+';renderSrsCuPlt()">'
+        +'<span style="font-family:var(--font-mono);font-size:10px;color:var(--c-blue)">'+escHS(u.id)+'</span> '+escHS(u.nombre)+'</div>'
+        +'<button style="background:none;border:none;cursor:pointer;color:var(--muted);font-size:15px;padding:0 3px" onclick="SRS.casos.splice('+i+',1);srsSave();window._srsCuSel=Math.max(0,'+(i)+'-1);renderSrsCuPlt()">×</button>'
+        +'</div>';
+    }).join('')
+    +'<button class="btn btn-sm" style="margin-top:.4rem" onclick="srsCuAdd()">+ Caso de uso</button>'
+    +'</div>';
+
+  var u=SRS.casos[sel]||{}; var idx=sel;
+  function fi(lbl,key,ph){
+    return '<div><label style="font-size:11px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.3px;display:block;margin-bottom:2px">'+lbl+'</label>'
+      +'<input style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:5px 8px;font-size:12px;color:var(--text);font-family:var(--font-sans);outline:none" value="'+escHS(u[key]||'')+'" placeholder="'+ph+'" oninput="SRS.casos['+idx+'].'+key+'=this.value;srsSave()"></div>';
+  }
+  function ta(lbl,key,ph,rows){
+    return '<div><label style="font-size:11px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.3px;display:block;margin-bottom:2px">'+lbl+'</label>'
+      +'<textarea style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:5px 8px;font-size:12px;color:var(--text);font-family:var(--font-sans);resize:vertical;outline:none;line-height:1.6" rows="'+(rows||2)+'" placeholder="'+ph+'" oninput="SRS.casos['+idx+'].'+key+'=this.value;srsSave()">'+escHS(u[key]||'')+'</textarea></div>';
+  }
+
+  var detail='<div style="background:var(--surface);border-radius:10px;padding:1rem;border:0.5px solid var(--border)">'
+    +'<div style="display:grid;grid-template-columns:80px 1fr 1fr 1fr;gap:.5rem;margin-bottom:.5rem">'
+    +fi('ID','id','UC-01')+fi('Nombre','nombre','Solicitar crédito')+fi('Actor principal','actor','Cliente solicitante')+fi('Actores secundarios','actoresS','API X · Sistema Y')
+    +'</div>'
+    +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-bottom:.5rem">'
+    +fi('Nivel','nivel','Objetivo de usuario')+fi('Prioridad','prioridad','Must have')
+    +'</div>'
+    +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-bottom:.5rem">'
+    +ta('Precondición','pre','Estado previo...',2)+ta('Postcondición exitosa','postOk','Estado tras éxito...',2)
+    +ta('Postcondición de fallo','postFail','Estado tras fallo...',2)+ta('Flujos alternativos','alt','Alt 1: Si X ocurre...',2)
+    +'</div>'
+    +ta('Flujo principal — camino feliz (un paso por línea)','flujo','1. Actor hace...\n2. Sistema responde...',5)
+    +'<div style="display:flex;gap:.5rem;margin-top:.6rem;align-items:center">'
+    +'<button class="btn" style="background:var(--c-blue);color:#fff;border-color:var(--c-blue)" onclick="srsSave();srsSaved(\'srs-cu-plt-msg\')">Guardar</button>'
+    +'<button class="btn btn-sm" onclick="SRS.casos=defaultSRS().casos;srsSave();window._srsCuSel=0;renderSrsCuPlt()">↺ Restaurar</button>'
+    +'<span id="srs-cu-plt-msg" style="font-size:11px;color:var(--c-green)"></span></div></div>';
+
+  el.innerHTML='<div style="display:grid;grid-template-columns:200px 1fr;gap:12px">'+list+detail+'</div>';
+}
+function srsCuAdd(){
+  SRS.casos=SRS.casos||[];
+  SRS.casos.push({id:'UC-'+String(SRS.casos.length+1).padStart(2,'0'),nombre:'Nuevo caso de uso',actor:'',actoresS:'',nivel:'',prioridad:'',pre:'',postOk:'',postFail:'',flujo:'',alt:''});
+  srsSave(); window._srsCuSel=SRS.casos.length-1; renderSrsCuPlt();
+}
+
+function renderAnaUC(){
+  var el=document.getElementById('ana-uc-mount'); if(!el) return;
+  if(!ANA.uc||!ANA.uc.length){ ANA.uc=defaultANA().uc; anaSave(); }
+  var selIdx = window._anaUCSel||0;
+  if(selIdx>=ANA.uc.length) selIdx=0;
+  function escH(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
+  var list='<div style="display:flex;flex-direction:column;gap:4px;margin-bottom:.6rem">'
+    +ANA.uc.map(function(u,i){
+      return '<div style="display:flex;align-items:center;gap:4px">'
+        +'<div style="flex:1;padding:7px 10px;border-radius:7px;font-size:12px;cursor:pointer;border:0.5px solid '+(i===selIdx?'var(--c-purple)':'var(--border)')+';background:'+(i===selIdx?'var(--bg)':'var(--surface)')+';font-weight:'+(i===selIdx?'500':'400')+';color:'+(i===selIdx?'var(--text)':'var(--muted)')+'" onclick="window._anaUCSel='+i+';renderAnaUC()">'+escH(u.name)+'</div>'
+        +'<button style="background:none;border:none;cursor:pointer;color:var(--muted);font-size:15px;padding:0 3px" onclick="ANA.uc.splice('+i+',1);anaSave();if(window._anaUCSel>=ANA.uc.length)window._anaUCSel=Math.max(0,ANA.uc.length-1);renderAnaUC()">×</button>'
+        +'</div>';
+    }).join('')
+    +'<button class="btn btn-sm" style="margin-top:.3rem" onclick="anaAddUC()">+ Caso de uso</button>'
+    +'</div>';
+
+  var u=ANA.uc[selIdx]||{name:'',actor:'',pre:'',trigger:'',flujo:'',alt:'',post:''};
+  var idx=selIdx;
+  function inp(label,key,ph,rows){
+    if(rows){
+      return '<div style="margin-bottom:.5rem"><div style="font-size:11px;font-weight:500;color:var(--muted);margin-bottom:3px;text-transform:uppercase;letter-spacing:.3px">'+label+'</div>'
+        +'<textarea style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:5px 8px;font-size:12px;color:var(--text);font-family:var(--font-sans);resize:vertical;outline:none;line-height:1.6" rows="'+rows+'" placeholder="'+ph+'" oninput="ANA.uc['+idx+'].'+key+'=this.value;anaSave()">'+escH(u[key])+'</textarea></div>';
+    }
+    return '<div style="margin-bottom:.5rem"><div style="font-size:11px;font-weight:500;color:var(--muted);margin-bottom:3px;text-transform:uppercase;letter-spacing:.3px">'+label+'</div>'
+      +'<input style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:5px 8px;font-size:12px;color:var(--text);font-family:var(--font-sans);outline:none" value="'+escH(u[key])+'" placeholder="'+ph+'" oninput="ANA.uc['+idx+'].'+key+'=this.value;anaSave()"></div>';
+  }
+
+  var detail='<div style="background:var(--surface);border-radius:10px;padding:1rem;border:0.5px solid var(--border)">'
+    +inp('Nombre del caso de uso','name','Ej: Autenticar usuario')
+    +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:.6rem">'
+    +inp('Actor principal','actor','Ej: Usuario final')
+    +inp('Disparador','trigger','¿Qué inicia este caso de uso?')
+    +'</div>'
+    +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:.6rem">'
+    +inp('Precondición','pre','Estado del sistema antes del caso de uso')
+    +inp('Postcondición','post','Estado del sistema después del caso de uso')
+    +'</div>'
+    +inp('Flujo principal','flujo','Paso 1. El usuario hace... Paso 2. El sistema responde...',4)
+    +inp('Flujo alternativo / excepción','alt','Ej: Si el token expira, redirigir a login',2)
+    +'<div style="display:flex;gap:.5rem;margin-top:.6rem;align-items:center">'
+    +'<button class="btn" style="background:var(--c-purple);color:#fff;border-color:var(--c-purple)" onclick="anaUCSave()">Guardar casos de uso</button>'
+    +'<button class="btn btn-sm" onclick="anaUCRestore()">↺ Restaurar ejemplos</button>'
+    +'<span id="uc-msg" style="font-size:11px;color:var(--c-green)"></span>'
+    +'</div></div>';
+
+  el.innerHTML='<div style="display:grid;grid-template-columns:200px 1fr;gap:12px">'+list+detail+'</div>';
+}
+window._anaUCSel=0;
+
+function anaUCSave(){ anaSave(); anaSaved('uc-msg'); }
+function anaKanoSave(){ anaSave(); anaSaved('kano-msg'); }
+function anaUCRestore(){ ANA.uc=defaultANA().uc; anaSave(); window._anaUCSel=0; renderAnaUC(); }
+function anaKanoRestore(){ ANA.kano=defaultANA().kano; anaSave(); renderAnaKano(); }
+function anaAddUC(){
+  if(!ANA.uc) ANA.uc=[];
+  ANA.uc.push({name:'Nuevo caso de uso',actor:'',pre:'',trigger:'',flujo:'',alt:'',post:''});
+  anaSave();
+  window._anaUCSel=ANA.uc.length-1;
+  renderAnaUC();
+}
+function anaAddKanoItem(ci){
+  ci=parseInt(ci);
+  if(!ANA.kano||!ANA.kano[ci]) return;
+  ANA.kano[ci].items.push({func:'',pregF:'',respF:'',pregD:'',respD:'',nota:''});
+  anaSave(); renderAnaKano();
+}
+
+
+function initAnaKano(){
+  var el=document.getElementById('ana-kano-mount'); if(!el||el.innerHTML.trim()) return;
+  renderAnaKano();
+}
+function renderAnaKano(){
+  var el=document.getElementById('ana-kano-mount'); if(!el) return;
+  if(!ANA.kano) { ANA.kano=defaultANA().kano; anaSave(); }
+  function escH(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+  var resps=['','Me gusta','Lo espero','Indiferente','Lo acepto','Me disgusta'];
+  var tip='<div style="background:rgba(83,52,131,.07);border:0.5px solid rgba(83,52,131,.3);border-radius:var(--radius);padding:.5rem .8rem;font-size:11px;color:var(--c-purple);margin-bottom:1rem">ⓘ Para cada atributo, registra la respuesta funcional y disfuncional de tu sesión con usuarios. El campo "Notas" es libre para tus hallazgos.</div>';
+
+  var cats=ANA.kano.map(function(cat,ci){
+    var items=cat.items.map(function(item,ii){
+      return '<div style="background:var(--bg);border:0.5px solid var(--border);border-radius:7px;padding:.7rem;margin-bottom:.5rem">'
+        +'<div style="display:flex;align-items:center;gap:5px;margin-bottom:.5rem">'
+        +'<input value="'+escH(item.func)+'" style="flex:1;background:var(--surface);border:0.5px solid var(--border2);border-radius:5px;padding:4px 8px;font-size:12px;font-weight:500;color:var(--text);font-family:var(--font-sans);outline:none" placeholder="Atributo / función..." oninput="ANA.kano['+ci+'].items['+ii+'].func=this.value;anaSave()">'
+        +'<button style="background:none;border:none;cursor:pointer;color:var(--muted);font-size:15px;padding:0 3px;flex-shrink:0" onclick="ANA.kano['+ci+'].items.splice('+ii+',1);anaSave();renderAnaKano()">×</button>'
+        +'</div>'
+        +'<div style="display:grid;grid-template-columns:1fr 130px;gap:5px;margin-bottom:.3rem">'
+        +'<input value="'+escH(item.pregF)+'" style="background:var(--surface);border:0.5px solid var(--border2);border-radius:5px;padding:3px 7px;font-size:11px;color:var(--muted);font-family:var(--font-sans);outline:none" placeholder="Pregunta funcional..." oninput="ANA.kano['+ci+'].items['+ii+'].pregF=this.value;anaSave()">'
+        +'<select style="background:var(--surface);border:0.5px solid var(--border2);border-radius:5px;padding:3px 7px;font-size:11px;color:var(--text);font-family:var(--font-sans);outline:none" onchange="ANA.kano['+ci+'].items['+ii+'].respF=this.value;anaSave()">'+resps.map(function(r){return'<option'+(item.respF===r?' selected':'')+'>'+r+'</option>';}).join('')+'</select>'
+        +'</div>'
+        +'<div style="display:grid;grid-template-columns:1fr 130px;gap:5px;margin-bottom:.5rem">'
+        +'<input value="'+escH(item.pregD)+'" style="background:var(--surface);border:0.5px solid var(--border2);border-radius:5px;padding:3px 7px;font-size:11px;color:var(--muted);font-family:var(--font-sans);outline:none" placeholder="Pregunta disfuncional..." oninput="ANA.kano['+ci+'].items['+ii+'].pregD=this.value;anaSave()">'
+        +'<select style="background:var(--surface);border:0.5px solid var(--border2);border-radius:5px;padding:3px 7px;font-size:11px;color:var(--text);font-family:var(--font-sans);outline:none" onchange="ANA.kano['+ci+'].items['+ii+'].respD=this.value;anaSave()">'+resps.map(function(r){return'<option'+(item.respD===r?' selected':'')+'>'+r+'</option>';}).join('')+'</select>'
+        +'</div>'
+        +'<div><div style="font-size:10px;font-weight:500;color:var(--muted);margin-bottom:2px;text-transform:uppercase;letter-spacing:.3px">Notas / hallazgo de la sesión</div>'
+        +'<textarea style="width:100%;background:var(--surface);border:0.5px solid var(--border2);border-radius:5px;padding:4px 8px;font-size:11px;color:var(--text);font-family:var(--font-sans);resize:vertical;outline:none;line-height:1.5" rows="2" placeholder="Escribe tu hallazgo o nota de la sesión con usuarios..." oninput="ANA.kano['+ci+'].items['+ii+'].nota=this.value;anaSave()">'+escH(item.nota)+'</textarea></div>'
+        +'</div>';
+    }).join('');
+
+    return '<div style="border-radius:var(--radius-lg);padding:1rem;border:0.5px solid '+escH(cat.bc)+';background:'+escH(cat.bg)+';margin-bottom:.8rem">'
+      +'<div style="font-size:13px;font-weight:500;color:'+escH(cat.color)+';margin-bottom:.2rem;font-family:var(--font-serif)">'+escH(cat.cat)+'</div>'
+      +'<div style="font-size:11px;color:var(--muted);margin-bottom:.6rem;line-height:1.5">'+escH(cat.desc)+'</div>'
+      +items
+      +'<button class="btn btn-sm" style="margin-top:.3rem;color:'+escH(cat.color)+'" data-ci="'+ci+'" onclick="anaAddKanoItem(this.dataset.ci)">>+ Atributo</button>'
+      +'</div>';
+  }).join('');
+
+  var bar='<div style="display:flex;align-items:center;gap:.5rem;margin-top:.5rem">'
+    +'<button class="btn" style="background:var(--c-purple);color:#fff;border-color:var(--c-purple)" onclick="anaKanoSave()">Guardar Kano</button>'
+    +'<button class="btn btn-sm" onclick="anaKanoRestore()">↺ Restaurar ejemplos</button>'
+    +'<span id="kano-msg" style="font-size:11px;color:var(--c-green)"></span></div>';
+
+  el.innerHTML=tip+cats+bar;
+}
+
+
+
+function initSrsEditor(){
+  var el=document.getElementById('srs-editor-mount'); if(!el||el.innerHTML.trim()) return;
+  renderSrsEditor();
+}
+function renderSrsEditor(){
+  var el=document.getElementById('srs-editor-mount'); if(!el) return;
+  var p=SRS.portada;
+
+  var tabs='<div class="tab-nav">'
+    +'<button class="tab-btn on" onclick="srseTab(0,this)">Portada y alcance</button>'
+    +'<button class="tab-btn" onclick="srseTab(1,this)">Req. funcionales (RF)</button>'
+    +'<button class="tab-btn" onclick="srseTab(2,this)">Req. no funcionales (RNF)</button>'
+    +'<button class="tab-btn" onclick="srseTab(3,this)">Supuestos y restricciones</button>'
+    +'</div>';
+
+  // Portada
+  function fi(lbl,key,ph){return '<div><label style="font-size:11px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.3px;display:block;margin-bottom:2px">'+lbl+'</label><input style="width:100%;background:var(--surface);border:0.5px solid var(--border2);border-radius:5px;padding:5px 8px;font-size:12px;color:var(--text);font-family:var(--font-sans);outline:none" value="'+escHS(p[key]||'')+'" placeholder="'+ph+'" oninput="SRS.portada.'+key+'=this.value;srsSave()"></div>';}
+  function ta2(lbl,key,ph,rows){return '<div><label style="font-size:11px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.3px;display:block;margin-bottom:2px">'+lbl+'</label><textarea style="width:100%;background:var(--surface);border:0.5px solid var(--border2);border-radius:5px;padding:5px 8px;font-size:12px;color:var(--text);font-family:var(--font-sans);resize:vertical;outline:none;line-height:1.6" rows="'+(rows||2)+'" placeholder="'+ph+'" oninput="SRS.portada.'+key+'=this.value;srsSave()">'+escHS(p[key]||'')+'</textarea></div>';}
+
+  var tab0='<div class="tab-panel on" id="srse-0"><div class="card">'
+    +'<div style="font-size:10px;color:var(--faint);font-family:var(--font-mono);margin-bottom:.8rem">'+escHS(p.docId)+' · '+escHS(p.estado)+'</div>'
+    +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:.6rem">'
+    +fi('Nombre del proyecto','nombre','Sistema de...')+fi('ID documento','docId','SRS-XXX-2025-v1.0')
+    +'<div><label style="font-size:11px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.3px;display:block;margin-bottom:2px">Estado</label>'
+    +'<select style="width:100%;background:var(--surface);border:0.5px solid var(--border2);border-radius:5px;padding:5px 8px;font-size:12px;color:var(--text);font-family:var(--font-sans);outline:none" onchange="SRS.portada.estado=this.value;srsSave()">'
+    +['Borrador','En revisión formal','Aprobado','Baseline'].map(function(o){return'<option'+(p.estado===o?' selected':'')+'>'+o+'</option>';}).join('')
+    +'</select></div>'
+    +fi('Fecha de corte','fecha','AAAA-MM-DD')
+    +'</div>'
+    +ta2('Propósito del sistema','proposito','Describe el sistema y el problema que resuelve...',3)
+    +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-top:.5rem">'
+    +ta2('En alcance','enAlcance','Módulos, funcionalidades incluidas...',3)+ta2('Fuera de alcance','fueraAlcance','Qué NO incluye esta versión...',3)
+    +'</div>'
+    +'<div style="display:flex;gap:.5rem;margin-top:.8rem;align-items:center">'
+    +'<button class="btn" style="background:var(--c-blue);color:#fff;border-color:var(--c-blue)" onclick="srsSave();srsSaved(\'srs-p-msg\')">Guardar portada</button>'
+    +'<span id="srs-p-msg" style="font-size:11px;color:var(--c-green)"></span></div>'
+    +'</div></div>';
+
+  // RF tab
+  var rfs=SRS.rfs||[];
+  var priOpts=['Must','Should','Could'];
+  var estOpts=['Borrador','En revisión','Aprobado','Ambiguo'];
+  var rfRows=rfs.map(function(r,i){
+    return '<div class="card-sm" style="margin-bottom:.6rem;border-left:3px solid var(--c-blue)">'
+      +'<div style="display:grid;grid-template-columns:80px 1fr 70px 100px 28px;gap:5px;align-items:center;margin-bottom:.5rem">'
+      +'<input value="'+escHS(r.id)+'" style="font-family:var(--font-mono);font-size:11px;color:var(--c-blue);background:var(--surface);border:0.5px solid var(--border2);border-radius:4px;padding:3px 6px;outline:none" oninput="SRS.rfs['+i+'].id=this.value;srsSave()">'
+      +'<input value="'+escHS(r.titulo)+'" placeholder="Título del RF" style="background:var(--surface);border:0.5px solid var(--border2);border-radius:4px;padding:3px 6px;font-size:12px;font-weight:500;color:var(--text);font-family:var(--font-sans);outline:none" oninput="SRS.rfs['+i+'].titulo=this.value;srsSave()">'
+      +'<select style="background:var(--surface);border:0.5px solid var(--border2);border-radius:4px;padding:3px 5px;font-size:11px;color:var(--text);font-family:var(--font-sans);outline:none" onchange="SRS.rfs['+i+'].prioridad=this.value;srsSave()">'+priOpts.map(function(o){return'<option'+(r.prioridad===o?' selected':'')+'>'+o+'</option>';}).join('')+'</select>'
+      +'<select style="background:var(--surface);border:0.5px solid var(--border2);border-radius:4px;padding:3px 5px;font-size:11px;color:var(--text);font-family:var(--font-sans);outline:none" onchange="SRS.rfs['+i+'].estado=this.value;srsSave()">'+estOpts.map(function(o){return'<option'+(r.estado===o?' selected':'')+'>'+o+'</option>';}).join('')+'</select>'
+      +'<button style="background:none;border:none;cursor:pointer;color:var(--muted);font-size:16px" onclick="SRS.rfs.splice('+i+',1);srsSave();renderSrsEditor()">×</button>'
+      +'</div>'
+      +'<textarea style="width:100%;background:var(--bg);border:0.5px solid var(--border);border-radius:4px;padding:4px 7px;font-size:12px;color:var(--muted);font-family:var(--font-sans);resize:vertical;outline:none;line-height:1.6;margin-bottom:.4rem" rows="2" placeholder="Descripción del RF usando DEBE/DEBERÍA..." oninput="SRS.rfs['+i+'].desc=this.value;srsSave()">'+escHS(r.desc)+'</textarea>'
+      +'<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px">'
+      +'<div><div style="font-size:10px;color:var(--c-blue);font-weight:500;margin-bottom:2px">Given</div><input value="'+escHS(r.given)+'" placeholder="Contexto..." style="width:100%;background:var(--bg);border:0.5px solid var(--border);border-radius:4px;padding:3px 6px;font-size:11px;font-family:var(--font-mono);color:var(--text);outline:none" oninput="SRS.rfs['+i+'].given=this.value;srsSave()"></div>'
+      +'<div><div style="font-size:10px;color:var(--c-amber);font-weight:500;margin-bottom:2px">When</div><input value="'+escHS(r.when)+'" placeholder="Acción..." style="width:100%;background:var(--bg);border:0.5px solid var(--border);border-radius:4px;padding:3px 6px;font-size:11px;font-family:var(--font-mono);color:var(--text);outline:none" oninput="SRS.rfs['+i+'].when=this.value;srsSave()"></div>'
+      +'<div><div style="font-size:10px;color:var(--c-green);font-weight:500;margin-bottom:2px">Then</div><input value="'+escHS(r.then)+'" placeholder="Resultado..." style="width:100%;background:var(--bg);border:0.5px solid var(--border);border-radius:4px;padding:3px 6px;font-size:11px;font-family:var(--font-mono);color:var(--text);outline:none" oninput="SRS.rfs['+i+'].then=this.value;srsSave()"></div>'
+      +'</div></div>';
+  }).join('');
+
+  var tab1='<div class="tab-panel" id="srse-1">'
+    +'<div style="background:rgba(24,95,165,.06);border:0.5px solid rgba(24,95,165,.25);border-radius:var(--radius);padding:.5rem .8rem;font-size:11px;color:var(--c-blue);margin-bottom:.8rem">ⓘ Edita cada RF directamente. Los criterios Gherkin se guardan automáticamente.</div>'
+    +rfRows
+    +'<div style="display:flex;gap:.5rem;margin-top:.5rem;align-items:center">'
+    +'<button class="btn btn-sm" style="color:var(--c-blue);border-color:rgba(24,95,165,.4)" onclick="srsAddRF()">+ RF</button>'
+    +'<button class="btn" style="background:var(--c-blue);color:#fff;border-color:var(--c-blue)" onclick="srsSave();srsSaved(\'srs-rf-msg\')">Guardar RF</button>'
+    +'<button class="btn btn-sm" onclick="SRS.rfs=defaultSRS().rfs;srsSave();renderSrsEditor()">↺ Restaurar</button>'
+    +'<span id="srs-rf-msg" style="font-size:11px;color:var(--c-green)"></span></div></div>';
+
+  // RNF tab
+  var rnfs=SRS.rnfs||[];
+  var catOpts=['Rendimiento','Disponibilidad','Seguridad','Mantenibilidad','Usabilidad','Escalabilidad','Interoperabilidad'];
+  var rnfRows=rnfs.map(function(r,i){
+    return '<div style="display:grid;grid-template-columns:80px 100px 1fr 1fr 28px;gap:5px;align-items:center;padding:5px 0;border-bottom:0.5px solid var(--border)">'
+      +'<input value="'+escHS(r.id)+'" style="font-family:var(--font-mono);font-size:11px;color:var(--c-purple);background:var(--surface);border:0.5px solid var(--border2);border-radius:4px;padding:3px 6px;outline:none" oninput="SRS.rnfs['+i+'].id=this.value;srsSave()">'
+      +'<select style="background:var(--surface);border:0.5px solid var(--border2);border-radius:4px;padding:3px 5px;font-size:11px;color:var(--text);font-family:var(--font-sans);outline:none" onchange="SRS.rnfs['+i+'].cat=this.value;srsSave()">'+catOpts.map(function(o){return'<option'+(r.cat===o?' selected':'')+'>'+o+'</option>';}).join('')+'</select>'
+      +'<input value="'+escHS(r.atributo)+'" placeholder="Atributo..." style="background:var(--surface);border:0.5px solid var(--border2);border-radius:4px;padding:3px 6px;font-size:12px;color:var(--text);font-family:var(--font-sans);outline:none" oninput="SRS.rnfs['+i+'].atributo=this.value;srsSave()">'
+      +'<input value="'+escHS(r.valor)+'" placeholder="Valor objetivo..." style="background:var(--surface);border:0.5px solid var(--border2);border-radius:4px;padding:3px 6px;font-size:12px;color:var(--text);font-family:var(--font-sans);outline:none" oninput="SRS.rnfs['+i+'].valor=this.value;srsSave()">'
+      +'<button style="background:none;border:none;cursor:pointer;color:var(--muted);font-size:16px" onclick="SRS.rnfs.splice('+i+',1);srsSave();renderSrsEditor()">×</button>'
+      +'</div>';
+  }).join('');
+
+  var tab2='<div class="tab-panel" id="srse-2"><div class="card">'
+    +'<div style="display:grid;grid-template-columns:80px 100px 1fr 1fr 28px;gap:5px;font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.3px;border-bottom:0.5px solid var(--border2);padding-bottom:4px;margin-bottom:3px">'
+    +'<span>ID</span><span>Categoría</span><span>Atributo</span><span>Valor objetivo</span><span></span></div>'
+    +rnfRows
+    +'<div style="display:flex;gap:.5rem;margin-top:.6rem;align-items:center">'
+    +'<button class="btn btn-sm" style="color:var(--c-purple);border-color:rgba(83,52,131,.4)" onclick="srsAddRNF()">+ RNF</button>'
+    +'<button class="btn" style="background:var(--c-purple);color:#fff;border-color:var(--c-purple)" onclick="srsSave();srsSaved(\'srs-rnf-msg\')">Guardar RNF</button>'
+    +'<span id="srs-rnf-msg" style="font-size:11px;color:var(--c-green)"></span></div>'
+    +'</div></div>';
+
+  // SA / RC tab
+  var sas=SRS.sas||[]; var rcs=SRS.rcs||[];
+  var saRows=sas.map(function(s,i){return '<div style="display:flex;gap:5px;align-items:center;padding:4px 0;border-bottom:0.5px solid var(--border)"><input value="'+escHS(s.id)+'" style="width:65px;flex-shrink:0;font-family:var(--font-mono);font-size:11px;color:var(--c-blue);background:var(--surface);border:0.5px solid var(--border2);border-radius:4px;padding:3px 6px;outline:none" oninput="SRS.sas['+i+'].id=this.value;srsSave()"><input value="'+escHS(s.desc)+'" placeholder="Descripción..." style="flex:1;background:var(--surface);border:0.5px solid var(--border2);border-radius:4px;padding:3px 6px;font-size:12px;color:var(--text);font-family:var(--font-sans);outline:none" oninput="SRS.sas['+i+'].desc=this.value;srsSave()"><button style="background:none;border:none;cursor:pointer;color:var(--muted);font-size:15px;flex-shrink:0" onclick="SRS.sas.splice('+i+',1);srsSave();renderSrsEditor()">×</button></div>';}).join('');
+  var rcRows=rcs.map(function(r,i){return '<div style="display:flex;gap:5px;align-items:center;padding:4px 0;border-bottom:0.5px solid var(--border)"><input value="'+escHS(r.id)+'" style="width:65px;flex-shrink:0;font-family:var(--font-mono);font-size:11px;color:var(--c-amber);background:var(--surface);border:0.5px solid var(--border2);border-radius:4px;padding:3px 6px;outline:none" oninput="SRS.rcs['+i+'].id=this.value;srsSave()"><input value="'+escHS(r.t)+'" placeholder="Tipo..." style="width:120px;flex-shrink:0;background:var(--surface);border:0.5px solid var(--border2);border-radius:4px;padding:3px 6px;font-size:12px;font-weight:500;color:var(--text);font-family:var(--font-sans);outline:none" oninput="SRS.rcs['+i+'].t=this.value;srsSave()"><input value="'+escHS(r.v)+'" placeholder="Valor..." style="flex:1;background:var(--surface);border:0.5px solid var(--border2);border-radius:4px;padding:3px 6px;font-size:12px;color:var(--text);font-family:var(--font-sans);outline:none" oninput="SRS.rcs['+i+'].v=this.value;srsSave()"><button style="background:none;border:none;cursor:pointer;color:var(--muted);font-size:15px;flex-shrink:0" onclick="SRS.rcs.splice('+i+',1);srsSave();renderSrsEditor()">×</button></div>';}).join('');
+
+  var tab3='<div class="tab-panel" id="srse-3"><div class="g2">'
+    +'<div class="card"><div class="card-title">Supuestos (SA)</div>'+saRows+'<button class="btn btn-sm" style="margin-top:.5rem" onclick="srsAddSA()">+ Supuesto</button></div>'
+    +'<div class="card"><div class="card-title">Restricciones (RC)</div>'+rcRows+'<button class="btn btn-sm" style="margin-top:.5rem" onclick="srsAddRC()">+ Restricción</button></div>'
+    +'</div>'
+    +'<div style="display:flex;gap:.5rem;margin-top:.6rem;align-items:center">'
+    +'<button class="btn" style="background:var(--c-blue);color:#fff;border-color:var(--c-blue)" onclick="srsSave();srsSaved(\'srs-sarc-msg\')">Guardar SA/RC</button>'
+    +'<span id="srs-sarc-msg" style="font-size:11px;color:var(--c-green)"></span></div></div>';
+
+  el.innerHTML=tabs+tab0+tab1+tab2+tab3;
+}
+function srseTab(i,btn){
+  document.querySelectorAll('.tab-btn').forEach(function(b,j){b.classList.toggle('on',j===i);});
+  ['srse-0','srse-1','srse-2','srse-3'].forEach(function(id,j){
+    var e=document.getElementById(id); if(e) e.style.display=j===i?'block':'none';
+  });
+}
+function srsAddRF(){ SRS.rfs=SRS.rfs||[]; var n=SRS.rfs.length+1; SRS.rfs.push({id:'RF-'+String(n).padStart(3,'0'),titulo:'',prioridad:'Must',estado:'Borrador',desc:'',given:'',when:'',then:''}); srsSave(); renderSrsEditor(); }
+function srsAddRNF(){ SRS.rnfs=SRS.rnfs||[]; var n=SRS.rnfs.length+1; SRS.rnfs.push({id:'RNF-'+String(n).padStart(3,'0'),cat:'Rendimiento',atributo:'',valor:'',metodo:''}); srsSave(); renderSrsEditor(); }
+function srsAddSA(){ SRS.sas=SRS.sas||[]; var n=SRS.sas.length+1; SRS.sas.push({id:'SA-'+String(n).padStart(3,'0'),desc:''}); srsSave(); renderSrsEditor(); }
+function srsAddRC(){ SRS.rcs=SRS.rcs||[]; var n=SRS.rcs.length+1; SRS.rcs.push({id:'RC-'+String(n).padStart(3,'0'),t:'',v:''}); srsSave(); renderSrsEditor(); }
+
 
 /* ════════════════════════════════════════
    APLICACIÓN EN CAMPO — STORAGE ENGINE
@@ -5039,7 +5515,11 @@ function onPageShow(id) {
   if (id==='principios') setTimeout(initPrincipios, 50);
   if (id==='ana-modelado') setTimeout(initAnaModelado, 50);
   if (id==='eli-tecnicas') setTimeout(initEliTecnicas, 50);
+  if (id==='ana-gap') setTimeout(initAnaGap, 50);
+  if (id==='ana-modelado') setTimeout(function(){ if(document.getElementById('ana-uc-mount')) renderAnaUC(); }, 200);
+  if (id==='ana-priorizacion') setTimeout(function(){ initAnaMoscow(); initAnaVxE(); initAnaKano(); }, 50);
   if (id==='eli-plantillas') setTimeout(initEliPlantillas, 50);
+  if (id==='srs-editor') setTimeout(initSrsEditor, 50);
   if (id==='srs-glosario') initGlosario();
   if (id==='val-log') initDefects();
   if (id==='ccb-cr') setTimeout(initCR, 50);
