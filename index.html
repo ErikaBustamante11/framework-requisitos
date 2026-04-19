@@ -3539,41 +3539,235 @@ reg('val-tecnicas', () => `
 <div class="page-header">
   <div class="page-eyebrow" style="color:var(--c-green)">● Fase 4 — Validación</div>
   <h1 class="page-title">Técnicas de revisión formal</h1>
-  <p class="page-desc">Las cuatro técnicas según IEEE 1028 con fases, roles y criterios de entrada/salida.</p>
+  <p class="page-desc">Las cuatro técnicas según IEEE 1028 con fases, roles, criterios de entrada/salida y plantillas editables de aplicación real.</p>
   <div class="std-row"><span class="std-pill">IEEE 1028:2008</span><span class="std-pill">IEEE 29148 §6.3</span></div>
 </div>
-
-<div class="tab-nav">
-  <button class="tab-btn on" onclick="tabSel('val',0,this)">Walkthrough</button>
-  <button class="tab-btn" onclick="tabSel('val',1,this)">Inspección Fagan</button>
-  <button class="tab-btn" onclick="tabSel('val',2,this)">Revisión técnica</button>
-  <button class="tab-btn" onclick="tabSel('val',3,this)">UAT</button>
-</div>
-
-${[
-  {name:'Walkthrough de requisitos',ref:'IEEE 1028 §5.3',color:'var(--c-blue)',desc:'El autor guía al grupo para detectar problemas tempranamente. La técnica más informal pero más rápida.',mets:[{l:'Formalidad',v:30},{l:'Eficacia detección',v:55},{l:'Costo',v:25}],fases:[{n:1,t:'Preparación (1–2 días antes)',d:'Distribuir el documento. Cada revisor lo lee y anota preguntas.'},{n:2,t:'Reunión (2–4 horas)',d:'Autor presenta sección por sección. Secretario registra observaciones.'},{n:3,t:'Seguimiento',d:'Autor resuelve observaciones y actualiza el documento.'}],entrada:'Borrador completo o sección lista para revisión',salida:'Lista de observaciones documentada · Autor tiene plan de resolución'},
-  {name:'Inspección Fagan',ref:'IEEE 1028 §5.4 · Fagan 1976',color:'var(--c-red)',desc:'La técnica más rigurosa. Proceso estructurado en 6 fases con roles definidos, métricas de densidad de defectos y criterio formal de re-inspección.',mets:[{l:'Formalidad',v:95},{l:'Eficacia detección',v:90},{l:'Costo',v:80}],fases:[{n:1,t:'Planificación',d:'El moderador define alcance, selecciona revisores y distribuye materiales.'},{n:2,t:'Visión general (Overview)',d:'El autor presenta el contexto del documento al equipo inspector.'},{n:3,t:'Preparación individual',d:'Cada inspector lee el documento de forma independiente usando el checklist.'},{n:4,t:'Reunión de inspección (máx. 2h)',d:'El moderador dirige. El lector parafrasea. Los inspectores reportan defectos.'},{n:5,t:'Reescritura',d:'El autor corrige todos los defectos Mayores.'},{n:6,t:'Seguimiento (Follow-up)',d:'El moderador verifica. Si densidad supera umbral → re-inspección.'}],entrada:'Documento completo · Checklist preparado · Revisores confirmados',salida:'Densidad defectos < 0.3/pág · 0 Mayores sin resolver · Moderador firma'},
-  {name:'Revisión técnica formal',ref:'IEEE 1028 §5.2',color:'var(--c-purple)',desc:'Revisión estructurada por pares enfocada en corrección técnica. Menos formal que Fagan pero con criterios de salida definidos y acta firmada.',mets:[{l:'Formalidad',v:65},{l:'Eficacia detección',v:75},{l:'Costo',v:50}],fases:[{n:1,t:'Preparación',d:'Distribución con checklist técnico. Revisores preparan preguntas de viabilidad.'},{n:2,t:'Reunión técnica (1–3 horas)',d:'Revisión sistemática. Equipo técnico evalúa viabilidad y consistencia.'},{n:3,t:'Decisión colegiada',d:'Aprobado / Aprobado con condiciones / Rechazado.'},{n:4,t:'Seguimiento',d:'Autor resuelve condiciones. Líder técnico verifica y cierra el acta.'}],entrada:'SRS con auto-revisión aprobada · Arquitectura preliminar disponible',salida:'Acta firmada · Condiciones con fecha de resolución · 0 issues de viabilidad abiertos'},
-  {name:'UAT — Prueba de aceptación de usuario',ref:'IEEE 29148 §6.3.4 · BABOK v3',color:'var(--c-green)',desc:'Los usuarios finales validan que el sistema implementado cumple sus necesidades reales, ejecutando casos de prueba en entorno representativo.',mets:[{l:'Formalidad',v:60},{l:'Eficacia validación',v:92},{l:'Costo',v:65}],fases:[{n:1,t:'Planificación del UAT',d:'Definir alcance, criterios, usuarios, entorno y datos de prueba.'},{n:2,t:'Diseño de casos de prueba',d:'Casos derivados de los criterios de aceptación del SRS y Gherkin.'},{n:3,t:'Ejecución del UAT',d:'Usuarios ejecutan cada caso. QA registra resultados sin influir.'},{n:4,t:'Gestión de defectos',d:'Bloqueantes detienen el lanzamiento. Mayores resueltos antes del go-live.'},{n:5,t:'Sign-off de aceptación',d:'Todos los criterios pasan. Usuario clave firma el documento de aceptación.'}],entrada:'Pruebas de sistema sin defectos bloqueantes · Ambiente UAT estable',salida:'100% casos críticos pasan · 0 Bloqueantes · Acta firmada · Go-live aprobado'},
-].map((t,i) => `
-<div class="tab-panel${i===0?' on':''}" id="val-${i}">
-  <div class="card" style="border-left:3px solid ${t.color}">
-    <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:.7rem;flex-wrap:wrap;gap:.5rem">
-      <div><div style="font-size:15px;font-weight:500;font-family:var(--font-serif);margin-bottom:.3rem">${t.name}</div><div style="font-size:12px;color:var(--muted);max-width:560px;line-height:1.6">${t.desc}</div></div>
-      <span class="badge b-func">${t.ref}</span>
-    </div>
-    ${t.mets.map(m => `<div class="bar-row"><div class="bar-label">${m.l}</div><div class="bar-track"><div class="bar-fill" style="width:${m.v}%;background:${t.color}"></div></div><div class="bar-val" style="color:${t.color}">${m.v}%</div></div>`).join('')}
-    <div style="margin-top:.8rem">
-      <div class="card-title">Fases de ejecución</div>
-      ${t.fases.map((f,fi,fa) => `<div class="step-row">${fi<fa.length-1?'<div class="step-line"></div>':''}<div class="step-num" style="background:${t.color}">${f.n}</div><div class="step-body"><div class="step-title">${f.t}</div><div class="step-desc">${f.d}</div></div></div>`).join('')}
-    </div>
-    <div class="g2" style="margin-top:.8rem">
-      <div style="background:rgba(163,45,45,.04);border:0.5px solid rgba(163,45,45,.2);border-radius:var(--radius);padding:.6rem .8rem"><div style="font-size:10px;font-weight:500;color:var(--c-red);text-transform:uppercase;letter-spacing:.3px;margin-bottom:.3rem">Criterio de entrada</div><div style="font-size:11px">${t.entrada}</div></div>
-      <div style="background:rgba(15,110,86,.04);border:0.5px solid rgba(15,110,86,.2);border-radius:var(--radius);padding:.6rem .8rem"><div style="font-size:10px;font-weight:500;color:var(--c-green);text-transform:uppercase;letter-spacing:.3px;margin-bottom:.3rem">Criterio de salida</div><div style="font-size:11px">${t.salida}</div></div>
-    </div>
-  </div>
-</div>`).join('')}
+<div id="val-tec-mount"></div>
 `);
+
+function initValTecnicas(){
+  var el=document.getElementById('val-tec-mount'); if(!el||el.innerHTML.trim()) return;
+  renderValTecnicas();
+}
+
+function renderValTecnicas(){
+  var el=document.getElementById('val-tec-mount'); if(!el) return;
+
+  // ── Storage ──
+  var VT_KEY='fw_vt_v1';
+  if(!window._VT){ try{ window._VT=JSON.parse(localStorage.getItem(VT_KEY))||defVT(); }catch(e){ window._VT=defVT(); } }
+  function saveVT(){ localStorage.setItem(VT_KEY,JSON.stringify(window._VT)); }
+  function defVT(){
+    return {
+      wt:{ fecha:'', moderador:'', autor:'', participantes:'', seccion:'', observaciones:'', pendientes:'', proximos:'',
+           checks:{c1:false,c2:false,c3:false,c4:false,c5:false} },
+      fg:{ fecha:'', moderador:'', autor:'', lector:'', inspectores:'', alcance:'', totalPags:'', defectos:'', densidad:'', decision:'',
+           checks:{c1:false,c2:false,c3:false,c4:false,c5:false,c6:false}, notas:'' },
+      rt:{ fecha:'', lider:'', participantes:'', doc:'', decision:'Pendiente', condiciones:'', plazo:'', cierre:'',
+           checks:{c1:false,c2:false,c3:false,c4:false} },
+      uat:{ fecha:'', ambiente:'', responsable:'', alcance:'', signoff:'', notas:'',
+            casos:[
+              {id:'CP-001',desc:'Login con credenciales válidas SSO',criterio:'Redirige al dashboard en < 3s',resultado:'',bloqueante:false},
+              {id:'CP-002',desc:'Formulario con campos inválidos',criterio:'Mensaje de error por campo en < 500ms',resultado:'',bloqueante:false},
+              {id:'CP-003',desc:'Consulta score con API disponible',criterio:'Score retornado en < 5s',resultado:'',bloqueante:true},
+            ]},
+    };
+  }
+  function escH(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+  function inp(id,val,ph,style){ return '<input id="'+id+'" value="'+escH(val)+'" placeholder="'+ph+'" style="'+(style||'width:100%')+';background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:5px 8px;font-size:12px;color:var(--text);font-family:var(--font-sans);outline:none" oninput="window._VT.'+id.replace(/-/g,'.')+'.this=null" onchange="vtSaveField(\''+id+'\',this.value)">'; }
+  function ta(id,val,ph,rows){ return '<textarea id="'+id+'" rows="'+(rows||2)+'" placeholder="'+ph+'" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:5px 8px;font-size:12px;color:var(--text);font-family:var(--font-sans);resize:vertical;outline:none;line-height:1.6" oninput="vtSaveTA(\''+id+'\',this.value)">'+escH(val)+'</textarea>'; }
+  function fld(lbl,html){ return '<div><div style="font-size:11px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.3px;margin-bottom:2px">'+lbl+'</div>'+html+'</div>'; }
+  function chk(id,checked,label,color){
+    return '<div style="display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:0.5px solid var(--border);cursor:pointer" onclick="vtToggleChk(\''+id+'\',this)">'
+      +'<div style="width:17px;height:17px;border-radius:4px;border:1.5px solid var(--border2);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;'+(checked?'background:var(--c-green);border-color:var(--c-green);color:#fff':'')+'">'+( checked?'✓':'')+'</div>'
+      +'<div style="font-size:12px;'+(checked?'text-decoration:line-through;color:var(--muted)':'')+'">'+label+'</div>'
+      +'</div>';
+  }
+  function saveBar(techKey,msgId){
+    return '<div style="display:flex;gap:.5rem;margin-top:.8rem;align-items:center">'
+      +'<button class="btn" style="background:var(--c-green);color:#fff;border-color:var(--c-green)" onclick="vtSaveAll(\''+techKey+'\',\''+msgId+'\')">Guardar plantilla</button>'
+      +'<button class="btn btn-sm" onclick="vtReset(\''+techKey+'\')">↺ Limpiar</button>'
+      +'<span id="'+msgId+'" style="font-size:11px;color:var(--c-green)"></span></div>';
+  }
+
+  var techs = [
+    { key:'wt', name:'Walkthrough de requisitos', ref:'IEEE 1028 §5.3', color:'var(--c-blue)',
+      desc:'El autor guía al grupo para detectar problemas tempranamente. La técnica más informal pero más rápida.',
+      mets:[{l:'Formalidad',v:30},{l:'Eficacia detección',v:55},{l:'Costo',v:25}],
+      fases:[{n:1,t:'Preparación (1–2 días antes)',d:'Distribuir el documento. Cada revisor lo lee y anota preguntas.'},{n:2,t:'Reunión (2–4 horas)',d:'Autor presenta sección por sección. Secretario registra observaciones.'},{n:3,t:'Seguimiento',d:'Autor resuelve observaciones y actualiza el documento.'}],
+      entrada:'Borrador completo o sección lista para revisión',
+      salida:'Lista de observaciones documentada · Autor tiene plan de resolución' },
+    { key:'fg', name:'Inspección Fagan', ref:'IEEE 1028 §5.4 · Fagan 1976', color:'var(--c-red)',
+      desc:'La técnica más rigurosa. Proceso estructurado en 6 fases con roles definidos, métricas de densidad de defectos y criterio formal de re-inspección.',
+      mets:[{l:'Formalidad',v:95},{l:'Eficacia detección',v:90},{l:'Costo',v:80}],
+      fases:[{n:1,t:'Planificación',d:'El moderador define alcance, selecciona revisores y distribuye materiales.'},{n:2,t:'Visión general',d:'El autor presenta el contexto al equipo inspector.'},{n:3,t:'Preparación individual',d:'Cada inspector lee de forma independiente usando el checklist.'},{n:4,t:'Reunión de inspección (máx. 2h)',d:'El moderador dirige. El lector parafrasea. Los inspectores reportan defectos.'},{n:5,t:'Reescritura',d:'El autor corrige todos los defectos Mayores.'},{n:6,t:'Seguimiento (Follow-up)',d:'El moderador verifica. Si densidad > umbral → re-inspección.'}],
+      entrada:'Documento completo · Checklist preparado · Revisores confirmados',
+      salida:'Densidad < 0.3/pág · 0 Mayores sin resolver · Moderador firma' },
+    { key:'rt', name:'Revisión técnica formal', ref:'IEEE 1028 §5.2', color:'var(--c-purple)',
+      desc:'Revisión estructurada por pares enfocada en corrección técnica. Menos formal que Fagan pero con criterios de salida definidos y acta firmada.',
+      mets:[{l:'Formalidad',v:65},{l:'Eficacia detección',v:75},{l:'Costo',v:50}],
+      fases:[{n:1,t:'Preparación',d:'Distribución con checklist técnico. Revisores preparan preguntas de viabilidad.'},{n:2,t:'Reunión técnica (1–3 horas)',d:'Revisión sistemática. Equipo evalúa viabilidad y consistencia.'},{n:3,t:'Decisión colegiada',d:'Aprobado / Aprobado con condiciones / Rechazado.'},{n:4,t:'Seguimiento',d:'Autor resuelve condiciones. Líder técnico verifica y cierra el acta.'}],
+      entrada:'SRS con auto-revisión aprobada · Arquitectura preliminar disponible',
+      salida:'Acta firmada · Condiciones con fecha de resolución · 0 issues de viabilidad abiertos' },
+    { key:'uat', name:'UAT — Prueba de aceptación', ref:'IEEE 29148 §6.3.4 · BABOK v3', color:'var(--c-green)',
+      desc:'Los usuarios finales validan que el sistema cumple sus necesidades reales, ejecutando casos de prueba en entorno representativo.',
+      mets:[{l:'Formalidad',v:60},{l:'Eficacia validación',v:92},{l:'Costo',v:65}],
+      fases:[{n:1,t:'Planificación del UAT',d:'Definir alcance, criterios, usuarios, entorno y datos de prueba.'},{n:2,t:'Diseño de casos de prueba',d:'Casos derivados de los criterios de aceptación del SRS y Gherkin.'},{n:3,t:'Ejecución del UAT',d:'Usuarios ejecutan cada caso. QA registra resultados sin influir.'},{n:4,t:'Gestión de defectos',d:'Bloqueantes detienen el lanzamiento. Mayores resueltos antes del go-live.'},{n:5,t:'Sign-off de aceptación',d:'Todos los criterios pasan. Usuario clave firma el documento de aceptación.'}],
+      entrada:'Pruebas de sistema sin defectos bloqueantes · Ambiente UAT estable',
+      salida:'100% casos críticos pasan · 0 Bloqueantes · Acta firmada · Go-live aprobado' },
+  ];
+
+  // ── Nav tabs ──
+  var curTech = window._vtCurTech||0;
+  var nav = '<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1rem">'
+    + techs.map(function(t,i){
+        return '<button style="padding:6px 14px;border-radius:20px;font-size:12px;font-weight:500;cursor:pointer;border:0.5px solid '+(i===curTech?t.color:'var(--border2)')+';background:transparent;color:'+(i===curTech?t.color:'var(--muted)')+';transition:all .2s" onclick="window._vtCurTech='+i+';window._vtCurTab=0;renderValTecnicas()">'+t.name+'</button>';
+      }).join('')
+    + '</div>';
+
+  var t = techs[curTech];
+  var vt = window._VT[t.key];
+  var curTab = window._vtCurTab||0;
+
+  // ── Inner tab nav ──
+  var innerTabs = '<div class="tab-nav">'
+    +'<button class="tab-btn'+(curTab===0?' on':'')+'" onclick="window._vtCurTab=0;renderValTecnicas()">Guía de referencia</button>'
+    +'<button class="tab-btn'+(curTab===1?' on':'')+'" onclick="window._vtCurTab=1;renderValTecnicas()">Plantilla de aplicación</button>'
+    +'</div>';
+
+  // ── TAB 0: Guía de referencia (original) ──
+  var tab0 = '<div style="display:'+(curTab===0?'block':'none')+'">'
+    +'<div class="card" style="border-left:3px solid '+t.color+'">'
+    +'<div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:.7rem;flex-wrap:wrap;gap:.5rem">'
+    +'<div><div style="font-size:15px;font-weight:500;font-family:var(--font-serif);margin-bottom:.3rem">'+t.name+'</div>'
+    +'<div style="font-size:12px;color:var(--muted);max-width:560px;line-height:1.6">'+t.desc+'</div></div>'
+    +'<span class="badge b-func">'+t.ref+'</span></div>'
+    + t.mets.map(function(m){ return '<div class="bar-row"><div class="bar-label">'+m.l+'</div><div class="bar-track"><div class="bar-fill" style="width:'+m.v+'%;background:'+t.color+'"></div></div><div class="bar-val" style="color:'+t.color+'">'+m.v+'%</div></div>'; }).join('')
+    +'<div style="margin-top:.8rem"><div class="card-title">Fases de ejecución</div>'
+    + t.fases.map(function(f,fi,fa){ return '<div class="step-row">'+(fi<fa.length-1?'<div class="step-line"></div>':'')+' <div class="step-num" style="background:'+t.color+'">'+f.n+'</div><div class="step-body"><div class="step-title">'+f.t+'</div><div class="step-desc">'+f.d+'</div></div></div>'; }).join('')
+    +'</div><div class="g2" style="margin-top:.8rem">'
+    +'<div style="background:rgba(163,45,45,.04);border:0.5px solid rgba(163,45,45,.2);border-radius:var(--radius);padding:.6rem .8rem"><div style="font-size:10px;font-weight:500;color:var(--c-red);text-transform:uppercase;letter-spacing:.3px;margin-bottom:.3rem">Criterio de entrada</div><div style="font-size:11px">'+t.entrada+'</div></div>'
+    +'<div style="background:rgba(15,110,86,.04);border:0.5px solid rgba(15,110,86,.2);border-radius:var(--radius);padding:.6rem .8rem"><div style="font-size:10px;font-weight:500;color:var(--c-green);text-transform:uppercase;letter-spacing:.3px;margin-bottom:.3rem">Criterio de salida</div><div style="font-size:11px">'+t.salida+'</div></div>'
+    +'</div></div></div>';
+
+  // ── TAB 1: Plantilla de aplicación ──
+  var plantillas = {
+    wt: '<div class="card"><div class="card-title" style="color:var(--c-blue);margin-bottom:.8rem">Plantilla de Walkthrough</div>'
+      +'<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.6rem;margin-bottom:.6rem">'
+      +fld('Fecha',inp('wt-fecha',vt.fecha||'','','width:100%;'))+fld('Moderador / Secretario',inp('wt-moderador',vt.moderador||'','Nombre del secretario'))+fld('Autor del documento',inp('wt-autor',vt.autor||'','Nombre del autor'))
+      +'</div>'
+      +'<div style="margin-bottom:.6rem">'+fld('Participantes',inp('wt-participantes',vt.participantes||'','Nombre · Rol, separados por coma'))+'</div>'
+      +'<div style="margin-bottom:.6rem">'+fld('Sección / documento revisado',inp('wt-seccion',vt.seccion||'','Ej: SRS v1.2 §4.2 — Módulo de crédito'))+'</div>'
+      +'<div style="margin-bottom:.6rem">'+fld('Observaciones y hallazgos',ta('wt-observaciones',vt.observaciones||'','Registra cada observación con su número y descripción...',4))+'</div>'
+      +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:.6rem">'
+      +fld('Temas pendientes de aclaración',ta('wt-pendientes',vt.pendientes||'','Ej: RF-002 — definir KPIs específicos...',3))
+      +fld('Próximos pasos acordados',ta('wt-proximos',vt.proximos||'','Ej: Autor envía minuta en 24h...',3))
+      +'</div>'
+      +saveBar('wt','wt-msg')
+      +'</div>',
+
+    fg: '<div class="card"><div class="card-title" style="color:var(--c-red);margin-bottom:.8rem">Acta de Inspección Fagan</div>'
+      +'<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.6rem;margin-bottom:.6rem">'
+      +fld('Fecha',inp('fg-fecha',vt.fecha||'',''))+fld('Moderador',inp('fg-moderador',vt.moderador||'','Nombre del moderador'))+fld('Autor',inp('fg-autor',vt.autor||'','Nombre del autor'))
+      +'</div>'
+      +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:.6rem">'
+      +fld('Lector',inp('fg-lector',vt.lector||'','Nombre del lector'))+fld('Inspectores',inp('fg-inspectores',vt.inspectores||'','Nombres separados por coma'))
+      +'</div>'
+      +'<div style="margin-bottom:.6rem">'+fld('Alcance de la inspección',inp('fg-alcance',vt.alcance||'','Ej: SRS §3 — Requisitos funcionales RF-001 a RF-012'))+'</div>'
+      +'<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.6rem;margin-bottom:.6rem">'
+      +fld('Total páginas revisadas',inp('fg-totalPags',vt.totalPags||'','','width:100%;'))+fld('Total defectos encontrados',inp('fg-defectos',vt.defectos||'','','width:100%;'))+fld('Densidad (def/pág)',inp('fg-densidad',vt.densidad||'','Ej: 0.18','width:100%;'))
+      +'</div>'
+      +'<div style="margin-bottom:.6rem"><div style="font-size:11px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.3px;margin-bottom:4px">Decisión del moderador</div>'
+      +'<select id="fg-decision" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:5px 8px;font-size:12px;color:var(--text);font-family:var(--font-sans);outline:none" onchange="vtSaveField(\'fg-decision\',this.value)">'
+      +['','Aprobado — sin re-inspección','Re-inspección requerida — densidad supera umbral','En proceso — pendiente resolución de defectos'].map(function(o){return'<option'+(vt.decision===o?' selected':'')+'>'+o+'</option>';}).join('')
+      +'</select></div>'
+      +'<div style="margin-bottom:.6rem">'+fld('Notas adicionales',ta('fg-notas',vt.notas||'','Observaciones del moderador, contexto de la inspección...',3))+'</div>'
+      +saveBar('fg','fg-msg')
+      +'</div>',
+
+    rt: '<div class="card"><div class="card-title" style="color:var(--c-purple);margin-bottom:.8rem">Acta de Revisión Técnica Formal</div>'
+      +'<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.6rem;margin-bottom:.6rem">'
+      +fld('Fecha',inp('rt-fecha',vt.fecha||'',''))+fld('Líder técnico',inp('rt-lider',vt.lider||'','Nombre del líder'))+fld('Documento revisado',inp('rt-doc',vt.doc||'','Ej: SRS v1.2'))
+      +'</div>'
+      +'<div style="margin-bottom:.6rem">'+fld('Participantes',inp('rt-participantes',vt.participantes||'','Nombre · Rol, separados por coma'))+'</div>'
+      +'<div style="margin-bottom:.6rem"><div style="font-size:11px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.3px;margin-bottom:4px">Decisión colegiada</div>'
+      +'<select id="rt-decision" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:5px 8px;font-size:12px;color:var(--text);font-family:var(--font-sans);outline:none" onchange="vtSaveField(\'rt-decision\',this.value)">'
+      +['Pendiente','Aprobado','Aprobado con condiciones','Rechazado — requiere reescritura'].map(function(o){return'<option'+(vt.decision===o?' selected':'')+'>'+o+'</option>';}).join('')
+      +'</select></div>'
+      +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:.6rem">'
+      +fld('Condiciones a resolver',ta('rt-condiciones',vt.condiciones||'','Una condición por línea...',3))+fld('Plazo de resolución',inp('rt-plazo',vt.plazo||'','Ej: 5 días hábiles'))
+      +'</div>'
+      +'<div style="margin-bottom:.6rem">'+fld('Cierre / verificación del líder',ta('rt-cierre',vt.cierre||'','Confirma que las condiciones fueron resueltas...',2))+'</div>'
+      +saveBar('rt','rt-msg')
+      +'</div>',
+
+    uat: function(){
+      var casos=vt.casos||[];
+      var total=casos.length;
+      var pasa=casos.filter(function(ca){return ca.resultado==='Pasa';}).length;
+      var falla=casos.filter(function(ca){return ca.resultado==='Falla';}).length;
+      var bloq=casos.filter(function(ca){return ca.resultado==='Bloqueante';}).length;
+
+      var kpis='<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:.5rem;margin-bottom:1rem">'
+        +[{n:total,l:'Total casos',c:'var(--c-blue)'},{n:pasa,l:'Pasan',c:'var(--c-green)'},{n:falla,l:'Fallan',c:'var(--c-amber)'},{n:bloq,l:'Bloqueantes',c:'var(--c-red)'}]
+        .map(function(k){return '<div class="kpi"><div class="kpi-num" style="color:'+k.c+';font-size:18px">'+k.n+'</div><div class="kpi-label" style="font-size:10px">'+k.l+'</div></div>';}).join('')+'</div>';
+
+      var casoRows=casos.map(function(ca,i){
+        return '<div style="display:grid;grid-template-columns:70px 1fr 1fr 90px 28px;gap:5px;align-items:center;padding:5px 0;border-bottom:0.5px solid var(--border)">'
+          +'<input value="'+escH(ca.id)+'" style="font-family:var(--font-mono);font-size:11px;color:var(--c-blue);background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 6px;outline:none" oninput="window._VT.uat.casos['+i+'].id=this.value;saveVT()">'
+          +'<input value="'+escH(ca.desc)+'" placeholder="Descripción del caso..." style="background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 6px;font-size:12px;color:var(--text);font-family:var(--font-sans);outline:none" oninput="window._VT.uat.casos['+i+'].desc=this.value;saveVT()">'
+          +'<input value="'+escH(ca.criterio)+'" placeholder="Criterio de aceptación..." style="background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 6px;font-size:12px;color:var(--text);font-family:var(--font-sans);outline:none" oninput="window._VT.uat.casos['+i+'].criterio=this.value;saveVT()">'
+          +'<select style="background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 5px;font-size:12px;color:var(--text);font-family:var(--font-sans);outline:none" onchange="window._VT.uat.casos['+i+'].resultado=this.value;saveVT();renderValTecnicas()">'
+          +['','Pasa','Falla','Bloqueante','No ejecutado'].map(function(o){return'<option'+(ca.resultado===o?' selected':'')+'>'+o+'</option>';}).join('')+'</select>'
+          +'<button style="background:none;border:none;cursor:pointer;color:var(--muted);font-size:15px" onclick="window._VT.uat.casos.splice('+i+',1);saveVT();renderValTecnicas()">×</button>'
+          +'</div>';
+      }).join('');
+
+      return '<div class="card"><div class="card-title" style="color:var(--c-green);margin-bottom:.8rem">Registro de UAT</div>'
+        +kpis
+        +'<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.6rem;margin-bottom:.6rem">'
+        +fld('Fecha',inp('uat-fecha',vt.fecha||'',''))+fld('Ambiente UAT',inp('uat-ambiente',vt.ambiente||'','Ej: Staging v1.2'))+fld('Responsable QA',inp('uat-responsable',vt.responsable||'','Nombre'))
+        +'</div><div style="margin-bottom:.6rem">'+fld('Alcance del UAT',inp('uat-alcance',vt.alcance||'','Módulos y funcionalidades incluidas'))+'</div>'
+        +'<div class="card-title" style="margin-bottom:.4rem">Casos de prueba</div>'
+        +'<div style="display:grid;grid-template-columns:70px 1fr 1fr 90px 28px;gap:5px;font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.3px;border-bottom:0.5px solid var(--border2);padding-bottom:3px;margin-bottom:3px">'
+        +'<span>ID</span><span>Descripción</span><span>Criterio de aceptación</span><span>Resultado</span><span></span></div>'
+        +casoRows
+        +'<button class="btn btn-sm" style="margin-top:.5rem" onclick="window._VT.uat.casos.push({id:\'CP-\'+String(window._VT.uat.casos.length+1).padStart(3,\'0\'),desc:\'\',criterio:\'\',resultado:\'\',bloqueante:false});saveVT();renderValTecnicas()">+ Caso de prueba</button>'
+        +'<div style="margin-top:.8rem">'+fld('Sign-off / observaciones finales',ta('uat-signoff',vt.signoff||'','Confirma que el UAT fue aprobado y quién firmó...',3))+'</div>'
+        +saveBar('uat','uat-msg')+'</div>';
+    }(),
+  };
+
+  var tab1p = '<div style="display:'+(curTab===1?'block':'none')+'">'
+    +(typeof plantillas[t.key]==='string'?plantillas[t.key]:plantillas[t.key])
+    +'</div>';
+
+  el.innerHTML = nav + innerTabs + tab0 + tab1p;
+
+  // Expose functions to window
+
+  window.vtSaveField = function(fieldId, val){
+    var parts = fieldId.split('-');
+    var tech=parts[0], field=parts[1];
+    if(window._VT[tech]) window._VT[tech][field]=val;
+    saveVT();
+  };
+  window.vtSaveTA = function(fieldId, val){
+    var parts = fieldId.split('-');
+    var tech=parts[0], field=parts[1];
+    if(window._VT[tech]) window._VT[tech][field]=val;
+    saveVT();
+  };
+  window.vtSaveAll = function(techKey, msgId){
+    saveVT();
+    var e=document.getElementById(msgId); if(e){e.textContent='✓ Guardado';setTimeout(function(){e.textContent='';},1800);}
+  };
+  window.vtReset = function(techKey){
+    if(!confirm('¿Limpiar la plantilla de '+techKey+'?')) return;
+    var fresh=defVT(); window._VT[techKey]=fresh[techKey]; saveVT(); renderValTecnicas();
+  };
+}
+
 
 /* ════════════════════════════════════════
    PAGE: LOG DEFECTOS
@@ -3582,37 +3776,295 @@ reg('val-log', () => `
 <div class="page-header">
   <div class="page-eyebrow" style="color:var(--c-green)">● Fase 4 — Validación</div>
   <h1 class="page-title">Log de defectos</h1>
-  <p class="page-desc">Registro oficial de defectos detectados en la inspección formal. Haz clic en cualquier fila para ver el detalle completo.</p>
+  <p class="page-desc">Registro oficial de defectos detectados en la inspección formal. Edita, agrega o elimina según tu revisión real.</p>
+  <div class="std-row"><span class="std-pill">IEEE 1028:2008</span><span class="std-pill">Fagan Inspection</span></div>
 </div>
-<div class="kpi-grid" id="def-kpis"></div>
-<div class="table-wrap" style="margin-bottom:1rem">
-  <table class="data-table">
-    <thead><tr><th>ID</th><th>Sección</th><th>Severidad</th><th>Descripción</th><th>Asignado</th><th>Estado</th></tr></thead>
-    <tbody id="def-body"></tbody>
-  </table>
-</div>
-<div id="def-detail"></div>
+<div id="val-log-mount"></div>
 `);
 
-/* ════════════════════════════════════════
-   PAGE: SIMULADOR UAT
-════════════════════════════════════════ */
+function initValLog(){
+  var el=document.getElementById('val-log-mount');
+  if(!el||el.innerHTML.trim()) return;
+  if(!window._DEFS) window._DEFS = DEFECTS.slice();
+  window._selDefIdx = -1;
+  renderValLog();
+}
+
+function renderValLog(){
+  var el=document.getElementById('val-log-mount'); if(!el) return;
+  if(!window._DEFS) window._DEFS = DEFECTS.slice();
+  var defs = window._DEFS;
+  var sel  = (typeof window._selDefIdx==='number') ? window._selDefIdx : -1;
+
+  function e(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+  // KPIs
+  var bloq = defs.filter(function(d){return d.sev==='Bloqueante';}).length;
+  var may  = defs.filter(function(d){return d.sev==='Mayor';}).length;
+  var ab   = defs.filter(function(d){return d.est==='Abierto';}).length;
+  var dens = (defs.length/12).toFixed(2);
+  var ok   = ab===0 && parseFloat(dens)<0.3;
+
+  var html = '';
+
+  // Banner
+  html += '<div style="background:rgba(24,95,165,.06);border:0.5px solid rgba(24,95,165,.25);border-radius:var(--radius);padding:.5rem .8rem;font-size:11px;color:var(--c-blue);margin-bottom:.8rem">'
+         +'ⓘ Edita severidad/estado con los selectores. Usa ✎ para impacto/resolución. + para agregar, × para eliminar.</div>';
+
+  // KPI grid
+  html += '<div class="kpi-grid" style="margin-bottom:.8rem">';
+  [{n:defs.length,l:'Total',c:'var(--c-blue)'},{n:bloq,l:'Bloqueantes',c:'var(--c-red)'},
+   {n:may,l:'Mayores',c:'var(--c-amber)'},{n:ab,l:'Abiertos',c:ab?'var(--c-red)':'var(--c-green)'}]
+  .forEach(function(k){ html += '<div class="kpi"><div class="kpi-num" style="color:'+k.c+'">'+k.n+'</div><div class="kpi-label">'+k.l+'</div></div>'; });
+  html += '</div>';
+
+  // Status
+  html += '<div class="card" style="margin-bottom:.8rem;background:rgba('+(ok?'15,110,86':'163,45,45')+',.04);border-color:rgba('+(ok?'15,110,86':'163,45,45')+',.25)">'
+         +'<div style="font-size:13px;font-weight:500;color:var('+(ok?'--c-green':'--c-red')+');">'
+         +(ok?'✓ SRS apto para baseline':'⚠ SRS no puede aprobarse — resuelve defectos abiertos')+'</div>'
+         +'<div style="font-size:11px;color:var(--muted);margin-top:2px">Densidad: '+dens+' def/pág · Umbral Fagan: &lt; 0.30 · '+ab+' abierto(s)</div></div>';
+
+  // Formulario agregar
+  html += '<div class="card" style="margin-bottom:.8rem"><div class="card-title" style="margin-bottom:.5rem">Agregar defecto</div>'
+         +'<div style="display:grid;grid-template-columns:80px 80px 110px 1fr 80px;gap:5px;margin-bottom:5px">'
+         +'<div><div style="font-size:10px;font-weight:500;color:var(--muted);margin-bottom:2px">ID</div>'
+         +'<input id="nd-id" placeholder="DEF-00X" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:4px 6px;font-size:12px;font-family:var(--font-mono);color:var(--c-blue);outline:none"></div>'
+         +'<div><div style="font-size:10px;font-weight:500;color:var(--muted);margin-bottom:2px">Sección</div>'
+         +'<input id="nd-sec" placeholder="RF-001" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:4px 6px;font-size:12px;font-family:var(--font-mono);color:var(--text);outline:none"></div>'
+         +'<div><div style="font-size:10px;font-weight:500;color:var(--muted);margin-bottom:2px">Severidad</div>'
+         +'<select id="nd-sev" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:4px 5px;font-size:12px;color:var(--text);outline:none">'
+         +'<option>Bloqueante</option><option selected>Mayor</option><option>Menor</option><option>Informativo</option></select></div>'
+         +'<div><div style="font-size:10px;font-weight:500;color:var(--muted);margin-bottom:2px">Descripción</div>'
+         +'<input id="nd-desc" placeholder="Describe el defecto..." style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:4px 6px;font-size:12px;color:var(--text);outline:none"></div>'
+         +'<div><div style="font-size:10px;font-weight:500;color:var(--muted);margin-bottom:2px">Asignado</div>'
+         +'<input id="nd-asig" placeholder="BA" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:4px 6px;font-size:12px;color:var(--text);outline:none"></div>'
+         +'</div><button class="btn btn-sm" style="background:var(--c-green);color:#fff;border-color:var(--c-green)" onclick="defAdd()">+ Agregar defecto</button></div>';
+
+  // Tabla
+  html += '<div class="table-wrap" style="margin-bottom:.8rem"><table class="data-table">'
+         +'<thead><tr><th>ID</th><th>Sección</th><th>Severidad</th><th>Descripción</th><th>Asignado</th><th>Estado</th><th></th></tr></thead><tbody>';
+
+  var sevBadge = {Bloqueante:'b-err',Mayor:'b-warn',Menor:'b-could',Informativo:''};
+  var estBadge = {Abierto:'b-err','En revisión':'b-warn',Resuelto:'b-ok'};
+
+  defs.forEach(function(d,i){
+    html += '<tr>'
+      +'<td style="font-family:var(--font-mono);color:var(--c-blue);font-size:11px">'+e(d.id)+'</td>'
+      +'<td style="font-family:var(--font-mono);font-size:11px">'+e(d.sec)+'</td>'
+      +'<td><select style="font-size:11px;border:0.5px solid var(--border2);border-radius:4px;padding:2px 4px;background:var(--bg);color:var(--text);cursor:pointer;outline:none"'
+      +' onchange="defSetSev('+i+',this.value)">'
+      +'<option'+( d.sev==='Bloqueante'?' selected':'')+'>Bloqueante</option>'
+      +'<option'+(d.sev==='Mayor'?' selected':'')+'>Mayor</option>'
+      +'<option'+(d.sev==='Menor'?' selected':'')+'>Menor</option>'
+      +'<option'+(d.sev==='Informativo'?' selected':'')+'>Informativo</option>'
+      +'</select></td>'
+      +'<td style="font-size:12px">'+e(d.desc)+'</td>'
+      +'<td style="font-size:12px">'+e(d.asig)+'</td>'
+      +'<td><select style="font-size:11px;border:0.5px solid var(--border2);border-radius:4px;padding:2px 4px;background:var(--bg);color:var(--text);cursor:pointer;outline:none"'
+      +' onchange="defSetEst('+i+',this.value)">'
+      +'<option'+(d.est==='Abierto'?' selected':'')+'>Abierto</option>'
+      +'<option'+(d.est==='En revisión'?' selected':'')+'>En revisión</option>'
+      +'<option'+(d.est==='Resuelto'?' selected':'')+'>Resuelto</option>'
+      +'</select></td>'
+      +'<td style="white-space:nowrap">'
+      +'<button class="uat-btn" style="color:var(--c-blue);font-size:13px;margin-right:4px" title="Editar impacto/resolución" onclick="defOpenDetail('+i+')">✎</button>'
+      +'<button class="uat-btn" style="color:var(--muted);font-size:16px" onclick="defDel('+i+')">×</button>'
+      +'</td></tr>';
+  });
+
+  html += '</tbody></table></div>';
+
+  // Detalle
+  if(sel>=0 && sel<defs.length){
+    var d=defs[sel];
+    html += '<div class="card"><div class="card-title">Detalle — '+e(d.id)+'</div>'
+      +'<div style="margin-bottom:.5rem"><div style="font-size:11px;font-weight:500;color:var(--muted);margin-bottom:2px">Impacto si no se resuelve</div>'
+      +'<input value="'+e(d.impacto||'')+'" placeholder="Describe el impacto..." style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:5px 8px;font-size:12px;color:var(--text);font-family:var(--font-sans);outline:none" oninput="window._DEFS['+sel+'].impacto=this.value;defSave()"></div>'
+      +'<div><div style="font-size:11px;font-weight:500;color:var(--muted);margin-bottom:2px">Resolución aplicada</div>'
+      +'<input value="'+e(d.res||'')+'" placeholder="Describe cómo fue resuelto..." style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:5px 8px;font-size:12px;color:var(--text);font-family:var(--font-sans);outline:none" oninput="window._DEFS['+sel+'].res=this.value;defSave()"></div>'
+      +'</div>';
+  } else {
+    html += '<div class="card" style="font-size:12px;color:var(--muted);text-align:center;padding:1rem">Usa ✎ en una fila para editar impacto y resolución.</div>';
+  }
+
+  el.innerHTML = html;
+}
+
+function defOpenDetail(i){ window._selDefIdx=parseInt(i); renderValLog(); }
+function defSetSev(i,v){ window._DEFS[parseInt(i)].sev=v; defSave(); renderValLog(); }
+function defSetEst(i,v){ window._DEFS[parseInt(i)].est=v; defSave(); renderValLog(); }
+
+
+function defSave(){
+  try{ localStorage.setItem('fw_defs_v1', JSON.stringify(window._DEFS||DEFECTS)); }catch(e){}
+}
+function defAdd(){
+  if(!window._DEFS) window._DEFS=DEFECTS.slice();
+  var id=document.getElementById('nd-id')?.value?.trim()||'DEF-'+String(window._DEFS.length+1).padStart(3,'0');
+  var sec=document.getElementById('nd-sec')?.value?.trim()||'';
+  var sev=document.getElementById('nd-sev')?.value||'Mayor';
+  var desc=document.getElementById('nd-desc')?.value?.trim()||'';
+  var asig=document.getElementById('nd-asig')?.value?.trim()||'BA';
+  if(!desc){alert('La descripción es obligatoria');return;}
+  window._DEFS.push({id:id,sec:sec,sev:sev,desc:desc,asig:asig,est:'Abierto',impacto:'',res:''});
+  defSave(); renderValLog();
+}
+function defDel(i){
+  i=parseInt(i);
+  if(!window._DEFS) window._DEFS=DEFECTS.slice();
+  window._DEFS.splice(i,1); defSave();
+  if(window._selDefIdx===i) window._selDefIdx=-1;
+  renderValLog();
+}
+
 reg('val-uat', () => `
 <div class="page-header">
   <div class="page-eyebrow" style="color:var(--c-green)">● Fase 4 — Validación</div>
   <h1 class="page-title">Simulador UAT</h1>
-  <p class="page-desc">Marca cada caso como Pasó / Falló / Bloqueado. El indicador GO/NO-GO se actualiza en tiempo real.</p>
+  <p class="page-desc">Ejecuta y registra los casos de prueba de aceptación. Agrega, edita o elimina casos. El indicador GO/NO-GO se actualiza en tiempo real.</p>
 </div>
-<div class="g4" style="margin-bottom:1rem" id="uat-summary"></div>
-<div id="uat-cases"></div>
-<div class="card" style="background:rgba(15,110,86,.04);border-color:rgba(15,110,86,.2);margin-top:.8rem;font-size:12px;color:var(--muted)">
-  Go-live requiere: 100% casos Críticos en Pasó · 0 defectos Bloqueantes · Acta firmada por el usuario clave.
-</div>
+<div id="val-uat-mount"></div>
 `);
 
-/* ════════════════════════════════════════
-   PAGE: APROBACIÓN BASELINE
-════════════════════════════════════════ */
+function initValUat(){
+  var el=document.getElementById('val-uat-mount'); if(!el||el.innerHTML.trim()) return;
+  renderValUat();
+}
+function renderValUat(){
+  var el=document.getElementById('val-uat-mount'); if(!el) return;
+  if(!window._UAT) window._UAT = UAT_CASES.map(function(u){return Object.assign({res:''},u);});
+  var cases = window._UAT;
+  var sel   = (typeof window._uatSelIdx==='number') ? window._uatSelIdx : -1;
+
+  function e(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+  var pasa  = cases.filter(function(u){return u.res==='Pasó';}).length;
+  var falla = cases.filter(function(u){return u.res==='Falló';}).length;
+  var bloq  = cases.filter(function(u){return u.res==='Bloqueado';}).length;
+  var pend  = cases.filter(function(u){return !u.res;}).length;
+  var crit  = cases.filter(function(u){return u.prio==='Crítico';});
+  var critOk= crit.every(function(u){return u.res==='Pasó';});
+  var goNogo= pasa>0 && bloq===0 && critOk && pend===0;
+  var parcial= bloq===0 && pend>0;
+
+  var html = '';
+
+  html += '<div style="background:rgba(24,95,165,.06);border:0.5px solid rgba(24,95,165,.25);border-radius:var(--radius);padding:.5rem .8rem;font-size:11px;color:var(--c-blue);margin-bottom:.8rem">'
+         +'ⓘ Marca el resultado en el select. Haz clic en el ID para expandir y editar los criterios Gherkin. + para agregar, × para eliminar.</div>';
+
+  // KPIs
+  html += '<div class="g4" style="margin-bottom:.8rem">';
+  [{n:pasa,l:'Pasó',c:'var(--c-green)'},{n:falla,l:'Falló',c:'var(--c-amber)'},
+   {n:bloq,l:'Bloqueado',c:'var(--c-red)'},{n:pend,l:'Pendiente',c:'var(--c-gray)'}]
+  .forEach(function(k){ html += '<div class="kpi"><div class="kpi-num" style="color:'+k.c+'">'+k.n+'</div><div class="kpi-label">'+k.l+'</div></div>'; });
+  html += '</div>';
+
+  // Banner GO/NO-GO
+  var bannerColor = goNogo ? '15,110,86' : (parcial ? '186,117,23' : '163,45,45');
+  var bannerVar   = goNogo ? '--c-green'  : (parcial ? '--c-amber'   : '--c-red');
+  var bannerText  = goNogo ? '✓ GO — Aprobado para release' : (parcial ? '⏳ EN CURSO — Casos pendientes' : '✗ NO-GO — Defectos bloqueantes o casos fallidos');
+  html += '<div class="card" style="margin-bottom:.8rem;background:rgba('+bannerColor+',.04);border-color:rgba('+bannerColor+',.25)">'
+         +'<div style="font-size:15px;font-weight:600;color:var('+bannerVar+');">'+bannerText+'</div>'
+         +'<div style="font-size:11px;color:var(--muted);margin-top:2px">'+pasa+' pasaron · '+falla+' fallaron · '+bloq+' bloqueados · '+pend+' pendientes</div></div>';
+
+  // Formulario agregar
+  html += '<div class="card" style="margin-bottom:.8rem"><div class="card-title" style="margin-bottom:.5rem">Agregar caso de prueba</div>'
+         +'<div style="display:grid;grid-template-columns:80px 80px 90px 1fr;gap:5px;margin-bottom:5px">'
+         +'<div><div style="font-size:10px;font-weight:500;color:var(--muted);margin-bottom:2px">ID</div>'
+         +'<input id="nu-id" placeholder="UAT-009" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:4px 6px;font-size:12px;font-family:var(--font-mono);color:var(--c-blue);outline:none"></div>'
+         +'<div><div style="font-size:10px;font-weight:500;color:var(--muted);margin-bottom:2px">RF</div>'
+         +'<input id="nu-rfid" placeholder="RF-001" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:4px 6px;font-size:12px;font-family:var(--font-mono);color:var(--text);outline:none"></div>'
+         +'<div><div style="font-size:10px;font-weight:500;color:var(--muted);margin-bottom:2px">Prioridad</div>'
+         +'<select id="nu-prio" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:4px 5px;font-size:12px;color:var(--text);outline:none">'
+         +'<option>Crítico</option><option>Alto</option><option>Medio</option><option>Bajo</option></select></div>'
+         +'<div><div style="font-size:10px;font-weight:500;color:var(--muted);margin-bottom:2px">Título</div>'
+         +'<input id="nu-title" placeholder="Describe el caso..." style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:4px 6px;font-size:12px;color:var(--text);outline:none"></div>'
+         +'</div><button class="btn btn-sm" style="background:var(--c-green);color:#fff;border-color:var(--c-green)" onclick="uatAdd()">+ Agregar caso</button></div>';
+
+  // Casos
+  cases.forEach(function(u,i){
+    var resColor = {Pasó:'var(--c-green)',Falló:'var(--c-amber)',Bloqueado:'var(--c-red)'}[u.res]||'var(--c-gray)';
+    var prioClass= {Crítico:'b-err',Alto:'b-warn',Medio:'b-func',Bajo:''}[u.prio]||'';
+    var isOpen   = sel===i;
+
+    html += '<div class="card-sm" style="margin-bottom:.4rem;border-left:3px solid '+resColor+'">'
+      +'<div style="display:flex;align-items:center;gap:.5rem;flex-wrap:wrap">'
+      +'<span style="font-family:var(--font-mono);font-size:11px;color:var(--c-blue);cursor:pointer" onclick="uatToggle('+i+')">'+e(u.id)+'</span>'
+      +'<span class="badge b-func" style="font-size:10px">'+e(u.rfid)+'</span>'
+      +'<span class="badge '+prioClass+'" style="font-size:10px">'+e(u.prio)+'</span>'
+      +'<span style="font-size:12px;font-weight:500;flex:1;cursor:pointer" onclick="uatToggle('+i+')">'+e(u.title)+'</span>'
+      +'<select style="font-size:11px;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:2px 5px;color:var(--text);outline:none;cursor:pointer" onchange="uatSetRes('+i+',this.value)">'
+      +'<option'+(!u.res?' selected':'')+'>-- resultado --</option>'
+      +'<option'+(u.res==='Pasó'?' selected':'')+'>Pasó</option>'
+      +'<option'+(u.res==='Falló'?' selected':'')+'>Falló</option>'
+      +'<option'+(u.res==='Bloqueado'?' selected':'')+'>Bloqueado</option>'
+      +'<option'+(u.res==='No ejecutado'?' selected':'')+'>No ejecutado</option>'
+      +'</select>'
+      +'<button class="uat-btn" style="color:var(--muted);font-size:16px;flex-shrink:0" onclick="uatDel('+i+')">×</button>'
+      +'</div>';
+
+    if(isOpen){
+      html += '<div style="margin-top:.6rem;padding-top:.6rem;border-top:0.5px solid var(--border)">'
+        +'<div style="display:grid;grid-template-columns:70px 70px 80px 1fr;gap:5px;margin-bottom:.5rem">'
+        +'<div><div style="font-size:10px;font-weight:500;color:var(--muted);margin-bottom:2px">ID</div>'
+        +'<input value="'+e(u.id)+'" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 6px;font-size:11px;font-family:var(--font-mono);color:var(--c-blue);outline:none" oninput="window._UAT['+i+'].id=this.value;uatSave()"></div>'
+        +'<div><div style="font-size:10px;font-weight:500;color:var(--muted);margin-bottom:2px">RF</div>'
+        +'<input value="'+e(u.rfid)+'" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 6px;font-size:11px;font-family:var(--font-mono);color:var(--text);outline:none" oninput="window._UAT['+i+'].rfid=this.value;uatSave()"></div>'
+        +'<div><div style="font-size:10px;font-weight:500;color:var(--muted);margin-bottom:2px">Prioridad</div>'
+        +'<select style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 5px;font-size:11px;color:var(--text);outline:none" onchange="uatSetPrio('+i+',this.value)">'
+        +'<option'+(u.prio==='Crítico'?' selected':'')+'>Crítico</option>'
+        +'<option'+(u.prio==='Alto'?' selected':'')+'>Alto</option>'
+        +'<option'+(u.prio==='Medio'?' selected':'')+'>Medio</option>'
+        +'<option'+(u.prio==='Bajo'?' selected':'')+'>Bajo</option>'
+        +'</select></div>'
+        +'<div><div style="font-size:10px;font-weight:500;color:var(--muted);margin-bottom:2px">Título</div>'
+        +'<input value="'+e(u.title)+'" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 6px;font-size:12px;color:var(--text);outline:none" oninput="window._UAT['+i+'].title=this.value;uatSave()"></div>'
+        +'</div>'
+        +'<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px">'
+        +'<div><div style="font-size:10px;font-weight:500;color:var(--c-blue);margin-bottom:2px">Given</div>'
+        +'<textarea rows="2" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 6px;font-size:11px;font-family:var(--font-mono);color:var(--text);resize:vertical;outline:none" oninput="window._UAT['+i+'].given=this.value;uatSave()">'+e(u.given||'')+'</textarea></div>'
+        +'<div><div style="font-size:10px;font-weight:500;color:var(--c-amber);margin-bottom:2px">When</div>'
+        +'<textarea rows="2" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 6px;font-size:11px;font-family:var(--font-mono);color:var(--text);resize:vertical;outline:none" oninput="window._UAT['+i+'].when=this.value;uatSave()">'+e(u.when||'')+'</textarea></div>'
+        +'<div><div style="font-size:10px;font-weight:500;color:var(--c-green);margin-bottom:2px">Then</div>'
+        +'<textarea rows="2" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 6px;font-size:11px;font-family:var(--font-mono);color:var(--text);resize:vertical;outline:none" oninput="window._UAT['+i+'].then=this.value;uatSave()">'+e(u.then||'')+'</textarea></div>'
+        +'</div></div>';
+    }
+    html += '</div>';
+  });
+
+  html += '<div style="margin-top:.8rem"><button class="btn btn-sm" onclick="uatRestore()">↺ Restaurar ejemplos</button></div>';
+  el.innerHTML = html;
+}
+
+function uatToggle(i){ window._uatSelIdx = (window._uatSelIdx===i) ? -1 : parseInt(i); renderValUat(); }
+function uatSetRes(i,v){ if(v==='-- resultado --') v=''; window._UAT[parseInt(i)].res=v; uatSave(); renderValUat(); }
+function uatSetPrio(i,v){ window._UAT[parseInt(i)].prio=v; uatSave(); renderValUat(); }
+
+
+function uatSave(){
+  try{ localStorage.setItem('fw_uat_v1', JSON.stringify(window._UAT)); }catch(e){}
+}
+function uatAdd(){
+  if(!window._UAT) window._UAT=UAT_CASES.map(function(u){return Object.assign({res:''},u);});
+  var id=document.getElementById('nu-id')?.value?.trim()||'UAT-'+String(window._UAT.length+1).padStart(3,'0');
+  var rfid=document.getElementById('nu-rfid')?.value?.trim()||'';
+  var prio=document.getElementById('nu-prio')?.value||'Crítico';
+  var title=document.getElementById('nu-title')?.value?.trim()||'';
+  if(!title){alert('El título es obligatorio');return;}
+  window._UAT.push({id:id,rfid:rfid,prio:prio,title:title,given:'',when:'',then:'',res:''});
+  uatSave(); renderValUat();
+}
+function uatDel(i){
+  i=parseInt(i);
+  window._UAT.splice(i,1); uatSave();
+  if(window._uatSelIdx===i) window._uatSelIdx=-1;
+  renderValUat();
+}
+function uatRestore(){
+  window._UAT=UAT_CASES.map(function(u){return Object.assign({res:''},u);});
+  uatSave(); renderValUat();
+}
+
 reg('val-baseline', () => `
 <div class="page-header">
   <div class="page-eyebrow" style="color:var(--c-green)">● Fase 4 — Validación</div>
@@ -5521,7 +5973,9 @@ function onPageShow(id) {
   if (id==='eli-plantillas') setTimeout(initEliPlantillas, 50);
   if (id==='srs-editor') setTimeout(initSrsEditor, 50);
   if (id==='srs-glosario') initGlosario();
-  if (id==='val-log') initDefects();
+  if (id==='val-tecnicas') setTimeout(initValTecnicas, 50);
+  if (id==='val-log') setTimeout(function(){ if(!window._DEFS){window._DEFS=DEFECTS.slice();} window._selDefIdx=-1; initValLog(); }, 50);
+  if (id==='val-uat') setTimeout(function(){ window._uatSelIdx=-1; initValUat(); }, 50);
   if (id==='ccb-cr') setTimeout(initCR, 50);
   if (id==='roadmap') setTimeout(buildRoadmap, 50);
   // Aplicación en campo
