@@ -570,7 +570,8 @@ textarea { resize: vertical; line-height: 1.6; }
     </div>
     <div class="nav-group">
       <span class="nav-label">Fase 1 · Elicitación</span>
-      <button class="nav-item" onclick="nav('eli-overview')"><div class="nav-pip" style="background:var(--c-teal)"></div>Visión general y flujo</button>
+      <button class="nav-item" onclick="nav('eli-flujo')"><div class="nav-pip" style="background:var(--c-teal)"></div>Flujo de actividades</button>
+      <button class="nav-item" onclick="nav('eli-overview')"><div class="nav-pip" style="background:var(--c-teal)"></div>Visión general</button>
       <button class="nav-item" onclick="nav('eli-stakeholders')"><div class="nav-pip" style="background:var(--c-teal)"></div>Mapa de stakeholders</button>
       <button class="nav-item" onclick="nav('eli-tecnicas')"><div class="nav-pip" style="background:var(--c-teal)"></div>Técnicas <span class="nav-count">5</span></button>
       <button class="nav-item" onclick="nav('eli-plantillas')"><div class="nav-pip" style="background:var(--c-teal)"></div>Plantillas de sesión</button>
@@ -1061,6 +1062,140 @@ reg('gobernanza', () => `
 /* ════════════════════════════════════════
    PAGE: ELICITACIÓN OVERVIEW
 ════════════════════════════════════════ */
+/* ════════════════════════════════════════
+   PAGE: ELICITACIÓN — FLUJO
+════════════════════════════════════════ */
+reg('eli-flujo', () => `
+<div class="page-header">
+  <div class="page-eyebrow" style="color:var(--c-teal)">● Fase 1 — Elicitación</div>
+  <h1 class="page-title">Flujo de actividades de elicitación</h1>
+  <p class="page-desc">Secuencia de cuatro actividades que transforman las necesidades de los stakeholders en hallazgos documentados, validados y listos para la fase de análisis.</p>
+  <div class="std-row"><span class="std-pill">BABOK v3</span><span class="std-pill">ISO 9241-210:2019</span><span class="std-pill">IEEE 29148:2018</span></div>
+</div>
+
+<div class="tab-nav">
+  <button class="tab-btn on" onclick="tabSel('elif',0,this)">Flujo de actividades</button>
+  <button class="tab-btn" onclick="tabSel('elif',1,this)">Técnicas y artefactos</button>
+</div>
+
+<div class="tab-panel on" id="elif-0">
+  <div class="card" style="margin-bottom:.8rem">
+    <div class="card-title">Secuencia de actividades — Fase 1</div>
+    <svg width="100%" viewBox="0 0 680 560" xmlns="http://www.w3.org/2000/svg">
+      <defs><marker id="aeli" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>
+
+      <!-- Start -->
+      <rect x="251" y="14" width="178" height="34" rx="17" fill="#F1EFE8" stroke="#888780" stroke-width="0.5"/>
+      <text x="340" y="31" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="12" fill="#444441">Inicio del proyecto</text>
+
+      <line x1="340" y1="48" x2="340" y2="74" stroke="#9A9A94" stroke-width="1" marker-end="url(#aeli)"/>
+
+      <!-- A1 Preparación -->
+      <rect x="210" y="76" width="260" height="56" rx="10" fill="#E1F5EE" stroke="#1D9E75" stroke-width="1"/>
+      <text x="340" y="97" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="13" font-weight="500" fill="#085041">A1. Preparación</text>
+      <text x="340" y="115" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#0F6E56">Planear, mapear stakeholders, definir técnicas</text>
+      <rect x="44" y="83" width="128" height="30" rx="7" fill="#E1F5EE" stroke="#1D9E75" stroke-width="0.5"/>
+      <text x="108" y="98" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#085041">Plan de elicitación</text>
+      <line x1="172" y1="98" x2="208" y2="98" stroke="#1D9E75" stroke-width="0.5" marker-end="url(#aeli)"/>
+
+      <line x1="340" y1="132" x2="340" y2="158" stroke="#9A9A94" stroke-width="1" marker-end="url(#aeli)"/>
+
+      <!-- A2 Ejecución -->
+      <rect x="210" y="160" width="260" height="56" rx="10" fill="#E1F5EE" stroke="#1D9E75" stroke-width="1"/>
+      <text x="340" y="181" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="13" font-weight="500" fill="#085041">A2. Ejecución</text>
+      <text x="340" y="199" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#0F6E56">Entrevistas, talleres JAD, observación, prototipado</text>
+      <rect x="44" y="167" width="128" height="30" rx="7" fill="#E1F5EE" stroke="#1D9E75" stroke-width="0.5"/>
+      <text x="108" y="182" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#085041">Guías de entrevista</text>
+      <line x1="172" y1="182" x2="208" y2="182" stroke="#1D9E75" stroke-width="0.5" marker-end="url(#aeli)"/>
+
+      <!-- Gaps loop -->
+      <path d="M 470 188 L 560 188 L 560 100 L 472 100" fill="none" stroke="#9A9A94" stroke-width="0.5" stroke-dasharray="3 3" marker-end="url(#aeli)"/>
+      <text x="576" y="140" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="10" fill="#9A9A94">Gaps</text>
+      <text x="576" y="154" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="10" fill="#9A9A94">detectados</text>
+
+      <line x1="340" y1="216" x2="340" y2="242" stroke="#9A9A94" stroke-width="1" marker-end="url(#aeli)"/>
+
+      <!-- A3 Documentación -->
+      <rect x="210" y="244" width="260" height="56" rx="10" fill="#E1F5EE" stroke="#1D9E75" stroke-width="1"/>
+      <text x="340" y="265" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="13" font-weight="500" fill="#085041">A3. Documentación</text>
+      <text x="340" y="283" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#0F6E56">Consolidar, estructurar hallazgos, asignar IDs</text>
+      <rect x="44" y="251" width="128" height="30" rx="7" fill="#E1F5EE" stroke="#1D9E75" stroke-width="0.5"/>
+      <text x="108" y="266" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#085041">Notas / grabaciones</text>
+      <line x1="172" y1="266" x2="208" y2="266" stroke="#1D9E75" stroke-width="0.5" marker-end="url(#aeli)"/>
+
+      <line x1="340" y1="300" x2="340" y2="326" stroke="#9A9A94" stroke-width="1" marker-end="url(#aeli)"/>
+
+      <!-- A4 Confirmación -->
+      <rect x="210" y="328" width="260" height="56" rx="10" fill="#EEEDFE" stroke="#534AB7" stroke-width="1"/>
+      <text x="340" y="349" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="13" font-weight="500" fill="#26215C">A4. Confirmación</text>
+      <text x="340" y="367" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#534AB7">Revisión y validación con stakeholders — PC1</text>
+      <rect x="44" y="335" width="128" height="30" rx="7" fill="#EEEDFE" stroke="#534AB7" stroke-width="0.5"/>
+      <text x="108" y="350" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#26215C">Acta de conformidad</text>
+      <line x1="172" y1="350" x2="208" y2="350" stroke="#534AB7" stroke-width="0.5" marker-end="url(#aeli)"/>
+
+      <!-- Confirmación loop back -->
+      <path d="M 470 354 L 560 354 L 560 270 L 472 270" fill="none" stroke="#534AB7" stroke-width="0.5" stroke-dasharray="3 3" marker-end="url(#aeli)"/>
+      <text x="576" y="308" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="10" fill="#534AB7">Requiere</text>
+      <text x="576" y="322" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="10" fill="#534AB7">ajustes</text>
+
+      <line x1="340" y1="384" x2="340" y2="410" stroke="#9A9A94" stroke-width="1" marker-end="url(#aeli)"/>
+
+      <!-- PC1 checkpoint -->
+      <rect x="210" y="412" width="260" height="44" rx="10" fill="#E6F1FB" stroke="#185FA5" stroke-width="1"/>
+      <text x="340" y="434" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="13" font-weight="500" fill="#042C53">PC1 — Punto de control</text>
+      <rect x="44" y="419" width="128" height="30" rx="7" fill="#E6F1FB" stroke="#185FA5" stroke-width="0.5"/>
+      <text x="108" y="434" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#042C53">Checklist PC1 firmado</text>
+      <line x1="172" y1="434" x2="208" y2="434" stroke="#185FA5" stroke-width="0.5" marker-end="url(#aeli)"/>
+
+      <line x1="340" y1="456" x2="340" y2="482" stroke="#9A9A94" stroke-width="1" marker-end="url(#aeli)"/>
+
+      <!-- End -->
+      <rect x="210" y="484" width="260" height="34" rx="10" fill="#F1EFE8" stroke="#888780" stroke-width="0.5"/>
+      <text x="340" y="501" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="12" fill="#2C2C2A">Entradas para Análisis (Fase 2)</text>
+
+      <text x="28" y="60" font-family="DM Sans,sans-serif" font-size="10" fill="#9A9A94">Artefactos</text>
+    </svg>
+  </div>
+</div>
+
+<div class="tab-panel" id="elif-1">
+  <div class="g2" style="margin-bottom:1rem">
+    <div class="card">
+      <div class="card-title">Técnicas por actividad</div>
+      ${[
+        {a:'A1. Preparación',   c:'var(--c-teal)',  ts:['Análisis de stakeholders (influencia × interés)','Revisión de documentación existente','Definición del plan de elicitación','Selección de técnicas según contexto']},
+        {a:'A2. Ejecución',     c:'var(--c-teal)',  ts:['Entrevista estructurada / semi-estructurada','Taller JAD (Joint Application Design)','Observación contextual (shadowing)','Prototipado / wireframing','Cuestionarios y encuestas']},
+        {a:'A3. Documentación', c:'var(--c-teal)',  ts:['Minuta de sesión estructurada','Asignación de IDs a cada hallazgo','Clasificación: RF / RNF / SA / RC','Affinity mapping de hallazgos']},
+        {a:'A4. Confirmación',  c:'var(--c-purple)',ts:['Revisión formal con stakeholders (walkthrough)','Validación de la minuta firmada','Detección de brechas y retrabajo','Aprobación PC1: PO + Analista']},
+      ].map(t => `
+      <div class="dot-item" style="flex-direction:column;align-items:flex-start;padding:.5rem 0">
+        <div style="font-size:12px;font-weight:500;color:${t.c};margin-bottom:.3rem">${t.a}</div>
+        ${t.ts.map(ti => `<div class="dot-item" style="border:none;padding:2px 0"><div class="dot" style="background:${t.c}"></div>${ti}</div>`).join('')}
+      </div>`).join('')}
+    </div>
+    <div class="card">
+      <div class="card-title">Artefactos producidos</div>
+      ${[
+        {a:'Plan de elicitación',          d:'Objetivos, técnicas, agenda y lista de stakeholders a entrevistar',       c:'var(--c-teal)'},
+        {a:'Mapa de stakeholders',         d:'Cuadrante influencia × interés con estrategia por cuadrante',             c:'var(--c-teal)'},
+        {a:'Guías de preguntas',           d:'Banco de preguntas por técnica y momento de la sesión',                   c:'var(--c-teal)'},
+        {a:'Minuta de elicitación',        d:'RF / RNF / SA / RC capturados, firmados por los participantes',           c:'var(--c-teal)'},
+        {a:'Notas y grabaciones',          d:'Registro fiel de la sesión para trazabilidad y consulta posterior',       c:'var(--c-teal)'},
+        {a:'Lista de supuestos (SA)',       d:'Premisas no verificadas que afectan al diseño del sistema',               c:'var(--c-blue)'},
+        {a:'Lista de restricciones (RC)',   d:'Limitaciones técnicas, regulatorias y de negocio no negociables',        c:'var(--c-amber)'},
+        {a:'Acta de conformidad PC1',       d:'Checklist firmado: stakeholders mapeados, sesiones confirmadas, SA y RC documentados', c:'var(--c-blue)'},
+      ].map(a => `<div class="dot-item"><div class="dot" style="background:${a.c}"></div><div><strong style="font-size:12px;font-weight:500">${a.a}</strong><div style="font-size:11px;color:var(--muted)">${a.d}</div></div></div>`).join('')}
+    </div>
+  </div>
+  <div class="card" style="background:rgba(29,158,117,.03);border-color:rgba(29,158,117,.2)">
+    <div class="card-title" style="color:var(--c-teal)">Criterios de salida — PC1 (Definition of Done)</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:.4rem">
+      ${['Stakeholders identificados y clasificados en el cuadrante','Objetivos de negocio documentados y vinculados a estrategia','Al menos una sesión de elicitación ejecutada y confirmada','Acta firmada por los participantes clave de la sesión','Supuestos y restricciones registrados con ID asignado','PO y Analista aprueban el paso a la Fase 2'].map(c => `<div class="dot-item"><div class="dot" style="background:var(--c-teal)"></div>${c}</div>`).join('')}
+    </div>
+  </div>
+</div>
+`);
+
 reg('eli-overview', () => `
 <div class="page-header">
   <div class="page-eyebrow" style="color:var(--c-teal)">● Fase 1 — Elicitación</div>
@@ -1519,132 +1654,281 @@ function renderEliPlantillas() {
   var el = document.getElementById('eli-plt-mount'); if(!el) return;
   var m = ELI.minuta;
 
-  var styles = '<style>';
-  styles += '.plt-tab-nav{display:flex;gap:2px;border-bottom:0.5px solid var(--border);margin-bottom:1.2rem}';
-  styles += '.plt-tab-btn{padding:.5rem .95rem;border-radius:var(--radius) var(--radius) 0 0;border:none;background:transparent;color:var(--muted);font-size:12px;font-weight:400;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-0.5px;font-family:var(--font-sans);transition:all .15s}';
-  styles += '.plt-tab-btn:hover{color:var(--text);background:var(--surface)}';
-  styles += '.plt-tab-btn.on{color:var(--text);font-weight:500;border-bottom-color:var(--c-teal);background:var(--bg)}';
-  styles += '.plt-panel{display:none}.plt-panel.on{display:block}';
-  styles += '.eli-input{width:100%;background:var(--surface);border:0.5px solid var(--border2);border-radius:var(--radius);padding:.5rem .75rem;font-size:13px;color:var(--text);font-family:var(--font-sans);outline:none;transition:border-color .15s}';
-  styles += '.eli-input:focus{border-color:var(--c-teal)}';
-  styles += '.eli-ta{width:100%;background:var(--surface);border:0.5px solid var(--border2);border-radius:var(--radius);padding:.5rem .75rem;font-size:12px;color:var(--text);font-family:var(--font-sans);resize:vertical;line-height:1.6;outline:none;transition:border-color .15s}';
-  styles += '.eli-ta:focus{border-color:var(--c-teal)}';
-  styles += '.eli-label{font-size:11px;font-weight:500;color:var(--muted);display:block;margin-bottom:3px;text-transform:uppercase;letter-spacing:.3px}';
-  styles += '.eli-field{margin-bottom:.7rem}';
-  styles += '.req-row-edit{display:grid;gap:5px;align-items:center;padding:6px 0;border-bottom:0.5px solid var(--border)}';
-  styles += '.req-row-edit:last-child{border-bottom:none}';
-  styles += '.req-row-edit input,.req-row-edit select{background:var(--surface);border:0.5px solid var(--border2);border-radius:5px;padding:4px 7px;font-size:12px;color:var(--text);font-family:var(--font-sans);outline:none}';
-  styles += '.req-row-edit input:focus,.req-row-edit select:focus{border-color:var(--c-teal)}';
-  styles += '.del-row-btn{background:none;border:none;cursor:pointer;color:var(--muted);font-size:16px;padding:0 3px;line-height:1}';
-  styles += '.del-row-btn:hover{color:var(--c-red)}';
-  styles += '.save-bar{display:flex;align-items:center;gap:.5rem;margin-top:1rem;padding-top:.8rem;border-top:0.5px solid var(--border)}';
-  styles += '.pq-item{padding:7px 0;border-bottom:0.5px solid var(--border)}';
-  styles += '.pq-item:last-child{border-bottom:none}';
-  styles += '.pq-q{font-size:12px;font-weight:500;margin-bottom:4px;display:flex;gap:6px;align-items:flex-start}';
-  styles += '.pq-edit-inp{flex:1;background:var(--surface);border:0.5px solid var(--border2);border-radius:5px;padding:4px 7px;font-size:12px;color:var(--text);font-family:var(--font-sans);outline:none}';
-  styles += '.pq-edit-inp:focus{border-color:var(--c-teal)}';
-  styles += '.pq-resp{width:100%;min-height:48px;background:rgba(0,0,0,0.02);border:0.5px solid var(--border);border-radius:6px;padding:6px 8px;font-size:12px;color:var(--text);font-family:var(--font-sans);resize:vertical;margin-top:4px;line-height:1.5;outline:none}';
-  styles += '.pq-resp:focus{border-color:var(--c-teal)}';
-  styles += '.pq-cat-title{font-size:13px;font-weight:500;font-family:var(--font-serif);margin-bottom:.5rem;display:flex;justify-content:space-between;align-items:center}';
-  styles += '</style>';
+  var css = '<style>'
+    +'.plt-tab-nav{display:flex;gap:2px;border-bottom:0.5px solid var(--border);margin-bottom:1.2rem}'
+    +'.plt-tab-btn{padding:.5rem .95rem;border-radius:var(--radius) var(--radius) 0 0;border:none;background:transparent;color:var(--muted);font-size:12px;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-0.5px;font-family:var(--font-sans);transition:all .15s}'
+    +'.plt-tab-btn:hover{color:var(--text);background:var(--surface)}'
+    +'.plt-tab-btn.on{color:var(--text);font-weight:500;border-bottom-color:var(--c-teal);background:var(--bg)}'
+    +'.plt-panel{display:none}.plt-panel.on{display:block}'
+    +'.eli-lbl{font-size:11px;font-weight:500;color:var(--muted);display:block;margin-bottom:3px;text-transform:uppercase;letter-spacing:.3px}'
+    +'.eli-inp{width:100%;background:var(--surface);border:0.5px solid var(--border2);border-radius:var(--radius);padding:.5rem .75rem;font-size:13px;color:var(--text);font-family:var(--font-sans);outline:none}'
+    +'.eli-inp:focus{border-color:var(--c-teal)}'
+    +'.eli-ta{width:100%;background:var(--surface);border:0.5px solid var(--border2);border-radius:var(--radius);padding:.5rem .75rem;font-size:12px;color:var(--text);font-family:var(--font-sans);resize:vertical;line-height:1.6;outline:none}'
+    +'.eli-ta:focus{border-color:var(--c-teal)}'
+    +'.rrow{display:grid;gap:4px;align-items:center;padding:5px 0;border-bottom:0.5px solid var(--border)}'
+    +'.rrow:last-child{border-bottom:none}'
+    +'.rrow input,.rrow select{background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:4px 6px;font-size:12px;color:var(--text);font-family:var(--font-sans);outline:none}'
+    +'.rrow input:focus,.rrow select:focus{border-color:var(--c-teal)}'
+    +'.rdel{background:none;border:none;cursor:pointer;color:var(--muted);font-size:16px;padding:0 2px;line-height:1}'
+    +'.rdel:hover{color:var(--c-red)}'
+    +'.rhdr{display:grid;gap:4px;font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.3px;border-bottom:0.5px solid var(--border2);padding-bottom:4px;margin-bottom:3px}'
+    +'.pq-item{padding:6px 0;border-bottom:0.5px solid var(--border)}'
+    +'.pq-item:last-child{border-bottom:none}'
+    +'.pq-inp{width:100%;background:var(--surface);border:0.5px solid var(--border2);border-radius:4px;padding:4px 7px;font-size:12px;color:var(--text);font-family:var(--font-sans);outline:none}'
+    +'.pq-inp:focus{border-color:var(--c-teal)}'
+    +'.pq-resp{width:100%;min-height:46px;background:rgba(0,0,0,0.02);border:0.5px solid var(--border);border-radius:5px;padding:5px 7px;font-size:12px;color:var(--text);font-family:var(--font-sans);resize:vertical;margin-top:3px;outline:none}'
+    +'.pq-resp:focus{border-color:var(--c-teal)}'
+    +'</style>';
 
   var tabs = '<div class="plt-tab-nav">'
-    + '<button class="plt-tab-btn on" onclick="pltTab(0,this)">Plan de sesión</button>'
-    + '<button class="plt-tab-btn" onclick="pltTab(1,this)">Minuta editable</button>'
-    + '<button class="plt-tab-btn" onclick="pltTab(2,this)">Guía de preguntas</button>'
-    + '</div>';
+    +'<button class="plt-tab-btn on" onclick="pltTabSel(0,this)">Plan de sesión</button>'
+    +'<button class="plt-tab-btn" onclick="pltTabSel(1,this)">Minuta editable</button>'
+    +'<button class="plt-tab-btn" onclick="pltTabSel(2,this)">Guía de preguntas</button>'
+    +'</div>';
 
-  // ── PANEL 0: Plan de sesión (informativo, sin cambios) ──────────────────
-  var panel0 = '<div class="plt-panel on" id="pltP0">';
-  panel0 += '<div class="card" style="margin-bottom:.8rem">';
-  panel0 += '<div style="font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.5px;color:var(--c-teal);margin-bottom:.8rem">● Agenda tipo — sesión de elicitación (90 min)</div>';
-  var agenda = [{rng:'0–10 min',c:'var(--c-teal)',t:'Apertura y contexto',d:'Presentación del objetivo, roles, reglas de la sesión y consentimiento de grabación'},{rng:'10–30 min',c:'var(--c-teal)',t:'Situación actual (As-Is)',d:'¿Cómo funciona el proceso hoy? Identificar puntos de dolor, workarounds y excepciones'},{rng:'30–60 min',c:'var(--c-teal)',t:'Situación deseada (To-Be)',d:'¿Qué necesita que haga el nuevo sistema? Explorar funcionalidades, prioridades y criterios de éxito'},{rng:'60–75 min',c:'var(--c-purple)',t:'Restricciones y dependencias',d:'Normativas, integraciones existentes, limitaciones técnicas, plazos no negociables'},{rng:'75–90 min',c:'var(--c-gray)',t:'Cierre y acuerdos',d:'Resumen de lo capturado, pendientes, próximos pasos y firma de participación'}];
-  agenda.forEach(function(s,i){ panel0 += '<div style="display:grid;grid-template-columns:72px 1fr;gap:.6rem;margin-bottom:.35rem;position:relative">'+(i<agenda.length-1?'<div style="position:absolute;left:107px;top:36px;bottom:-4px;width:1px;background:var(--border2)"></div>':'')+'<div style="font-size:11px;font-weight:500;color:var(--muted);text-align:right;padding-top:.45rem;line-height:1.3">'+s.rng+'</div><div style="padding:.5rem .85rem;background:var(--bg);border:0.5px solid var(--border);border-radius:var(--radius)"><div style="font-size:13px;font-weight:500;margin-bottom:.15rem;color:'+s.c+'">'+s.t+'</div><div style="font-size:12px;color:var(--muted);line-height:1.5">'+s.d+'</div></div></div>'; });
-  panel0 += '</div></div>';
-
-  // ── PANEL 1: Minuta editable ─────────────────────────────────────────────
-  var panel1 = '<div class="plt-panel" id="pltP1">';
-  panel1 += '<div class="card">';
-
-  // Datos generales
-  panel1 += '<div style="background:rgba(29,158,117,.06);border:0.5px solid rgba(29,158,117,.25);border-radius:var(--radius);padding:.55rem .8rem;font-size:11px;color:var(--c-teal);margin-bottom:.8rem;display:flex;align-items:center;gap:.5rem"><span>ⓘ</span><span>Los campos con ejemplos son <strong>editables</strong> — modifica, agrega o elimina según tu proyecto real. Los datos se guardan automáticamente.</span></div>';
-  panel1 += '<div class="card-title" style="color:var(--c-teal);margin-bottom:.8rem">● Datos generales de la sesión</div>';
-  panel1 += '<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.7rem;margin-bottom:.8rem">';
-  panel1 += '<div class="eli-field"><label class="eli-label">Proyecto</label><input class="eli-input" id="m-proyecto" value="'+escH(m.proyecto)+'" placeholder="Nombre del proyecto" oninput="eliMsave()"></div>';
-  panel1 += '<div class="eli-field"><label class="eli-label">ID de sesión</label><input class="eli-input" id="m-sesionId" value="'+escH(m.sesionId)+'" placeholder="ELI-001" style="font-family:var(--font-mono)" oninput="eliMsave()"></div>';
-  panel1 += '<div class="eli-field"><label class="eli-label">Fecha</label><input class="eli-input" type="date" id="m-fecha" value="'+escH(m.fecha)+'" oninput="eliMsave()"></div>';
-  panel1 += '<div class="eli-field"><label class="eli-label">Analista responsable</label><input class="eli-input" id="m-analista" value="'+escH(m.analista)+'" placeholder="Nombre del BA" oninput="eliMsave()"></div>';
-  panel1 += '<div class="eli-field"><label class="eli-label">Técnica utilizada</label><select class="eli-input" id="m-tecnica" onchange="eliMsave()"><option>Entrevista estructurada</option><option>Entrevista semi-estructurada</option><option>Taller JAD</option><option>Observación contextual</option><option>Cuestionario</option><option>Análisis documental</option><option>Prototipado</option></select></div>';
-  panel1 += '<div class="eli-field"><label class="eli-label">Lugar / modalidad</label><input class="eli-input" id="m-lugar" value="'+escH(m.lugar)+'" placeholder="Presencial / Virtual" oninput="eliMsave()"></div>';
-  panel1 += '</div>';
-  panel1 += '<div class="eli-field"><label class="eli-label">Objetivo de la sesión</label><textarea class="eli-ta" id="m-objetivo" rows="2" placeholder="Identifica y documenta los requisitos de..." oninput="eliMsave()">'+escH(m.objetivo)+'</textarea></div>';
-
-  // Participantes
-  panel1 += '<div class="card-title" style="margin-top:.8rem;margin-bottom:.5rem">Participantes</div>';
-  panel1 += '<div id="m-partic-list"></div>';
-  panel1 += '<button class="btn btn-sm" style="margin-top:.4rem" onclick="addEliPartic()">+ Participante</button>';
-
-  // RF tabla
-  panel1 += '<div class="card-title" style="margin-top:1rem;margin-bottom:.4rem">Requisitos funcionales (RF)</div>';
-  panel1 += '<div id="m-rf-list"></div>';
-  panel1 += '<button class="btn btn-sm" style="margin-top:.4rem;border-color:rgba(83,52,131,.4);color:var(--c-purple)" data-list="rfs" data-tipo="RF" onclick="addEliReq(this)">+ RF</button>';
-
-  // RNF tabla
-  panel1 += '<div class="card-title" style="margin-top:1rem;margin-bottom:.4rem">Requisitos no funcionales (RNF)</div>';
-  panel1 += '<div id="m-rnf-list"></div>';
-  panel1 += '<button class="btn btn-sm" style="margin-top:.4rem;border-color:rgba(15,110,86,.4);color:var(--c-teal)" data-list="rnfs" data-tipo="RNF" onclick="addEliReq(this)">+ RNF</button>';
-
-  // SA / RC en dos columnas
-  panel1 += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:.8rem;margin-top:1rem">';
-  panel1 += '<div><div class="card-title" style="margin-bottom:.4rem">Supuestos (SA)</div><div id="m-sa-list"></div><button class="btn btn-sm" style="margin-top:.4rem" data-list="sas" data-prefix="SA" onclick="addEliSimple(this)">+ Supuesto</button></div>';
-  panel1 += '<div><div class="card-title" style="margin-bottom:.4rem">Restricciones (RC)</div><div id="m-rc-list"></div><button class="btn btn-sm" style="margin-top:.4rem" data-list="rcs" data-prefix="RC" onclick="addEliSimple(this)">+ Restricción</button></div>';
-  panel1 += '</div>';
-
-  // Pendientes y próximos pasos
-  panel1 += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:.8rem;margin-top:1rem">';
-  panel1 += '<div class="eli-field"><label class="eli-label">Temas pendientes de aclaración</label><textarea class="eli-ta" id="m-pendientes" rows="3" placeholder="Un tema por línea..." oninput="eliMsave()">'+escH(m.pendientes)+'</textarea></div>';
-  panel1 += '<div class="eli-field"><label class="eli-label">Próximos pasos acordados</label><textarea class="eli-ta" id="m-proximos" rows="3" placeholder="Un paso por línea..." oninput="eliMsave()">'+escH(m.proximos)+'</textarea></div>';
-  panel1 += '</div>';
-
-  // Save bar
-  panel1 += '<div class="save-bar">';
-  panel1 += '<button class="btn" style="background:var(--c-teal);color:#fff;border-color:var(--c-teal)" onclick="saveEliMinuta()">Guardar minuta</button>';
-  panel1 += '<button class="btn btn-sm" style="margin-left:.5rem" onclick="eliRestoreEjemplos()">↺ Restaurar ejemplos</button>';
-  panel1 += '<button class="btn btn-sm" style="margin-left:.3rem;color:var(--c-red)" onclick="eliLimpiarMinuta()">✕ Limpiar</button>';
-  panel1 += '<span id="m-saved-msg" style="font-size:11px;color:var(--c-green);margin-left:.5rem"></span></div>';
-  panel1 += '</div></div>';
-
-  // ── PANEL 2: Guía de preguntas ──────────────────────────────────────────
-  var panel2 = '<div class="plt-panel" id="pltP2">';
-  var cats = Object.keys(ELI.preguntas);
-  var catColors = {Apertura:'var(--c-teal)',Profundización:'var(--c-purple)',Validación:'var(--c-blue)',Restricciones:'var(--c-amber)'};
-  panel2 += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">';
-  cats.forEach(function(cat){
-    var color = catColors[cat]||'var(--c-teal)';
-    panel2 += '<div class="card">';
-    panel2 += '<div class="pq-cat-title" style="color:'+color+'">'+cat;
-    panel2 += '<button class="btn btn-sm" onclick="addEliPQ(\''+cat+'\')">+ Pregunta</button></div>';
-    panel2 += '<div id="pq-'+cat.replace(/[^a-z]/gi,'')+'-list"></div>';
-    panel2 += '</div>';
+  /* ── PANEL 0: plan (read-only) ── */
+  var p0 = '<div class="plt-panel on" id="pltP0"><div class="card" style="margin-bottom:.8rem">';
+  p0 += '<div style="font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.5px;color:var(--c-teal);margin-bottom:.8rem">● Agenda tipo — sesión de elicitación (90 min)</div>';
+  [{r:'0–10 min',c:'var(--c-teal)',t:'Apertura y contexto',d:'Presentación del objetivo, roles, reglas de la sesión y consentimiento de grabación'},
+   {r:'10–30 min',c:'var(--c-teal)',t:'Situación actual (As-Is)',d:'¿Cómo funciona el proceso hoy? Identificar puntos de dolor, workarounds y excepciones'},
+   {r:'30–60 min',c:'var(--c-teal)',t:'Situación deseada (To-Be)',d:'¿Qué necesita que haga el nuevo sistema? Explorar funcionalidades y criterios de éxito'},
+   {r:'60–75 min',c:'var(--c-purple)',t:'Restricciones y dependencias',d:'Normativas, integraciones existentes, limitaciones técnicas, plazos no negociables'},
+   {r:'75–90 min',c:'var(--c-gray)',t:'Cierre y acuerdos',d:'Resumen, pendientes, próximos pasos y firma de participación'}
+  ].forEach(function(s,i,a){
+    p0 += '<div style="display:grid;grid-template-columns:72px 1fr;gap:.6rem;margin-bottom:.35rem;position:relative">'
+      +(i<a.length-1?'<div style="position:absolute;left:107px;top:36px;bottom:-4px;width:1px;background:var(--border2)"></div>':'')
+      +'<div style="font-size:11px;font-weight:500;color:var(--muted);text-align:right;padding-top:.45rem">'+s.r+'</div>'
+      +'<div style="padding:.5rem .85rem;background:var(--bg);border:0.5px solid var(--border);border-radius:var(--radius)">'
+      +'<div style="font-size:13px;font-weight:500;margin-bottom:.15rem;color:'+s.c+'">'+s.t+'</div>'
+      +'<div style="font-size:12px;color:var(--muted)">'+s.d+'</div></div></div>';
   });
-  panel2 += '</div>';
-  panel2 += '<div class="save-bar" style="margin-top:.8rem"><button class="btn" style="background:var(--c-blue);color:#fff;border-color:var(--c-blue)" onclick="saveEliPQ()">Guardar preguntas y respuestas</button>';
-  panel2 += '<span id="pq-saved-msg" style="font-size:11px;color:var(--c-green)"></span></div>';
-  panel2 += '</div>';
+  p0 += '</div></div>';
 
-  el.innerHTML = styles + tabs + panel0 + panel1 + panel2;
+  /* ── PANEL 1: minuta editable ── */
+  var p1 = '<div class="plt-panel" id="pltP1"><div class="card">';
+  p1 += '<div style="background:rgba(29,158,117,.07);border:0.5px solid rgba(29,158,117,.3);border-radius:var(--radius);padding:.5rem .8rem;font-size:11px;color:var(--c-teal);margin-bottom:.9rem">ⓘ Todos los campos y tablas son <strong>editables</strong>. Usa los botones + para agregar filas y × para eliminar.</div>';
 
-  // Render all dynamic lists
-  renderEliPartics();
-  renderEliReqList('rfs');
-  renderEliReqList('rnfs');
-  renderEliSimpleList('sas');
-  renderEliSimpleList('rcs');
-  renderAllPQ();
+  /* datos generales */
+  p1 += '<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.7rem;margin-bottom:.8rem">';
+  p1 += fld('Proyecto','m-proyecto',m.proyecto,'Nombre del proyecto');
+  p1 += fld('ID de sesión','m-sesionId',m.sesionId,'ELI-001','text','font-family:var(--font-mono)');
+  p1 += fld('Fecha','m-fecha',m.fecha,'','date');
+  p1 += fld('Analista responsable','m-analista',m.analista,'Nombre del BA');
+  p1 += '<div><label class="eli-lbl">Técnica utilizada</label>'
+    +'<select class="eli-inp" id="m-tecnica" onchange="eliMsave()">'
+    +['Entrevista estructurada','Entrevista semi-estructurada','Taller JAD','Observación contextual','Cuestionario','Análisis documental','Prototipado']
+      .map(function(o){return '<option'+(m.tecnica===o?' selected':'')+'>'+o+'</option>';}).join('')
+    +'</select></div>';
+  p1 += fld('Lugar / modalidad','m-lugar',m.lugar,'Presencial / Virtual');
+  p1 += '</div>';
+  p1 += '<div style="margin-bottom:.8rem"><label class="eli-lbl">Objetivo de la sesión</label>'
+    +'<textarea class="eli-ta" id="m-objetivo" rows="2" oninput="eliMsave()">'+escH(m.objetivo)+'</textarea></div>';
 
-  // set select value
-  var sel = document.getElementById('m-tecnica');
-  if(sel && m.tecnica) sel.value = m.tecnica;
+  /* participantes */
+  p1 += '<div class="card-title" style="margin-top:.8rem;margin-bottom:.4rem">Participantes</div>';
+  p1 += '<div id="mplist"></div>';
+  p1 += '<button class="btn btn-sm" style="margin-top:.4rem" onclick="eliAddP()">+ Participante</button>';
+
+  /* RF */
+  p1 += '<div class="card-title" style="margin-top:1rem;margin-bottom:.4rem">Requisitos funcionales (RF)</div>';
+  p1 += '<div id="mrflist"></div>';
+  p1 += '<button class="btn btn-sm" style="margin-top:.4rem;border-color:rgba(83,52,131,.4);color:var(--c-purple)" onclick="eliAddRF()">+ RF</button>';
+
+  /* RNF */
+  p1 += '<div class="card-title" style="margin-top:1rem;margin-bottom:.4rem">Requisitos no funcionales (RNF)</div>';
+  p1 += '<div id="mrnflist"></div>';
+  p1 += '<button class="btn btn-sm" style="margin-top:.4rem;border-color:rgba(15,110,86,.4);color:var(--c-teal)" onclick="eliAddRNF()">+ RNF</button>';
+
+  /* SA / RC */
+  p1 += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:.8rem;margin-top:1rem">';
+  p1 += '<div><div class="card-title" style="margin-bottom:.4rem">Supuestos (SA)</div><div id="msalist"></div>'
+    +'<button class="btn btn-sm" style="margin-top:.4rem" onclick="eliAddSA()">+ Supuesto</button></div>';
+  p1 += '<div><div class="card-title" style="margin-bottom:.4rem">Restricciones (RC)</div><div id="mrclist"></div>'
+    +'<button class="btn btn-sm" style="margin-top:.4rem" onclick="eliAddRC()">+ Restricción</button></div>';
+  p1 += '</div>';
+
+  /* pendientes */
+  p1 += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:.8rem;margin-top:1rem">';
+  p1 += '<div><label class="eli-lbl">Temas pendientes</label><textarea class="eli-ta" id="m-pendientes" rows="3" oninput="eliMsave()">'+escH(m.pendientes)+'</textarea></div>';
+  p1 += '<div><label class="eli-lbl">Próximos pasos</label><textarea class="eli-ta" id="m-proximos" rows="3" oninput="eliMsave()">'+escH(m.proximos)+'</textarea></div>';
+  p1 += '</div>';
+
+  /* save bar */
+  p1 += '<div style="display:flex;align-items:center;gap:.5rem;margin-top:1rem;padding-top:.8rem;border-top:0.5px solid var(--border)">';
+  p1 += '<button class="btn" style="background:var(--c-teal);color:#fff;border-color:var(--c-teal)" onclick="eliSaveMinuta()">Guardar minuta</button>';
+  p1 += '<button class="btn btn-sm" onclick="eliRestoreEjemplos()">↺ Restaurar ejemplos</button>';
+  p1 += '<button class="btn btn-sm" style="color:var(--c-red)" onclick="eliLimpiarMinuta()">✕ Limpiar</button>';
+  p1 += '<span id="m-msg" style="font-size:11px;color:var(--c-green)"></span></div>';
+  p1 += '</div></div>';
+
+  /* ── PANEL 2: guía de preguntas ── */
+  var catColors = {Apertura:'var(--c-teal)',Profundización:'var(--c-purple)',Validación:'var(--c-blue)',Restricciones:'var(--c-amber)'};
+  var p2 = '<div class="plt-panel" id="pltP2"><div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">';
+  Object.keys(ELI.preguntas).forEach(function(cat){
+    var col = catColors[cat]||'var(--c-teal)';
+    var key = cat.replace(/[^a-zA-Z]/g,'');
+    p2 += '<div class="card">';
+    p2 += '<div style="font-size:13px;font-weight:500;color:'+col+';margin-bottom:.5rem;display:flex;justify-content:space-between;align-items:center">';
+    p2 += cat+'<button class="btn btn-sm" onclick="eliAddPQ(\''+cat+'\')">+ Pregunta</button></div>';
+    p2 += '<div id="pq'+key+'list"></div>';
+    p2 += '</div>';
+  });
+  p2 += '</div><div style="margin-top:.8rem;display:flex;gap:.5rem;align-items:center">';
+  p2 += '<button class="btn" style="background:var(--c-blue);color:#fff;border-color:var(--c-blue)" onclick="eliSavePQ()">Guardar respuestas</button>';
+  p2 += '<span id="pq-msg" style="font-size:11px;color:var(--c-green)"></span></div></div>';
+
+  el.innerHTML = css + tabs + p0 + p1 + p2;
+
+  /* render all lists after DOM is set */
+  eliRenderP(); eliRenderRF(); eliRenderRNF(); eliRenderSA(); eliRenderRC(); eliRenderAllPQ();
+}
+
+/* ── field helper ── */
+function fld(lbl,id,val,ph,type,sty){
+  return '<div><label class="eli-lbl">'+lbl+'</label>'
+    +'<input class="eli-inp" id="'+id+'" type="'+(type||'text')+'" value="'+escH(val)+'" placeholder="'+(ph||'')+'"'+(sty?' style="'+sty+'"':'')+' oninput="eliMsave()"></div>';
+}
+
+/* ── tab switch ── */
+function pltTabSel(i,btn){
+  btn.parentElement.querySelectorAll('.plt-tab-btn').forEach(function(b,j){b.classList.toggle('on',j===i);});
+  btn.closest('.plt-panel,.page,.card')&&null;
+  var panels=document.querySelectorAll('.plt-panel');
+  panels.forEach(function(p,j){p.classList.toggle('on',j===i);});
+}
+
+/* ── auto-save ── */
+function eliMsave(){
+  var g=function(id){var e=document.getElementById(id);return e?e.value:'';};
+  Object.assign(ELI.minuta,{projeto:g('m-projeto'),projeto:g('m-projeto'),
+    projeto:g('m-projeto'),
+    sesionId:g('m-sesionId'),fecha:g('m-fecha'),analista:g('m-analista'),
+    tecnica:g('m-tecnica'),lugar:g('m-lugar'),objetivo:g('m-objetivo'),
+    pendientes:g('m-pendientes'),proximos:g('m-proximos')});
+  ELI.minuta.proyecto=g('m-proyecto');
+  eliSave();
+}
+function eliSaveMinuta(){eliMsave();var e=document.getElementById('m-msg');if(e){e.textContent='✓ Guardado';setTimeout(function(){e.textContent='';},1800);}}
+function eliSavePQ(){eliSave();var e=document.getElementById('pq-msg');if(e){e.textContent='✓ Guardado';setTimeout(function(){e.textContent='';},1800);}}
+
+/* ── participantes ── */
+function eliRenderP(){
+  var el=document.getElementById('mplist');if(!el)return;
+  var list=ELI.minuta.participantes||[];
+  el.innerHTML=list.map(function(p,i){
+    return '<div class="rrow" style="grid-template-columns:1fr 1fr 1fr 110px 24px">'
+      +'<input value="'+escH(p.nombre)+'" placeholder="Nombre" oninput="ELI.minuta.participantes['+i+'].nombre=this.value;eliSave()">'
+      +'<input value="'+escH(p.rol)+'" placeholder="Rol" oninput="ELI.minuta.participantes['+i+'].rol=this.value;eliSave()">'
+      +'<input value="'+escH(p.area)+'" placeholder="Área" oninput="ELI.minuta.participantes['+i+'].area=this.value;eliSave()">'
+      +'<select onchange="ELI.minuta.participantes['+i+'].participacion=this.value;eliSave()">'
+      +['Confirmada','Facilitador','Observador','Ausente'].map(function(o){return'<option'+(p.participacion===o?' selected':'')+'>'+o+'</option>';}).join('')
+      +'</select>'
+      +'<button class="rdel" onclick="ELI.minuta.participantes.splice('+i+',1);eliSave();eliRenderP()">×</button>'
+      +'</div>';
+  }).join('')||'<div style="font-size:12px;color:var(--muted);font-style:italic">Sin participantes.</div>';
+}
+function eliAddP(){ELI.minuta.participantes=ELI.minuta.participantes||[];ELI.minuta.participantes.push({nombre:'',rol:'',area:'',participacion:'Confirmada'});eliSave();eliRenderP();}
+
+/* ── RF ── */
+function eliRenderRF(){
+  var el=document.getElementById('mrflist');if(!el)return;
+  var list=ELI.minuta.rfs||[];
+  var hdr='<div class="rhdr" style="grid-template-columns:70px 1fr 55px 70px 100px 24px"><span>ID</span><span>Descripción</span><span>Tipo</span><span>Prior.</span><span>Estado</span><span></span></div>';
+  var rows=list.map(function(r,i){
+    return '<div class="rrow" style="grid-template-columns:70px 1fr 55px 70px 100px 24px">'
+      +'<input value="'+escH(r.id)+'" style="font-family:var(--font-mono);color:var(--c-purple);font-size:11px" oninput="ELI.minuta.rfs['+i+'].id=this.value;eliSave()">'
+      +'<input value="'+escH(r.desc)+'" placeholder="Descripción..." oninput="ELI.minuta.rfs['+i+'].desc=this.value;eliSave()">'
+      +'<select onchange="ELI.minuta.rfs['+i+'].tipo=this.value;eliSave()">'+['RF','SA','RC'].map(function(o){return'<option'+(r.tipo===o?' selected':'')+'>'+o+'</option>';}).join('')+'</select>'
+      +'<select onchange="ELI.minuta.rfs['+i+'].prioridad=this.value;eliSave()">'+['Must','Should','Could'].map(function(o){return'<option'+(r.prioridad===o?' selected':'')+'>'+o+'</option>';}).join('')+'</select>'
+      +'<select onchange="ELI.minuta.rfs['+i+'].estado=this.value;eliSave()">'+['Borrador','Confirmado','Ambiguo','En revisión','Aprobado','Pendiente'].map(function(o){return'<option'+(r.estado===o?' selected':'')+'>'+o+'</option>';}).join('')+'</select>'
+      +'<button class="rdel" onclick="ELI.minuta.rfs.splice('+i+',1);eliSave();eliRenderRF()">×</button>'
+      +'</div>';
+  }).join('')||'<div style="font-size:12px;color:var(--muted);font-style:italic;padding:.3rem 0">Sin registros.</div>';
+  el.innerHTML=hdr+rows;
+}
+function eliAddRF(){ELI.minuta.rfs=ELI.minuta.rfs||[];var n=ELI.minuta.rfs.length+1;ELI.minuta.rfs.push({id:'RF-'+String(n).padStart(3,'0'),desc:'',tipo:'RF',prioridad:'Must',estado:'Borrador'});eliSave();eliRenderRF();}
+
+/* ── RNF ── */
+function eliRenderRNF(){
+  var el=document.getElementById('mrnflist');if(!el)return;
+  var list=ELI.minuta.rnfs||[];
+  var hdr='<div class="rhdr" style="grid-template-columns:75px 1fr 55px 70px 100px 24px"><span>ID</span><span>Descripción</span><span>Tipo</span><span>Prior.</span><span>Estado</span><span></span></div>';
+  var rows=list.map(function(r,i){
+    return '<div class="rrow" style="grid-template-columns:75px 1fr 55px 70px 100px 24px">'
+      +'<input value="'+escH(r.id)+'" style="font-family:var(--font-mono);color:var(--c-teal);font-size:11px" oninput="ELI.minuta.rnfs['+i+'].id=this.value;eliSave()">'
+      +'<input value="'+escH(r.desc)+'" placeholder="Descripción..." oninput="ELI.minuta.rnfs['+i+'].desc=this.value;eliSave()">'
+      +'<select onchange="ELI.minuta.rnfs['+i+'].tipo=this.value;eliSave()">'+['RNF','SA','RC'].map(function(o){return'<option'+(r.tipo===o?' selected':'')+'>'+o+'</option>';}).join('')+'</select>'
+      +'<select onchange="ELI.minuta.rnfs['+i+'].prioridad=this.value;eliSave()">'+['Must','Should','Could'].map(function(o){return'<option'+(r.prioridad===o?' selected':'')+'>'+o+'</option>';}).join('')+'</select>'
+      +'<select onchange="ELI.minuta.rnfs['+i+'].estado=this.value;eliSave()">'+['Borrador','Confirmado','Ambiguo','En revisión','Aprobado','Pendiente'].map(function(o){return'<option'+(r.estado===o?' selected':'')+'>'+o+'</option>';}).join('')+'</select>'
+      +'<button class="rdel" onclick="ELI.minuta.rnfs.splice('+i+',1);eliSave();eliRenderRNF()">×</button>'
+      +'</div>';
+  }).join('')||'<div style="font-size:12px;color:var(--muted);font-style:italic;padding:.3rem 0">Sin registros.</div>';
+  el.innerHTML=hdr+rows;
+}
+function eliAddRNF(){ELI.minuta.rnfs=ELI.minuta.rnfs||[];var n=ELI.minuta.rnfs.length+1;ELI.minuta.rnfs.push({id:'RNF-'+String(n).padStart(3,'0'),desc:'',tipo:'RNF',prioridad:'Must',estado:'Borrador'});eliSave();eliRenderRNF();}
+
+/* ── SA ── */
+function eliRenderSA(){
+  var el=document.getElementById('msalist');if(!el)return;
+  var list=ELI.minuta.sas||[];
+  el.innerHTML=list.map(function(s,i){
+    return '<div class="rrow" style="grid-template-columns:65px 1fr 24px">'
+      +'<input value="'+escH(s.id)+'" style="font-family:var(--font-mono);color:var(--c-blue);font-size:11px" oninput="ELI.minuta.sas['+i+'].id=this.value;eliSave()">'
+      +'<input value="'+escH(s.desc)+'" placeholder="Descripción del supuesto..." oninput="ELI.minuta.sas['+i+'].desc=this.value;eliSave()">'
+      +'<button class="rdel" onclick="ELI.minuta.sas.splice('+i+',1);eliSave();eliRenderSA()">×</button>'
+      +'</div>';
+  }).join('')||'<div style="font-size:12px;color:var(--muted);font-style:italic;padding:.3rem 0">Sin registros.</div>';
+}
+function eliAddSA(){ELI.minuta.sas=ELI.minuta.sas||[];var n=ELI.minuta.sas.length+1;ELI.minuta.sas.push({id:'SA-'+String(n).padStart(3,'0'),desc:''});eliSave();eliRenderSA();}
+
+/* ── RC ── */
+function eliRenderRC(){
+  var el=document.getElementById('mrclist');if(!el)return;
+  var list=ELI.minuta.rcs||[];
+  el.innerHTML=list.map(function(r,i){
+    return '<div class="rrow" style="grid-template-columns:65px 1fr 24px">'
+      +'<input value="'+escH(r.id)+'" style="font-family:var(--font-mono);color:var(--c-amber);font-size:11px" oninput="ELI.minuta.rcs['+i+'].id=this.value;eliSave()">'
+      +'<input value="'+escH(r.desc)+'" placeholder="Descripción de la restricción..." oninput="ELI.minuta.rcs['+i+'].desc=this.value;eliSave()">'
+      +'<button class="rdel" onclick="ELI.minuta.rcs.splice('+i+',1);eliSave();eliRenderRC()">×</button>'
+      +'</div>';
+  }).join('')||'<div style="font-size:12px;color:var(--muted);font-style:italic;padding:.3rem 0">Sin registros.</div>';
+}
+function eliAddRC(){ELI.minuta.rcs=ELI.minuta.rcs||[];var n=ELI.minuta.rcs.length+1;ELI.minuta.rcs.push({id:'RC-'+String(n).padStart(3,'0'),desc:''});eliSave();eliRenderRC();}
+
+/* ── PREGUNTAS ── */
+function eliRenderAllPQ(){ Object.keys(ELI.preguntas).forEach(function(cat){ eliRenderPQ(cat); }); }
+function eliRenderPQ(cat){
+  var key=cat.replace(/[^a-zA-Z]/g,'');
+  var el=document.getElementById('pq'+key+'list'); if(!el)return;
+  var list=ELI.preguntas[cat]||[];
+  el.innerHTML=list.map(function(item,i){
+    return '<div class="pq-item">'
+      +'<div style="display:flex;gap:5px;align-items:flex-start;margin-bottom:3px">'
+      +'<span style="font-size:10px;color:var(--muted);min-width:16px;padding-top:4px">'+(i+1)+'.</span>'
+      +'<input class="pq-inp" value="'+escH(item.q)+'" placeholder="Pregunta..." style="flex:1" oninput="ELI.preguntas[\''+cat+'\']['+i+'].q=this.value;eliSave()">'
+      +'<button class="rdel" onclick="ELI.preguntas[\''+cat+'\'].splice('+i+',1);eliSave();eliRenderPQ(\''+cat+'\')">×</button></div>'
+      +'<textarea class="pq-resp" rows="2" placeholder="Respuesta / hallazgo de la sesión..." oninput="ELI.preguntas[\''+cat+'\']['+i+'].r=this.value;eliSave()">'+escH(item.r)+'</textarea>'
+      +'</div>';
+  }).join('')||'<div style="font-size:12px;color:var(--muted);font-style:italic">Sin preguntas.</div>';
+}
+function eliAddPQ(cat){
+  ELI.preguntas[cat]=ELI.preguntas[cat]||[];
+  ELI.preguntas[cat].push({q:'',r:''});
+  eliSave(); eliRenderPQ(cat);
+}
+
+/* ── restore / clear ── */
+function eliRestoreEjemplos(){
+  if(!confirm('¿Restaurar los datos de ejemplo? Esto reemplazará los datos actuales de la minuta.')) return;
+  var d=defaultELI().minuta;
+  ['rfs','rnfs','sas','rcs','participantes','pendientes','proximos'].forEach(function(k){ ELI.minuta[k]=d[k]; });
+  eliSave();
+  var m=document.getElementById('eli-plt-mount'); if(m){m.innerHTML=''; initEliPlantillas();}
+}
+function eliLimpiarMinuta(){
+  if(!confirm('¿Limpiar toda la minuta?')) return;
+  localStorage.removeItem(ELI_KEY); ELI=loadELI();
+  var m=document.getElementById('eli-plt-mount'); if(m){m.innerHTML=''; initEliPlantillas();}
 }
 
 // ── helper: escape HTML ────────────────────────────────────────────────────
