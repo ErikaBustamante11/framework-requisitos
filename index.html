@@ -4670,11 +4670,130 @@ reg('roadmap', () => `
   <h1 class="page-title">Hoja de ruta de implementación</h1>
   <p class="page-desc">Plan concreto para pasar de nivel inicial a proceso optimizado en el equipo.</p>
 </div>
-<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1rem">
-  ${['Nivel 1 → 2 (Inicial)','Nivel 2 → 3 (Gestionado)','Nivel 3 → 4 (Definido)'].map((l,i) => `<button class="btn btn-sm${i===0?' btn-primary':''}" onclick="setRoadmap(${i},this)">${l}</button>`).join('')}
+<div class="tab-nav">
+  <button class="tab-btn on" onclick="tabSel('rdm',0,this)">Guía de referencia</button>
+  <button class="tab-btn" onclick="tabSel('rdm',1,this);setTimeout(initMiPlan,60)">Mi plan de implementación</button>
 </div>
-<div id="roadmap-content"></div>
+<div class="tab-panel on" id="rdm-0">
+  <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1rem">
+    ${['Nivel 1 → 2 (Inicial)','Nivel 2 → 3 (Gestionado)','Nivel 3 → 4 (Definido)'].map((l,i) => `<button class="btn btn-sm${i===0?' btn-primary':''}" onclick="setRoadmap(${i},this)">${l}</button>`).join('')}
+  </div>
+  <div id="roadmap-content"></div>
+</div>
+<div class="tab-panel" id="rdm-1">
+  <div id="mi-plan-mount"></div>
+</div>
 `);
+
+const PLAN_KEY = 'fw_plan_v1';
+function initMiPlan(){
+  var el=document.getElementById('mi-plan-mount'); if(!el||el.innerHTML.trim()) return;
+  if(!window._PLAN){
+    try{ window._PLAN=JSON.parse(localStorage.getItem(PLAN_KEY))||defPlan(); }catch(ex){ window._PLAN=defPlan(); }
+  }
+  renderMiPlan();
+}
+
+function defPlan(){ return {
+  empresa:'', nivelActual:'Nivel 1 — Inicial', nivelObjetivo:'Nivel 2 — Gestionado',
+  fechaInicio:'', fechaObjetivo:'', responsable:'', obs:'',
+  actividades:[
+    {fase:'Semanas 1–2',nombre:'Diagnóstico y plantillas base',estado:'Pendiente',fecha:'',resp:'',nota:''},
+    {fase:'Semanas 3–6',nombre:'Primera elicitación estructurada',estado:'Pendiente',fecha:'',resp:'',nota:''},
+    {fase:'Semanas 7–10',nombre:'Especificación básica',estado:'Pendiente',fecha:'',resp:'',nota:''},
+  ],
+}; }
+
+function renderMiPlan(){
+  var el=document.getElementById('mi-plan-mount'); if(!el) return;
+  function savePlan(){ localStorage.setItem(PLAN_KEY,JSON.stringify(window._PLAN)); }
+  function e(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+  var p=window._PLAN;
+  var acts=p.actividades||[];
+
+  // Progreso global
+  var comp=acts.filter(function(a){return a.estado==='Completado';}).length;
+  var prog=acts.filter(function(a){return a.estado==='En progreso';}).length;
+  var pct=acts.length?Math.round(comp/acts.length*100):0;
+  var allDone=comp===acts.length&&acts.length>0;
+  var gVar=allDone?'--c-green':prog>0?'--c-blue':'--c-gray';
+  var gColor=allDone?'15,110,86':prog>0?'24,95,165':'0,0,0';
+
+  var global='<div class="card" style="margin-bottom:1rem;background:rgba('+gColor+',.04);border-color:rgba('+gColor+',.2)">'
+    +'<div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem;margin-bottom:.5rem">'
+    +'<div><div style="font-size:13px;font-weight:500;color:var('+gVar+');">'
+    +(allDone?'✓ Plan completado':prog>0?'⏳ Plan en ejecución — '+comp+' de '+acts.length+' completadas':'○ Plan por iniciar')
+    +'</div><div style="font-size:11px;color:var(--muted);margin-top:2px">'+comp+' completadas · '+prog+' en progreso · '+(acts.length-comp-prog)+' pendientes</div></div>'
+    +'<div style="font-size:28px;font-weight:500;font-family:var(--font-serif);color:var('+gVar+')">'+pct+'%</div>'
+    +'</div>'
+    +'<div style="height:7px;background:var(--surface2);border-radius:4px;overflow:hidden">'
+    +'<div style="height:100%;width:'+pct+'%;background:var('+gVar+');border-radius:4px;transition:width .5s"></div>'
+    +'</div></div>';
+
+  // Contexto del plan
+  var nivelOpts=['Nivel 1 — Inicial','Nivel 2 — Gestionado','Nivel 3 — Definido','Nivel 4 — Optimizado'];
+  function fi(lbl,key,ph){ return '<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.3px;display:block;margin-bottom:2px">'+lbl+'</label><input value="'+e(p[key]||'')+'" placeholder="'+ph+'" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:5px 8px;font-size:12px;color:var(--text);font-family:var(--font-sans);outline:none" oninput="window._PLAN.'+key+'=this.value;savePlan()"></div>'; }
+  function sel(lbl,key){ return '<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.3px;display:block;margin-bottom:2px">'+lbl+'</label><select style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:5px 8px;font-size:12px;color:var(--text);outline:none" onchange="window._PLAN.'+key+'=this.value;savePlan()">'+nivelOpts.map(function(o){return'<option'+(p[key]===o?' selected':'')+'>'+o+'</option>';}).join('')+'</select></div>'; }
+
+  var ctx='<div class="card" style="margin-bottom:1rem">'
+    +'<div class="card-title" style="margin-bottom:.6rem">Contexto del plan</div>'
+    +'<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.5rem;margin-bottom:.5rem">'
+    +fi('Organización / equipo','empresa','Nombre del equipo o empresa')+sel('Nivel actual','nivelActual')+sel('Nivel objetivo','nivelObjetivo')
+    +'</div>'
+    +'<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.5rem;margin-bottom:.5rem">'
+    +fi('Fecha de inicio','fechaInicio','AAAA-MM-DD')+fi('Fecha objetivo','fechaObjetivo','AAAA-MM-DD')+fi('Responsable del plan','responsable','Nombre · Rol')
+    +'</div>'
+    +'<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.3px;display:block;margin-bottom:2px">Observaciones generales</label>'
+    +'<textarea rows="2" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:5px 8px;font-size:12px;color:var(--text);font-family:var(--font-sans);resize:vertical;outline:none;line-height:1.6" placeholder="Contexto, restricciones, acuerdos del equipo..." oninput="window._PLAN.obs=this.value;savePlan()">'+e(p.obs||'')+'</textarea></div>'
+    +'</div>';
+
+  // Actividades
+  var estOpts=['Pendiente','En progreso','Completado','Bloqueado'];
+  var estColor={Pendiente:'var(--muted)','En progreso':'var(--c-blue)',Completado:'var(--c-green)',Bloqueado:'var(--c-red)'};
+  var estBg={Pendiente:'var(--surface)','En progreso':'rgba(24,95,165,.05)',Completado:'rgba(15,110,86,.06)',Bloqueado:'rgba(163,45,45,.05)'};
+
+  var actCards=acts.map(function(a,i){
+    var ec=estColor[a.estado]||'var(--muted)';
+    var eb=estBg[a.estado]||'var(--surface)';
+    return '<div style="background:'+eb+';border:0.5px solid var(--border);border-radius:var(--radius);padding:.7rem .9rem;margin-bottom:.5rem">'
+      +'<div style="display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;margin-bottom:.5rem">'
+      +'<span style="font-size:10px;font-family:var(--font-mono);color:var(--muted);background:var(--surface2);padding:2px 7px;border-radius:4px">'+e(a.fase)+'</span>'
+      +'<input value="'+e(a.nombre)+'" style="flex:1;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:4px 8px;font-size:12px;font-weight:500;color:var(--text);font-family:var(--font-serif);outline:none;min-width:180px" oninput="window._PLAN.actividades['+i+'].nombre=this.value;savePlan()">'
+      +'<select style="font-size:11px;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:3px 7px;color:'+ec+';font-weight:500;outline:none;cursor:pointer" onchange="window._PLAN.actividades['+i+'].estado=this.value;savePlan();renderMiPlan()">'+estOpts.map(function(o){return'<option'+(a.estado===o?' selected':'')+'>'+o+'</option>';}).join('')+'</select>'
+      +'<input value="'+e(a.fase)+'" placeholder="Período" style="width:120px;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:3px 7px;font-size:11px;font-family:var(--font-mono);color:var(--muted);outline:none" oninput="window._PLAN.actividades['+i+'].fase=this.value;savePlan()">'
+      +'<button style="background:none;border:none;cursor:pointer;color:var(--muted);font-size:15px;flex-shrink:0" onclick="window._PLAN.actividades.splice('+i+',1);savePlan();renderMiPlan()">×</button>'
+      +'</div>'
+      +'<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.5rem">'
+      +'<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.3px;display:block;margin-bottom:2px">Fecha comprometida</label>'
+      +'<input type="date" value="'+e(a.fecha)+'" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:4px 7px;font-size:12px;color:var(--text);outline:none" oninput="window._PLAN.actividades['+i+'].fecha=this.value;savePlan()"></div>'
+      +'<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.3px;display:block;margin-bottom:2px">Responsable</label>'
+      +'<input value="'+e(a.resp)+'" placeholder="Nombre · Rol" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:4px 7px;font-size:12px;color:var(--text);font-family:var(--font-sans);outline:none" oninput="window._PLAN.actividades['+i+'].resp=this.value;savePlan()"></div>'
+      +'<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.3px;display:block;margin-bottom:2px">Notas / avance</label>'
+      +'<input value="'+e(a.nota)+'" placeholder="Observación..." style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:4px 7px;font-size:12px;color:var(--text);font-family:var(--font-sans);outline:none" oninput="window._PLAN.actividades['+i+'].nota=this.value;savePlan()"></div>'
+      +'</div></div>';
+  }).join('');
+
+  var addBtn='<div style="display:flex;gap:.5rem;margin-top:.5rem;align-items:center">'
+    +'<button class="btn btn-sm" style="color:var(--c-gray);border-color:rgba(0,0,0,.2)" onclick="planAddAct()">+ Actividad</button>'
+    +'<button class="btn btn-sm" onclick="planReset()">↺ Restaurar plan base</button>'
+    +'<span style="font-size:11px;color:var(--muted)">Guardado automáticamente</span></div>';
+
+  el.innerHTML='<div style="background:rgba(24,95,165,.06);border:0.5px solid rgba(24,95,165,.25);border-radius:var(--radius);padding:.5rem .8rem;font-size:11px;color:var(--c-blue);margin-bottom:.8rem">ⓘ Documenta tu plan real de implementación del framework en la empresa del caso de estudio. Guardado automático.</div>'
+    +global+ctx+actCards+addBtn;
+}
+
+function planAddAct(){
+  window._PLAN.actividades=window._PLAN.actividades||[];
+  window._PLAN.actividades.push({fase:'Nueva fase',nombre:'Nueva actividad',estado:'Pendiente',fecha:'',resp:'',nota:''});
+  localStorage.setItem(PLAN_KEY,JSON.stringify(window._PLAN));
+  renderMiPlan();
+}
+function planReset(){
+  window._PLAN=defPlan();
+  localStorage.setItem(PLAN_KEY,JSON.stringify(window._PLAN));
+  var m=document.getElementById('mi-plan-mount'); if(m){m.innerHTML='';initMiPlan();}
+}
+
 
 /* ════════════════════════════════════════
    INTERACTIVE LOGIC
