@@ -4503,32 +4503,137 @@ reg('calidad', () => `
   <p class="page-desc">Los 7 criterios que deben cumplir los requisitos para ser considerados aptos para el desarrollo. Derivados de la ISO/IEC/IEEE 29148:2018 y el modelo de calidad ISO/IEC 25010:2023.</p>
   <div class="std-row"><span class="std-pill">ISO/IEC 25010:2023</span><span class="std-pill">IEEE 29148:2018</span></div>
 </div>
-<div class="table-wrap" style="margin-bottom:1.2rem">
-  <table class="data-table">
-    <thead><tr><th>Criterio</th><th>Definición operacional</th><th>Métrica</th><th>Umbral mínimo</th></tr></thead>
-    <tbody>
-      ${[
-        {c:'Claridad',def:'Expresado en lenguaje preciso sin términos sujetos a múltiples interpretaciones; verificado mediante revisión entre pares',met:'% HU sin términos ambiguos detectados en revisión',u:'≥ 90%',color:'var(--c-teal)'},
-        {c:'Completitud',def:'Describe suficientemente el comportamiento esperado incluyendo condiciones de entrada, procesamiento y resultado',met:'% HU con criterio de aceptación definido',u:'≥ 95%',color:'var(--c-blue)'},
-        {c:'Verificabilidad',def:'Puede comprobarse mediante pruebas, inspección o análisis; preferiblemente en formato Dado–Cuando–Entonces (BDD/Gherkin)',met:'% AC formulados en formato testable',u:'≥ 85%',color:'var(--c-purple)'},
-        {c:'Trazabilidad',def:'Vinculable a su origen en el descubrimiento y a sus elementos de verificación; enlace completo en la RTM: origen → HU/RNF → diseño → prueba',met:'% requisitos con enlace completo en RTM',u:'≥ 90%',color:'var(--c-green)'},
-        {c:'Consistencia',def:'No contradice ni duplica otros requisitos del conjunto; coherente con objetivos del negocio y restricciones del sistema',met:'% requisitos sin conflictos en revisión de backlog',u:'≥ 95%',color:'var(--c-amber)'},
-        {c:'Necesidad',def:'Responde a una necesidad real del negocio o del usuario, vinculable a un objetivo organizacional documentado en la Fase 1',met:'% requisitos con objetivo de negocio en RTM',u:'≥ 90%',color:'var(--c-red)'},
-        {c:'Cuantificación de RNF',def:'Los requisitos no funcionales se especifican con umbral numérico medible y método de verificación conforme a ISO/IEC 25010:2023',met:'% RNF con umbral y método de verificación definidos',u:'≥ 80%',color:'var(--c-gray)'},
-      ].map(r => `<tr>
-        <td><span style="font-weight:500;color:${r.color}">${r.c}</span></td>
-        <td style="color:var(--muted)">${r.def}</td>
-        <td style="font-size:11px;color:var(--muted)">${r.met}</td>
-        <td><span class="badge b-ok" style="font-size:12px">${r.u}</span></td>
-      </tr>`).join('')}
-    </tbody>
-  </table>
+<div class="tab-nav">
+  <button class="tab-btn on" onclick="tabSel('cal',0,this)">Criterios de referencia</button>
+  <button class="tab-btn" onclick="tabSel('cal',1,this);setTimeout(initCalMedicion,60)">Medición en campo</button>
 </div>
-
-<div class="card" style="background:rgba(15,110,86,.03);border-color:rgba(15,110,86,.2);font-size:12px;color:var(--muted);line-height:1.7">
-  El cumplimiento de estos criterios se verifica mediante el checklist de calidad aplicado en el PC3 y se monitorea de forma continua durante la Fase 5. El criterio de Cuantificación de RNF complementa los seis criterios base aplicando el modelo de calidad de la ISO/IEC 25010:2023 específicamente a los requisitos no funcionales, cuya naturaleza requiere una forma de medición diferenciada.
+<div class="tab-panel on" id="cal-0">
+  <div id="cal-ref-mount"></div>
+</div>
+<div class="tab-panel" id="cal-1">
+  <div id="cal-med-mount"></div>
 </div>
 `);
+
+function initCalidad(){
+  var el=document.getElementById('cal-ref-mount'); if(!el||el.innerHTML.trim()) return;
+  var criterios=[
+    {c:'Claridad',          def:'Expresado en lenguaje preciso sin términos sujetos a múltiples interpretaciones; verificado mediante revisión entre pares.',          met:'% HU sin términos ambiguos detectados en revisión',    u:90, color:'var(--c-teal)'},
+    {c:'Completitud',       def:'Describe suficientemente el comportamiento esperado incluyendo condiciones de entrada, procesamiento y resultado.',                   met:'% HU con criterio de aceptación definido',            u:95, color:'var(--c-blue)'},
+    {c:'Verificabilidad',   def:'Puede comprobarse mediante pruebas, inspección o análisis; preferiblemente en formato Dado–Cuando–Entonces (BDD/Gherkin).',          met:'% AC formulados en formato testable',                 u:85, color:'var(--c-purple)'},
+    {c:'Trazabilidad',      def:'Vinculable a su origen en el descubrimiento y a sus elementos de verificación; enlace completo en la RTM.',                         met:'% requisitos con enlace completo en RTM',             u:90, color:'var(--c-green)'},
+    {c:'Consistencia',      def:'No contradice ni duplica otros requisitos del conjunto; coherente con objetivos del negocio y restricciones del sistema.',            met:'% requisitos sin conflictos en revisión de backlog',  u:95, color:'var(--c-amber)'},
+    {c:'Necesidad',         def:'Responde a una necesidad real del negocio o del usuario, vinculable a un objetivo organizacional documentado en la Fase 1.',         met:'% requisitos con objetivo de negocio en RTM',        u:90, color:'var(--c-red)'},
+    {c:'Cuantificación RNF',def:'Los RNF se especifican con umbral numérico medible y método de verificación conforme a ISO/IEC 25010:2023.',                         met:'% RNF con umbral y método de verificación definidos', u:80, color:'var(--c-gray)'},
+  ];
+  var rows=criterios.map(function(r){
+    return '<tr>'
+      +'<td><span style="font-weight:500;color:'+r.color+'">'+r.c+'</span></td>'
+      +'<td style="color:var(--muted)">'+r.def+'</td>'
+      +'<td style="font-size:11px;color:var(--muted)">'+r.met+'</td>'
+      +'<td><span class="badge b-ok" style="font-size:12px">≥ '+r.u+'%</span></td>'
+      +'</tr>';
+  }).join('');
+  el.innerHTML='<div class="table-wrap" style="margin-bottom:1.2rem">'
+    +'<table class="data-table"><thead><tr><th>Criterio</th><th>Definición operacional</th><th>Métrica</th><th>Umbral mínimo</th></tr></thead>'
+    +'<tbody>'+rows+'</tbody></table></div>'
+    +'<div class="card" style="background:rgba(15,110,86,.03);border-color:rgba(15,110,86,.2);font-size:12px;color:var(--muted);line-height:1.7">'
+    +'El cumplimiento de estos criterios se verifica mediante el checklist de calidad aplicado en el PC3 y se monitorea de forma continua durante la Fase 5. '
+    +'El criterio de Cuantificación de RNF complementa los seis criterios base aplicando el modelo de calidad de la ISO/IEC 25010:2023 específicamente a los requisitos no funcionales, cuya naturaleza requiere una forma de medición diferenciada.'
+    +'</div>';
+}
+
+function initCalMedicion(){
+  var el=document.getElementById('cal-med-mount'); if(!el||el.innerHTML.trim()) return;
+  var CAL_KEY='fw_cal_v1';
+  if(!window._CAL){
+    try{ window._CAL=JSON.parse(localStorage.getItem(CAL_KEY))||defCal(); }catch(ex){ window._CAL=defCal(); }
+  }
+  renderCalMedicion();
+}
+
+function defCal(){ return { mediciones:[
+  {criterio:'Claridad',          umbral:90, color:'var(--c-teal)',   valor:'', herramienta:'', obs:''},
+  {criterio:'Completitud',       umbral:95, color:'var(--c-blue)',   valor:'', herramienta:'', obs:''},
+  {criterio:'Verificabilidad',   umbral:85, color:'var(--c-purple)', valor:'', herramienta:'', obs:''},
+  {criterio:'Trazabilidad',      umbral:90, color:'var(--c-green)',  valor:'', herramienta:'', obs:''},
+  {criterio:'Consistencia',      umbral:95, color:'var(--c-amber)',  valor:'', herramienta:'', obs:''},
+  {criterio:'Necesidad',         umbral:90, color:'var(--c-red)',    valor:'', herramienta:'', obs:''},
+  {criterio:'Cuantificación RNF',umbral:80, color:'var(--c-gray)',   valor:'', herramienta:'', obs:''},
+]}; }
+
+function renderCalMedicion(){
+  var el=document.getElementById('cal-med-mount'); if(!el) return;
+  var CAL_KEY='fw_cal_v1';
+  function save(){ localStorage.setItem(CAL_KEY,JSON.stringify(window._CAL)); }
+  function e(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+  var meds=window._CAL.mediciones;
+
+  var aprobados=meds.filter(function(m){ var v=parseFloat(m.valor); return !isNaN(v)&&v>=m.umbral; }).length;
+  var medidos  =meds.filter(function(m){ return m.valor!==''; }).length;
+  var allOk=aprobados===7&&medidos===7;
+  var pct=medidos>0?Math.round(aprobados/7*100):0;
+  var gVar=allOk?'--c-green':medidos>0?'--c-blue':'--c-gray';
+  var gColor=allOk?'15,110,86':medidos>0?'24,95,165':'0,0,0';
+
+  var global='<div class="card" style="margin-bottom:1rem;background:rgba('+gColor+',.04);border-color:rgba('+gColor+',.2)">'
+    +'<div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem;margin-bottom:.5rem">'
+    +'<div><div style="font-size:13px;font-weight:500;color:var('+gVar+');">'
+    +(allOk?'✓ Todos los criterios superan el umbral mínimo':medidos>0?'⏳ Medición en progreso — '+aprobados+' de 7 aprobados':'○ Ingresa los valores reales para ver el resultado')
+    +'</div><div style="font-size:11px;color:var(--muted);margin-top:2px">'+medidos+' medidos · '+aprobados+' superan el umbral · '+(7-aprobados)+' por mejorar</div></div>'
+    +'<div style="font-size:30px;font-weight:500;font-family:var(--font-serif);color:var('+gVar+')">'+aprobados+'/7</div>'
+    +'</div>'
+    +'<div style="height:7px;background:var(--surface2);border-radius:4px;overflow:hidden">'
+    +'<div style="height:100%;width:'+pct+'%;background:var('+gVar+');border-radius:4px;transition:width .5s"></div>'
+    +'</div></div>';
+
+  var tip='<div style="background:rgba(24,95,165,.06);border:0.5px solid rgba(24,95,165,.25);border-radius:var(--radius);padding:.5rem .8rem;font-size:11px;color:var(--c-blue);margin-bottom:.8rem">'
+    +'ⓘ Registra el valor real obtenido en tu caso de estudio para cada criterio. El semáforo compara con el umbral IEEE/ISO. Guardado automático.</div>';
+
+  var cards='';
+  meds.forEach(function(m,i){
+    var val=parseFloat(m.valor);
+    var medido=m.valor!=='';
+    var aprobado=medido&&!isNaN(val)&&val>=m.umbral;
+    var sc=!medido?'var(--muted)':aprobado?'var(--c-green)':'var(--c-red)';
+    var sb=!medido?'var(--border)':aprobado?'rgba(15,110,86,.3)':'rgba(163,45,45,.3)';
+    var sbg=!medido?'var(--surface)':aprobado?'rgba(15,110,86,.05)':'rgba(163,45,45,.05)';
+    var slabel=!medido?'Sin medir':aprobado?'✓ Aprobado':'✗ No alcanzado';
+    var diff=medido&&!isNaN(val)?(val-m.umbral).toFixed(1):null;
+
+    cards+='<div style="background:'+sbg+';border:0.5px solid '+sb+';border-radius:var(--radius);padding:.8rem 1rem;margin-bottom:.6rem">'
+      +'<div style="display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;margin-bottom:.5rem">'
+      +'<div style="width:10px;height:10px;border-radius:50%;background:'+m.color+';flex-shrink:0"></div>'
+      +'<div style="font-size:13px;font-weight:500;font-family:var(--font-serif);flex:1">'+e(m.criterio)+'</div>'
+      +'<span style="font-size:11px;color:var(--muted)">Umbral: <strong style="color:var(--text)">≥ '+m.umbral+'%</strong></span>'
+      +'<span style="font-size:11px;font-weight:600;color:'+sc+';padding:2px 10px;border-radius:10px;background:var(--bg);border:0.5px solid '+sb+'">'+slabel+'</span>'
+      +'</div>'
+      +'<div style="display:grid;grid-template-columns:120px 1fr 1fr;gap:.5rem;align-items:end">'
+      +'<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.3px;display:block;margin-bottom:2px">Valor obtenido (%)</label>'
+      +'<div style="display:flex;align-items:center;gap:.4rem">'
+      +'<input type="number" min="0" max="100" value="'+e(m.valor)+'" placeholder="%" '
+      +'style="width:72px;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:5px 8px;font-size:15px;font-weight:600;color:'+(medido?sc:'var(--text)')+';font-family:var(--font-mono);outline:none;text-align:center" '
+      +'oninput="window._CAL.mediciones['+i+'].valor=this.value;save();renderCalMedicion()">'
+      +(diff!==null?'<span style="font-size:11px;font-weight:500;color:'+sc+'">'+(parseFloat(diff)>=0?'+':'')+diff+' pp</span>':'')
+      +'</div></div>'
+      +'<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.3px;display:block;margin-bottom:2px">Herramienta / método</label>'
+      +'<input value="'+e(m.herramienta)+'" placeholder="Ej: RTM, revisión entre pares, SonarQube..." '
+      +'style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:5px 8px;font-size:12px;color:var(--text);font-family:var(--font-sans);outline:none" '
+      +'oninput="window._CAL.mediciones['+i+'].herramienta=this.value;save()"></div>'
+      +'<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.3px;display:block;margin-bottom:2px">Observaciones</label>'
+      +'<input value="'+e(m.obs)+'" placeholder="Contexto, limitaciones, ajustes..." '
+      +'style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:5px 8px;font-size:12px;color:var(--text);font-family:var(--font-sans);outline:none" '
+      +'oninput="window._CAL.mediciones['+i+'].obs=this.value;save()"></div>'
+      +'</div>'
+      +(medido?'<div style="margin-top:.4rem"><div style="height:4px;background:var(--surface2);border-radius:2px;overflow:hidden">'
+        +'<div style="height:100%;width:'+Math.min(Math.max(val,0),100)+'%;background:'+sc+';border-radius:2px;transition:width .4s"></div>'
+        +'</div></div>':'')
+      +'</div>';
+  });
+
+  el.innerHTML=global+tip+cards;
+}
+
 
 /* ════════════════════════════════════════
    PAGE: EVALUADOR DE MADUREZ
@@ -6341,6 +6446,7 @@ function onPageShow(id) {
   if (id==='srs-editor') setTimeout(initSrsEditor, 50);
   if (id==='srs-glosario') initGlosario();
   if (id==='val-tecnicas') setTimeout(initValTecnicas, 50);
+  if (id==='calidad') setTimeout(initCalidad, 50);
   if (id==='val-baseline') setTimeout(function(){ initBlRef(); }, 50);
   if (id==='val-log') setTimeout(function(){ if(!window._DEFS){window._DEFS=DEFECTS.slice();} window._selDefIdx=-1; initValLog(); }, 50);
   if (id==='val-uat') setTimeout(function(){ window._uatSelIdx=-1; initValUat(); }, 50);
