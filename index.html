@@ -5932,8 +5932,8 @@ function campoField(label, id, value='', placeholder='', type='text', opts=null)
 reg('campo-proyecto', () => `
 <div class="page-header">
   <div class="page-eyebrow" style="color:var(--c-teal)">● Aplicación en campo</div>
-  <h1 class="page-title">Contexto del proyecto real</h1>
-  <p class="page-desc">Define el contexto de la empresa y el sistema donde aplicarás el framework. Base del capítulo de aplicación de la tesis.</p>
+  <h1 class="page-title">Contexto del proyecto</h1>
+  <p class="page-desc">Define el contexto de la empresa y el sistema donde se aplica el framework.</p>
 </div>
 <div id="cp-mount"></div>
 `);
@@ -5956,33 +5956,33 @@ function renderCampoProyecto(){
   }
 
   var html='<div style="background:rgba(29,158,117,.06);border:0.5px solid rgba(29,158,117,.25);border-radius:var(--radius);padding:.5rem .8rem;font-size:11px;color:var(--c-teal);margin-bottom:.8rem">'
-    +'ⓘ Esta información es la base del capítulo de aplicación. Se guarda automáticamente.</div>'
+    +'ⓘ Define el contexto del proyecto antes de registrar los datos de cada fase. Guardado automático.</div>'
     +'<div class="card" style="margin-bottom:.8rem">'
     +'<div class="card-title" style="margin-bottom:.6rem">Identificación del proyecto</div>'
     +'<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.5rem;margin-bottom:.5rem">'
-    +fi('Nombre del proyecto','nombre','Sistema de gestión de...')+fi('Empresa / organización','empresa','Nombre de la empresa')+fi('Sector / industria','sector','Ej: Financiero, Salud, TI...')
+    +fi('Nombre del proyecto','nombre','Ej: Sistema de gestión de créditos')
+    +fi('Empresa / organización','empresa','Nombre de la empresa o entidad')
+    +fi('Sector / industria','sector','Ej: Financiero, Salud, Manufactura...')
     +'</div>'
     +'<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.5rem;margin-bottom:.5rem">'
-    +fi('Tipo de sistema','descripcion','Transaccional, ERP, portal...')+fi('Autor del framework','autor','Nombre completo')+fi('Director / tutor tesis','director','Nombre del director')
-    +'</div>'
-    +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-bottom:.5rem">'
-    +fi('Período de aplicación','fecha','Ej: Enero–Junio 2025')+fi('Versión del framework','version','Ej: v2.0','mono')
+    +fi('Tipo de sistema','descripcion','Ej: Transaccional, ERP, portal, móvil...')
+    +fi('Responsable del análisis','autor','Nombre del analista o BA')
+    +fi('Período de aplicación','fecha','Ej: Enero–Junio 2025')
     +'</div>'
     +'</div>'
     +'<div class="card" style="margin-bottom:.8rem">'
-    +'<div class="card-title" style="margin-bottom:.6rem">Descripción del sistema y contexto</div>'
-    +ta('Objetivo del sistema (una oración)','objetivo','El sistema busca automatizar / optimizar / digitalizar...',2)
-    +'<div style="margin-top:.5rem">'+ta('Problema que resuelve','problema','Describe el problema del negocio que motiva este proyecto...',3)+'</div>'
+    +'<div class="card-title" style="margin-bottom:.6rem">Descripción del sistema</div>'
+    +ta('Objetivo del sistema','objetivo','¿Qué hace el sistema y qué problema resuelve?',2)
     +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-top:.5rem">'
-    +ta('Alcance del sistema','alcance','Módulos, funcionalidades y áreas incluidas...',3)
-    +ta('Exclusiones del alcance','exclusiones','Qué NO incluye esta versión del sistema...',3)
+    +ta('En alcance','alcance','Módulos y funcionalidades incluidas...',3)
+    +ta('Fuera de alcance','exclusiones','Qué NO incluye esta versión...',3)
     +'</div>'
     +'</div>'
     +'<div class="card">'
     +'<div class="card-title" style="margin-bottom:.6rem">Contexto organizacional</div>'
     +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem">'
-    +ta('Área(s) involucrada(s)','areas','Ej: TI, Crédito, Riesgo, Operaciones...',2)
-    +ta('Stakeholders clave','stakeholders','Ej: Gerente de TI, PO, Analista de Riesgo...',2)
+    +ta('Áreas involucradas','areas','Ej: TI, Operaciones, Finanzas, Riesgo...',2)
+    +ta('Stakeholders clave','stakeholders','Ej: Gerente de TI, Product Owner, Usuario clave...',2)
     +'</div>'
     +'<div style="display:flex;gap:.5rem;margin-top:.8rem;align-items:center">'
     +'<button class="btn" style="background:var(--c-teal);color:#fff;border-color:var(--c-teal)" onclick="sc();saveCampoProyecto()">Guardar contexto</button>'
@@ -6065,7 +6065,6 @@ function addCampoSK() {
   document.getElementById('csk-mount').innerHTML=''; renderCampoSK();
 }
 function rmCampoSK(id) {
-  if(!confirm('¿Eliminar este stakeholder?'))return;
   CAMPO.stakeholders=CAMPO.stakeholders.filter(s=>s.id!==id); sc();
   document.getElementById('csk-mount').innerHTML=''; renderCampoSK();
 }
@@ -6082,66 +6081,127 @@ reg('campo-sesiones', () => `
 `);
 function initCampoSes() {
   const el = document.getElementById('cses-mount');
-  if(!el||el.innerHTML.trim()) return; renderCampoSes();
+  if (!el) return;
+  renderCampoSesiones();
 }
-function renderCampoSes() {
-  const el = document.getElementById('cses-mount'); if(!el) return;
-  const ses = CAMPO.sesiones;
-  const skNames = CAMPO.stakeholders.map(s=>s.nombre);
-  const durTotal = ses.reduce((a,s)=>a+(parseInt(s.duracion)||0),0);
-  el.innerHTML = `
-<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:.5rem;margin-bottom:1rem">
-  ${[{n:ses.length,l:'Sesiones',c:'var(--c-teal)'},{n:ses.filter(s=>s.estado==='Ejecutada'||s.estado==='Confirmada').length,l:'Ejecutadas',c:'var(--c-green)'},{n:durTotal,l:'Min. totales',c:'var(--c-purple)'},{n:ses.filter(s=>s.estado==='Planificada').length,l:'Planificadas',c:'var(--c-amber)'}].map(k=>`<div class="kpi"><div class="kpi-num" style="color:${k.c};font-size:18px">${k.n}</div><div class="kpi-label" style="font-size:10px">${k.l}</div></div>`).join('')}
-</div>
-<div class="card" style="margin-bottom:1rem">
-  <div class="card-title">Registrar sesión</div>
-  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.6rem;margin-bottom:.6rem">
-    ${campoField('Nombre de la sesión *','cses-nom','','Ej: Entrevista gerente de TI')}
-    ${campoField('Fecha','cses-fecha',new Date().toISOString().slice(0,10),'','date')}
-    ${campoField('Técnica utilizada','cses-tec','Entrevista estructurada','','',[
-      'Entrevista estructurada','Entrevista semi-estructurada','Taller JAD',
-      'Observación contextual','Cuestionario','Análisis documental','Prototipado','Focus Group'])}
-    ${campoField('Participante principal','cses-part','','Stakeholder entrevistado')}
-    ${campoField('Duración (minutos)','cses-dur','60','','number')}
-    ${campoField('Estado','cses-est','Ejecutada','','',[' ','Planificada','Ejecutada','Confirmada'])}
-  </div>
-  <div style="margin-bottom:.5rem">${campoField('Objetivo de la sesión','cses-obj','','¿Qué se buscaba obtener?','textarea')}</div>
-  <div style="margin-bottom:.5rem">${campoField('Hallazgos y necesidades identificadas','cses-hall','','Anota los requisitos, puntos de dolor, restricciones y supuestos capturados...','textarea')}</div>
-  <div style="margin-bottom:.6rem">${campoField('Pendientes y próximos pasos','cses-pend','','Ej: Clarificar regla de negocio con el área de riesgo...','textarea')}</div>
-  <button class="btn btn-primary" onclick="addCampoSes()">+ Registrar sesión</button>
-</div>
-${ses.length ? ses.slice().reverse().map(s=>`
-<div class="card" style="margin-bottom:.6rem;border-left:3px solid var(--c-teal)">
-  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.4rem;flex-wrap:wrap;gap:.4rem">
-    <div>
-      <div style="font-size:13px;font-weight:500;font-family:var(--font-serif)">${s.nombre}</div>
-      <div style="font-size:11px;color:var(--muted)">${s.fecha} · ${s.tecnica} · ${s.duracion} min · ${s.participante||'—'}</div>
+function renderCampoSes() { renderCampoSesiones(); }
+function renderCampoSesiones() {
+  const el = document.getElementById('cses-mount'); if (!el) return;
+  const ses = CAMPO.sesiones || [];
+  const total = ses.length;
+  const ej    = ses.filter(s => s.estado === 'Ejecutada' || s.estado === 'Confirmada').length;
+
+  var plan_  = ses.filter(function(s){return s.estado==='Planificada';}).length;
+  var ejec_  = ses.filter(function(s){return s.estado==='Ejecutada';}).length;
+  var conf_  = ses.filter(function(s){return s.estado==='Confirmada';}).length;
+  let kpiHtml = `<div class="kpi-grid" style="margin-bottom:1rem">
+    <div class="kpi"><div class="kpi-num" style="color:var(--c-teal)">${total}</div><div class="kpi-label">Total sesiones</div></div>
+    <div class="kpi"><div class="kpi-num" style="color:var(--c-amber)">${plan_}</div><div class="kpi-label">Planificadas</div></div>
+    <div class="kpi"><div class="kpi-num" style="color:var(--c-blue)">${ejec_}</div><div class="kpi-label">Ejecutadas</div></div>
+    <div class="kpi"><div class="kpi-num" style="color:var(--c-green)">${conf_}</div><div class="kpi-label">Confirmadas</div></div>
+  </div>`;
+
+  let formHtml = `<div class="card" style="margin-bottom:1rem">
+    <div class="card-title" style="margin-bottom:.6rem">Registrar sesión</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.5rem;margin-bottom:.5rem">
+      <div><label style="font-size:11px;color:var(--muted);display:block;margin-bottom:3px">Nombre / tema</label><input id="cses-nom" placeholder="Ej: Entrevista con Gerente de Riesgo" style="width:100%"></div>
+      <div><label style="font-size:11px;color:var(--muted);display:block;margin-bottom:3px">Fecha</label><input type="date" id="cses-fecha" style="width:100%"></div>
+      <div><label style="font-size:11px;color:var(--muted);display:block;margin-bottom:3px">Técnica</label>
+        <select id="cses-tec" style="width:100%">
+          <option>Entrevista estructurada</option><option>Entrevista semiestructurada</option>
+          <option>Taller JAD</option><option>Observación directa</option>
+          <option>Prototipado</option><option>Encuesta</option>
+        </select>
+      </div>
     </div>
-    <div style="display:flex;gap:.4rem;align-items:center">
-      <span class="badge ${s.estado==='Confirmada'?'b-ok':s.estado==='Ejecutada'?'b-func':'b-warn'}">${s.estado}</span>
-      <button onclick="rmCampoSes('${s.id}')" style="background:none;border:none;cursor:pointer;color:var(--c-red);font-size:16px">×</button>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.5rem;margin-bottom:.5rem">
+      <div><label style="font-size:11px;color:var(--muted);display:block;margin-bottom:3px">Duración (min)</label><input type="number" id="cses-dur" value="60" style="width:100%"></div>
+      <div><label style="font-size:11px;color:var(--muted);display:block;margin-bottom:3px">Participante clave</label><input id="cses-par" placeholder="Nombre · Cargo" style="width:100%"></div>
+      <div><label style="font-size:11px;color:var(--muted);display:block;margin-bottom:3px">Estado inicial</label>
+        <select id="cses-est" style="width:100%">
+          <option>Planificada</option><option>Ejecutada</option><option>Confirmada</option>
+        </select>
+      </div>
     </div>
-  </div>
-  ${s.objetivo?`<div style="font-size:12px;margin-bottom:.3rem"><strong>Objetivo:</strong> ${s.objetivo}</div>`:''}
-  ${s.hallazgos?`<div style="font-size:12px;color:var(--muted);line-height:1.6;background:var(--surface2);border-radius:6px;padding:.5rem .7rem;margin-bottom:.3rem;white-space:pre-wrap">${s.hallazgos}</div>`:''}
-  ${s.pendientes?`<div style="font-size:11px;color:var(--c-amber)"><strong>Pendientes:</strong> ${s.pendientes}</div>`:''}
-</div>`).join('') : '<div class="card" style="text-align:center;color:var(--muted);padding:2rem;font-size:13px">Sin sesiones registradas aún.</div>'}`;
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-bottom:.5rem">
+      <div><label style="font-size:11px;color:var(--muted);display:block;margin-bottom:3px">Objetivo</label><textarea id="cses-obj" rows="3" placeholder="¿Qué se busca obtener?" style="width:100%;resize:vertical"></textarea></div>
+      <div><label style="font-size:11px;color:var(--muted);display:block;margin-bottom:3px">Hallazgos principales</label><textarea id="cses-hall" rows="3" placeholder="Resumen de hallazgos..." style="width:100%;resize:vertical"></textarea></div>
+    </div>
+    <div style="margin-bottom:.5rem"><label style="font-size:11px;color:var(--muted);display:block;margin-bottom:3px">Pendientes / acciones</label><textarea id="cses-pend" rows="2" placeholder="Acciones acordadas..." style="width:100%;resize:vertical"></textarea></div>
+    <button class="btn btn-sm" style="background:var(--c-teal);color:#fff;border-color:var(--c-teal)" onclick="addCampoSes()">+ Registrar sesión</button>
+  </div>`;
+
+  let sesHtml = '';
+  if (ses.length === 0) {
+    sesHtml = '<div class="card" style="text-align:center;color:var(--muted);padding:2rem;font-size:13px">Sin sesiones registradas.</div>';
+  } else {
+    ses.forEach(function(s,i) {
+      var estColor = s.estado==='Confirmada'?'var(--c-green)':s.estado==='Ejecutada'?'var(--c-blue)':'var(--c-amber)';
+      var selOpts = ['Planificada','Ejecutada','Confirmada'].map(function(o){
+        return '<option'+(s.estado===o?' selected':'')+'>'+o+'</option>';
+      }).join('');
+      sesHtml += '<div class="card-sm" style="margin-bottom:.5rem;border-left:3px solid '+estColor+'">'
+        +'<div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:.4rem">'
+        +'<div>'
+        +'<strong style="font-size:13px">'+(s.nombre||'')+'</strong>'
+        +'<div style="font-size:11px;color:var(--muted);margin-top:2px">'+(s.fecha||'')+' · '+(s.tecnica||'')+' · '+(s.duracion||60)+' min'+(s.participante?' · '+s.participante:'')+'</div>'
+        +'</div>'
+        +'<div style="display:flex;align-items:center;gap:6px;flex-shrink:0">'
+        +'<select style="font-size:11px;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:3px 8px;color:var(--text);cursor:pointer;outline:none;font-weight:500" onchange="sesSetEstado('+i+',this.value)">'+selOpts+'</select>'
+        +'<button style="background:none;border:none;cursor:pointer;color:var(--muted);font-size:16px;line-height:1" onclick="sesDel('+i+')">×</button>'
+        +'</div></div>'
+        +(s.objetivo?'<div style="font-size:12px;margin-bottom:.3rem"><strong>Objetivo:</strong> '+s.objetivo+'</div>':'')
+        +(s.hallazgos?'<div style="font-size:12px;color:var(--muted);line-height:1.6;background:var(--surface2);border-radius:6px;padding:.5rem .7rem;margin-bottom:.3rem">'+s.hallazgos+'</div>':'')
+        +(s.pendientes?'<div style="font-size:11px;color:var(--c-amber)"><strong>Pendientes:</strong> '+s.pendientes+'</div>':'')
+        +'</div>';
+    });
+  }
+
+  el.innerHTML = kpiHtml + formHtml + sesHtml;
 }
-function addCampoSes() {
-  const g = id => document.getElementById(id)?.value?.trim()||'';
-  const nombre = g('cses-nom'); if(!nombre){alert('El nombre es obligatorio');return;}
-  CAMPO.sesiones.push({ id:'SES'+Date.now(), nombre, fecha:g('cses-fecha'),
-    tecnica:g('cses-tec'), participante:g('cses-part'), duracion:g('cses-dur'),
-    estado:g('cses-est')||'Ejecutada',
+
+function sesSetEstado(i,v){
+  CAMPO.sesiones[i].estado=v; sc();
+  var ej=CAMPO.sesiones.filter(function(s){return s.estado==='Ejecutada'||s.estado==='Confirmada';}).length;
+  var total=CAMPO.sesiones.length;
+  // Update KPI cells directly without full re-render
+  var _plan=CAMPO.sesiones.filter(function(s){return s.estado==='Planificada';}).length;
+  var _ejec=CAMPO.sesiones.filter(function(s){return s.estado==='Ejecutada';}).length;
+  var _conf=CAMPO.sesiones.filter(function(s){return s.estado==='Confirmada';}).length;
+  var kpis=document.querySelectorAll('#cses-mount .kpi-num');
+  if(kpis[0]) kpis[0].textContent=CAMPO.sesiones.length;
+  if(kpis[1]) kpis[1].textContent=_plan;
+  if(kpis[2]) kpis[2].textContent=_ejec;
+  if(kpis[3]) kpis[3].textContent=_conf;
+  // Update card border color
+  var cards=document.querySelectorAll('#cses-mount .card-sm');
+  var estColor=v==='Confirmada'?'var(--c-green)':v==='Ejecutada'?'var(--c-blue)':'var(--c-amber)';
+  if(cards[i]) cards[i].style.borderLeftColor=estColor.replace('var(','').replace(')','');
+}
+function addCampoSes(){
+  var nombre=(document.getElementById('cses-nom')?.value||'').trim();
+  if(!nombre){return;}
+  CAMPO.sesiones.push({
+    id:'SES'+Date.now(), nome:nombre, nombre:nombre,
+    fecha:document.getElementById('cses-fecha')?.value||'',
+    tecnica:document.getElementById('cses-tec')?.value||'Entrevista estructurada',
+    participante:document.getElementById('cses-par')?.value||'',
+    duracion:document.getElementById('cses-dur')?.value||'60',
+    estado:document.getElementById('cses-est')?.value||'Planificada',
     objetivo:document.getElementById('cses-obj')?.value||'',
     hallazgos:document.getElementById('cses-hall')?.value||'',
-    pendientes:document.getElementById('cses-pend')?.value||'' });
+    pendientes:document.getElementById('cses-pend')?.value||''
+  });
   sc();
-  ['cses-nom','cses-part','cses-obj','cses-hall','cses-pend'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});
-  document.getElementById('cses-mount').innerHTML=''; renderCampoSes();
+  ['cses-nom','cses-par','cses-obj','cses-hall','cses-pend'].forEach(function(id){
+    var e=document.getElementById(id); if(e) e.value='';
+  });
+  renderCampoSesiones();
+}
+function sesDel(i){
+  CAMPO.sesiones.splice(i,1); sc(); renderCampoSesiones();
 }
 function rmCampoSes(id) {
-  if(!confirm('¿Eliminar esta sesión?'))return;
   CAMPO.sesiones=CAMPO.sesiones.filter(s=>s.id!==id); sc();
   document.getElementById('cses-mount').innerHTML=''; renderCampoSes();
 }
@@ -6153,7 +6213,7 @@ reg('campo-resultados', () => `
 <div class="page-header">
   <div class="page-eyebrow" style="color:var(--c-purple)">● Aplicación en campo</div>
   <h1 class="page-title">Resultados consolidados</h1>
-  <p class="page-desc">Dashboard de resultados generado desde los datos reales registrados en todas las fases. Insumo directo para el capítulo de resultados de la tesis.</p>
+  <p class="page-desc">Dashboard de resultados generado desde los datos reales registrados en todas las fases. Métricas calculadas en tiempo real desde los datos registrados en todas las fases.</p>
 </div>
 <div id="cr-mount"></div>
 `);
@@ -6177,7 +6237,7 @@ function renderCampoResultados(){
   var proj  = CAMPO.proyecto||{};
 
   var tip='<div style="background:rgba(83,52,131,.06);border:0.5px solid rgba(83,52,131,.25);border-radius:var(--radius);padding:.5rem .8rem;font-size:11px;color:var(--c-purple);margin-bottom:1rem">'
-    +'ⓘ Este dashboard lee automáticamente los datos registrados en todas las fases. Completa las plantillas de cada fase para ver los resultados aquí.</div>';
+    +'ⓘ Este dashboard consolida automáticamente los datos registrados en todas las fases del framework.</div>';
 
   // ── Proyecto header ───────────────────────────────────────────────────────
   var header='';
@@ -6309,9 +6369,9 @@ function renderCampoResultados(){
   var obsVal='';
   try{obsVal=localStorage.getItem(OBS_KEY)||'';}catch(ex){}
   var obs='<div class="card">'
-    +'<div class="card-title" style="margin-bottom:.4rem">Conclusiones y observaciones para la tesis</div>'
-    +'<div style="font-size:11px;color:var(--muted);margin-bottom:.5rem">Campo libre para anotar hallazgos, conclusiones o redactar el borrador del capítulo de resultados.</div>'
-    +'<textarea rows="6" id="obs-tesis" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:6px 9px;font-size:12px;color:var(--text);font-family:var(--font-sans);resize:vertical;outline:none;line-height:1.7" placeholder="Redacta aquí tus hallazgos, análisis comparativo y conclusiones del caso de estudio..." oninput="try{localStorage.setItem(\'fw_obs_tesis_v1\',this.value);}catch(ex){}">'+e(obsVal)+'</textarea>'
+    +'<div class="card-title" style="margin-bottom:.4rem">Conclusiones y observaciones del proyecto</div>'
+    +'<div style="font-size:11px;color:var(--muted);margin-bottom:.5rem">Campo libre para anotar hallazgos, análisis comparativo y conclusiones del proyecto.</div>'
+    +'<textarea rows="6" id="obs-tesis" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:6px 9px;font-size:12px;color:var(--text);font-family:var(--font-sans);resize:vertical;outline:none;line-height:1.7" placeholder="Redacta aquí tus hallazgos, análisis y conclusiones del proyecto..." oninput="try{localStorage.setItem(\'fw_obs_tesis_v1\',this.value);}catch(ex){}">'+e(obsVal)+'</textarea>'
     +'</div>';
 
   el.innerHTML=tip+header+kpis+calTable+srsTable+defTable+crTable+obs;
@@ -6347,8 +6407,8 @@ function onPageShow(id) {
   if (id==='srs-contexto') setTimeout(function(){ if(document.getElementById('srs-ctx-plt')) initSrsCtxPlt(); }, 200);
   if (id==='srs-casos') setTimeout(function(){ if(document.getElementById('srs-cu-plt')) initSrsCuPlt(); }, 200);
   if (id==='srs-editor') setTimeout(initSrsEditor, 50);
-  if (id==='srs-gherkin') setTimeout(initSrsGherkin, 50);
-  if (id==='srs-detector') setTimeout(function(){ renderSrsDetector(); }, 100);
+  if (id==='srs-gherkin') setTimeout(function(){ if(typeof updateGherkin==='function') updateGherkin(); }, 100);
+  if (id==='srs-detector') setTimeout(function(){ if(typeof runDetector==='function') runDetector(); }, 100);
   if (id==='val-tecnicas') setTimeout(initValTecnicas, 50);
   if (id==='val-log') setTimeout(function(){ if(!window._DEFS){window._DEFS=DEFECTS.slice();} window._selDefIdx=-1; initValLog(); }, 50);
   if (id==='val-uat') setTimeout(function(){ window._uatSelIdx=-1; initValUat(); }, 50);
