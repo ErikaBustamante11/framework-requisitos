@@ -771,7 +771,11 @@ const AMBIG_WORDS = [
   {w:'robusto',sev:'medium',msg:'Sin criterio de robustez',fix:'Especificar disponibilidad o MTBF'},
   {w:'etc',sev:'high',msg:'Lista incompleta',fix:'Enumerar todos los elementos'},
   {w:'entre otros',sev:'high',msg:'Lista abierta',fix:'Listar todos los casos cubiertos'},
-  {w:'deberá',sev:'low',msg:'Modal incorrecto — usar DEBE (IEEE 29148)',fix:'Reemplazar con "DEBE"'},
+  {w:'deberá',sev:'high',msg:'Modal incorrecto — usar DEBE (IEEE 29148)',fix:'Reemplazar con "DEBE"'},
+  {w:'podrá',sev:'high',msg:'Modal incorrecto — usar DEBE o DEBERÍA (IEEE 29148)',fix:'DEBE para obligatorio, DEBERÍA para recomendado'},
+  {w:'debería',sev:'high',msg:'Modal incorrecto — usar DEBE para obligatorio (IEEE 29148)',fix:'Reemplazar con "DEBE" si es obligatorio'},
+  {w:'podría',sev:'medium',msg:'Modal demasiado débil — especificar si es obligatorio',fix:'DEBE para obligatorio, DEBERÍA para opcional'},
+  {w:'puede ',sev:'medium',msg:'Modal ambiguo — no expresa obligatoriedad',fix:'DEBE para obligatorio, DEBERÍA para recomendado'},
   {w:'podría',sev:'medium',msg:'Modal demasiado débil',fix:'DEBE para obligatorio, DEBERÍA para recomendado'},
   {w:'varios',sev:'low',msg:'Cantidad indeterminada',fix:'Número exacto'},
   {w:'muchos',sev:'low',msg:'Cantidad indeterminada',fix:'Usar número concreto'},
@@ -4843,20 +4847,21 @@ function runDetector() {
   const text = (document.getElementById('req-input')?.value || '').toLowerCase();
   const issues = [];
   let penalty = 0;
-  AMBIG_WORDS.forEach(a => { if (text.includes(a.w.toLowerCase())) { issues.push(a); penalty += a.sev==='high'?18:a.sev==='medium'?10:5; } });
-  if (!text.includes('debe') && !text.includes('must')) { issues.push({w:'[sin modal]',sev:'high',msg:'Falta DEBE/MUST (IEEE 29148 §5.2)',fix:'Iniciar con: "El sistema DEBE..."'}); penalty += 15; }
+  AMBIG_WORDS.forEach(a => { if (text.includes(a.w.toLowerCase())) { issues.push(a); penalty += a.sev==='high'?25:a.sev==='medium'?15:8; } });
+  var _hasModal = text.includes('debe') || text.includes('must') || text.includes('podr') || text.includes('deber') || text.includes('podr');
+  if (!_hasModal) { issues.push({w:'[sin modal]',sev:'high',msg:'Falta DEBE/MUST (IEEE 29148 §5.2)',fix:'Iniciar con: "El sistema DEBE..."'}); penalty += 25; }
   const score = Math.max(0, 100 - penalty);
-  const col = score>=70?'var(--c-green)':score>=40?'var(--c-amber)':'var(--c-red)';
+  const col = score>=85?'var(--c-green)':score>=60?'var(--c-amber)':'var(--c-red)';
   const el1=document.getElementById('det-score'), el2=document.getElementById('det-fill'), el3=document.getElementById('det-label');
   if(el1){el1.textContent=score;el1.style.color=col;}
   if(el2){el2.style.width=score+'%';el2.style.background=col;}
-  if(el3){el3.textContent=score>=70?'Buena calidad':score>=40?'Mejorable':'Calidad baja';el3.style.color=col;}
+  if(el3){el3.textContent=score>=85?'Buena calidad':score>=60?'Mejorable':'Calidad baja';el3.style.color=col;}
   const sevBg={high:'rgba(163,45,45,.06)',medium:'rgba(186,117,23,.05)',low:'var(--surface)'};
   const sevCol={high:'var(--c-red)',medium:'var(--c-amber)',low:'var(--c-gray)'};
   const issEl = document.getElementById('det-issues');
   if(issEl) issEl.innerHTML = issues.length ? issues.map(i=>`<div style="background:${sevBg[i.sev]};border:0.5px solid ${sevCol[i.sev]}40;border-radius:var(--radius);padding:.5rem .7rem;margin-bottom:.3rem;font-size:11px"><div><strong style="color:${sevCol[i.sev]}">"${i.w}"</strong> — ${i.msg}</div><div style="color:var(--muted);margin-top:2px">${i.fix}</div></div>`).join('') : '<div style="color:var(--c-green);font-size:12px;padding:.5rem;background:rgba(15,110,86,.05);border-radius:var(--radius)">No se detectaron problemas. El requisito parece bien estructurado.</div>';
   let sug = text;
-  const reps = {' rápido ':' en menos de 3 segundos ',' fácil ':' en menos de 2 pasos ',' amigable ':' conforme WCAG 2.1 AA ',' adecuado ':' definido según criterio [especificar] ',' deberá ':' DEBE ',' proporcionar ':' mostrar ',' manejar ':' procesar ',' varios ':' [N] ',' etc':' [listar todos]'};
+  const reps = {' rápido ':' en menos de 3 segundos ',' rápida ':' en menos de 3 segundos ',' fácil ':' en menos de 2 pasos ',' amigable ':' conforme WCAG 2.1 AA ',' adecuado ':' definido según criterio [especificar] ',' deberá ':' DEBE ',' debería ':' DEBE ',' podrá ':' DEBE ',' podría ':' DEBERÍA ',' proporcionar ':' mostrar ',' manejar ':' procesar ',' varios ':' [N] ',' etc':' [listar todos]'};
   Object.entries(reps).forEach(([b,g]) => { sug = sug.split(b).join(g); });
   const suEl = document.getElementById('det-sugg');
   if(suEl) suEl.textContent = issues.length > 0 ? sug.trim() : 'El requisito tiene buena calidad. Considera añadir criterio de verificación Gherkin si aún no lo tiene.';
