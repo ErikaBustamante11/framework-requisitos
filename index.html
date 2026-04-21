@@ -1921,14 +1921,14 @@ function eliAddPQ(cat){
 
 /* ── restore / clear ── */
 function eliRestoreEjemplos(){
-  if(!confirm('¿Restaurar los datos de ejemplo? Esto reemplazará los datos actuales de la minuta.')) return;
+  
   var d=defaultELI().minuta;
   ['rfs','rnfs','sas','rcs','participantes','pendientes','proximos'].forEach(function(k){ ELI.minuta[k]=d[k]; });
   eliSave();
   var m=document.getElementById('eli-plt-mount'); if(m){m.innerHTML=''; initEliPlantillas();}
 }
 function eliLimpiarMinuta(){
-  if(!confirm('¿Limpiar toda la minuta?')) return;
+  
   localStorage.removeItem(ELI_KEY); ELI=loadELI();
   var m=document.getElementById('eli-plt-mount'); if(m){m.innerHTML=''; initEliPlantillas();}
 }
@@ -2522,9 +2522,9 @@ function defaultANA() {
 let ANA = loadANA();
 function anaSave() { saveANA(); }
 function anaSaved(id){ var e=document.getElementById(id); if(e){e.textContent='✓ Guardado';setTimeout(function(){e.textContent='';},1800);} }
-function anaRestoreGAP(){ if(!confirm('¿Restaurar ejemplos del GAP?')) return; var d=defaultANA(); ANA.gap=d.gap; anaSave(); var m=document.getElementById('ana-gap-mount'); if(m){m.innerHTML=''; initAnaGap();} }
-function anaRestoreMoscow(){ if(!confirm('¿Restaurar ejemplos de MoSCoW?')) return; var d=defaultANA(); ANA.moscow=d.moscow; anaSave(); var m=document.getElementById('ana-mos-mount'); if(m){m.innerHTML=''; initAnaMoscow();} }
-function anaRestoreVxE(){ if(!confirm('¿Restaurar ejemplos de Valor vs. Esfuerzo?')) return; var d=defaultANA(); ANA.vxe=d.vxe; anaSave(); var m=document.getElementById('ana-vxe-mount'); if(m){m.innerHTML=''; initAnaVxE();} }
+function anaRestoreGAP(){  var d=defaultANA(); ANA.gap=d.gap; anaSave(); var m=document.getElementById('ana-gap-mount'); if(m){m.innerHTML=''; initAnaGap();} }
+function anaRestoreMoscow(){  var d=defaultANA(); ANA.moscow=d.moscow; anaSave(); var m=document.getElementById('ana-mos-mount'); if(m){m.innerHTML=''; initAnaMoscow();} }
+function anaRestoreVxE(){  var d=defaultANA(); ANA.vxe=d.vxe; anaSave(); var m=document.getElementById('ana-vxe-mount'); if(m){m.innerHTML=''; initAnaVxE();} }
 
 /* ════════════════════════════════════════
    PAGE: GAP ANALYSIS
@@ -3547,6 +3547,24 @@ reg('val-tecnicas', () => `
 <div id="val-tec-mount"></div>
 `);
 
+const VT_KEY_G = 'fw_vt_v1';
+function saveVT(){ if(window._VT) localStorage.setItem(VT_KEY_G,JSON.stringify(window._VT)); }
+function defVT(){
+  return {
+    wt:{ fecha:'', moderador:'', autor:'', participantes:'', seccion:'', observaciones:'', pendientes:'', proximos:'',
+         checks:{c1:false,c2:false,c3:false,c4:false,c5:false} },
+    fg:{ fecha:'', moderador:'', autor:'', lector:'', inspectores:'', alcance:'', totalPags:'', defectos:'', densidad:'', decision:'',
+         checks:{c1:false,c2:false,c3:false,c4:false,c5:false,c6:false}, notas:'' },
+    rt:{ fecha:'', lider:'', participantes:'', doc:'', decision:'Pendiente', condiciones:'', plazo:'', cierre:'',
+         checks:{c1:false,c2:false,c3:false,c4:false} },
+    uat:{ fecha:'', ambiente:'', responsable:'', alcance:'', signoff:'', notas:'',
+          casos:[
+            {id:'CP-001',desc:'Login con credenciales v\u00e1lidas SSO',criterio:'Redirige al dashboard en < 3s',resultado:'',bloqueante:false},
+            {id:'CP-002',desc:'Formulario con campos inv\u00e1lidos',criterio:'Mensaje de error por campo en < 500ms',resultado:'',bloqueante:false},
+            {id:'CP-003',desc:'Consulta score con API disponible',criterio:'Score retornado en < 5s',resultado:'',bloqueante:true},
+          ]},
+  };
+}
 function initValTecnicas(){
   var el=document.getElementById('val-tec-mount'); if(!el||el.innerHTML.trim()) return;
   renderValTecnicas();
@@ -3556,25 +3574,8 @@ function renderValTecnicas(){
   var el=document.getElementById('val-tec-mount'); if(!el) return;
 
   // ── Storage ──
-  var VT_KEY='fw_vt_v1';
-  if(!window._VT){ try{ window._VT=JSON.parse(localStorage.getItem(VT_KEY))||defVT(); }catch(e){ window._VT=defVT(); } }
-  function saveVT(){ localStorage.setItem(VT_KEY,JSON.stringify(window._VT)); }
-  function defVT(){
-    return {
-      wt:{ fecha:'', moderador:'', autor:'', participantes:'', seccion:'', observaciones:'', pendientes:'', proximos:'',
-           checks:{c1:false,c2:false,c3:false,c4:false,c5:false} },
-      fg:{ fecha:'', moderador:'', autor:'', lector:'', inspectores:'', alcance:'', totalPags:'', defectos:'', densidad:'', decision:'',
-           checks:{c1:false,c2:false,c3:false,c4:false,c5:false,c6:false}, notas:'' },
-      rt:{ fecha:'', lider:'', participantes:'', doc:'', decision:'Pendiente', condiciones:'', plazo:'', cierre:'',
-           checks:{c1:false,c2:false,c3:false,c4:false} },
-      uat:{ fecha:'', ambiente:'', responsable:'', alcance:'', signoff:'', notas:'',
-            casos:[
-              {id:'CP-001',desc:'Login con credenciales válidas SSO',criterio:'Redirige al dashboard en < 3s',resultado:'',bloqueante:false},
-              {id:'CP-002',desc:'Formulario con campos inválidos',criterio:'Mensaje de error por campo en < 500ms',resultado:'',bloqueante:false},
-              {id:'CP-003',desc:'Consulta score con API disponible',criterio:'Score retornado en < 5s',resultado:'',bloqueante:true},
-            ]},
-    };
-  }
+  if(!window._VT){ try{ window._VT=JSON.parse(localStorage.getItem(VT_KEY_G))||defVT(); }catch(ex){ window._VT=defVT(); } }
+
   function escH(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
   function inp(id,val,ph,style){ return '<input id="'+id+'" value="'+escH(val)+'" placeholder="'+ph+'" style="'+(style||'width:100%')+';background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:5px 8px;font-size:12px;color:var(--text);font-family:var(--font-sans);outline:none" oninput="window._VT.'+id.replace(/-/g,'.')+'.this=null" onchange="vtSaveField(\''+id+'\',this.value)">'; }
   function ta(id,val,ph,rows){ return '<textarea id="'+id+'" rows="'+(rows||2)+'" placeholder="'+ph+'" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:5px 8px;font-size:12px;color:var(--text);font-family:var(--font-sans);resize:vertical;outline:none;line-height:1.6" oninput="vtSaveTA(\''+id+'\',this.value)">'+escH(val)+'</textarea>'; }
@@ -3765,7 +3766,7 @@ function renderValTecnicas(){
     var e=document.getElementById(msgId); if(e){e.textContent='✓ Guardado';setTimeout(function(){e.textContent='';},1800);}
   };
   window.vtReset = function(techKey){
-    if(!confirm('¿Limpiar la plantilla de '+techKey+'?')) return;
+    
     var fresh=defVT(); window._VT[techKey]=fresh[techKey]; saveVT(); renderValTecnicas();
   };
 }
@@ -3804,8 +3805,9 @@ function renderValLog(){
   var bloq = defs.filter(function(d){return d.sev==='Bloqueante';}).length;
   var may  = defs.filter(function(d){return d.sev==='Mayor';}).length;
   var ab   = defs.filter(function(d){return d.est==='Abierto';}).length;
-  var dens = (defs.length/12).toFixed(2);
-  var ok   = ab===0 && parseFloat(dens)<0.3;
+  var _srsPages = (function(){try{var s=JSON.parse(localStorage.getItem('fw_srs_v1'));return (s&&s.rfs)?(s.rfs.length||10):10;}catch(ex){return 10;}})();
+  var dens = _srsPages>0 ? (defs.length/_srsPages).toFixed(2) : '—';
+  var ok   = ab===0;
 
   var html = '';
 
@@ -3823,7 +3825,7 @@ function renderValLog(){
   // Status
   html += '<div class="card" style="margin-bottom:.8rem;background:rgba('+(ok?'15,110,86':'163,45,45')+',.04);border-color:rgba('+(ok?'15,110,86':'163,45,45')+',.25)">'
          +'<div style="font-size:13px;font-weight:500;color:var('+(ok?'--c-green':'--c-red')+');">'
-         +(ok?'✓ SRS apto para baseline':'⚠ SRS no puede aprobarse — resuelve defectos abiertos')+'</div>'
+         +(ok?'✓ SRS apto para baseline — 0 defectos abiertos':'⚠ SRS no puede aprobarse — '+ab+' defecto(s) abierto(s) pendiente(s)')+'</div>'
          +'<div style="font-size:11px;color:var(--muted);margin-top:2px">Densidad: '+dens+' def/pág · Umbral Fagan: &lt; 0.30 · '+ab+' abierto(s)</div></div>';
 
   // Formulario agregar
@@ -3907,7 +3909,7 @@ function defAdd(){
   var sev=document.getElementById('nd-sev')?.value||'Mayor';
   var desc=document.getElementById('nd-desc')?.value?.trim()||'';
   var asig=document.getElementById('nd-asig')?.value?.trim()||'BA';
-  if(!desc){alert('La descripción es obligatoria');return;}
+  if(!desc){var _e=document.getElementById('def-add-msg');if(_e){_e.textContent='⚠ La descripción es obligatoria';setTimeout(function(){_e.textContent='';},2000);}return;}
   window._DEFS.push({id:id,sec:sec,sev:sev,desc:desc,asig:asig,est:'Abierto',impacto:'',res:''});
   defSave(); renderValLog();
 }
@@ -4052,7 +4054,7 @@ function uatAdd(){
   var rfid=document.getElementById('nu-rfid')?.value?.trim()||'';
   var prio=document.getElementById('nu-prio')?.value||'Crítico';
   var title=document.getElementById('nu-title')?.value?.trim()||'';
-  if(!title){alert('El título es obligatorio');return;}
+  if(!title){var _e=document.getElementById('uat-add-msg');if(_e){_e.textContent='⚠ El título es obligatorio';setTimeout(function(){_e.textContent='';},2000);}return;}
   window._UAT.push({id:id,rfid:rfid,prio:prio,title:title,given:'',when:'',then:'',res:''});
   uatSave(); renderValUat();
 }
@@ -4857,7 +4859,7 @@ function runDetector() {
   const reps = {' rápido ':' en menos de 3 segundos ',' fácil ':' en menos de 2 pasos ',' amigable ':' conforme WCAG 2.1 AA ',' adecuado ':' definido según criterio [especificar] ',' deberá ':' DEBE ',' proporcionar ':' mostrar ',' manejar ':' procesar ',' varios ':' [N] ',' etc':' [listar todos]'};
   Object.entries(reps).forEach(([b,g]) => { sug = sug.split(b).join(g); });
   const suEl = document.getElementById('det-sugg');
-  if(suEl) suEl.textContent = score < 70 ? sug.trim() : 'El requisito tiene buena calidad. Considera añadir criterio de verificación Gherkin si aún no lo tiene.';
+  if(suEl) suEl.textContent = issues.length > 0 ? sug.trim() : 'El requisito tiene buena calidad. Considera añadir criterio de verificación Gherkin si aún no lo tiene.';
 }
 
 // ── GLOSARIO ──
@@ -4893,7 +4895,7 @@ function filterGlos() {
     addDiv.innerHTML='<input id="glos-new-name" placeholder="Término..." style="width:120px;background:var(--surface);border:0.5px solid var(--border2);border-radius:5px;padding:5px 8px;font-size:12px;color:var(--text);font-family:var(--font-mono);outline:none">'
       +'<input id="glos-new-def" placeholder="Definición..." style="flex:1;background:var(--surface);border:0.5px solid var(--border2);border-radius:5px;padding:5px 8px;font-size:12px;color:var(--text);font-family:var(--font-sans);outline:none">'
       +'<input id="glos-new-cat" placeholder="Categoría..." style="width:100px;background:var(--surface);border:0.5px solid var(--border2);border-radius:5px;padding:5px 8px;font-size:12px;color:var(--text);font-family:var(--font-sans);outline:none">'
-      +'<button class="btn btn-sm" style="background:var(--c-blue);color:#fff;border-color:var(--c-blue)" onclick="glosAddTerm()">+ Agregar</button>';
+      +'<button class="btn btn-sm" style="background:var(--c-blue);color:#fff;border-color:var(--c-blue)" onclick="glosAddTerm()">+ Agregar</button>'+'<span id="glos-add-msg" style="font-size:11px;color:var(--c-red);margin-left:.5rem"></span>';
     el.after(addDiv);
   }
 }
@@ -4901,7 +4903,7 @@ function glosAddTerm(){
   const name=(document.getElementById('glos-new-name')?.value||'').trim();
   const def=(document.getElementById('glos-new-def')?.value||'').trim();
   const cat=(document.getElementById('glos-new-cat')?.value||'General').trim();
-  if(!name||!def){alert('El término y la definición son obligatorios.');return;}
+  if(!name||!def){var _e=document.getElementById('glos-add-msg');if(_e){_e.textContent='⚠ Término y definición son obligatorios';setTimeout(function(){_e.textContent='';},2000);}return;}
   GLOSARIO.push({name,def,cat});
   ['glos-new-name','glos-new-def','glos-new-cat'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});
   var addRow=document.getElementById('glos-add-row'); if(addRow) addRow.remove();
@@ -5417,14 +5419,14 @@ function defaultELI() {
 let ELI = loadELI();
 function eliSave() { saveELI(); }
 function eliLimpiarMinuta() {
-  if(!confirm('¿Limpiar toda la minuta?')) return;
+  
   localStorage.removeItem('fw_eli_v7');
   ELI = loadELI();
   var m = document.getElementById('eli-plt-mount');
   if(m){ m.innerHTML=''; initEliPlantillas(); }
 }
 function eliRestoreEjemplos() {
-  if(!confirm('¿Restaurar los datos de ejemplo? Esto reemplazará los datos actuales de la minuta.')) return;
+  
   var d = defaultELI();
   ELI.minuta.rfs = d.minuta.rfs;
   ELI.minuta.rnfs = d.minuta.rnfs;
@@ -5900,13 +5902,13 @@ function campoImportJSON(e) {
   const file = e.target.files[0]; if(!file) return;
   const r = new FileReader();
   r.onload = ev => {
-    try { CAMPO = JSON.parse(ev.target.result); sc(); alert('Datos importados. Recargando...'); location.reload(); }
-    catch(err) { alert('Archivo JSON inválido'); }
+    try { CAMPO = JSON.parse(ev.target.result); sc(); console.log('Datos importados'); location.reload(); }
+    catch(err) { console.warn('Archivo JSON inválido'); }
   };
   r.readAsText(file);
 }
 function campoClearAll() {
-  if(!confirm('¿Eliminar todos los datos del campo? Esta acción no se puede deshacer.')) return;
+  
   localStorage.removeItem(CAMPO_KEY); location.reload();
 }
 
@@ -6057,7 +6059,7 @@ ${sks.length ? `<div class="card"><div class="card-title">Lista completa (${sks.
 }
 function addCampoSK() {
   const g = id => document.getElementById(id)?.value?.trim()||'';
-  const nombre = g('csk-nom'); if(!nombre){alert('El nombre es obligatorio');return;}
+  const nombre = g('csk-nom'); if(!nombre){var _e=document.getElementById('csk-msg');if(_e){_e.textContent='⚠ Nombre obligatorio';setTimeout(function(){_e.textContent='';},2000);}return;}
   CAMPO.stakeholders.push({ id:'SK'+Date.now(), nombre, cargo:g('csk-cargo'), area:g('csk-area'),
     inf:g('csk-inf')||'baja', int:g('csk-int')||'bajo', tecnica:g('csk-tec'),
     exp:document.getElementById('csk-exp')?.value||'' });
@@ -6182,7 +6184,7 @@ function addCampoSes(){
   var nombre=(document.getElementById('cses-nom')?.value||'').trim();
   if(!nombre){return;}
   CAMPO.sesiones.push({
-    id:'SES'+Date.now(), nome:nombre, nombre:nombre,
+    id:'SES'+Date.now(), nombre:nombre,
     fecha:document.getElementById('cses-fecha')?.value||'',
     tecnica:document.getElementById('cses-tec')?.value||'Entrevista estructurada',
     participante:document.getElementById('cses-par')?.value||'',
@@ -6364,14 +6366,14 @@ function renderCampoResultados(){
       +'</div></div>';
   }
 
-  // ── Observaciones de tesis ────────────────────────────────────────────────
-  var OBS_KEY='fw_obs_tesis_v1';
+  // ── Observaciones del proyecto ──────────────────────────────────────────────
+  var OBS_KEY='fw_obs_proyecto_v1';
   var obsVal='';
   try{obsVal=localStorage.getItem(OBS_KEY)||'';}catch(ex){}
   var obs='<div class="card">'
     +'<div class="card-title" style="margin-bottom:.4rem">Conclusiones y observaciones del proyecto</div>'
     +'<div style="font-size:11px;color:var(--muted);margin-bottom:.5rem">Campo libre para anotar hallazgos, análisis comparativo y conclusiones del proyecto.</div>'
-    +'<textarea rows="6" id="obs-tesis" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:6px 9px;font-size:12px;color:var(--text);font-family:var(--font-sans);resize:vertical;outline:none;line-height:1.7" placeholder="Redacta aquí tus hallazgos, análisis y conclusiones del proyecto..." oninput="try{localStorage.setItem(\'fw_obs_tesis_v1\',this.value);}catch(ex){}">'+e(obsVal)+'</textarea>'
+    +'<textarea rows="6" id="obs-proyecto" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:6px 9px;font-size:12px;color:var(--text);font-family:var(--font-sans);resize:vertical;outline:none;line-height:1.7" placeholder="Redacta aquí tus hallazgos, análisis y conclusiones del proyecto..." oninput="try{localStorage.setItem(\'fw_obs_proyecto_v1\',this.value);}catch(ex){}">'+e(obsVal)+'</textarea>'
     +'</div>';
 
   el.innerHTML=tip+header+kpis+calTable+srsTable+defTable+crTable+obs;
