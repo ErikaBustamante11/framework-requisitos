@@ -2291,6 +2291,7 @@ reg('ana-modelado', () => `
 function initAnaModelado() {
   var el = document.getElementById('ana-mod-mount');
   if (!el) return;
+  el.innerHTML = '';
 
   el.innerHTML = `
 
@@ -2380,7 +2381,10 @@ function initAnaModelado() {
 
 <div class="mod-body2" id="amod1">
   <div style="background:rgba(83,52,131,.07);border:0.5px solid rgba(83,52,131,.3);border-radius:var(--radius);padding:.5rem .8rem;font-size:11px;color:var(--c-purple);margin-bottom:.8rem">ⓘ Selecciona un caso de uso para editarlo. Usa + para agregar y × para eliminar.</div>
-  <div id="ana-uc-mount"></div>
+  <div style="display:grid;grid-template-columns:180px 1fr;gap:12px">
+    <div id="ucList2"></div>
+    <div id="ucDetail2"></div>
+  </div>
 </div>
 
 <div class="mod-body2" id="amod2">
@@ -2486,6 +2490,7 @@ function initAnaModelado() {
   window.modSel2 = function(i) {
     document.querySelectorAll('.mod-tab2').forEach(function(t,j){ t.classList.toggle('on',i===j); });
     document.querySelectorAll('.mod-body2').forEach(function(b,j){ b.classList.toggle('on',i===j); });
+    if(i===1 && typeof window._renderUC2==='function') window._renderUC2();
   };
 }
 
@@ -5634,10 +5639,12 @@ function srsCuAdd(){
   SRS.casos=SRS.casos||[];
   SRS.casos.push({id:'UC-'+String(SRS.casos.length+1).padStart(2,'0'),nombre:'Nuevo caso de uso',actor:'',actoresS:'',nivel:'',prioridad:'',pre:'',postOk:'',postFail:'',flujo:'',alt:''});
   srsSave(); window._srsCuSel=SRS.casos.length-1; renderSrsCuPlt();
+  renderAnaUC();
 }
-
 function renderAnaUC(){
   var el=document.getElementById('ana-uc-mount'); if(!el) return;
+  // If initAnaModelado already rendered the UC via its local renderUC2, use that
+  if(typeof window._renderUC2==='function'){ window._renderUC2(); return; }
   if(!ANA.uc||!ANA.uc.length){ ANA.uc=defaultANA().uc; anaSave(); }
   var selIdx = window._anaUCSel||0;
   if(selIdx>=ANA.uc.length) selIdx=0;
@@ -6407,7 +6414,7 @@ function onPageShow(id) {
   if (id==='ana-modelado') setTimeout(initAnaModelado, 50);
   if (id==='eli-tecnicas') setTimeout(initEliTecnicas, 50);
   if (id==='ana-gap') setTimeout(initAnaGap, 50);
-  if (id==='ana-modelado') setTimeout(function(){ if(document.getElementById('ana-uc-mount')) renderAnaUC(); }, 200);
+  // renderAnaUC is called inside initAnaModelado
   if (id==='ana-priorizacion') setTimeout(function(){ initAnaMoscow(); initAnaVxE(); initAnaKano(); }, 50);
   if (id==='eli-plantillas') setTimeout(initEliPlantillas, 50);
   if (id==='srs-glosario') initGlosario();
