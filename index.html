@@ -5791,9 +5791,10 @@ function renderSrsEditor(){
   var el=document.getElementById('srs-editor-mount'); if(!el) return;
   var p=SRS.portada;
 
+  var _t=window._srseTab||0;
   var tabs='<div class="tab-nav">'
-    +'<button class="tab-btn on" onclick="srseTab(0,this)">Portada y alcance</button>'
-    +'<button class="tab-btn" onclick="srseTab(1,this)">Req. funcionales (RF)</button>'
+    +'<button class="tab-btn'+(_t===0?' on':'')+' " onclick="srseTab(0,this)">Portada y alcance</button>'
+    +'<button class="tab-btn'+(_t===1?' on':'')+' " onclick="srseTab(1,this)">Req. funcionales (RF)</button>'
     +'<button class="tab-btn" onclick="srseTab(2,this)">Req. no funcionales (RNF)</button>'
     +'<button class="tab-btn" onclick="srseTab(3,this)">Supuestos y restricciones</button>'
     +'</div>';
@@ -5888,9 +5889,11 @@ function renderSrsEditor(){
     +'<span id="srs-sarc-msg" style="font-size:11px;color:var(--c-green)"></span></div></div>';
 
   el.innerHTML=tabs+tab0+tab1+tab2+tab3;
+  setTimeout(function(){srseTab(window._srseTab||0);},0);
 }
 function srseTab(i,btn){
-  document.querySelectorAll('.tab-btn').forEach(function(b,j){b.classList.toggle('on',j===i);});
+  window._srseTab=i;
+  document.querySelectorAll('#srs-editor-mount .tab-btn').forEach(function(b,j){b.classList.toggle('on',j===i);});
   ['srse-0','srse-1','srse-2','srse-3'].forEach(function(id,j){
     var e=document.getElementById(id); if(e) e.style.display=j===i?'block':'none';
   });
