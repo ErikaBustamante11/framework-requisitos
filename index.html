@@ -541,6 +541,28 @@ textarea { resize: vertical; line-height: 1.6; }
   .page { padding: 1.5rem 1.2rem; padding-top: 4rem; }
   .g2,.g3,.g4,.g5 { grid-template-columns: 1fr; }
 }
+
+.mod-tabs2{display:flex;gap:2px;margin-bottom:1rem;flex-wrap:wrap}
+.mod-tab2{padding:6px 16px;border-radius:6px;font-size:12px;font-weight:500;cursor:pointer;background:transparent;border:0.5px solid var(--border);color:var(--muted);transition:all .2s}
+.mod-tab2.on{background:var(--surface);color:var(--text);border-color:var(--border2)}
+.mod-body2{display:none}
+.mod-body2.on{display:block}
+.uc-grid2{display:grid;grid-template-columns:200px 1fr;gap:12px;margin-top:.5rem}
+.uc-list2{display:flex;flex-direction:column;gap:4px}
+.uc-item2{padding:7px 10px;border-radius:7px;font-size:12px;cursor:pointer;border:0.5px solid var(--border);background:var(--surface);color:var(--muted);transition:all .2s}
+.uc-item2:hover{color:var(--text);border-color:var(--border2)}
+.uc-item2.on{background:var(--bg);color:var(--text);border-color:var(--c-purple);font-weight:500}
+.uc-detail2{background:var(--surface);border-radius:10px;padding:1rem;border:0.5px solid var(--border)}
+.uc-det-row2{display:grid;grid-template-columns:110px 1fr;gap:4px;padding:5px 0;border-bottom:0.5px solid var(--border);font-size:12px;align-items:flex-start}
+.uc-det-row2:last-child{border-bottom:none}
+.uc-det-key2{font-size:11px;font-weight:500;color:var(--muted)}
+.uc-det-val2{color:var(--text);line-height:1.5}
+.uc-steps2{list-style:none;padding:0;margin:0}
+.uc-steps2 li{padding:3px 0;font-size:11px;display:flex;gap:6px;align-items:flex-start;border-bottom:0.5px solid var(--border)}
+.uc-steps2 li:last-child{border-bottom:none}
+.uc-step-num2{font-size:10px;font-weight:500;color:var(--muted);min-width:16px}
+.actor-tag2{display:inline-block;font-size:10px;padding:2px 7px;border-radius:4px;font-weight:500;background:rgba(83,52,131,0.1);color:#3C3489;border:0.5px solid rgba(83,52,131,0.2);margin-right:4px}
+.bleg-item2{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--muted)}
 </style>
 </head>
 <body>
@@ -2172,82 +2194,82 @@ reg('ana-flujo', () => `
   <div class="card">
     <div class="card-title">Estructura jerárquica — Fase 2</div>
     <p style="font-size:12px;color:var(--muted);margin-bottom:.8rem;line-height:1.6">Las cinco actividades se organizan en dos bloques: modelado (A1–A3) que transforma necesidades brutas en modelos verificables, y evaluación (A4–A5) que ordena y valida esos modelos antes de pasarlos a la Fase 3.</p>
-    <svg width="100%" viewBox="0 0 680 360" xmlns="http://www.w3.org/2000/svg" style="overflow:visible">
+    <svg width="100%" viewBox="0 0 740 340" xmlns="http://www.w3.org/2000/svg">
       <defs><marker id="aa3" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>
 
       <!-- Root -->
-      <rect x="230" y="20" width="220" height="44" rx="10" fill="#EEEDFE" stroke="#534AB7" stroke-width="1"/>
-      <text x="340" y="42" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="13" font-weight="500" fill="#26215C">Fase 2 — Análisis</text>
+      <rect x="260" y="14" width="220" height="40" rx="10" fill="#EEEDFE" stroke="#534AB7" stroke-width="1"/>
+      <text x="370" y="34" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="13" font-weight="500" fill="#26215C">Fase 2 — Análisis</text>
 
-      <!-- Branch lines from root -->
-      <line x1="340" y1="64" x2="340" y2="88" stroke="#9A9A94" stroke-width="0.5"/>
-      <line x1="180" y1="88" x2="500" y2="88" stroke="#9A9A94" stroke-width="0.5"/>
-      <line x1="180" y1="88" x2="180" y2="110" stroke="#9A9A94" stroke-width="0.5" marker-end="url(#aa3)"/>
-      <line x1="500" y1="88" x2="500" y2="110" stroke="#9A9A94" stroke-width="0.5" marker-end="url(#aa3)"/>
+      <!-- Root to blocks -->
+      <line x1="370" y1="54" x2="370" y2="76" stroke="#9A9A94" stroke-width="0.5"/>
+      <line x1="190" y1="76" x2="550" y2="76" stroke="#9A9A94" stroke-width="0.5"/>
+      <line x1="190" y1="76" x2="190" y2="96" stroke="#9A9A94" stroke-width="0.5" marker-end="url(#aa3)"/>
+      <line x1="550" y1="76" x2="550" y2="96" stroke="#9A9A94" stroke-width="0.5" marker-end="url(#aa3)"/>
 
-      <!-- Block 1: Modelado -->
-      <rect x="80" y="112" width="200" height="40" rx="8" fill="#EEEDFE" stroke="#534AB7" stroke-width="0.8"/>
-      <text x="180" y="132" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="12" font-weight="500" fill="#26215C">Bloque 1 — Modelado</text>
+      <!-- Block 1 -->
+      <rect x="84" y="98" width="212" height="38" rx="8" fill="#EEEDFE" stroke="#534AB7" stroke-width="0.8"/>
+      <text x="190" y="117" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="12" font-weight="500" fill="#26215C">Bloque 1 — Modelado</text>
 
-      <!-- Block 2: Evaluacion -->
-      <rect x="400" y="112" width="200" height="40" rx="8" fill="#E1F5EE" stroke="#1D9E75" stroke-width="0.8"/>
-      <text x="500" y="132" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="12" font-weight="500" fill="#085041">Bloque 2 — Evaluación</text>
+      <!-- Block 2 -->
+      <rect x="444" y="98" width="212" height="38" rx="8" fill="#E1F5EE" stroke="#1D9E75" stroke-width="0.8"/>
+      <text x="550" y="117" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="12" font-weight="500" fill="#085041">Bloque 2 — Evaluación</text>
 
-      <!-- Lines from Block 1 -->
-      <line x1="180" y1="152" x2="180" y2="172" stroke="#9A9A94" stroke-width="0.5"/>
-      <line x1="80" y1="172" x2="280" y2="172" stroke="#9A9A94" stroke-width="0.5"/>
-      <line x1="80"  y1="172" x2="80"  y2="192" stroke="#9A9A94" stroke-width="0.5" marker-end="url(#aa3)"/>
-      <line x1="180" y1="172" x2="180" y2="192" stroke="#9A9A94" stroke-width="0.5" marker-end="url(#aa3)"/>
-      <line x1="280" y1="172" x2="280" y2="192" stroke="#9A9A94" stroke-width="0.5" marker-end="url(#aa3)"/>
+      <!-- Block 1 to A1 A2 A3 -->
+      <line x1="190" y1="136" x2="190" y2="156" stroke="#9A9A94" stroke-width="0.5"/>
+      <line x1="76"  y1="156" x2="304" y2="156" stroke="#9A9A94" stroke-width="0.5"/>
+      <line x1="76"  y1="156" x2="76"  y2="174" stroke="#9A9A94" stroke-width="0.5" marker-end="url(#aa3)"/>
+      <line x1="190" y1="156" x2="190" y2="174" stroke="#9A9A94" stroke-width="0.5" marker-end="url(#aa3)"/>
+      <line x1="304" y1="156" x2="304" y2="174" stroke="#9A9A94" stroke-width="0.5" marker-end="url(#aa3)"/>
 
       <!-- A1 -->
-      <rect x="26" y="194" width="108" height="52" rx="8" fill="#EEEDFE" stroke="#534AB7" stroke-width="0.5"/>
-      <text x="80" y="212" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" font-weight="500" fill="#26215C">A1</text>
-      <text x="80" y="228" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="10" fill="#534AB7">Estructuración</text>
-      <text x="80" y="242" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="10" fill="#534AB7">RF / RNF / RC</text>
+      <rect x="22"  y="176" width="108" height="54" rx="7" fill="#EEEDFE" stroke="#534AB7" stroke-width="0.5"/>
+      <text x="76"  y="194" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" font-weight="600" fill="#26215C">A1</text>
+      <text x="76"  y="208" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="10" fill="#534AB7">Estructuración</text>
+      <text x="76"  y="221" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="10" fill="#534AB7">RF / RNF / RC</text>
 
       <!-- A2 -->
-      <rect x="126" y="194" width="108" height="52" rx="8" fill="#EEEDFE" stroke="#534AB7" stroke-width="0.5"/>
-      <text x="180" y="212" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" font-weight="500" fill="#26215C">A2</text>
-      <text x="180" y="228" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="10" fill="#534AB7">Modelado BPMN</text>
-      <text x="180" y="242" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="10" fill="#534AB7">As-Is / To-Be</text>
+      <rect x="136" y="176" width="108" height="54" rx="7" fill="#EEEDFE" stroke="#534AB7" stroke-width="0.5"/>
+      <text x="190" y="194" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" font-weight="600" fill="#26215C">A2</text>
+      <text x="190" y="208" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="10" fill="#534AB7">Modelado BPMN</text>
+      <text x="190" y="221" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="10" fill="#534AB7">As-Is / To-Be</text>
 
       <!-- A3 -->
-      <rect x="226" y="194" width="108" height="52" rx="8" fill="#EEEDFE" stroke="#534AB7" stroke-width="0.5"/>
-      <text x="280" y="212" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" font-weight="500" fill="#26215C">A3</text>
-      <text x="280" y="228" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="10" fill="#534AB7">Modelado sistema</text>
-      <text x="280" y="242" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="10" fill="#534AB7">Contexto · UML</text>
+      <rect x="250" y="176" width="108" height="54" rx="7" fill="#EEEDFE" stroke="#534AB7" stroke-width="0.5"/>
+      <text x="304" y="194" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" font-weight="600" fill="#26215C">A3</text>
+      <text x="304" y="208" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="10" fill="#534AB7">Modelado sistema</text>
+      <text x="304" y="221" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="10" fill="#534AB7">Contexto · UML</text>
 
-      <!-- Lines from Block 2 -->
-      <line x1="500" y1="152" x2="500" y2="172" stroke="#9A9A94" stroke-width="0.5"/>
-      <line x1="420" y1="172" x2="580" y2="172" stroke="#9A9A94" stroke-width="0.5"/>
-      <line x1="420" y1="172" x2="420" y2="192" stroke="#9A9A94" stroke-width="0.5" marker-end="url(#aa3)"/>
-      <line x1="580" y1="172" x2="580" y2="192" stroke="#9A9A94" stroke-width="0.5" marker-end="url(#aa3)"/>
+      <!-- Block 2 to A4 A5 -->
+      <line x1="550" y1="136" x2="550" y2="156" stroke="#9A9A94" stroke-width="0.5"/>
+      <line x1="468" y1="156" x2="632" y2="156" stroke="#9A9A94" stroke-width="0.5"/>
+      <line x1="468" y1="156" x2="468" y2="174" stroke="#9A9A94" stroke-width="0.5" marker-end="url(#aa3)"/>
+      <line x1="632" y1="156" x2="632" y2="174" stroke="#9A9A94" stroke-width="0.5" marker-end="url(#aa3)"/>
 
       <!-- A4 -->
-      <rect x="366" y="194" width="108" height="52" rx="8" fill="#E1F5EE" stroke="#1D9E75" stroke-width="0.5"/>
-      <text x="420" y="212" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" font-weight="500" fill="#085041">A4</text>
-      <text x="420" y="228" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="10" fill="#0F6E56">Priorización</text>
-      <text x="420" y="242" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="10" fill="#0F6E56">MoSCoW · Kano</text>
+      <rect x="414" y="176" width="108" height="54" rx="7" fill="#E1F5EE" stroke="#1D9E75" stroke-width="0.5"/>
+      <text x="468" y="194" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" font-weight="600" fill="#085041">A4</text>
+      <text x="468" y="208" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="10" fill="#0F6E56">Priorización</text>
+      <text x="468" y="221" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="10" fill="#0F6E56">MoSCoW · Kano</text>
 
       <!-- A5 -->
-      <rect x="520" y="194" width="114" height="52" rx="8" fill="#E1F5EE" stroke="#1D9E75" stroke-width="0.5"/>
-      <text x="577" y="212" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" font-weight="500" fill="#085041">A5</text>
-      <text x="577" y="228" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="10" fill="#0F6E56">Verificación</text>
-      <text x="577" y="242" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="10" fill="#0F6E56">Consistencia</text>
+      <rect x="578" y="176" width="108" height="54" rx="7" fill="#E1F5EE" stroke="#1D9E75" stroke-width="0.5"/>
+      <text x="632" y="194" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" font-weight="600" fill="#085041">A5</text>
+      <text x="632" y="208" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="10" fill="#0F6E56">Verificación</text>
+      <text x="632" y="221" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="10" fill="#0F6E56">Consistencia</text>
 
-      <!-- Artifacts row -->
-      <text x="340" y="280" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="10" fill="#9A9A94">Artefactos producidos</text>
-      <rect x="26"  y="294" width="108" height="28" rx="6" fill="#F1EFE8" stroke="#888780" stroke-width="0.5"/>
-      <text x="80"  y="308" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="10" fill="#444441">Lista RF/RNF/RC</text>
-      <rect x="146" y="294" width="108" height="28" rx="6" fill="#F1EFE8" stroke="#888780" stroke-width="0.5"/>
-      <text x="200" y="308" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="10" fill="#444441">BPMN As-Is/To-Be</text>
-      <rect x="266" y="294" width="108" height="28" rx="6" fill="#F1EFE8" stroke="#888780" stroke-width="0.5"/>
-      <text x="320" y="308" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="10" fill="#444441">Diagrama contexto</text>
-      <rect x="386" y="294" width="108" height="28" rx="6" fill="#F1EFE8" stroke="#888780" stroke-width="0.5"/>
-      <text x="440" y="308" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="10" fill="#444441">Backlog MoSCoW</text>
-      <rect x="506" y="294" width="128" height="28" rx="6" fill="#F1EFE8" stroke="#888780" stroke-width="0.5"/>
-      <text x="570" y="308" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="10" fill="#444441">Análisis GAP verif.</text>
+      <!-- Artifacts -->
+      <text x="370" y="258" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="10" fill="#9A9A94">Artefactos producidos</text>
+      <rect x="14"  y="268" width="120" height="26" rx="6" fill="#F1EFE8" stroke="#888780" stroke-width="0.5"/>
+      <text x="74"  y="281" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="10" fill="#444441">Lista RF/RNF/RC</text>
+      <rect x="144" y="268" width="120" height="26" rx="6" fill="#F1EFE8" stroke="#888780" stroke-width="0.5"/>
+      <text x="204" y="281" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="10" fill="#444441">BPMN As-Is/To-Be</text>
+      <rect x="274" y="268" width="120" height="26" rx="6" fill="#F1EFE8" stroke="#888780" stroke-width="0.5"/>
+      <text x="334" y="281" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="10" fill="#444441">Diagrama contexto</text>
+      <rect x="404" y="268" width="120" height="26" rx="6" fill="#F1EFE8" stroke="#888780" stroke-width="0.5"/>
+      <text x="464" y="281" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="10" fill="#444441">Backlog MoSCoW</text>
+      <rect x="534" y="268" width="120" height="26" rx="6" fill="#F1EFE8" stroke="#888780" stroke-width="0.5"/>
+      <text x="594" y="281" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="10" fill="#444441">Análisis GAP verif.</text>
     </svg>
   </div>
 </div>
@@ -2268,31 +2290,9 @@ reg('ana-modelado', () => `
 
 function initAnaModelado() {
   var el = document.getElementById('ana-mod-mount');
-  if (!el || el.innerHTML.trim()) return;
+  if (!el) return;
 
-  el.innerHTML = `<style>
-.mod-tabs2{display:flex;gap:2px;margin-bottom:1rem;flex-wrap:wrap}
-.mod-tab2{padding:6px 16px;border-radius:6px;font-size:12px;font-weight:500;cursor:pointer;background:transparent;border:0.5px solid var(--border);color:var(--muted);transition:all .2s}
-.mod-tab2.on{background:var(--surface);color:var(--text);border-color:var(--border2)}
-.mod-body2{display:none}
-.mod-body2.on{display:block}
-.uc-grid2{display:grid;grid-template-columns:200px 1fr;gap:12px;margin-top:.5rem}
-.uc-list2{display:flex;flex-direction:column;gap:4px}
-.uc-item2{padding:7px 10px;border-radius:7px;font-size:12px;cursor:pointer;border:0.5px solid var(--border);background:var(--surface);color:var(--muted);transition:all .2s}
-.uc-item2:hover{color:var(--text);border-color:var(--border2)}
-.uc-item2.on{background:var(--bg);color:var(--text);border-color:var(--c-purple);font-weight:500}
-.uc-detail2{background:var(--surface);border-radius:10px;padding:1rem;border:0.5px solid var(--border)}
-.uc-det-row2{display:grid;grid-template-columns:110px 1fr;gap:4px;padding:5px 0;border-bottom:0.5px solid var(--border);font-size:12px;align-items:flex-start}
-.uc-det-row2:last-child{border-bottom:none}
-.uc-det-key2{font-size:11px;font-weight:500;color:var(--muted)}
-.uc-det-val2{color:var(--text);line-height:1.5}
-.uc-steps2{list-style:none;padding:0;margin:0}
-.uc-steps2 li{padding:3px 0;font-size:11px;display:flex;gap:6px;align-items:flex-start;border-bottom:0.5px solid var(--border)}
-.uc-steps2 li:last-child{border-bottom:none}
-.uc-step-num2{font-size:10px;font-weight:500;color:var(--muted);min-width:16px}
-.actor-tag2{display:inline-block;font-size:10px;padding:2px 7px;border-radius:4px;font-weight:500;background:rgba(83,52,131,0.1);color:#3C3489;border:0.5px solid rgba(83,52,131,0.2);margin-right:4px}
-.bleg-item2{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--muted)}
-</style>
+  el.innerHTML = `
 
 <div class="mod-tabs2">
   <button class="mod-tab2 on" onclick="modSel2(0)">Diagrama de contexto</button>
