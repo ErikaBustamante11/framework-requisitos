@@ -563,6 +563,23 @@ textarea { resize: vertical; line-height: 1.6; }
 .uc-step-num2{font-size:10px;font-weight:500;color:var(--muted);min-width:16px}
 .actor-tag2{display:inline-block;font-size:10px;padding:2px 7px;border-radius:4px;font-weight:500;background:rgba(83,52,131,0.1);color:#3C3489;border:0.5px solid rgba(83,52,131,0.2);margin-right:4px}
 .bleg-item2{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--muted)}
+
+/* ── Input/textarea improvements ── */
+input[type=text]:not([style*="width:80px"]):not([style*="width:72px"]):not([style*="width:120px"]),
+input:not([type]):not([style*="width:80px"]):not([style*="width:72px"]):not([style*="width:120px"]),
+input[type=number] {
+  text-overflow: ellipsis;
+}
+input:focus, textarea:focus {
+  box-shadow: 0 0 0 2px rgba(83,52,131,.15) !important;
+}
+/* Moscow/Kano desc inputs — make row taller on hover */
+.moscow-item input[style*="flex:1"]:hover,
+.moscow-item input[style*="flex:1"]:focus {
+  position: relative;
+  z-index: 2;
+}
+
 </style>
 </head>
 <body>
@@ -603,15 +620,15 @@ textarea { resize: vertical; line-height: 1.6; }
       <button class="nav-item" onclick="nav('ana-flujo')"><div class="nav-pip" style="background:var(--c-purple)"></div>Flujo de actividades</button>
       <button class="nav-item" onclick="nav('ana-gap')"><div class="nav-pip" style="background:var(--c-purple)"></div>GAP Analysis</button>
       <button class="nav-item" onclick="nav('ana-modelado')"><div class="nav-pip" style="background:var(--c-purple)"></div>Modelado del sistema</button>
+      <button class="nav-item" onclick="nav('srs-contexto')"><div class="nav-pip" style="background:var(--c-purple)"></div>Diagrama de contexto</button>
+      <button class="nav-item" onclick="nav('srs-casos')"><div class="nav-pip" style="background:var(--c-purple)"></div>Casos de uso</button>
+      <button class="nav-item" onclick="nav('srs-bpmn')"><div class="nav-pip" style="background:var(--c-purple)"></div>Guía BPMN</button>
       <button class="nav-item" onclick="nav('ana-priorizacion')"><div class="nav-pip" style="background:var(--c-purple)"></div>Priorización</button>
     </div>
     <div class="nav-group">
       <span class="nav-label">Fase 3 · Especificación</span>
       <button class="nav-item" onclick="nav('srs-flujo')"><div class="nav-pip" style="background:var(--c-blue)"></div>Flujo de actividades</button>
       <button class="nav-item" onclick="nav('srs-editor')"><div class="nav-pip" style="background:var(--c-blue)"></div>Editor SRS <span class="nav-count">12 RF</span></button>
-      <button class="nav-item" onclick="nav('srs-contexto')"><div class="nav-pip" style="background:var(--c-blue)"></div>Diagrama de contexto</button>
-      <button class="nav-item" onclick="nav('srs-casos')"><div class="nav-pip" style="background:var(--c-blue)"></div>Casos de uso</button>
-      <button class="nav-item" onclick="nav('srs-bpmn')"><div class="nav-pip" style="background:var(--c-blue)"></div>Guía BPMN</button>
       <button class="nav-item" onclick="nav('srs-gherkin')"><div class="nav-pip" style="background:var(--c-blue)"></div>Constructor Gherkin</button>
       <button class="nav-item" onclick="nav('srs-detector')"><div class="nav-pip" style="background:var(--c-blue)"></div>Detector de ambigüedad</button>
       <button class="nav-item" onclick="nav('srs-glosario')"><div class="nav-pip" style="background:var(--c-blue)"></div>Glosario técnico</button>
@@ -730,7 +747,6 @@ function buildAll() {
   initUAT();
   initMaturity();
   setTimeout(initPrincipios, 100);
-  setTimeout(initAnaModelado, 130);
   setTimeout(initEliTecnicas, 120);
 }
 
@@ -2282,286 +2298,65 @@ reg('ana-modelado', () => `
 <div class="page-header">
   <div class="page-eyebrow" style="color:var(--c-purple)">● Fase 2 — Análisis</div>
   <h1 class="page-title">Modelado del sistema</h1>
-  <p class="page-desc">Diagrama de contexto (nivel 0), casos de uso y guía BPMN 2.0. Los tres artefactos que transforman los hallazgos de la elicitación en modelos formales verificables.</p>
+  <p class="page-desc">Los tres artefactos que transforman los hallazgos de la elicitación en modelos formales verificables. Cada herramienta tiene un propósito distinto y se complementan entre sí.</p>
   <div class="std-row"><span class="std-pill">ISO 19510 (BPMN 2.0)</span><span class="std-pill">UML 2.5</span><span class="std-pill">IEEE 29148:2018</span></div>
 </div>
-<div id="ana-mod-mount"></div>
+
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem;margin-bottom:1.5rem">
+
+  <div class="card" style="border-top:3px solid var(--c-teal)">
+    <div style="font-size:11px;font-weight:500;color:var(--c-teal);text-transform:uppercase;letter-spacing:.5px;margin-bottom:.5rem">Artefacto 1</div>
+    <div style="font-size:15px;font-weight:500;font-family:var(--font-serif);margin-bottom:.5rem">Diagrama de contexto</div>
+    <div style="font-size:12px;color:var(--muted);line-height:1.7;margin-bottom:.8rem">Define los límites del sistema (nivel 0). Muestra qué está dentro del sistema y qué actores o sistemas externos interactúan con él, sin entrar en detalles internos.</div>
+    <div style="font-size:11px;font-weight:500;color:var(--muted);margin-bottom:.3rem">¿Cuándo usarlo?</div>
+    <div style="font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:.8rem">Al inicio del análisis, antes de especificar requisitos. Responde: ¿qué hace el sistema y con quién interactúa?</div>
+    <div style="font-size:11px;font-weight:500;color:var(--muted);margin-bottom:.3rem">Entradas</div>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:.5rem">Objetivos del negocio · Stakeholders identificados · Alcance del proyecto</div>
+    <div style="font-size:11px;font-weight:500;color:var(--muted);margin-bottom:.3rem">Salidas</div>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:.8rem">Diagrama de contexto firmado · Lista de interfaces externas · Actores validados</div>
+    <button class="btn btn-sm" style="background:var(--c-teal);color:#fff;border-color:var(--c-teal);width:100%" onclick="nav('srs-contexto')">Ir al Diagrama de contexto →</button>
+  </div>
+
+  <div class="card" style="border-top:3px solid var(--c-purple)">
+    <div style="font-size:11px;font-weight:500;color:var(--c-purple);text-transform:uppercase;letter-spacing:.5px;margin-bottom:.5rem">Artefacto 2</div>
+    <div style="font-size:15px;font-weight:500;font-family:var(--font-serif);margin-bottom:.5rem">Casos de uso</div>
+    <div style="font-size:12px;color:var(--muted);line-height:1.7;margin-bottom:.8rem">Describe las interacciones entre los actores y el sistema en términos de objetivos de negocio. Cada caso de uso representa una funcionalidad completa desde la perspectiva del usuario.</div>
+    <div style="font-size:11px;font-weight:500;color:var(--muted);margin-bottom:.3rem">¿Cuándo usarlo?</div>
+    <div style="font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:.8rem">Después del diagrama de contexto. Responde: ¿qué puede hacer cada actor con el sistema?</div>
+    <div style="font-size:11px;font-weight:500;color:var(--muted);margin-bottom:.3rem">Entradas</div>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:.5rem">Diagrama de contexto · Hallazgos de elicitación · Actores definidos</div>
+    <div style="font-size:11px;font-weight:500;color:var(--muted);margin-bottom:.3rem">Salidas</div>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:.8rem">Catálogo de casos de uso · Flujos principal y alternativo · Base para los RF</div>
+    <button class="btn btn-sm" style="background:var(--c-purple);color:#fff;border-color:var(--c-purple);width:100%" onclick="nav('srs-casos')">Ir a Casos de uso →</button>
+  </div>
+
+  <div class="card" style="border-top:3px solid var(--c-amber)">
+    <div style="font-size:11px;font-weight:500;color:var(--c-amber);text-transform:uppercase;letter-spacing:.5px;margin-bottom:.5rem">Artefacto 3</div>
+    <div style="font-size:15px;font-weight:500;font-family:var(--font-serif);margin-bottom:.5rem">Guía BPMN</div>
+    <div style="font-size:12px;color:var(--muted);line-height:1.7;margin-bottom:.8rem">Modela los procesos de negocio As-Is (estado actual) y To-Be (estado futuro). Permite identificar ineficiencias, puntos de decisión y oportunidades de automatización.</div>
+    <div style="font-size:11px;font-weight:500;color:var(--muted);margin-bottom:.3rem">¿Cuándo usarlo?</div>
+    <div style="font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:.8rem">En paralelo al GAP Analysis. Responde: ¿cómo funciona el proceso hoy y cómo debería funcionar?</div>
+    <div style="font-size:11px;font-weight:500;color:var(--muted);margin-bottom:.3rem">Entradas</div>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:.5rem">Observación directa · Entrevistas · Documentación de procesos existentes</div>
+    <div style="font-size:11px;font-weight:500;color:var(--muted);margin-bottom:.3rem">Salidas</div>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:.8rem">Diagrama BPMN As-Is · Diagrama BPMN To-Be · Lista de mejoras identificadas</div>
+    <button class="btn btn-sm" style="background:var(--c-amber);color:#fff;border-color:var(--c-amber);width:100%" onclick="nav('srs-bpmn')">Ir a Guía BPMN →</button>
+  </div>
+
+</div>
+
+<div class="card" style="background:rgba(83,52,131,.04);border-color:rgba(83,52,131,.2)">
+  <div style="font-size:13px;font-weight:500;font-family:var(--font-serif);margin-bottom:.6rem">Relación entre los tres artefactos</div>
+  <div style="font-size:12px;color:var(--muted);line-height:1.8">
+    El <strong style="color:var(--c-teal)">Diagrama de contexto</strong> establece los límites — define qué actores y sistemas externos existen.
+    Los <strong style="color:var(--c-purple)">Casos de uso</strong> detallan las interacciones de esos actores con el sistema — cada caso de uso se convierte en uno o varios RF.
+    La <strong style="color:var(--c-amber)">Guía BPMN</strong> explica el proceso de negocio que rodea esas interacciones — justifica por qué se necesita cada RF y qué pasa si no existe.
+    Juntos forman la base analítica completa para redactar el SRS en la Fase 3.
+  </div>
+</div>
 `);
 
-function initAnaModelado() {
-  var el = document.getElementById('ana-mod-mount');
-  if (!el || el.innerHTML.trim()) return;
 
-  el.innerHTML = `<style>
-.mod-tabs2{display:flex;gap:2px;margin-bottom:1rem;flex-wrap:wrap}
-.mod-tab2{padding:6px 16px;border-radius:6px;font-size:12px;font-weight:500;cursor:pointer;background:transparent;border:0.5px solid var(--border);color:var(--muted);transition:all .2s}
-.mod-tab2.on{background:var(--surface);color:var(--text);border-color:var(--border2)}
-.mod-body2{display:none}
-.mod-body2.on{display:block}
-.uc-grid2{display:grid;grid-template-columns:200px 1fr;gap:12px;margin-top:.5rem}
-.uc-list2{display:flex;flex-direction:column;gap:4px}
-.uc-item2{padding:7px 10px;border-radius:7px;font-size:12px;cursor:pointer;border:0.5px solid var(--border);background:var(--surface);color:var(--muted);transition:all .2s}
-.uc-item2:hover{color:var(--text);border-color:var(--border2)}
-.uc-item2.on{background:var(--bg);color:var(--text);border-color:var(--c-purple);font-weight:500}
-.uc-detail2{background:var(--surface);border-radius:10px;padding:1rem;border:0.5px solid var(--border)}
-.uc-det-row2{display:grid;grid-template-columns:110px 1fr;gap:4px;padding:5px 0;border-bottom:0.5px solid var(--border);font-size:12px;align-items:flex-start}
-.uc-det-row2:last-child{border-bottom:none}
-.uc-det-key2{font-size:11px;font-weight:500;color:var(--muted)}
-.uc-det-val2{color:var(--text);line-height:1.5}
-.uc-steps2{list-style:none;padding:0;margin:0}
-.uc-steps2 li{padding:3px 0;font-size:11px;display:flex;gap:6px;align-items:flex-start;border-bottom:0.5px solid var(--border)}
-.uc-steps2 li:last-child{border-bottom:none}
-.uc-step-num2{font-size:10px;font-weight:500;color:var(--muted);min-width:16px}
-.actor-tag2{display:inline-block;font-size:10px;padding:2px 7px;border-radius:4px;font-weight:500;background:rgba(83,52,131,0.1);color:#3C3489;border:0.5px solid rgba(83,52,131,0.2);margin-right:4px}
-.bleg-item2{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--muted)}
-</style>
-
-<div class="mod-tabs2">
-  <button class="mod-tab2 on" onclick="modSel2(0)">Diagrama de contexto</button>
-  <button class="mod-tab2" onclick="modSel2(1)">Casos de uso</button>
-  <button class="mod-tab2" onclick="modSel2(2)">Guía BPMN</button>
-</div>
-
-<div class="mod-body2 on" id="amod0">
-  <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;flex-wrap:wrap;margin-bottom:.8rem">
-    <div style="font-size:11px;color:var(--muted);line-height:1.6;flex:1">El diagrama de contexto (nivel 0) delimita el sistema y muestra todos sus actores e interfaces externas. Haz clic en cualquier elemento para explorar los flujos.</div>
-    <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0">
-      <label style="cursor:pointer;display:inline-flex;align-items:center;gap:6px;padding:5px 11px;border-radius:var(--radius);border:0.5px solid rgba(186,117,23,.4);background:rgba(186,117,23,.06);font-size:11px;font-weight:500;color:var(--c-amber)">📎 Adjuntar mi diagrama<input type="file" accept=".pdf,.png,.jpg,.jpeg,.svg,.drawio,.vsdx" style="display:none" onchange="srsCtxAdj(this)"></label>
-      <span id="srs-ctx-adj-lbl" style="font-size:11px;color:var(--c-blue)"></span>
-    </div>
-  </div>
-  <svg width="100%" viewBox="0 0 680 380">
-    <defs>
-      <marker id="arr2m" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
-        <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-      </marker>
-    </defs>
-    <!-- Sistema central -->
-    <g style="cursor:pointer" onclick="sendPrompt('¿Qué funcionalidades tiene el núcleo del sistema de gestión?')">
-      <rect x="240" y="140" width="200" height="80" rx="12" fill="#EEEDFE" stroke="#534AB7" stroke-width="1.5"/>
-      <text x="340" y="172" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="14" font-weight="500" fill="#26215C">Sistema de gestión</text>
-      <text x="340" y="193" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#534AB7">Núcleo del sistema</text>
-    </g>
-    <!-- Actores izquierda -->
-    <g style="cursor:pointer" onclick="sendPrompt('¿Qué datos intercambia el usuario final con el sistema?')">
-      <rect x="30" y="60" width="140" height="52" rx="8" fill="#E1F5EE" stroke="#1D9E75" stroke-width="0.5"/>
-      <text x="100" y="83" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="13" font-weight="500" fill="#085041">Usuario final</text>
-      <text x="100" y="100" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#0F6E56">Consultas, acciones</text>
-    </g>
-    <g style="cursor:pointer" onclick="sendPrompt('¿Qué información necesita el administrador del sistema?')">
-      <rect x="30" y="248" width="140" height="52" rx="8" fill="#E1F5EE" stroke="#1D9E75" stroke-width="0.5"/>
-      <text x="100" y="271" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="13" font-weight="500" fill="#085041">Administrador</text>
-      <text x="100" y="288" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#0F6E56">Config, usuarios</text>
-    </g>
-    <!-- Sistemas externos derecha -->
-    <g style="cursor:pointer" onclick="sendPrompt('¿Qué integración tiene el sistema con el CRM externo?')">
-      <rect x="510" y="60" width="140" height="52" rx="8" fill="#FAEEDA" stroke="#BA7517" stroke-width="0.5"/>
-      <text x="580" y="83" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="13" font-weight="500" fill="#412402">CRM externo</text>
-      <text x="580" y="100" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#BA7517">Sincronización datos</text>
-    </g>
-    <g style="cursor:pointer" onclick="sendPrompt('¿Qué datos llegan desde el ERP al sistema?')">
-      <rect x="510" y="165" width="140" height="52" rx="8" fill="#FAEEDA" stroke="#BA7517" stroke-width="0.5"/>
-      <text x="580" y="188" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="13" font-weight="500" fill="#412402">ERP / Finanzas</text>
-      <text x="580" y="205" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#BA7517">Transacciones, GL</text>
-    </g>
-    <g style="cursor:pointer" onclick="sendPrompt('¿Cómo se integran las notificaciones externas con el sistema?')">
-      <rect x="510" y="270" width="140" height="52" rx="8" fill="#FAEEDA" stroke="#BA7517" stroke-width="0.5"/>
-      <text x="580" y="293" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="13" font-weight="500" fill="#412402">Notificaciones</text>
-      <text x="580" y="310" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#BA7517">Email / SMS / Push</text>
-    </g>
-    <!-- Salida abajo -->
-    <g style="cursor:pointer" onclick="sendPrompt('¿Qué reportes genera el sistema para el área de reportería?')">
-      <rect x="240" y="295" width="200" height="52" rx="8" fill="#E6F1FB" stroke="#185FA5" stroke-width="0.5"/>
-      <text x="340" y="318" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="13" font-weight="500" fill="#042C53">Reportería / BI</text>
-      <text x="340" y="335" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#185FA5">Dashboards, KPIs</text>
-    </g>
-    <!-- Flechas -->
-    <line x1="170" y1="86" x2="238" y2="166" stroke="#1D9E75" stroke-width="1" marker-end="url(#arr2m)" fill="none"/>
-    <line x1="238" y1="186" x2="170" y2="274" stroke="#1D9E75" stroke-width="1" marker-end="url(#arr2m)" fill="none"/>
-    <line x1="440" y1="166" x2="508" y2="86" stroke="#BA7517" stroke-width="1" marker-end="url(#arr2m)" fill="none"/>
-    <line x1="440" y1="186" x2="508" y2="191" stroke="#BA7517" stroke-width="1" marker-end="url(#arr2m)" fill="none"/>
-    <line x1="440" y1="206" x2="508" y2="286" stroke="#BA7517" stroke-width="1" marker-end="url(#arr2m)" fill="none"/>
-    <line x1="340" y1="220" x2="340" y2="293" stroke="#185FA5" stroke-width="1" marker-end="url(#arr2m)" fill="none"/>
-    <!-- Labels de flujos -->
-    <text x="190" y="120" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="10" fill="#1D9E75">Solicitudes</text>
-    <text x="190" y="240" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="10" fill="#1D9E75">Configuración</text>
-    <text x="495" y="118" text-anchor="end" font-family="DM Sans,sans-serif" font-size="10" fill="#BA7517">Clientes</text>
-    <text x="495" y="192" text-anchor="end" font-family="DM Sans,sans-serif" font-size="10" fill="#BA7517">Datos GL</text>
-    <text x="495" y="260" text-anchor="end" font-family="DM Sans,sans-serif" font-size="10" fill="#BA7517">Alertas</text>
-    <text x="358" y="262" text-anchor="start" font-family="DM Sans,sans-serif" font-size="10" fill="#185FA5">Datos analíticos</text>
-    <!-- Leyenda -->
-    <rect x="30" y="154" width="24" height="24" rx="4" fill="#E1F5EE" stroke="#1D9E75" stroke-width="0.5"/>
-    <text x="42" y="166" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="10" fill="#085041">A</text>
-    <rect x="62" y="154" width="24" height="24" rx="4" fill="#FAEEDA" stroke="#BA7517" stroke-width="0.5"/>
-    <text x="74" y="166" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="10" fill="#412402">E</text>
-    <rect x="94" y="154" width="24" height="24" rx="4" fill="#E6F1FB" stroke="#185FA5" stroke-width="0.5"/>
-    <text x="106" y="166" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="10" fill="#042C53">S</text>
-    <text x="126" y="166" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="10" fill="#888780">Actor   Ext. sistema   Salida</text>
-  </svg>
-</div>
-
-<div class="mod-body2" id="amod1">
-  <div style="background:rgba(83,52,131,.07);border:0.5px solid rgba(83,52,131,.3);border-radius:var(--radius);padding:.5rem .8rem;font-size:11px;color:var(--c-purple);margin-bottom:.8rem">ⓘ Selecciona un caso de uso para editarlo. Usa + para agregar y × para eliminar.</div>
-  <div id="ana-uc-mount"></div>
-</div>
-
-<div class="mod-body2" id="amod2">
-  <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:.8rem">
-    <div class="bleg-item2"><svg width="18" height="18"><circle cx="9" cy="9" r="7" fill="none" stroke="var(--border2)" stroke-width="1.5"/></svg>Evento (inicio/fin)</div>
-    <div class="bleg-item2"><svg width="24" height="18"><rect x="2" y="3" width="20" height="12" rx="3" fill="none" stroke="var(--border2)" stroke-width="1"/></svg>Actividad/Tarea</div>
-    <div class="bleg-item2"><svg width="18" height="18"><polygon points="9,2 17,9 9,16 1,9" fill="none" stroke="var(--border2)" stroke-width="1"/></svg>Decisión (Gateway)</div>
-    <div class="bleg-item2"><svg width="24" height="12"><line x1="0" y1="6" x2="20" y2="6" stroke="var(--border2)" stroke-width="1"/><polygon points="18,3 24,6 18,9" fill="var(--border2)"/></svg>Flujo secuencia</div>
-    <div class="bleg-item2"><svg width="24" height="12"><line x1="0" y1="6" x2="20" y2="6" stroke="var(--border2)" stroke-width="1" stroke-dasharray="3 2"/><polygon points="18,3 24,6 18,9" fill="var(--border2)"/></svg>Flujo mensaje</div>
-  </div>
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-    <div>
-      <div style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:6px">Tipos de tareas BPMN 2.0</div>
-      <div style="display:flex;flex-direction:column;gap:5px" id="bpmnTasks2"></div>
-    </div>
-    <div>
-      <div style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:6px">Tipos de Gateway</div>
-      <div style="display:flex;flex-direction:column;gap:5px" id="bpmnGates2"></div>
-    </div>
-  </div>
-  <div style="background:var(--surface);border-radius:8px;padding:.8rem;margin-top:.8rem">
-    <div style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:6px">Reglas de modelado BPMN — IEEE/OMG</div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px" id="bpmnRules2"></div>
-  </div>
-</div>`;
-
-  // ── UC DATA ──
-  var ucData2 = [
-    {name:'Autenticar usuario',actor:'Usuario final',pre:'Sistema disponible, usuario registrado',trigger:'Usuario accede a la URL del sistema',flujo:['Usuario ingresa credenciales SSO','Sistema valida contra directorio activo','Si válido: genera token de sesión y redirige','Si inválido: muestra error y permite 3 reintentos'],alt:'Sesión expirada: redirigir a re-autenticación',post:'Usuario autenticado con sesión activa (TTL: 8h)'},
-    {name:'Consultar dashboard',actor:'Usuario final / Gerente',pre:'Usuario autenticado, datos cargados',trigger:'Usuario navega a la pantalla principal',flujo:['Sistema carga KPIs del período seleccionado','Aplica filtros de perfil y permisos del usuario','Renderiza gráficos y métricas en < 3s','Usuario puede cambiar período o vista'],alt:'Sin datos en período: mostrar mensaje y sugerir rango alternativo',post:'Dashboard visible con datos actualizados'},
-    {name:'Generar reporte',actor:'Usuario final / Analista',pre:'Usuario autenticado con permiso de reportes',trigger:'Usuario selecciona "Nuevo reporte" en menú',flujo:['Usuario selecciona tipo y parámetros','Sistema valida permisos sobre los datos solicitados','Sistema procesa y genera el reporte','Usuario puede previsualizar, descargar o compartir'],alt:'Reporte > 10MB: generar asíncronamente y notificar por email',post:'Reporte generado y disponible en historial 30 días'},
-    {name:'Gestionar usuarios',actor:'Administrador del sistema',pre:'Usuario con rol ADMIN autenticado',trigger:'Admin accede a módulo de Usuarios',flujo:['Admin busca usuario existente o crea uno nuevo','Asigna roles y permisos del catálogo','Sistema aplica cambios y registra en auditoría','Notifica al usuario por email'],alt:'Usuario ya existe: mostrar duplicado y permitir fusión',post:'Cambios activos de inmediato, log de auditoría actualizado'},
-    {name:'Configurar alertas',actor:'Usuario final',pre:'Usuario autenticado con permiso de alertas',trigger:'Usuario accede a sección de notificaciones',flujo:['Usuario selecciona métricas a monitorear','Define umbrales y condiciones de disparo','Elige canal: email, push, SMS','Sistema activa monitoreo continuo'],alt:'Canal no disponible: sugerir alternativa activa',post:'Alertas activas, se disparan cuando se cumple condición'},
-  ];
-
-  var curUC2 = 0;
-  function renderUC2() {
-    var list = document.getElementById('ucList2');
-    var det = document.getElementById('ucDetail2');
-    if (!list || !det) return;
-    list.innerHTML = ucData2.map(function(u,i) {
-      return '<div class="uc-item2'+(i===curUC2?' on':'')+'" onclick="window._curUC2='+i+';window._renderUC2()">'+u.name+'</div>';
-    }).join('');
-    var u = ucData2[curUC2];
-    det.innerHTML = '<div class="uc-detail2">'
-      + '<div style="font-size:13px;font-weight:500;color:var(--text);margin-bottom:.7rem">'+u.name+'</div>'
-      + '<div class="uc-det-row2"><div class="uc-det-key2">Actor principal</div><div class="uc-det-val2"><span class="actor-tag2">'+u.actor+'</span></div></div>'
-      + '<div class="uc-det-row2"><div class="uc-det-key2">Precondición</div><div class="uc-det-val2">'+u.pre+'</div></div>'
-      + '<div class="uc-det-row2"><div class="uc-det-key2">Disparador</div><div class="uc-det-val2">'+u.trigger+'</div></div>'
-      + '<div class="uc-det-row2"><div class="uc-det-key2">Flujo principal</div><div class="uc-det-val2"><ol class="uc-steps2">'+u.flujo.map(function(f,j){ return '<li><span class="uc-step-num2">'+(j+1)+'.</span>'+f+'</li>'; }).join('')+'</ol></div></div>'
-      + '<div class="uc-det-row2"><div class="uc-det-key2">Flujo alternativo</div><div class="uc-det-val2">'+u.alt+'</div></div>'
-      + '<div class="uc-det-row2"><div class="uc-det-key2">Postcondición</div><div class="uc-det-val2">'+u.post+'</div></div>'
-      + '</div>';
-  }
-  window._ucData2 = ucData2;
-  window._curUC2 = 0;
-  window._renderUC2 = function() {
-    curUC2 = window._curUC2;
-    renderUC2();
-  };
-  renderUC2();
-
-  // ── BPMN TASKS ──
-  var bpmnTasks2 = [
-    {tipo:'Tarea de usuario',desc:'Persona realiza la actividad manualmente',color:'rgba(83,52,131,0.1)',tc:'#3C3489'},
-    {tipo:'Tarea de servicio',desc:'Sistema ejecuta automáticamente',color:'rgba(24,95,165,0.08)',tc:'#0C447C'},
-    {tipo:'Tarea de script',desc:'Código/regla ejecutada por motor',color:'rgba(244,162,97,0.08)',tc:'#633806'},
-    {tipo:'Tarea de envío',desc:'Envía mensaje a participante externo',color:'rgba(15,110,86,0.08)',tc:'#085041'},
-    {tipo:'Tarea de recepción',desc:'Espera mensaje de participante externo',color:'rgba(162,45,45,0.07)',tc:'#791F1F'},
-  ];
-  document.getElementById('bpmnTasks2').innerHTML = bpmnTasks2.map(function(t) {
-    return '<div style="background:'+t.color+';border-radius:6px;padding:6px 10px;font-size:11px"><strong style="color:'+t.tc+'">'+t.tipo+'</strong><div style="color:var(--muted);margin-top:1px">'+t.desc+'</div></div>';
-  }).join('');
-
-  var bpmnGates2 = [
-    {tipo:'Exclusivo (XOR)',desc:'Solo un camino — decisión',icon:'×'},
-    {tipo:'Paralelo (AND)',desc:'Todos los caminos simultáneos',icon:'+'},
-    {tipo:'Inclusivo (OR)',desc:'Uno o más caminos posibles',icon:'○'},
-    {tipo:'Basado en evento',desc:'Espera el primero que ocurra',icon:'⬡'},
-  ];
-  document.getElementById('bpmnGates2').innerHTML = bpmnGates2.map(function(g) {
-    return '<div style="background:var(--surface);border-radius:6px;padding:6px 10px;font-size:11px;display:flex;gap:8px;align-items:center">'
-      + '<div style="width:22px;height:22px;background:var(--bg);border:0.5px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:12px;transform:rotate(45deg);flex-shrink:0;border-radius:2px"><span style="transform:rotate(-45deg);display:block;color:var(--text)">'+g.icon+'</span></div>'
-      + '<div><strong style="color:var(--text)">'+g.tipo+'</strong><div style="color:var(--muted);margin-top:1px">'+g.desc+'</div></div>'
-      + '</div>';
-  }).join('');
-
-  var bpmnRules2 = [
-    'Todo proceso tiene exactamente un evento de inicio',
-    'Los gateways de apertura deben tener cierre correspondiente',
-    'Sin tareas huérfanas — todo nodo tiene entrada y salida',
-    'Los pools representan participantes, no sistemas',
-    'Las lanes organizan responsabilidades dentro de un pool',
-    'Los flujos de mensaje cruzan entre pools (nunca dentro)',
-    'Nombrar tareas con verbo + sustantivo: "Validar documento"',
-    'Documentar excepciones como flujos alternativos explícitos',
-  ];
-  document.getElementById('bpmnRules2').innerHTML = bpmnRules2.map(function(r) {
-    return '<div style="font-size:11px;color:var(--text);padding:4px 8px;background:var(--bg);border:0.5px solid var(--border);border-radius:5px;display:flex;gap:6px;align-items:flex-start"><div style="width:4px;height:4px;border-radius:50%;background:var(--c-blue);margin-top:4px;flex-shrink:0"></div>'+r+'</div>';
-  }).join('');
-
-  // ── TAB SELECTOR ──
-  window.modSel2 = function(i) {
-    document.querySelectorAll('.mod-tab2').forEach(function(t,j){ t.classList.toggle('on',i===j); });
-    document.querySelectorAll('.mod-body2').forEach(function(b,j){ b.classList.toggle('on',i===j); });
-    if(i===1){ setTimeout(function(){ renderAnaUC(); }, 50); }
-  };
-}
-
-/* ANA storage ───────────────────────────────────────────────────────────── */
-const ANA_KEY = 'fw_ana_v1';
-function loadANA() { try { return JSON.parse(localStorage.getItem(ANA_KEY)) || defaultANA(); } catch(e){ return defaultANA(); } }
-function saveANA() { localStorage.setItem(ANA_KEY, JSON.stringify(ANA)); }
-function defaultANA() {
-  return {
-    gap: {
-      asIs: ['Cliente llena formulario en papel o Excel','Analista transcribe datos al sistema manualmente','Consulta manual al buró de crédito (1-2 días)','Reunión semanal del comité de aprobación','Notificación por carta física o llamada telefónica'],
-      toBe: ['Cliente completa formulario digital con validación en línea','Datos migrados automáticamente al sistema sin intervención','Score consultado en tiempo real vía API (< 3 seg)','Decisión automática en menos de 2 horas según reglas','Notificación inmediata multicanal: email, SMS y push'],
-      brechas: [
-        {titulo:'Formulario manual → Digital',tipo:'Automatización',impacto:85,reqs:'RF-010: Formulario digital con validación; RNF-003: Disponibilidad 99.9%'},
-        {titulo:'Doble captura → Flujo unificado',tipo:'Eliminación',impacto:90,reqs:'RF-011: Integración formulario-CRM; RNF-004: Latencia < 500ms'},
-        {titulo:'Consulta manual → API tiempo real',tipo:'Integración',impacto:80,reqs:'RF-003: Integración API buró; RNF-005: SLA < 3s'},
-        {titulo:'Reunión semanal → Motor de decisión',tipo:'Optimización',impacto:95,reqs:'RF-004: Motor de reglas configurable; RF-005: Flujo de escalación'},
-      ]
-    },
-    moscow: {
-      must:   [{id:'RF-001',desc:'Login con SSO corporativo (AD/LDAP)'},{id:'RF-002',desc:'Dashboard con KPIs en tiempo real'},{id:'RF-003',desc:'Consulta automática score crediticio vía API'},{id:'RF-004',desc:'Motor de decisión automática con reglas configurables'},{id:'RNF-001',desc:'Rendimiento: P95 < 3s bajo 500 usuarios concurrentes'}],
-      should: [{id:'RF-010',desc:'Notificaciones push multicanal al cliente'},{id:'RF-011',desc:'Filtros avanzados en reportes y dashboard'},{id:'RF-012',desc:'Historial de auditoría completo de decisiones'},{id:'RF-013',desc:'Integración con sistema CRM existente'}],
-      could:  [{id:'RF-020',desc:'Modo oscuro / claro configurable por usuario'},{id:'RF-021',desc:'Análisis predictivo básico de cartera'},{id:'RF-022',desc:'App móvil nativa iOS y Android'}],
-      wont:   [{id:'RF-030',desc:'Integración con redes sociales'},{id:'RF-031',desc:'Motor de IA generativa para decisiones'},{id:'RF-032',desc:'Marketplace de integraciones externas'}],
-    },
-    vxe: [
-      {req:'Login SSO',valor:95,esfuerzo:30},
-      {req:'Dashboard KPIs',valor:92,esfuerzo:65},
-      {req:'Motor de decisión',valor:90,esfuerzo:75},
-      {req:'Exportar PDF',valor:80,esfuerzo:25},
-      {req:'Notificaciones push',valor:72,esfuerzo:40},
-      {req:'Integración CRM',valor:85,esfuerzo:80},
-      {req:'Tema oscuro',valor:35,esfuerzo:20},
-      {req:'Motor IA generativa',valor:45,esfuerzo:90},
-    ],
-    uc: [
-      {name:'Autenticar usuario',actor:'Usuario final',pre:'Sistema disponible, usuario registrado',trigger:'Usuario accede a la URL del sistema',flujo:'1. Usuario ingresa credenciales SSO\n2. Sistema valida contra directorio activo\n3. Si válido: genera token de sesión y redirige\n4. Si inválido: muestra error y permite 3 reintentos',alt:'Sesión expirada: redirigir a re-autenticación',post:'Usuario autenticado con sesión activa (TTL: 8h)'},
-      {name:'Consultar dashboard',actor:'Usuario final',pre:'Usuario autenticado',trigger:'Usuario navega a la pantalla principal',flujo:'1. Sistema carga KPIs del período seleccionado\n2. Aplica filtros de perfil del usuario\n3. Renderiza gráficos en < 3s',alt:'Sin datos: mostrar mensaje y sugerir rango alternativo',post:'Dashboard visible con datos actualizados'},
-      {name:'Generar reporte',actor:'Analista',pre:'Usuario autenticado con permiso de reportes',trigger:'Usuario selecciona Nuevo reporte',flujo:'1. Usuario selecciona tipo y parámetros\n2. Sistema valida permisos\n3. Sistema genera el reporte\n4. Usuario puede descargar o compartir',alt:'Reporte > 10MB: generar asíncronamente y notificar por email',post:'Reporte generado y disponible en historial 30 días'},
-      {name:'Gestionar usuarios',actor:'Administrador',pre:'Usuario con rol ADMIN autenticado',trigger:'Admin accede a módulo de Usuarios',flujo:'1. Admin busca usuario existente o crea uno nuevo\n2. Asigna roles y permisos\n3. Sistema aplica cambios y registra en auditoría',alt:'Usuario ya existe: mostrar duplicado',post:'Cambios activos de inmediato, log de auditoría actualizado'},
-    ],
-  };
-}
-let ANA = loadANA();
-function anaSave() { saveANA(); }
-function anaSaved(id){ var e=document.getElementById(id); if(e){e.textContent='✓ Guardado';setTimeout(function(){e.textContent='';},1800);} }
-function anaRestoreGAP(){  var d=defaultANA(); ANA.gap=d.gap; anaSave(); var m=document.getElementById('ana-gap-mount'); if(m){m.innerHTML=''; initAnaGap();} }
-function anaRestoreMoscow(){  var d=defaultANA(); ANA.moscow=d.moscow; anaSave(); var m=document.getElementById('ana-mos-mount'); if(m){m.innerHTML=''; initAnaMoscow();} }
-function anaRestoreVxE(){  var d=defaultANA(); ANA.vxe=d.vxe; anaSave(); var m=document.getElementById('ana-vxe-mount'); if(m){m.innerHTML=''; initAnaVxE();} }
-
-/* ════════════════════════════════════════
-   PAGE: GAP ANALYSIS
-════════════════════════════════════════ */
 reg('ana-gap', () => `
 <div class="page-header">
   <div class="page-eyebrow" style="color:var(--c-purple)">● Fase 2 — Análisis</div>
@@ -2733,8 +2528,8 @@ function renderAnaMoscow(){
       var rows=list.map(function(r,i){
         var k=cat.key;
         return '<div style="display:flex;align-items:center;gap:5px;padding:4px 0;border-bottom:0.5px solid var(--border)">'
-          +'<input value="'+escH(r.id)+'" style="width:80px;flex-shrink:0;font-family:var(--font-mono);color:'+cat.color+';font-size:11px;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 6px;outline:none" oninput="ANA.moscow.'+k+'['+i+'].id=this.value;anaSave()">'
-          +'<input value="'+escH(r.desc)+'" style="flex:1;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 6px;font-size:12px;color:var(--text);font-family:var(--font-sans);outline:none" placeholder="Descripción..." oninput="ANA.moscow.'+k+'['+i+'].desc=this.value;anaSave()">'
+          +'<input value="'+escH(r.id)+'" title="'+escH(r.id)+'" style="width:80px;flex-shrink:0;font-family:var(--font-mono);color:'+cat.color+';font-size:11px;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 6px;outline:none" oninput="ANA.moscow.'+k+'['+i+'].id=this.value;anaSave()">'
+          +'<textarea rows="2" style="flex:1;min-width:0;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 6px;font-size:12px;color:var(--text);font-family:var(--font-sans);outline:none;resize:vertical;line-height:1.5" placeholder="Descripción..." oninput="ANA.moscow.'+k+'['+i+'].desc=this.value;anaSave()">'+escH(r.desc)+'</textarea>'
           +'<button style="background:none;border:none;cursor:pointer;color:var(--muted);font-size:15px;padding:0 2px;flex-shrink:0" onmouseover="this.style.color=\'var(--c-red)\'" onmouseout="this.style.color=\'var(--muted)\'" onclick="ANA.moscow.'+k+'.splice('+i+',1);anaSave();renderAnaMoscow()">×</button>'
           +'</div>';
       }).join('');
@@ -3064,7 +2859,7 @@ reg('srs-casos', () => `
 ════════════════════════════════════════ */
 reg('srs-bpmn', () => `
 <div class="page-header">
-  <div class="page-eyebrow" style="color:var(--c-blue)">● Fase 3 — Especificación</div>
+  <div class="page-eyebrow" style="color:var(--c-purple)">● Fase 2 — Análisis</div>
   <h1 class="page-title">Guía BPMN 2.0</h1>
   <p class="page-desc">Business Process Model and Notation — estándar ISO 19510 para modelar procesos de negocio. En el framework se usa para construir los diagramas As-Is y To-Be de la Fase 2 y documentar los flujos que originan los requisitos.</p>
   <div class="std-row"><span class="std-pill">ISO 19510 (BPMN 2.0)</span><span class="std-pill">BABOK v3</span></div>
@@ -3078,61 +2873,106 @@ reg('srs-bpmn', () => `
   <button class="tab-btn on" onclick="tabSel('bpmn',0,this)">Elementos principales</button>
   <button class="tab-btn" onclick="tabSel('bpmn',1,this)">Reglas de modelado</button>
   <button class="tab-btn" onclick="tabSel('bpmn',2,this)">Ejemplo As-Is / To-Be</button>
+  <button class="tab-btn" onclick="tabSel('bpmn',3,this)">Mis diagramas</button>
 </div>
 
 <div class="tab-panel on" id="bpmn-0">
   <div class="g2">
-    ${[
-      {cat:'Eventos',color:'var(--c-green)',elementos:[
-        {n:'Evento de inicio',f:'Círculo simple',d:'Marca el comienzo del proceso. Siempre existe uno.'},
-        {n:'Evento de fin',f:'Círculo borde grueso',d:'Marca el final del proceso. Puede haber varios.'},
-        {n:'Evento intermedio',f:'Círculo doble',d:'Ocurre durante el proceso: mensajes, temporizadores, errores.'},
-      ]},
-      {cat:'Actividades',color:'var(--c-blue)',elementos:[
-        {n:'Tarea',f:'Rectángulo redondeado',d:'Unidad atómica de trabajo realizada por un actor o sistema.'},
-        {n:'Sub-proceso',f:'Rectángulo con +',d:'Tarea compleja que contiene un proceso interno expandible.'},
-        {n:'Tarea de servicio',f:'Rectángulo con engranaje',d:'Tarea automatizada ejecutada por un sistema sin intervención humana.'},
-      ]},
-      {cat:'Compuertas (Gateways)',color:'var(--c-amber)',elementos:[
-        {n:'Exclusiva (XOR)',f:'Rombo con X',d:'Solo un camino se toma según una condición. Los demás se descartan.'},
-        {n:'Paralela (AND)',f:'Rombo con +',d:'Todos los caminos se activan simultáneamente.'},
-        {n:'Inclusiva (OR)',f:'Rombo con O',d:'Uno o más caminos se activan según condiciones.'},
-      ]},
-      {cat:'Contenedores',color:'var(--c-purple)',elementos:[
-        {n:'Pool',f:'Rectángulo grande',d:'Representa una organización o proceso completo. Contiene lanes.'},
-        {n:'Lane (calle)',f:'Banda dentro del pool',d:'Representa un rol, área o sistema dentro de la organización.'},
-        {n:'Artefacto de datos',f:'Página con esquina doblada',d:'Documento o dato producido o consumido por una actividad.'},
-      ]},
-    ].map(g => `
-    <div class="card" style="border-left:3px solid ${g.color}">
-      <div class="card-title" style="color:${g.color}">${g.cat}</div>
-      ${g.elementos.map(e => `
+    <div class="card" style="border-left:3px solid var(--c-green)">
+      <div class="card-title" style="color:var(--c-green)">Eventos</div>
       <div style="padding:.5rem 0;border-bottom:0.5px solid var(--border)">
-        <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.2rem">
-          <div style="font-size:12px;font-weight:500">${e.n}</div>
-          <span style="font-size:10px;padding:1px 6px;border-radius:3px;background:${g.color}18;color:${g.color}">${e.f}</span>
-        </div>
-        <div style="font-size:11px;color:var(--muted)">${e.d}</div>
-      </div>`).join('')}
-    </div>`).join('')}
+        <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.2rem"><div style="font-size:12px;font-weight:500">Evento de inicio</div><span style="font-size:10px;padding:1px 6px;border-radius:3px;background:rgba(15,110,86,.1);color:var(--c-green)">Círculo simple</span></div>
+        <div style="font-size:11px;color:var(--muted)">Marca el comienzo del proceso. Siempre existe uno.</div>
+      </div>
+      <div style="padding:.5rem 0;border-bottom:0.5px solid var(--border)">
+        <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.2rem"><div style="font-size:12px;font-weight:500">Evento de fin</div><span style="font-size:10px;padding:1px 6px;border-radius:3px;background:rgba(15,110,86,.1);color:var(--c-green)">Círculo borde grueso</span></div>
+        <div style="font-size:11px;color:var(--muted)">Marca el final del proceso. Puede haber varios.</div>
+      </div>
+      <div style="padding:.5rem 0">
+        <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.2rem"><div style="font-size:12px;font-weight:500">Evento intermedio</div><span style="font-size:10px;padding:1px 6px;border-radius:3px;background:rgba(15,110,86,.1);color:var(--c-green)">Círculo doble</span></div>
+        <div style="font-size:11px;color:var(--muted)">Ocurre durante el proceso: mensajes, temporizadores, errores.</div>
+      </div>
+    </div>
+    <div class="card" style="border-left:3px solid var(--c-blue)">
+      <div class="card-title" style="color:var(--c-blue)">Actividades</div>
+      <div style="padding:.5rem 0;border-bottom:0.5px solid var(--border)">
+        <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.2rem"><div style="font-size:12px;font-weight:500">Tarea</div><span style="font-size:10px;padding:1px 6px;border-radius:3px;background:rgba(24,95,165,.1);color:var(--c-blue)">Rectángulo redondeado</span></div>
+        <div style="font-size:11px;color:var(--muted)">Unidad atómica de trabajo realizada por un actor o sistema.</div>
+      </div>
+      <div style="padding:.5rem 0;border-bottom:0.5px solid var(--border)">
+        <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.2rem"><div style="font-size:12px;font-weight:500">Sub-proceso</div><span style="font-size:10px;padding:1px 6px;border-radius:3px;background:rgba(24,95,165,.1);color:var(--c-blue)">Rectángulo con +</span></div>
+        <div style="font-size:11px;color:var(--muted)">Tarea compleja que contiene un proceso interno expandible.</div>
+      </div>
+      <div style="padding:.5rem 0">
+        <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.2rem"><div style="font-size:12px;font-weight:500">Tarea de servicio</div><span style="font-size:10px;padding:1px 6px;border-radius:3px;background:rgba(24,95,165,.1);color:var(--c-blue)">Rectángulo con engranaje</span></div>
+        <div style="font-size:11px;color:var(--muted)">Tarea automatizada ejecutada por un sistema sin intervención humana.</div>
+      </div>
+    </div>
+    <div class="card" style="border-left:3px solid var(--c-amber)">
+      <div class="card-title" style="color:var(--c-amber)">Compuertas (Gateways)</div>
+      <div style="padding:.5rem 0;border-bottom:0.5px solid var(--border)">
+        <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.2rem"><div style="font-size:12px;font-weight:500">Exclusiva (XOR)</div><span style="font-size:10px;padding:1px 6px;border-radius:3px;background:rgba(186,117,23,.1);color:var(--c-amber)">Rombo con X</span></div>
+        <div style="font-size:11px;color:var(--muted)">Solo un camino se toma según una condición.</div>
+      </div>
+      <div style="padding:.5rem 0;border-bottom:0.5px solid var(--border)">
+        <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.2rem"><div style="font-size:12px;font-weight:500">Paralela (AND)</div><span style="font-size:10px;padding:1px 6px;border-radius:3px;background:rgba(186,117,23,.1);color:var(--c-amber)">Rombo con +</span></div>
+        <div style="font-size:11px;color:var(--muted)">Todos los caminos se activan simultáneamente.</div>
+      </div>
+      <div style="padding:.5rem 0">
+        <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.2rem"><div style="font-size:12px;font-weight:500">Inclusiva (OR)</div><span style="font-size:10px;padding:1px 6px;border-radius:3px;background:rgba(186,117,23,.1);color:var(--c-amber)">Rombo con O</span></div>
+        <div style="font-size:11px;color:var(--muted)">Uno o más caminos se activan según condiciones.</div>
+      </div>
+    </div>
+    <div class="card" style="border-left:3px solid var(--c-purple)">
+      <div class="card-title" style="color:var(--c-purple)">Contenedores</div>
+      <div style="padding:.5rem 0;border-bottom:0.5px solid var(--border)">
+        <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.2rem"><div style="font-size:12px;font-weight:500">Pool</div><span style="font-size:10px;padding:1px 6px;border-radius:3px;background:rgba(83,52,131,.1);color:var(--c-purple)">Rectángulo grande</span></div>
+        <div style="font-size:11px;color:var(--muted)">Representa una organización o proceso completo.</div>
+      </div>
+      <div style="padding:.5rem 0;border-bottom:0.5px solid var(--border)">
+        <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.2rem"><div style="font-size:12px;font-weight:500">Lane (calle)</div><span style="font-size:10px;padding:1px 6px;border-radius:3px;background:rgba(83,52,131,.1);color:var(--c-purple)">Banda dentro del pool</span></div>
+        <div style="font-size:11px;color:var(--muted)">Representa un rol, área o sistema dentro de la organización.</div>
+      </div>
+      <div style="padding:.5rem 0">
+        <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.2rem"><div style="font-size:12px;font-weight:500">Artefacto de datos</div><span style="font-size:10px;padding:1px 6px;border-radius:3px;background:rgba(83,52,131,.1);color:var(--c-purple)">Página con esquina doblada</span></div>
+        <div style="font-size:11px;color:var(--muted)">Documento o dato producido o consumido por una actividad.</div>
+      </div>
+    </div>
   </div>
 </div>
 
 <div class="tab-panel" id="bpmn-1">
   <div class="g2">
-    ${[
-      {t:'Un evento de inicio siempre',color:'var(--c-green)',ok:'Nombrar con sustantivo: "Solicitud recibida"',bad:'Verbos en el evento de inicio: "Iniciar proceso"'},
-      {t:'Tareas nombradas con verbo',color:'var(--c-blue)',ok:'"Validar documentos", "Consultar score", "Notificar resultado"',bad:'"Documentos", "Score", "Notificación" (sin verbo)'},
-      {t:'Compuertas con pregunta',color:'var(--c-amber)',ok:'"¿Score > 680?" — respuesta: Sí / No',bad:'"Decisión" o "Verificar" — no especifica la condición'},
-      {t:'Artefactos conectados',color:'var(--c-purple)',ok:'Los documentos se conectan con asociaciones punteadas a las tareas que los producen o consumen',bad:'Artefactos flotantes sin conexión a ninguna actividad'},
-      {t:'As-Is sin juicios de valor',color:'var(--c-red)',ok:'Modelar el proceso tal como ocurre hoy, con sus ineficiencias incluidas',bad:'Mejorar el proceso mientras se modela el As-Is — eso es el To-Be'},
-      {t:'Un proceso por diagrama',color:'var(--c-gray)',ok:'Un diagrama = un proceso de negocio con inicio y fin claros',bad:'Múltiples procesos no relacionados en el mismo diagrama'},
-    ].map(r => `
-    <div class="card-sm" style="border-left:3px solid ${r.color}">
-      <div style="font-size:12px;font-weight:500;margin-bottom:.4rem">${r.t}</div>
-      <div style="background:rgba(15,110,86,.04);border-radius:4px;padding:.35rem .55rem;font-size:11px;margin-bottom:.3rem;color:var(--muted)">✓ ${r.ok}</div>
-      <div style="background:rgba(163,45,45,.04);border-radius:4px;padding:.35rem .55rem;font-size:11px;color:var(--muted)">✗ ${r.bad}</div>
-    </div>`).join('')}
+    <div class="card-sm" style="border-left:3px solid var(--c-green)">
+      <div style="font-size:12px;font-weight:500;margin-bottom:.4rem">Un evento de inicio siempre</div>
+      <div style="background:rgba(15,110,86,.04);border-radius:4px;padding:.35rem .55rem;font-size:11px;margin-bottom:.3rem;color:var(--muted)">✓ Nombrar con sustantivo: "Solicitud recibida"</div>
+      <div style="background:rgba(163,45,45,.04);border-radius:4px;padding:.35rem .55rem;font-size:11px;color:var(--muted)">✗ Verbos en el evento de inicio: "Iniciar proceso"</div>
+    </div>
+    <div class="card-sm" style="border-left:3px solid var(--c-blue)">
+      <div style="font-size:12px;font-weight:500;margin-bottom:.4rem">Tareas nombradas con verbo</div>
+      <div style="background:rgba(15,110,86,.04);border-radius:4px;padding:.35rem .55rem;font-size:11px;margin-bottom:.3rem;color:var(--muted)">✓ "Validar documentos", "Consultar score", "Notificar resultado"</div>
+      <div style="background:rgba(163,45,45,.04);border-radius:4px;padding:.35rem .55rem;font-size:11px;color:var(--muted)">✗ "Documentos", "Score", "Notificación" (sin verbo)</div>
+    </div>
+    <div class="card-sm" style="border-left:3px solid var(--c-amber)">
+      <div style="font-size:12px;font-weight:500;margin-bottom:.4rem">Compuertas con pregunta</div>
+      <div style="background:rgba(15,110,86,.04);border-radius:4px;padding:.35rem .55rem;font-size:11px;margin-bottom:.3rem;color:var(--muted)">✓ "¿Score &gt; 680?" — respuesta: Sí / No</div>
+      <div style="background:rgba(163,45,45,.04);border-radius:4px;padding:.35rem .55rem;font-size:11px;color:var(--muted)">✗ "Decisión" o "Verificar" — no especifica la condición</div>
+    </div>
+    <div class="card-sm" style="border-left:3px solid var(--c-purple)">
+      <div style="font-size:12px;font-weight:500;margin-bottom:.4rem">Artefactos conectados</div>
+      <div style="background:rgba(15,110,86,.04);border-radius:4px;padding:.35rem .55rem;font-size:11px;margin-bottom:.3rem;color:var(--muted)">✓ Los documentos se conectan con asociaciones punteadas a las tareas que los producen o consumen</div>
+      <div style="background:rgba(163,45,45,.04);border-radius:4px;padding:.35rem .55rem;font-size:11px;color:var(--muted)">✗ Artefactos flotantes sin conexión a ninguna actividad</div>
+    </div>
+    <div class="card-sm" style="border-left:3px solid var(--c-red)">
+      <div style="font-size:12px;font-weight:500;margin-bottom:.4rem">As-Is sin juicios de valor</div>
+      <div style="background:rgba(15,110,86,.04);border-radius:4px;padding:.35rem .55rem;font-size:11px;margin-bottom:.3rem;color:var(--muted)">✓ Modelar el proceso tal como ocurre hoy, con sus ineficiencias incluidas</div>
+      <div style="background:rgba(163,45,45,.04);border-radius:4px;padding:.35rem .55rem;font-size:11px;color:var(--muted)">✗ Mejorar el proceso mientras se modela el As-Is — eso es el To-Be</div>
+    </div>
+    <div class="card-sm" style="border-left:3px solid var(--c-gray)">
+      <div style="font-size:12px;font-weight:500;margin-bottom:.4rem">Un proceso por diagrama</div>
+      <div style="background:rgba(15,110,86,.04);border-radius:4px;padding:.35rem .55rem;font-size:11px;margin-bottom:.3rem;color:var(--muted)">✓ Un diagrama = un proceso de negocio con inicio y fin claros</div>
+      <div style="background:rgba(163,45,45,.04);border-radius:4px;padding:.35rem .55rem;font-size:11px;color:var(--muted)">✗ Múltiples procesos no relacionados en el mismo diagrama</div>
+    </div>
   </div>
 </div>
 
@@ -3140,42 +2980,146 @@ reg('srs-bpmn', () => `
   <div class="g2">
     <div class="card" style="border-left:3px solid var(--c-red)">
       <div style="font-size:12px;font-weight:500;color:var(--c-red);margin-bottom:.6rem">Proceso As-Is — Aprobación de crédito actual</div>
-      ${[
-        {t:'Cliente llena formulario en papel',d:'Manual, propenso a errores de escritura'},
-        {t:'Analista transcribe al sistema',d:'Doble captura — 2–4 horas diarias'},
-        {t:'Analista consulta buró manualmente',d:'1–2 días de espera, costo por consulta'},
-        {t:'Reunión semanal del comité',d:'5–7 días hábiles de espera'},
-        {t:'Notificación por carta física',d:'3–5 días de entrega, sin confirmación'},
-      ].map((s,i,a) => `
-      <div style="display:grid;grid-template-columns:28px 1fr;gap:.5rem;margin-bottom:.3rem;position:relative">
-        ${i<a.length-1?'<div style="position:absolute;left:13px;top:30px;bottom:-4px;width:1px;background:var(--border2)"></div>':''}
-        <div style="width:24px;height:24px;border-radius:50%;background:var(--c-red);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:500;color:#fff;flex-shrink:0">${i+1}</div>
+      <div style="display:grid;grid-template-columns:28px 1fr;gap:.5rem;margin-bottom:.3rem">
+        <div style="width:24px;height:24px;border-radius:50%;background:var(--c-red);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:500;color:#fff">1</div>
         <div style="padding:.4rem .7rem;background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius)">
-          <div style="font-size:12px;font-weight:500">${s.t}</div>
-          <div style="font-size:10px;color:var(--c-red);margin-top:1px">${s.d}</div>
+          <div style="font-size:12px;font-weight:500">Cliente llena formulario en papel</div>
+          <div style="font-size:10px;color:var(--c-red);margin-top:1px">Manual, propenso a errores de escritura</div>
         </div>
-      </div>`).join('')}
+      </div>
+      <div style="display:grid;grid-template-columns:28px 1fr;gap:.5rem;margin-bottom:.3rem">
+        <div style="width:24px;height:24px;border-radius:50%;background:var(--c-red);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:500;color:#fff">2</div>
+        <div style="padding:.4rem .7rem;background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius)">
+          <div style="font-size:12px;font-weight:500">Analista transcribe al sistema</div>
+          <div style="font-size:10px;color:var(--c-red);margin-top:1px">Doble captura — 2–4 horas diarias</div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:28px 1fr;gap:.5rem;margin-bottom:.3rem">
+        <div style="width:24px;height:24px;border-radius:50%;background:var(--c-red);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:500;color:#fff">3</div>
+        <div style="padding:.4rem .7rem;background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius)">
+          <div style="font-size:12px;font-weight:500">Analista consulta buró manualmente</div>
+          <div style="font-size:10px;color:var(--c-red);margin-top:1px">1–2 días de espera, costo por consulta</div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:28px 1fr;gap:.5rem;margin-bottom:.3rem">
+        <div style="width:24px;height:24px;border-radius:50%;background:var(--c-red);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:500;color:#fff">4</div>
+        <div style="padding:.4rem .7rem;background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius)">
+          <div style="font-size:12px;font-weight:500">Reunión semanal del comité</div>
+          <div style="font-size:10px;color:var(--c-red);margin-top:1px">5–7 días hábiles de espera</div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:28px 1fr;gap:.5rem;margin-bottom:.3rem">
+        <div style="width:24px;height:24px;border-radius:50%;background:var(--c-red);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:500;color:#fff">5</div>
+        <div style="padding:.4rem .7rem;background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius)">
+          <div style="font-size:12px;font-weight:500">Notificación por carta física</div>
+          <div style="font-size:10px;color:var(--c-red);margin-top:1px">3–5 días de entrega, sin confirmación</div>
+        </div>
+      </div>
       <div style="margin-top:.6rem;padding:.5rem .7rem;background:rgba(163,45,45,.05);border-radius:var(--radius);font-size:11px;color:var(--c-red)">Tiempo total: 5–7 días hábiles</div>
     </div>
 
     <div class="card" style="border-left:3px solid var(--c-green)">
       <div style="font-size:12px;font-weight:500;color:var(--c-green);margin-bottom:.6rem">Proceso To-Be — Aprobación de crédito digitalizado</div>
-      ${[
-        {t:'Cliente completa formulario digital',d:'Validación en tiempo real, guardado automático'},
-        {t:'Sistema migra datos automáticamente',d:'Cero captura manual, cero errores de transcripción'},
-        {t:'Sistema consulta score vía API',d:'Respuesta en < 3 segundos'},
-        {t:'Motor de decisión automática',d:'Decisión en < 2 horas para el 80% de los casos'},
-        {t:'Notificación multicanal inmediata',d:'Email + SMS en < 30 segundos'},
-      ].map((s,i,a) => `
-      <div style="display:grid;grid-template-columns:28px 1fr;gap:.5rem;margin-bottom:.3rem;position:relative">
-        ${i<a.length-1?'<div style="position:absolute;left:13px;top:30px;bottom:-4px;width:1px;background:var(--border2)"></div>':''}
-        <div style="width:24px;height:24px;border-radius:50%;background:var(--c-green);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:500;color:#fff;flex-shrink:0">${i+1}</div>
+      <div style="display:grid;grid-template-columns:28px 1fr;gap:.5rem;margin-bottom:.3rem">
+        <div style="width:24px;height:24px;border-radius:50%;background:var(--c-green);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:500;color:#fff">1</div>
         <div style="padding:.4rem .7rem;background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius)">
-          <div style="font-size:12px;font-weight:500">${s.t}</div>
-          <div style="font-size:10px;color:var(--c-green);margin-top:1px">${s.d}</div>
+          <div style="font-size:12px;font-weight:500">Cliente completa formulario digital</div>
+          <div style="font-size:10px;color:var(--c-green);margin-top:1px">Validación en tiempo real, guardado automático</div>
         </div>
-      </div>`).join('')}
+      </div>
+      <div style="display:grid;grid-template-columns:28px 1fr;gap:.5rem;margin-bottom:.3rem">
+        <div style="width:24px;height:24px;border-radius:50%;background:var(--c-green);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:500;color:#fff">2</div>
+        <div style="padding:.4rem .7rem;background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius)">
+          <div style="font-size:12px;font-weight:500">Sistema migra datos automáticamente</div>
+          <div style="font-size:10px;color:var(--c-green);margin-top:1px">Cero captura manual, cero errores</div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:28px 1fr;gap:.5rem;margin-bottom:.3rem">
+        <div style="width:24px;height:24px;border-radius:50%;background:var(--c-green);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:500;color:#fff">3</div>
+        <div style="padding:.4rem .7rem;background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius)">
+          <div style="font-size:12px;font-weight:500">Sistema consulta score vía API</div>
+          <div style="font-size:10px;color:var(--c-green);margin-top:1px">Respuesta en &lt; 3 segundos</div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:28px 1fr;gap:.5rem;margin-bottom:.3rem">
+        <div style="width:24px;height:24px;border-radius:50%;background:var(--c-green);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:500;color:#fff">4</div>
+        <div style="padding:.4rem .7rem;background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius)">
+          <div style="font-size:12px;font-weight:500">Motor de decisión automática</div>
+          <div style="font-size:10px;color:var(--c-green);margin-top:1px">Decisión en &lt; 2 horas para el 80%</div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:28px 1fr;gap:.5rem;margin-bottom:.3rem">
+        <div style="width:24px;height:24px;border-radius:50%;background:var(--c-green);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:500;color:#fff">5</div>
+        <div style="padding:.4rem .7rem;background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius)">
+          <div style="font-size:12px;font-weight:500">Notificación multicanal inmediata</div>
+          <div style="font-size:10px;color:var(--c-green);margin-top:1px">Email + SMS en &lt; 30 segundos</div>
+        </div>
+      </div>
       <div style="margin-top:.6rem;padding:.5rem .7rem;background:rgba(15,110,86,.05);border-radius:var(--radius);font-size:11px;color:var(--c-green)">Tiempo total: &lt; 2 horas para el 80% de los casos</div>
+    </div>
+  </div>
+</div>
+
+<div class="tab-panel" id="bpmn-3">
+  <div style="background:rgba(83,52,131,.06);border:0.5px solid rgba(83,52,131,.25);border-radius:var(--radius);padding:.5rem .8rem;font-size:11px;color:var(--c-purple);margin-bottom:1rem">
+    ⓘ Registra los diagramas BPMN reales de tu proyecto. Adjunta los archivos y documenta los hallazgos clave de cada proceso.
+  </div>
+
+  <div class="g2">
+    <div class="card" style="border-top:3px solid var(--c-red)">
+      <div style="font-size:13px;font-weight:500;font-family:var(--font-serif);color:var(--c-red);margin-bottom:.6rem">Proceso As-Is — Estado actual</div>
+      <div style="margin-bottom:.6rem">
+        <label style="cursor:pointer;display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:var(--radius);border:0.5px solid rgba(163,45,45,.4);background:rgba(163,45,45,.05);font-size:11px;font-weight:500;color:var(--c-red)">
+          📎 Adjuntar diagrama As-Is
+          <input type="file" accept=".pdf,.png,.jpg,.jpeg,.bpmn,.xml,.drawio,.vsdx" style="display:none" onchange="bpmnAdjFile(this,'bpmn-asis-lbl')">
+        </label>
+        <span id="bpmn-asis-lbl" style="font-size:11px;color:var(--c-blue);margin-left:.5rem"></span>
+      </div>
+      <div style="margin-bottom:.5rem">
+        <label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.3px;display:block;margin-bottom:3px">Nombre del proceso</label>
+        <input id="bpmn-asis-nombre" placeholder="Ej: Aprobación de crédito — proceso actual" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:5px 8px;font-size:12px;color:var(--text);outline:none" oninput="bpmnSave()">
+      </div>
+      <div style="margin-bottom:.5rem">
+        <label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.3px;display:block;margin-bottom:3px">Actores / roles involucrados</label>
+        <input id="bpmn-asis-actores" placeholder="Ej: Cliente, Analista de crédito, Comité" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:5px 8px;font-size:12px;color:var(--text);outline:none" oninput="bpmnSave()">
+      </div>
+      <div>
+        <label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.3px;display:block;margin-bottom:3px">Ineficiencias y problemas identificados</label>
+        <textarea id="bpmn-asis-notas" rows="4" placeholder="Describe los cuellos de botella, tiempos de espera, pasos manuales, errores frecuentes..." style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:5px 8px;font-size:12px;color:var(--text);font-family:var(--font-sans);resize:vertical;outline:none;line-height:1.6" oninput="bpmnSave()"></textarea>
+      </div>
+    </div>
+
+    <div class="card" style="border-top:3px solid var(--c-green)">
+      <div style="font-size:13px;font-weight:500;font-family:var(--font-serif);color:var(--c-green);margin-bottom:.6rem">Proceso To-Be — Estado futuro</div>
+      <div style="margin-bottom:.6rem">
+        <label style="cursor:pointer;display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:var(--radius);border:0.5px solid rgba(15,110,86,.4);background:rgba(15,110,86,.05);font-size:11px;font-weight:500;color:var(--c-green)">
+          📎 Adjuntar diagrama To-Be
+          <input type="file" accept=".pdf,.png,.jpg,.jpeg,.bpmn,.xml,.drawio,.vsdx" style="display:none" onchange="bpmnAdjFile(this,'bpmn-tobe-lbl')">
+        </label>
+        <span id="bpmn-tobe-lbl" style="font-size:11px;color:var(--c-blue);margin-left:.5rem"></span>
+      </div>
+      <div style="margin-bottom:.5rem">
+        <label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.3px;display:block;margin-bottom:3px">Nombre del proceso</label>
+        <input id="bpmn-tobe-nombre" placeholder="Ej: Aprobación de crédito — proceso digitalizado" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:5px 8px;font-size:12px;color:var(--text);outline:none" oninput="bpmnSave()">
+      </div>
+      <div style="margin-bottom:.5rem">
+        <label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.3px;display:block;margin-bottom:3px">Mejoras y automatizaciones incluidas</label>
+        <input id="bpmn-tobe-mejoras" placeholder="Ej: Formulario digital, API score, motor de decisión" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:5px 8px;font-size:12px;color:var(--text);outline:none" oninput="bpmnSave()">
+      </div>
+      <div>
+        <label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.3px;display:block;margin-bottom:3px">Beneficios esperados</label>
+        <textarea id="bpmn-tobe-notas" rows="4" placeholder="Describe las mejoras de tiempo, reducción de errores, automatizaciones y valor para el negocio..." style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:5px 8px;font-size:12px;color:var(--text);font-family:var(--font-sans);resize:vertical;outline:none;line-height:1.6" oninput="bpmnSave()"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:.8rem">
+    <div style="font-size:13px;font-weight:500;font-family:var(--font-serif);margin-bottom:.5rem">Hallazgos clave del modelado</div>
+    <div style="font-size:11px;color:var(--muted);margin-bottom:.5rem">Requisitos que surgieron directamente del análisis BPMN — cada ineficiencia del As-Is genera uno o más RF en el SRS.</div>
+    <textarea id="bpmn-hallazgos" rows="3" placeholder="Ej: RF-001 surge del paso manual de captura de datos (As-Is paso 1). RF-003 surge de la consulta manual al buró (As-Is paso 3)..." style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:5px 8px;font-size:12px;color:var(--text);font-family:var(--font-sans);resize:vertical;outline:none;line-height:1.6" oninput="bpmnSave()"></textarea>
+    <div style="display:flex;gap:.5rem;margin-top:.6rem;align-items:center">
+      <button class="btn" style="background:var(--c-purple);color:#fff;border-color:var(--c-purple)" onclick="bpmnGuardar()">Guardar</button>
+      <span id="bpmn-msg" style="font-size:11px;color:var(--c-green)"></span>
     </div>
   </div>
 </div>
@@ -5828,12 +5772,14 @@ function renderSrsEditor(){
   var estOpts=['Borrador','En revisión','Aprobado','Ambiguo'];
   var rfRows=rfs.map(function(r,i){
     return '<div class="card-sm" style="margin-bottom:.6rem;border-left:3px solid var(--c-blue)">'
-      +'<div style="display:grid;grid-template-columns:80px 1fr 70px 100px 28px;gap:5px;align-items:center;margin-bottom:.5rem">'
-      +'<input value="'+escHS(r.id)+'" style="font-family:var(--font-mono);font-size:11px;color:var(--c-blue);background:var(--surface);border:0.5px solid var(--border2);border-radius:4px;padding:3px 6px;outline:none" oninput="SRS.rfs['+i+'].id=this.value;srsSave()">'
-      +'<input value="'+escHS(r.titulo)+'" placeholder="Título del RF" style="background:var(--surface);border:0.5px solid var(--border2);border-radius:4px;padding:3px 6px;font-size:12px;font-weight:500;color:var(--text);font-family:var(--font-sans);outline:none" oninput="SRS.rfs['+i+'].titulo=this.value;srsSave()">'
-      +'<select style="background:var(--surface);border:0.5px solid var(--border2);border-radius:4px;padding:3px 5px;font-size:11px;color:var(--text);font-family:var(--font-sans);outline:none" onchange="SRS.rfs['+i+'].prioridad=this.value;srsSave()">'+priOpts.map(function(o){return'<option'+(r.prioridad===o?' selected':'')+'>'+o+'</option>';}).join('')+'</select>'
-      +'<select style="background:var(--surface);border:0.5px solid var(--border2);border-radius:4px;padding:3px 5px;font-size:11px;color:var(--text);font-family:var(--font-sans);outline:none" onchange="SRS.rfs['+i+'].estado=this.value;srsSave()">'+estOpts.map(function(o){return'<option'+(r.estado===o?' selected':'')+'>'+o+'</option>';}).join('')+'</select>'
-      +'<button style="background:none;border:none;cursor:pointer;color:var(--muted);font-size:16px" onclick="SRS.rfs.splice('+i+',1);srsSave();renderSrsEditor()">×</button>'
+      +'<div style="margin-bottom:.4rem;display:flex;gap:5px;align-items:flex-start">'
+      +'<input value="'+escHS(r.id)+'" style="font-family:var(--font-mono);font-size:11px;color:var(--c-blue);background:var(--surface);border:0.5px solid var(--border2);border-radius:4px;padding:4px 6px;outline:none;flex-shrink:0;width:80px" oninput="SRS.rfs['+i+'].id=this.value;srsSave()">'
+      +'<textarea rows="2" placeholder="Título del RF" style="flex:1;background:var(--surface);border:0.5px solid var(--border2);border-radius:4px;padding:4px 8px;font-size:12px;font-weight:500;color:var(--text);font-family:var(--font-sans);outline:none;resize:vertical;line-height:1.5" oninput="SRS.rfs['+i+'].titulo=this.value;srsSave()">'+escHS(r.titulo)+'</textarea>'
+      +'<button style="background:none;border:none;cursor:pointer;color:var(--muted);font-size:16px;flex-shrink:0;padding-top:2px" onclick="SRS.rfs.splice('+i+',1);srsSave();renderSrsEditor()">×</button>'
+      +'</div>'
+      +'<div style="display:flex;gap:5px;align-items:center;margin-bottom:.3rem">'
+      +'<select style="background:var(--surface);border:0.5px solid var(--border2);border-radius:4px;padding:3px 5px;font-size:11px;color:var(--text);outline:none" onchange="SRS.rfs['+i+'].prioridad=this.value;srsSave()">'+priOpts.map(function(o){return'<option'+(r.prioridad===o?' selected':'')+'>'+o+'</option>';}).join('')+'</select>'
+      +'<select style="background:var(--surface);border:0.5px solid var(--border2);border-radius:4px;padding:3px 5px;font-size:11px;color:var(--text);outline:none" onchange="SRS.rfs['+i+'].estado=this.value;srsSave()">'+estOpts.map(function(o){return'<option'+(r.estado===o?' selected':'')+'>'+o+'</option>';}).join('')+'</select>'
       +'</div>'
       +'<textarea style="width:100%;background:var(--bg);border:0.5px solid var(--border);border-radius:4px;padding:4px 7px;font-size:12px;color:var(--muted);font-family:var(--font-sans);resize:vertical;outline:none;line-height:1.6;margin-bottom:.4rem" rows="2" placeholder="Descripción del RF usando DEBE/DEBERÍA..." oninput="SRS.rfs['+i+'].desc=this.value;srsSave()">'+escHS(r.desc)+'</textarea>'
       +'<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px">'
@@ -5903,6 +5849,54 @@ function srsAddRNF(){ SRS.rnfs=SRS.rnfs||[]; var n=SRS.rnfs.length+1; SRS.rnfs.p
 function srsAddSA(){ SRS.sas=SRS.sas||[]; var n=SRS.sas.length+1; SRS.sas.push({id:'SA-'+String(n).padStart(3,'0'),desc:''}); srsSave(); renderSrsEditor(); }
 function srsAddRC(){ SRS.rcs=SRS.rcs||[]; var n=SRS.rcs.length+1; SRS.rcs.push({id:'RC-'+String(n).padStart(3,'0'),t:'',v:''}); srsSave(); renderSrsEditor(); }
 
+
+/* ════════════════════════════════════════
+   ANA — STORAGE ENGINE (Fase 2)
+════════════════════════════════════════ */
+const ANA_KEY = 'fw_ana_v1';
+function defaultANA() {
+  return {
+    gap: {
+      asIs: ['Cliente llena formulario en papel o Excel','Analista transcribe datos manualmente','Consulta manual al buró de crédito (1-2 días)','Reunión semanal del comité de aprobación','Notificación por carta física o llamada'],
+      toBe: ['Formulario digital integrado al sistema','Captura automática de datos del cliente','Consulta automática al buró en tiempo real','Motor de decisión automática con reglas','Notificación digital inmediata por email/SMS'],
+      brechas: [
+        {proceso:'Captura de datos',asIs:'Manual en papel/Excel',toBe:'Formulario digital integrado',rf:'RF-001, RF-002',impacto:'Alto'},
+        {proceso:'Score crediticio',asIs:'Consulta manual 1-2 días',toBe:'API automática en tiempo real',rf:'RF-003',impacto:'Alto'},
+        {proceso:'Decisión de aprobación',asIs:'Comité semanal',toBe:'Motor automático con reglas',rf:'RF-004',impacto:'Alto'},
+      ]
+    },
+    moscow: {
+      must:   [{id:'RF-001',desc:'Login con SSO corporativo (AD/LDAP)'},{id:'RF-002',desc:'Dashboard con KPIs en tiempo real'},{id:'RF-003',desc:'Consulta automática score crediticio vía API'},{id:'RF-004',desc:'Motor de decisión automática con reglas configurables'},{id:'RNF-001',desc:'Rendimiento: P95 < 3s bajo 500 usuarios concurrentes'}],
+      should: [{id:'RF-010',desc:'Notificaciones push multicanal al cliente'},{id:'RF-011',desc:'Filtros avanzados en reportes y dashboard'},{id:'RF-012',desc:'Historial de auditoría completo de decisiones'},{id:'RF-013',desc:'Integración con sistema CRM existente'}],
+      could:  [{id:'RF-020',desc:'Modo oscuro / claro configurable por usuario'},{id:'RF-021',desc:'Análisis predictivo básico de cartera'},{id:'RF-022',desc:'App móvil nativa iOS y Android'}],
+      wont:   [{id:'RF-030',desc:'Integración con redes sociales'},{id:'RF-031',desc:'Motor de IA generativa para decisiones'},{id:'RF-032',desc:'Marketplace de integraciones externas'}],
+    },
+    kano: {
+      basic:       [{id:'RF-001',desc:'Autenticación segura'},{id:'RF-002',desc:'Dashboard principal'},{id:'RF-003',desc:'Consulta score'}],
+      performance: [{id:'RF-004',desc:'Motor de decisión automática'},{id:'RF-010',desc:'Notificaciones multicanal'},{id:'RF-011',desc:'Filtros avanzados'}],
+      excitement:  [{id:'RF-020',desc:'Modo oscuro'},{id:'RF-021',desc:'Análisis predictivo'},{id:'RF-022',desc:'App móvil nativa'}],
+    },
+    vxe: [
+      {req:'Login SSO',valor:90,esfuerzo:20},{req:'Dashboard KPIs',valor:85,esfuerzo:35},
+      {req:'Score API',valor:95,esfuerzo:40},{req:'Motor decisión',valor:90,esfuerzo:70},
+      {req:'Notificaciones',valor:70,esfuerzo:30},{req:'Filtros avanzados',valor:60,esfuerzo:25},
+      {req:'Historial auditoría',valor:75,esfuerzo:45},{req:'CRM integración',valor:65,esfuerzo:80},
+      {req:'Modo oscuro',valor:30,esfuerzo:15},{req:'App móvil',valor:50,esfuerzo:90},
+      {req:'Motor IA generativa',valor:45,esfuerzo:90},
+    ],
+    uc: [
+      {name:'Autenticar usuario',actor:'Usuario final',pre:'Sistema disponible, usuario registrado',trigger:'Usuario accede a la URL del sistema',flujo:'1. Usuario ingresa credenciales SSO\n2. Sistema valida contra directorio activo\n3. Si válido: genera token de sesión y redirige\n4. Si inválido: muestra error y permite 3 reintentos',alt:'Sesión expirada: redirigir a re-autenticación',post:'Usuario autenticado con sesión activa (TTL: 8h)'},
+      {name:'Consultar dashboard',actor:'Usuario final',pre:'Usuario autenticado',trigger:'Usuario navega a la pantalla principal',flujo:'1. Sistema carga KPIs del período seleccionado\n2. Aplica filtros de perfil del usuario\n3. Renderiza gráficos en < 3s',alt:'Sin datos: mostrar mensaje y sugerir rango alternativo',post:'Dashboard visible con datos actualizados'},
+      {name:'Generar reporte',actor:'Analista',pre:'Usuario autenticado con permiso de reportes',trigger:'Usuario selecciona Nuevo reporte',flujo:'1. Usuario selecciona tipo y parámetros\n2. Sistema valida permisos\n3. Sistema genera el reporte\n4. Usuario puede descargar o compartir',alt:'Reporte > 10MB: generar asíncronamente y notificar por email',post:'Reporte generado y disponible en historial 30 días'},
+      {name:'Gestionar usuarios',actor:'Administrador',pre:'Usuario con rol ADMIN autenticado',trigger:'Admin accede a módulo de Usuarios',flujo:'1. Admin busca usuario existente o crea uno nuevo\n2. Asigna roles y permisos\n3. Sistema aplica cambios y registra en auditoría',alt:'Usuario ya existe: mostrar duplicado',post:'Cambios activos de inmediato, log de auditoría actualizado'},
+    ],
+  };
+}
+function loadANA(){ try{ return JSON.parse(localStorage.getItem(ANA_KEY))||defaultANA(); }catch(e){ return defaultANA(); } }
+function saveANA(){ localStorage.setItem(ANA_KEY, JSON.stringify(ANA)); }
+function anaSave(){ saveANA(); }
+function anaSaved(id){ var e=document.getElementById(id); if(e){e.textContent='✓ Guardado';setTimeout(function(){e.textContent='';},1800);} }
+let ANA = loadANA();
 
 /* ════════════════════════════════════════
    APLICACIÓN EN CAMPO — STORAGE ENGINE
@@ -6436,12 +6430,13 @@ window.nav = function(id) {
 
 function onPageShow(id) {
   if (id==='principios') setTimeout(initPrincipios, 50);
-  if (id==='ana-modelado') { setTimeout(initAnaModelado, 50); setTimeout(renderAnaUC, 250); }
+  // ana-modelado is now static
   if (id==='eli-tecnicas') setTimeout(initEliTecnicas, 50);
   if (id==='ana-gap') setTimeout(initAnaGap, 50);
   // renderAnaUC is called inside initAnaModelado
   if (id==='ana-priorizacion') setTimeout(function(){ initAnaMoscow(); initAnaVxE(); initAnaKano(); }, 50);
   if (id==='eli-plantillas') setTimeout(initEliPlantillas, 50);
+  if (id==='srs-bpmn') setTimeout(bpmnLoad, 50);
   if (id==='srs-glosario') initGlosario();
   if (id==='srs-contexto') setTimeout(function(){ if(document.getElementById('srs-ctx-plt')) initSrsCtxPlt(); }, 200);
   if (id==='srs-casos') setTimeout(function(){ if(document.getElementById('srs-cu-plt')) initSrsCuPlt(); }, 200);
@@ -6469,6 +6464,43 @@ onPageShow('home');
 /* ════════════════════════════════════════
    BOOT
 ════════════════════════════════════════ */
+function bpmnAdjFile(input, lblId){
+  var lbl=document.getElementById(lblId);
+  if(lbl && input.files[0]) lbl.textContent='📄 '+input.files[0].name;
+}
+function bpmnSave(){
+  var data={
+    asisNombre: document.getElementById('bpmn-asis-nombre')?.value||'',
+    asisActores: document.getElementById('bpmn-asis-actores')?.value||'',
+    asisNotas: document.getElementById('bpmn-asis-notas')?.value||'',
+    tobeNombre: document.getElementById('bpmn-tobe-nombre')?.value||'',
+    tobeMejoras: document.getElementById('bpmn-tobe-mejoras')?.value||'',
+    tobeNotas: document.getElementById('bpmn-tobe-notas')?.value||'',
+    hallazgos: document.getElementById('bpmn-hallazgos')?.value||'',
+  };
+  localStorage.setItem('fw_bpmn_v1', JSON.stringify(data));
+}
+function bpmnGuardar(){
+  bpmnSave();
+  var m=document.getElementById('bpmn-msg');
+  if(m){m.textContent='✓ Guardado';setTimeout(function(){m.textContent='';},1800);}
+}
+function bpmnLoad(){
+  try{
+    var data=JSON.parse(localStorage.getItem('fw_bpmn_v1'))||{};
+    var fields={
+      'bpmn-asis-nombre':'asisNombre','bpmn-asis-actores':'asisActores',
+      'bpmn-asis-notas':'asisNotas','bpmn-tobe-nombre':'tobeNombre',
+      'bpmn-tobe-mejoras':'tobeMejoras','bpmn-tobe-notas':'tobeNotas',
+      'bpmn-hallazgos':'hallazgos'
+    };
+    Object.keys(fields).forEach(function(id){
+      var el=document.getElementById(id);
+      if(el && data[fields[id]]) el.value=data[fields[id]];
+    });
+  }catch(e){}
+}
+
 buildAll();
 </script>
 </body>
