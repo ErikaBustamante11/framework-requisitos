@@ -640,12 +640,14 @@ textarea { field-sizing: content; min-height: 2em; }
     <div class="nav-group">
       <span class="nav-label">Fase 2 · Análisis</span>
       <button class="nav-item" onclick="nav('ana-flujo')"><div class="nav-pip" style="background:var(--c-purple)"></div>Flujo de actividades</button>
+      <button class="nav-item" onclick="nav('ana-estructuracion')"><div class="nav-pip" style="background:var(--c-purple)"></div>Estructuración de requisitos</button>
       <button class="nav-item" onclick="nav('ana-gap')"><div class="nav-pip" style="background:var(--c-purple)"></div>GAP Analysis</button>
       <button class="nav-item" onclick="nav('ana-modelado')"><div class="nav-pip" style="background:var(--c-purple)"></div>Modelado del sistema</button>
       <button class="nav-item" onclick="nav('srs-contexto')"><div class="nav-pip" style="background:var(--c-purple)"></div>Diagrama de contexto</button>
       <button class="nav-item" onclick="nav('srs-casos')"><div class="nav-pip" style="background:var(--c-purple)"></div>Casos de uso</button>
       <button class="nav-item" onclick="nav('srs-bpmn')"><div class="nav-pip" style="background:var(--c-purple)"></div>Guía BPMN</button>
       <button class="nav-item" onclick="nav('ana-priorizacion')"><div class="nav-pip" style="background:var(--c-purple)"></div>Priorización</button>
+      <button class="nav-item" onclick="nav('ana-verificacion')"><div class="nav-pip" style="background:var(--c-purple)"></div>Verificación del modelo</button>
     </div>
     <div class="nav-group">
       <span class="nav-label">Fase 3 · Especificación</span>
@@ -2389,6 +2391,16 @@ reg('ana-modelado', () => `
 `);
 
 
+reg('ana-estructuracion', () => `
+<div class="page-header">
+  <div class="page-eyebrow" style="color:var(--c-purple)">● Fase 2 — Análisis</div>
+  <h1 class="page-title">A1. Estructuración de requisitos</h1>
+  <p class="page-desc">Primera actividad del análisis. Clasifica, depura y elimina duplicados de los requisitos brutos provenientes de la Fase 1 antes de modelar.</p>
+  <div class="std-row"><span class="std-pill">IEEE 29148:2018</span><span class="std-pill">BABOK v3</span></div>
+</div>
+<div id="ana-estr-mount"></div>
+`);
+
 reg('ana-gap', () => `
 <div class="page-header">
   <div class="page-eyebrow" style="color:var(--c-purple)">● Fase 2 — Análisis</div>
@@ -2475,6 +2487,16 @@ function renderAnaGap(){
 /* ════════════════════════════════════════
    PAGE: PRIORIZACIÓN
 ════════════════════════════════════════ */
+reg('ana-verificacion', () => `
+<div class="page-header">
+  <div class="page-eyebrow" style="color:var(--c-purple)">● Fase 2 — Análisis</div>
+  <h1 class="page-title">A5. Verificación del modelo</h1>
+  <p class="page-desc">Última actividad antes de pasar a Especificación. Verifica consistencia, completitud y trazabilidad del modelo de análisis.</p>
+  <div class="std-row"><span class="std-pill">IEEE 29148 §6.3</span><span class="std-pill">ISO/IEC 25010</span></div>
+</div>
+<div id="ana-ver-mount"></div>
+`);
+
 reg('ana-priorizacion', () => `
 <div class="page-header">
   <div class="page-eyebrow" style="color:var(--c-purple)">● Fase 2 — Análisis</div>
@@ -6464,8 +6486,10 @@ function onPageShow(id) {
   if (id==='principios') setTimeout(initPrincipios, 50);
   // ana-modelado is now static
   if (id==='eli-tecnicas') setTimeout(initEliTecnicas, 50);
+  if (id==='ana-estructuracion') setTimeout(initAnaEstr, 50);
   if (id==='ana-gap') setTimeout(initAnaGap, 50);
   // renderAnaUC is called inside initAnaModelado
+  if (id==='ana-verificacion') setTimeout(initAnaVer, 50);
   if (id==='ana-priorizacion') setTimeout(function(){ initAnaMoscow(); initAnaVxE(); initAnaKano(); }, 50);
   if (id==='eli-plantillas') setTimeout(initEliPlantillas, 50);
   if (id==='srs-bpmn') setTimeout(bpmnLoad, 50);
@@ -6703,6 +6727,190 @@ function exportPDF(){
   w.document.write(html);
   w.document.close();
   setTimeout(function(){ w.print(); }, 500);
+}
+
+/* ── A1 Estructuración ── */
+function initAnaEstr(){
+  var el=document.getElementById('ana-estr-mount'); if(!el) return;
+  el.innerHTML='';
+  renderAnaEstr();
+}
+function renderAnaEstr(){
+  var el=document.getElementById('ana-estr-mount'); if(!el) return;
+  var KEY='fw_ana_estr_v1';
+  var data; try{data=JSON.parse(localStorage.getItem(KEY))||{items:[]};}catch(e){data={items:[]};}
+  function save(){localStorage.setItem(KEY,JSON.stringify(data));}
+  function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
+  var tipos=['RF','RNF','Supuesto','Restricción'];
+  var estados=['Pendiente','Depurado','Duplicado','Descartado'];
+  var estColor={'Pendiente':'var(--muted)','Depurado':'var(--c-green)','Duplicado':'var(--c-amber)','Descartado':'var(--c-red)'};
+  var priOpts=['Alta','Media','Baja'];
+
+  // KPIs
+  var total=data.items.length;
+  var dep=data.items.filter(function(i){return i.estado==='Depurado';}).length;
+  var dup=data.items.filter(function(i){return i.estado==='Duplicado';}).length;
+  var desc=data.items.filter(function(i){return i.estado==='Descartado';}).length;
+
+  var html='<div class="kpi-grid" style="margin-bottom:1rem">'
+    +[{n:total,l:'Total',c:'var(--c-blue)'},{n:dep,l:'Depurados',c:'var(--c-green)'},{n:dup,l:'Duplicados',c:'var(--c-amber)'},{n:desc,l:'Descartados',c:'var(--c-red)'}]
+    .map(function(k){return'<div class="kpi"><div class="kpi-num" style="color:'+k.c+'">'+k.n+'</div><div class="kpi-label">'+k.l+'</div></div>';}).join('')
+    +'</div>';
+
+  // Info banner
+  html+='<div style="background:rgba(83,52,131,.06);border:0.5px solid rgba(83,52,131,.25);border-radius:var(--radius);padding:.5rem .8rem;font-size:11px;color:var(--c-purple);margin-bottom:1rem">'
+    +'ⓘ Registra cada requisito bruto de la Fase 1. Clasifícalo, asígnale un ID provisional y márcalo como Depurado, Duplicado o Descartado antes de modelar.</div>';
+
+  // Add form
+  html+='<div class="card" style="margin-bottom:1rem">'
+    +'<div class="card-title" style="margin-bottom:.6rem">Agregar requisito bruto</div>'
+    +'<div style="display:grid;grid-template-columns:90px 1fr 80px 80px 28px;gap:.5rem;align-items:center">'
+    +'<input id="estr-id" placeholder="RF-001" style="background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:4px 8px;font-size:12px;font-family:var(--font-mono);color:var(--c-blue);outline:none;width:100%">'
+    +'<input id="estr-desc" placeholder="Descripción del requisito..." style="background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:4px 8px;font-size:12px;color:var(--text);outline:none;width:100%">'
+    +'<select id="estr-tipo" style="background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:4px 6px;font-size:12px;color:var(--text);outline:none;width:100%">'+tipos.map(function(t){return'<option>'+t+'</option>';}).join('')+'</select>'
+    +'<select id="estr-pri" style="background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:4px 6px;font-size:12px;color:var(--text);outline:none;width:100%">'+priOpts.map(function(p){return'<option>'+p+'</option>';}).join('')+'</select>'
+    +'<button class="btn btn-sm" style="background:var(--c-purple);color:#fff;border-color:var(--c-purple);padding:4px 8px" onclick="estrAdd()">+</button>'
+    +'</div></div>';
+
+  // Table
+  if(data.items.length){
+    html+='<div class="table-wrap" style="overflow-x:auto"><table class="data-table" style="min-width:700px">'
+      +'<thead><tr><th>ID</th><th>Descripción</th><th>Tipo</th><th>Prioridad</th><th>Estado</th><th>Origen</th><th></th></tr></thead><tbody>';
+    data.items.forEach(function(item,i){
+      var col=estColor[item.estado]||'var(--muted)';
+      html+='<tr>'
+        +'<td><span style="font-family:var(--font-mono);color:var(--c-blue);font-size:11px">'+esc(item.id)+'</span></td>'
+        +'<td><input value="'+esc(item.desc)+'" style="width:100%;min-width:200px;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 6px;font-size:12px;color:var(--text);outline:none" oninput="estrSet('+i+',\'desc\',this.value)"></td>'
+        +'<td><select style="background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 5px;font-size:11px;color:var(--text);outline:none" onchange="estrSet('+i+',\'tipo\',this.value)">'+tipos.map(function(t){return'<option'+(item.tipo===t?' selected':'')+'>'+t+'</option>';}).join('')+'</select></td>'
+        +'<td><select style="background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 5px;font-size:11px;color:var(--text);outline:none" onchange="estrSet('+i+',\'prioridad\',this.value)">'+priOpts.map(function(p){return'<option'+(item.prioridad===p?' selected':'')+'>'+p+'</option>';}).join('')+'</select></td>'
+        +'<td><select style="background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 5px;font-size:11px;font-weight:500;color:'+col+';outline:none" onchange="estrSet('+i+',\'estado\',this.value)">'+estados.map(function(s){return'<option'+(item.estado===s?' selected':'')+'>'+s+'</option>';}).join('')+'</select></td>'
+        +'<td><input value="'+esc(item.origen||'')+'" placeholder="Sesión / stakeholder" style="width:100%;min-width:120px;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 6px;font-size:11px;color:var(--muted);outline:none" oninput="estrSet('+i+',\'origen\',this.value)"></td>'
+        +'<td><button style="background:none;border:none;cursor:pointer;color:var(--muted);font-size:15px" onclick="estrDel('+i+')">×</button></td>'
+        +'</tr>';
+    });
+    html+='</tbody></table></div>';
+  } else {
+    html+='<div class="card" style="text-align:center;color:var(--muted);font-size:13px">No hay requisitos registrados. Agrega los requisitos brutos de la Fase 1.</div>';
+  }
+
+  html+='<div style="display:flex;gap:.5rem;margin-top:.8rem;align-items:center">'
+    +'<span style="font-size:11px;color:var(--muted)">Guardado automático</span></div>';
+
+  el.innerHTML=html;
+}
+function estrAdd(){
+  var id=(document.getElementById('estr-id')||{value:''}).value.trim();
+  var desc=(document.getElementById('estr-desc')||{value:''}).value.trim();
+  if(!id&&!desc) return;
+  var KEY='fw_ana_estr_v1';
+  var data; try{data=JSON.parse(localStorage.getItem(KEY))||{items:[]};}catch(e){data={items:[]};}
+  data.items.push({
+    id:id||'REQ-'+(data.items.length+1),
+    desc:desc,
+    tipo:(document.getElementById('estr-tipo')||{value:'RF'}).value,
+    prioridad:(document.getElementById('estr-pri')||{value:'Media'}).value,
+    estado:'Pendiente',
+    origen:''
+  });
+  localStorage.setItem('fw_ana_estr_v1',JSON.stringify(data));
+  var el=document.getElementById('ana-estr-mount'); if(el){el.innerHTML='';renderAnaEstr();}
+}
+function estrSet(i,k,v){
+  var KEY='fw_ana_estr_v1';
+  var data; try{data=JSON.parse(localStorage.getItem(KEY))||{items:[]};}catch(e){data={items:[]};}
+  data.items[i][k]=v; localStorage.setItem(KEY,JSON.stringify(data));
+  if(k==='estado'||k==='tipo'||k==='prioridad') renderAnaEstr();
+}
+function estrDel(i){
+  var KEY='fw_ana_estr_v1';
+  var data; try{data=JSON.parse(localStorage.getItem(KEY))||{items:[]};}catch(e){data={items:[]};}
+  data.items.splice(i,1); localStorage.setItem(KEY,JSON.stringify(data));
+  var el=document.getElementById('ana-estr-mount'); if(el){el.innerHTML='';renderAnaEstr();}
+}
+
+/* ── A5 Verificación del modelo ── */
+const VER_KEY = 'fw_ana_ver_v1';
+const VER_ITEMS = [
+  {dim:'Consistencia', items:[
+    {id:'ver-01', text:'No existen requisitos que se contradigan entre sí'},
+    {id:'ver-02', text:'Los términos usados son consistentes con el glosario técnico'},
+    {id:'ver-03', text:'Las prioridades MoSCoW son coherentes entre el GAP Analysis y el backlog'},
+    {id:'ver-04', text:'Los casos de uso no se superponen ni generan conflictos funcionales'},
+  ]},
+  {dim:'Completitud', items:[
+    {id:'ver-05', text:'Todos los actores del diagrama de contexto tienen al menos un caso de uso asociado'},
+    {id:'ver-06', text:'Todas las brechas del GAP Analysis están mapeadas a al menos un requisito'},
+    {id:'ver-07', text:'Los procesos BPMN To-Be están completamente descritos con inicio, fin y actores'},
+    {id:'ver-08', text:'El backlog priorizado cubre todos los requisitos Must y Should'},
+  ]},
+  {dim:'Trazabilidad', items:[
+    {id:'ver-09', text:'Cada requisito puede vincularse a una brecha del GAP Analysis o una sesión de elicitación'},
+    {id:'ver-10', text:'Cada caso de uso puede vincularse a al menos un RF del backlog'},
+    {id:'ver-11', text:'Los diagramas BPMN As-Is y To-Be están conectados con las brechas identificadas'},
+  ]},
+  {dim:'Preparación para Fase 3', items:[
+    {id:'ver-12', text:'El modelo de análisis ha sido revisado con al menos un stakeholder clave'},
+    {id:'ver-13', text:'Los supuestos y restricciones del análisis están documentados'},
+    {id:'ver-14', text:'El backlog está listo para ser usado como entrada del Editor SRS en Fase 3'},
+  ]},
+];
+function initAnaVer(){
+  var el=document.getElementById('ana-ver-mount'); if(!el) return;
+  el.innerHTML='';
+  var data; try{data=JSON.parse(localStorage.getItem(VER_KEY))||{};}catch(e){data={};}
+  renderAnaVer(data);
+}
+function renderAnaVer(data){
+  var el=document.getElementById('ana-ver-mount'); if(!el) return;
+  var total=0,ok=0,na=0;
+  VER_ITEMS.forEach(function(d){d.items.forEach(function(i){total++;if(data[i.id]==='ok')ok++;if(data[i.id]==='na')na++;});});
+  var pct=Math.round(ok/total*100);
+  var ready=pct>=80;
+  var col=ready?'var(--c-green)':pct>=50?'var(--c-amber)':'var(--c-gray)';
+
+  var html='<div class="card" style="margin-bottom:1rem">'
+    +'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.5rem">'
+    +'<div style="font-size:13px;font-weight:500;color:'+col+'">'+(ready?'✓ Modelo verificado — listo para Fase 3':pct>=50?'⏳ En progreso — '+ok+'/'+total+' ítems':'○ Verificación pendiente')+'</div>'
+    +'<div style="font-size:28px;font-weight:500;font-family:var(--font-serif);color:'+col+'">'+pct+'%</div>'
+    +'</div>'
+    +'<div style="height:7px;background:var(--surface2);border-radius:4px;overflow:hidden">'
+    +'<div style="height:100%;width:'+pct+'%;background:'+col+';border-radius:4px;transition:width .5s"></div>'
+    +'</div></div>';
+
+  var dimColors={'Consistencia':'var(--c-purple)','Completitud':'var(--c-blue)','Trazabilidad':'var(--c-teal)','Preparación para Fase 3':'var(--c-green)'};
+  VER_ITEMS.forEach(function(dim){
+    var dimOk=dim.items.filter(function(i){return data[i.id]==='ok';}).length;
+    var col2=dimColors[dim.dim]||'var(--muted)';
+    html+='<div class="card" style="margin-bottom:.6rem">'
+      +'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.5rem">'
+      +'<div style="font-size:12px;font-weight:500;color:'+col2+'">'+dim.dim+'</div>'
+      +'<div style="font-size:11px;color:var(--muted)">'+dimOk+'/'+dim.items.length+'</div></div>';
+    dim.items.forEach(function(item){
+      var val=data[item.id]||'';
+      html+='<div style="display:flex;align-items:flex-start;gap:.6rem;padding:.4rem 0;border-bottom:0.5px solid var(--border)">'
+        +'<div style="display:flex;gap:4px;flex-shrink:0;padding-top:1px">'
+        +'<button style="width:24px;height:24px;border-radius:4px;border:0.5px solid '+(val==='ok'?'var(--c-green)':'var(--border2)')+';background:'+(val==='ok'?'var(--c-green)':'var(--surface)')+';color:'+(val==='ok'?'#fff':'var(--muted)')+';font-size:12px;cursor:pointer" onclick="verSet(\''+item.id+'\',\'ok\')">✓</button>'
+        +'<button style="width:24px;height:24px;border-radius:4px;border:0.5px solid '+(val==='na'?'var(--c-amber)':'var(--border2)')+';background:'+(val==='na'?'var(--c-amber)':'var(--surface)')+';color:'+(val==='na'?'#fff':'var(--muted)')+';font-size:10px;cursor:pointer" onclick="verSet(\''+item.id+'\',\'na\')">N/A</button>'
+        +'</div>'
+        +'<div style="font-size:12px;color:var(--text);line-height:1.5">'+item.text+'</div></div>';
+    });
+    html+='</div>';
+  });
+  html+='<div style="display:flex;gap:.5rem;margin-top:.5rem">'
+    +'<button class="btn btn-sm" onclick="verReset()">↺ Reiniciar</button>'
+    +'<span style="font-size:11px;color:var(--muted)">Guardado automáticamente</span></div>';
+  el.innerHTML=html;
+}
+function verSet(id,val){
+  var data; try{data=JSON.parse(localStorage.getItem(VER_KEY))||{};}catch(e){data={};}
+  if(data[id]===val) delete data[id]; else data[id]=val;
+  localStorage.setItem(VER_KEY,JSON.stringify(data));
+  renderAnaVer(data);
+}
+function verReset(){
+  localStorage.removeItem(VER_KEY);
+  var el=document.getElementById('ana-ver-mount'); if(el){el.innerHTML='';initAnaVer();}
 }
 
 buildAll();
