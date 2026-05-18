@@ -606,14 +606,18 @@ input:focus, textarea:focus {
       <span class="nav-label">Capa estratégica</span>
       <button class="nav-item" onclick="nav('principios')"><div class="nav-pip" style="background:var(--c-purple)"></div>Principios del framework</button>
       <button class="nav-item" onclick="nav('gobernanza')"><div class="nav-pip" style="background:var(--c-purple)"></div>Gobernanza — puntos de control</button>
+      <button class="nav-item" onclick="nav('roadmap')"><div class="nav-pip" style="background:var(--c-purple)"></div>Hoja de ruta</button>
     </div>
     <div class="nav-group">
       <span class="nav-label">Fase 1 · Elicitación</span>
       <button class="nav-item" onclick="nav('eli-flujo')"><div class="nav-pip" style="background:var(--c-teal)"></div>Flujo de actividades</button>
       <button class="nav-item" onclick="nav('eli-overview')"><div class="nav-pip" style="background:var(--c-teal)"></div>Visión general</button>
+      <button class="nav-item" onclick="nav('campo-proyecto')"><div class="nav-pip" style="background:var(--c-teal)"></div>Contexto del proyecto</button>
       <button class="nav-item" onclick="nav('eli-stakeholders')"><div class="nav-pip" style="background:var(--c-teal)"></div>Mapa de stakeholders</button>
       <button class="nav-item" onclick="nav('eli-tecnicas')"><div class="nav-pip" style="background:var(--c-teal)"></div>Técnicas <span class="nav-count">5</span></button>
       <button class="nav-item" onclick="nav('eli-plantillas')"><div class="nav-pip" style="background:var(--c-teal)"></div>Plantillas de sesión</button>
+      <button class="nav-item" onclick="nav('campo-sesiones')"><div class="nav-pip" style="background:var(--c-teal)"></div>Mis sesiones</button>
+      <button class="nav-item" onclick="nav('eli-pc1')"><div class="nav-pip" style="background:var(--c-teal)"></div>Punto de control PC1</button>
     </div>
     <div class="nav-group">
       <span class="nav-label">Fase 2 · Análisis</span>
@@ -659,22 +663,10 @@ input:focus, textarea:focus {
     <div class="nav-group">
       <span class="nav-label">Cierre</span>
       <button class="nav-item" onclick="nav('madurez')"><div class="nav-pip" style="background:var(--c-gray)"></div>Evaluador de madurez</button>
-      <button class="nav-item" onclick="nav('roadmap')"><div class="nav-pip" style="background:var(--c-gray)"></div>Hoja de ruta</button>
+      <button class="nav-item" onclick="nav('campo-resultados')"><div class="nav-pip" style="background:var(--c-gray)"></div>Resultados y análisis</button>
     </div>
 
-    <div class="nav-group" style="margin-top:.4rem;border-top:0.5px solid var(--border2);padding-top:.6rem">
-      <span class="nav-label" style="color:var(--c-teal)">● Aplicación en campo</span>
-      <button class="nav-item" onclick="nav('campo-proyecto')"><div class="nav-pip" style="background:var(--c-teal)"></div>Contexto del proyecto</button>
-      <button class="nav-item" onclick="nav('campo-stakeholders')"><div class="nav-pip" style="background:var(--c-teal)"></div>Stakeholders reales</button>
-      <button class="nav-item" onclick="nav('campo-sesiones')"><div class="nav-pip" style="background:var(--c-teal)"></div>Sesiones de elicitación</button>
-      
-      
-      
-      
-      
-      
-      <button class="nav-item" onclick="nav('campo-resultados')"><div class="nav-pip" style="background:var(--c-purple)"></div>Resultados y análisis</button>
-    </div>
+    
   </nav>
 
   <div class="sidebar-footer">
@@ -1340,6 +1332,16 @@ reg('eli-stakeholders', () => `
   <h1 class="page-title">Mapa de stakeholders</h1>
   <p class="page-desc">Clasificación por influencia e interés para definir la estrategia de comunicación y las técnicas de elicitación más adecuadas para cada perfil.</p>
 </div>
+<div class="tab-nav" id="sk-tab-nav">
+  <button class="tab-btn on" onclick="skTab(0)">Marco de referencia</button>
+  <button class="tab-btn" onclick="skTab(1)">Mi proyecto</button>
+</div>
+<div id="sk-panel-0" class="tab-panel on">
+<div class="page-header">
+  <div class="page-eyebrow" style="color:var(--c-teal)">● Fase 1 — Elicitación</div>
+  <h1 class="page-title">Mapa de stakeholders</h1>
+  <p class="page-desc">Clasificación por influencia e interés para definir la estrategia de comunicación y las técnicas de elicitación más adecuadas para cada perfil.</p>
+</div>
 <div class="g2" style="margin-bottom:1rem">
   ${[
     {t:'Alta influencia / Alto interés',est:'Gestionar de cerca',color:'var(--c-purple)',actors:['Product Owner','Gerente de negocio','Usuario clave'],tecnicas:['Entrevistas 1:1 profundas','Talleres JAD','Prototipado colaborativo']},
@@ -1356,11 +1358,23 @@ reg('eli-stakeholders', () => `
     ${s.tecnicas.map(t => `<div class="dot-item"><div class="dot" style="background:${s.color}"></div>${t}</div>`).join('')}
   </div>`).join('')}
 </div>
+</div>
+<div id="sk-panel-1" class="tab-panel" style="display:none">
+  <div id="csk-mount"></div>
+</div>
 `);
 
-/* ════════════════════════════════════════
-   PAGE: TÉCNICAS ELICITACIÓN
-════════════════════════════════════════ */
+
+reg('eli-pc1', () => `
+<div class="page-header">
+  <div class="page-eyebrow" style="color:var(--c-teal)">● Fase 1 — Elicitación</div>
+  <h1 class="page-title">Punto de control PC1</h1>
+  <p class="page-desc">Checklist de salida de la Fase 1. Verifica que todos los entregables mínimos están completos antes de pasar a la Fase 2 — Análisis.</p>
+  <div class="std-row"><span class="std-pill">IEEE 29148 §6.2</span><span class="std-pill">BABOK v3</span></div>
+</div>
+<div id="eli-pc1-mount"></div>
+`);
+
 reg('eli-tecnicas', () => `
 <div class="page-header">
   <div class="page-eyebrow" style="color:var(--c-teal)">● Fase 1 — Elicitación</div>
@@ -6455,6 +6469,8 @@ function onPageShow(id) {
   if (id==='campo-proyecto') setTimeout(initCampoProyecto, 50);
   if (id==='campo-stakeholders') setTimeout(initCampoSK, 50);
   if (id==='campo-sesiones') setTimeout(initCampoSes, 50);
+  if (id==='eli-pc1') setTimeout(initEliPC1, 50);
+  if (id==='eli-stakeholders') { var p0=document.getElementById('sk-panel-0'); var p1=document.getElementById('sk-panel-1'); if(p0)p0.style.display='block'; if(p1)p1.style.display='none'; document.querySelectorAll('#sk-tab-nav .tab-btn').forEach(function(b,j){b.classList.toggle('on',j===0);}); }
   if (id==='campo-resultados') setTimeout(initCampoResultados, 50);
 }
 
@@ -6499,6 +6515,95 @@ function bpmnLoad(){
       if(el && data[fields[id]]) el.value=data[fields[id]];
     });
   }catch(e){}
+}
+
+function skTab(i){
+  document.querySelectorAll('#sk-tab-nav .tab-btn').forEach(function(b,j){b.classList.toggle('on',j===i);});
+  document.getElementById('sk-panel-0').style.display=i===0?'block':'none';
+  document.getElementById('sk-panel-1').style.display=i===1?'block':'none';
+  if(i===1){ var m=document.getElementById('csk-mount'); if(m&&!m.innerHTML.trim()) initCampoSK(); }
+}
+
+const PC1_KEY = 'fw_eli_pc1_v1';
+const PC1_ITEMS = [
+  {dim:'Preparación', items:[
+    {id:'pc1-01', text:'Plan de elicitación elaborado con técnicas seleccionadas por tipo de stakeholder'},
+    {id:'pc1-02', text:'Todos los stakeholders identificados y clasificados en el mapa (influencia × interés)'},
+    {id:'pc1-03', text:'Al menos una técnica de elicitación ejecutada por cada cuadrante crítico'},
+  ]},
+  {dim:'Ejecución', items:[
+    {id:'pc1-04', text:'Sesiones de elicitación realizadas con al menos el 80% de los stakeholders clave'},
+    {id:'pc1-05', text:'Guías de entrevista o cuestionarios aplicados y guardados'},
+    {id:'pc1-06', text:'Notas, grabaciones o actas de cada sesión disponibles'},
+  ]},
+  {dim:'Documentación', items:[
+    {id:'pc1-07', text:'Todos los requisitos brutos consolidados con ID único asignado'},
+    {id:'pc1-08', text:'Requisitos clasificados como RF, RNF, Supuesto o Restricción'},
+    {id:'pc1-09', text:'Minuta de elicitación completa (proyecto, sesión, participantes, objetivo)'},
+    {id:'pc1-10', text:'Glosario técnico con términos clave del dominio documentados'},
+  ]},
+  {dim:'Confirmación', items:[
+    {id:'pc1-11', text:'Requisitos brutos revisados y validados con al menos un stakeholder de negocio'},
+    {id:'pc1-12', text:'Acta de conformidad firmada o confirmación escrita del Product Owner'},
+    {id:'pc1-13', text:'Gaps o inconsistencias detectadas registradas para resolución en Fase 2'},
+  ]},
+  {dim:'Entregables mínimos', items:[
+    {id:'pc1-14', text:'Lista depurada de RF y RNF lista para estructuración en Fase 2'},
+    {id:'pc1-15', text:'Checklist PC1 completo con al menos 80% de ítems aprobados'},
+  ]},
+];
+function initEliPC1(){
+  var el=document.getElementById('eli-pc1-mount'); if(!el) return;
+  el.innerHTML='';
+  var data; try{data=JSON.parse(localStorage.getItem(PC1_KEY))||{};}catch(e){data={};}
+  renderEliPC1(data);
+}
+function renderEliPC1(data){
+  var el=document.getElementById('eli-pc1-mount'); if(!el) return;
+  var total=0,ok=0,na=0;
+  PC1_ITEMS.forEach(function(d){d.items.forEach(function(i){total++;if(data[i.id]==='ok')ok++;if(data[i.id]==='na')na++;});});
+  var pct=Math.round(ok/total*100);
+  var ready=pct>=80;
+  var col=ready?'var(--c-green)':pct>=50?'var(--c-amber)':'var(--c-gray)';
+  var html='<div class="card" style="margin-bottom:1rem">'
+    +'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.5rem">'
+    +'<div style="font-size:13px;font-weight:500;color:'+col+'">'+(ready?'✓ Fase 1 completa — lista para Análisis':pct>=50?'⏳ En progreso — '+ok+'/'+total+' ítems':'○ Checklist por completar')+'</div>'
+    +'<div style="font-size:28px;font-weight:500;font-family:var(--font-serif);color:'+col+'">'+pct+'%</div>'
+    +'</div>'
+    +'<div style="height:7px;background:var(--surface2);border-radius:4px;overflow:hidden">'
+    +'<div style="height:100%;width:'+pct+'%;background:'+col+';border-radius:4px;transition:width .5s"></div>'
+    +'</div></div>';
+  PC1_ITEMS.forEach(function(dim){
+    var dimOk=dim.items.filter(function(i){return data[i.id]==='ok';}).length;
+    html+='<div class="card" style="margin-bottom:.6rem">'
+      +'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.5rem">'
+      +'<div style="font-size:12px;font-weight:500;color:var(--c-teal)">'+dim.dim+'</div>'
+      +'<div style="font-size:11px;color:var(--muted)">'+dimOk+'/'+dim.items.length+'</div></div>';
+    dim.items.forEach(function(item){
+      var val=data[item.id]||'';
+      html+='<div style="display:flex;align-items:flex-start;gap:.6rem;padding:.4rem 0;border-bottom:0.5px solid var(--border)">'
+        +'<div style="display:flex;gap:4px;flex-shrink:0;padding-top:1px">'
+        +'<button style="width:24px;height:24px;border-radius:4px;border:0.5px solid '+(val==='ok'?'var(--c-green)':'var(--border2)')+';background:'+(val==='ok'?'var(--c-green)':'var(--surface)')+';color:'+(val==='ok'?'#fff':'var(--muted)')+';font-size:12px;cursor:pointer" onclick="pc1Set(\''+item.id+'\',\'ok\')">✓</button>'
+        +'<button style="width:24px;height:24px;border-radius:4px;border:0.5px solid '+(val==='na'?'var(--c-amber)':'var(--border2)')+';background:'+(val==='na'?'var(--c-amber)':'var(--surface)')+';color:'+(val==='na'?'#fff':'var(--muted)')+';font-size:10px;cursor:pointer" onclick="pc1Set(\''+item.id+'\',\'na\')">N/A</button>'
+        +'</div>'
+        +'<div style="font-size:12px;color:var(--text);line-height:1.5">'+item.text+'</div></div>';
+    });
+    html+='</div>';
+  });
+  html+='<div style="display:flex;gap:.5rem;margin-top:.5rem">'
+    +'<button class="btn btn-sm" onclick="pc1Reset()">↺ Reiniciar</button>'
+    +'<span style="font-size:11px;color:var(--muted)">Guardado automáticamente</span></div>';
+  el.innerHTML=html;
+}
+function pc1Set(id,val){
+  var data; try{data=JSON.parse(localStorage.getItem(PC1_KEY))||{};}catch(e){data={};}
+  if(data[id]===val) delete data[id]; else data[id]=val;
+  localStorage.setItem(PC1_KEY,JSON.stringify(data));
+  renderEliPC1(data);
+}
+function pc1Reset(){
+  localStorage.removeItem(PC1_KEY);
+  var el=document.getElementById('eli-pc1-mount'); if(el){el.innerHTML='';initEliPC1();}
 }
 
 buildAll();
