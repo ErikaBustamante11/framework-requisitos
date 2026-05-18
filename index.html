@@ -580,6 +580,15 @@ input:focus, textarea:focus {
   z-index: 2;
 }
 
+
+@media print {
+  #sidebar, .sidebar-nav, button, .btn, .tab-nav, input[type=file], label[for] { display: none !important; }
+  .page { display: block !important; page-break-after: always; }
+  .page:not(.active) { display: block !important; }
+  body { background: white; }
+  .card, .card-sm { break-inside: avoid; }
+  * { color-adjust: exact; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}
 </style>
 </head>
 <body>
@@ -595,6 +604,13 @@ input:focus, textarea:focus {
     <div class="brand-eyebrow">Framework Metodológico Digital · v2.0</div>
     <div class="brand-title">Descubrimiento y levantamiento de requisitos</div>
     <div class="brand-sub">IEEE 29148 · BABOK v3 · ISO 25010</div>
+  </div>
+
+  <!-- Export/Import bar -->
+  <div style="padding:.5rem .8rem;border-bottom:0.5px solid var(--border);display:flex;gap:.4rem;flex-wrap:wrap">
+    <button onclick="exportJSON()" style="flex:1;padding:5px 8px;border-radius:6px;border:0.5px solid var(--border2);background:var(--surface);font-size:11px;font-weight:500;color:var(--c-blue);cursor:pointer;font-family:var(--font-sans)">⬇ Exportar datos</button>
+    <label style="flex:1;padding:5px 8px;border-radius:6px;border:0.5px solid var(--border2);background:var(--surface);font-size:11px;font-weight:500;color:var(--c-teal);cursor:pointer;font-family:var(--font-sans);text-align:center">⬆ Importar datos<input type="file" accept=".json" onchange="importJSON(this)" style="display:none"></label>
+    <button onclick="exportPDF()" style="width:100%;padding:5px 8px;border-radius:6px;border:0.5px solid var(--border2);background:var(--c-blue);font-size:11px;font-weight:500;color:#fff;cursor:pointer;font-family:var(--font-sans)">📄 Exportar PDF / Evidencia</button>
   </div>
 
   <nav class="sidebar-nav">
@@ -1774,7 +1790,7 @@ function renderEliPlantillas() {
   p1 += fld('Analista responsable','m-analista',m.analista,'Nombre del BA');
   p1 += '<div><label class="eli-lbl">Técnica utilizada</label>'
     +'<select class="eli-inp" id="m-tecnica" onchange="eliMsave()">'
-    +['Entrevista estructurada','Entrevista semi-estructurada','Taller JAD','Observación contextual','Cuestionario','Análisis documental','Prototipado']
+    +['Por definir','Entrevista estructurada','Entrevista semi-estructurada','Taller JAD','Observación contextual','Cuestionario','Análisis documental','Prototipado','No aplica']
       .map(function(o){return '<option'+(m.tecnica===o?' selected':'')+'>'+o+'</option>';}).join('')
     +'</select></div>';
   p1 += fld('Lugar / modalidad','m-lugar',m.lugar,'Presencial / Virtual');
@@ -6074,8 +6090,8 @@ function renderCampoSK() {
     ${campoField('Influencia','csk-inf','alta','','',[' ','alta','baja'])}
     ${campoField('Interés','csk-int','alto','','',[' ','alto','bajo'])}
     ${campoField('Técnica de elicitación','csk-tec','Entrevista estructurada','','',[
-      'Entrevista estructurada','Entrevista semi-estructurada','Taller JAD','Observación contextual',
-      'Cuestionario','Análisis documental','Prototipado','Focus Group'])}
+      'Por definir','Entrevista estructurada','Entrevista semi-estructurada','Taller JAD','Observación contextual',
+      'Cuestionario','Análisis documental','Prototipado','No aplica'])}
   </div>
   <div style="margin-bottom:.6rem">${campoField('Expectativas / intereses clave','csk-exp','','¿Qué espera este stakeholder del nuevo sistema?','textarea')}</div>
   <button class="btn btn-primary" onclick="addCampoSK()">+ Agregar</button>
@@ -6604,6 +6620,86 @@ function pc1Set(id,val){
 function pc1Reset(){
   localStorage.removeItem(PC1_KEY);
   var el=document.getElementById('eli-pc1-mount'); if(el){el.innerHTML='';initEliPC1();}
+}
+
+/* ════════════════════════════════════════
+   EXPORT / IMPORT / PDF
+════════════════════════════════════════ */
+const ALL_KEYS = [
+  'fw_ana_v1',
+  'fw_bl_v1',
+  'fw_bpmn_v1',
+  'fw_cal_v1',
+  'fw_campo_v1',
+  'fw_ccb_v1',
+  'fw_defs_v1',
+  'fw_eli_pc1_v1',
+  'fw_eli_v7',
+  'fw_obs_proyecto_v1',
+  'fw_plan_v1',
+  'fw_srs_ck_v1',
+  'fw_srs_hu_v1',
+  'fw_srs_rtm_v1',
+  'fw_srs_v1',
+  'fw_srs_ver_v1',
+  'fw_srs_wt_v1',
+  'fw_uat_v1',
+  'fw_vt_v1'
+];
+
+function exportJSON(){
+  var data = { version: '2.0', fecha: new Date().toISOString(), datos: {} };
+  ALL_KEYS.forEach(function(k){
+    var v = localStorage.getItem(k);
+    if(v) data.datos[k] = JSON.parse(v);
+  });
+  var blob = new Blob([JSON.stringify(data, null, 2)], {type:'application/json'});
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'framework-requisitos-' + new Date().toISOString().split('T')[0] + '.json';
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+
+function importJSON(input){
+  var file = input.files[0]; if(!file) return;
+  var reader = new FileReader();
+  reader.onload = function(e){
+    try{
+      var data = JSON.parse(e.target.result);
+      var datos = data.datos || data; // support both formats
+      var count = 0;
+      Object.keys(datos).forEach(function(k){
+        localStorage.setItem(k, JSON.stringify(datos[k]));
+        count++;
+      });
+      alert('✓ ' + count + ' secciones importadas correctamente. Recarga la página para ver los datos.');
+    } catch(err){
+      alert('Error al importar: ' + err.message);
+    }
+  };
+  reader.readAsText(file);
+  input.value = '';
+}
+
+function exportPDF(){
+  // Clone the document for printing all sections
+  var w = window.open('', '_blank');
+  if(!w){ alert('Por favor permite ventanas emergentes para exportar el PDF.'); return; }
+  var pages = document.querySelectorAll('.page');
+  var html = '<html><head><meta charset="utf-8"><title>Framework Metodológico Digital</title>';
+  // Copy all styles
+  var styles = document.querySelectorAll('style');
+  styles.forEach(function(s){ html += s.outerHTML; });
+  html += '<style>body{background:#fff} .page{display:block!important;page-break-after:always;padding:2rem} nav,button,.btn,.tab-nav,input[type=file]{display:none!important} .tab-panel{display:block!important}</style>';
+  html += '</head><body>';
+  pages.forEach(function(p){
+    html += '<div class="page active">' + p.innerHTML + '</div>';
+  });
+  html += '</body></html>';
+  w.document.write(html);
+  w.document.close();
+  setTimeout(function(){ w.print(); }, 500);
 }
 
 buildAll();
