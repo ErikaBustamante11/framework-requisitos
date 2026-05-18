@@ -582,13 +582,44 @@ input:focus, textarea:focus {
 
 
 @media print {
-  #sidebar, .sidebar-nav, button, .btn, .tab-nav, input[type=file], label[for] { display: none !important; }
+  #sidebar, .sidebar-nav, button, .btn, .tab-nav, input[type=file] { display: none !important; }
   .page { display: block !important; page-break-after: always; }
   .page:not(.active) { display: block !important; }
+  .tab-panel { display: block !important; }
   body { background: white; }
   .card, .card-sm { break-inside: avoid; }
   * { color-adjust: exact; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+  /* Show full input/textarea content in print */
+  input, textarea, select {
+    border: none !important;
+    border-bottom: 0.5px solid #ccc !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    width: auto !important;
+    min-width: 100% !important;
+    height: auto !important;
+    overflow: visible !important;
+    white-space: pre-wrap !important;
+    word-break: break-word !important;
+    padding: 2px 0 !important;
+    font-size: 11px !important;
+    color: #000 !important;
+    -webkit-appearance: none !important;
+    appearance: none !important;
+  }
+  textarea {
+    resize: none !important;
+    field-sizing: content !important;
+  }
+  /* Make selects show selected value */
+  select {
+    -webkit-appearance: none !important;
+    appearance: none !important;
+  }
 }
+
+textarea { field-sizing: content; }
 </style>
 </head>
 <body>
