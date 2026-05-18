@@ -590,33 +590,7 @@ input:focus, textarea:focus {
   .card, .card-sm { break-inside: avoid; }
   * { color-adjust: exact; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
 
-  /* Show full input/textarea content in print */
-  input, textarea, select {
-    border: none !important;
-    border-bottom: 0.5px solid #ccc !important;
-    border-radius: 0 !important;
-    background: transparent !important;
-    width: auto !important;
-    min-width: 100% !important;
-    height: auto !important;
-    overflow: visible !important;
-    white-space: pre-wrap !important;
-    word-break: break-word !important;
-    padding: 2px 0 !important;
-    font-size: 11px !important;
-    color: #000 !important;
-    -webkit-appearance: none !important;
-    appearance: none !important;
-  }
-  textarea {
-    resize: none !important;
-    field-sizing: content !important;
-  }
-  /* Make selects show selected value */
-  select {
-    -webkit-appearance: none !important;
-    appearance: none !important;
-  }
+
 }
 
 textarea { field-sizing: content; }
@@ -6714,23 +6688,42 @@ function importJSON(input){
 }
 
 function exportPDF(){
-  // Clone the document for printing all sections
-  var w = window.open('', '_blank');
-  if(!w){ alert('Por favor permite ventanas emergentes para exportar el PDF.'); return; }
-  var pages = document.querySelectorAll('.page');
-  var html = '<html><head><meta charset="utf-8"><title>Framework Metodológico Digital</title>';
-  // Copy all styles
-  var styles = document.querySelectorAll('style');
-  styles.forEach(function(s){ html += s.outerHTML; });
-  html += '<style>body{background:#fff} .page{display:block!important;page-break-after:always;padding:2rem} nav,button,.btn,.tab-nav,input[type=file]{display:none!important} .tab-panel{display:block!important}</style>';
-  html += '</head><body>';
-  pages.forEach(function(p){
-    html += '<div class="page active">' + p.innerHTML + '</div>';
+  // Replace all inputs/selects/textareas with divs showing their values
+  var replaced = [];
+  document.querySelectorAll('input, textarea, select').forEach(function(el){
+    if(el.type === 'file' || el.type === 'hidden') return;
+    var div = document.createElement('div');
+    div.style.cssText = 'font-size:12px;color:#111;padding:2px 0;border-bottom:0.5px solid #ddd;min-height:18px;word-break:break-word;white-space:pre-wrap;line-height:1.5;font-family:inherit';
+    var val = el.tagName === 'SELECT'
+      ? el.options[el.selectedIndex]?.text || ''
+      : el.value || '';
+    div.textContent = val;
+    el.parentNode.insertBefore(div, el);
+    el.style.display = 'none';
+    replaced.push({el: el, div: div});
   });
-  html += '</body></html>';
-  w.document.write(html);
-  w.document.close();
-  setTimeout(function(){ w.print(); }, 500);
+
+  // Show all tab panels
+  var hiddenPanels = [];
+  document.querySelectorAll('.tab-panel').forEach(function(p){
+    if(p.style.display === 'none'){
+      p.style.display = 'block';
+      hiddenPanels.push(p);
+    }
+  });
+
+  window.print();
+
+  // Restore everything after print dialog closes
+  setTimeout(function(){
+    replaced.forEach(function(r){
+      r.el.style.display = '';
+      r.div.parentNode.removeChild(r.div);
+    });
+    hiddenPanels.forEach(function(p){
+      p.style.display = 'none';
+    });
+  }, 1000);
 }
 
 buildAll();
