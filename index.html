@@ -2388,6 +2388,61 @@ reg('ana-modelado', () => `
     Juntos forman la base analítica completa para redactar el SRS en la Fase 3.
   </div>
 </div>
+
+<div class="card" style="margin-top:1rem">
+  <div style="font-size:15px;font-weight:500;font-family:var(--font-serif);margin-bottom:.8rem">Elementos UML — Diagramas de casos de uso</div>
+  <div class="g2">
+
+    <div style="border:0.5px solid var(--border);border-radius:var(--radius);padding:.8rem">
+      <div style="font-size:11px;font-weight:500;color:var(--c-purple);text-transform:uppercase;letter-spacing:.4px;margin-bottom:.6rem">Actores</div>
+      <div style="display:flex;flex-direction:column;gap:.5rem">
+        <div style="display:flex;gap:.6rem;align-items:flex-start">
+          <div style="width:28px;flex-shrink:0;text-align:center">
+            <svg width="24" height="36" viewBox="0 0 24 36"><circle cx="12" cy="7" r="5" fill="none" stroke="var(--c-purple)" stroke-width="1.5"/><line x1="12" y1="12" x2="12" y2="24" stroke="var(--c-purple)" stroke-width="1.5"/><line x1="4" y1="17" x2="20" y2="17" stroke="var(--c-purple)" stroke-width="1.5"/><line x1="12" y1="24" x2="5" y2="34" stroke="var(--c-purple)" stroke-width="1.5"/><line x1="12" y1="24" x2="19" y2="34" stroke="var(--c-purple)" stroke-width="1.5"/></svg>
+          </div>
+          <div><div style="font-size:12px;font-weight:500;color:var(--text)">Actor primario</div><div style="font-size:11px;color:var(--muted);line-height:1.5">Inicia la interacción con el sistema. Se ubica a la izquierda del diagrama. Ej: Usuario final, Analista.</div></div>
+        </div>
+        <div style="display:flex;gap:.6rem;align-items:flex-start">
+          <div style="width:28px;flex-shrink:0;text-align:center">
+            <svg width="24" height="36" viewBox="0 0 24 36"><circle cx="12" cy="7" r="5" fill="none" stroke="var(--c-teal)" stroke-width="1.5"/><line x1="12" y1="12" x2="12" y2="24" stroke="var(--c-teal)" stroke-width="1.5"/><line x1="4" y1="17" x2="20" y2="17" stroke="var(--c-teal)" stroke-width="1.5"/><line x1="12" y1="24" x2="5" y2="34" stroke="var(--c-teal)" stroke-width="1.5"/><line x1="12" y1="24" x2="19" y2="34" stroke="var(--c-teal)" stroke-width="1.5"/></svg>
+          </div>
+          <div><div style="font-size:12px;font-weight:500;color:var(--text)">Actor secundario</div><div style="font-size:11px;color:var(--muted);line-height:1.5">Reacciona o es invocado por el sistema. Se ubica a la derecha. Ej: Sistema externo, API, Base de datos.</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div style="border:0.5px solid var(--border);border-radius:var(--radius);padding:.8rem">
+      <div style="font-size:11px;font-weight:500;color:var(--c-blue);text-transform:uppercase;letter-spacing:.4px;margin-bottom:.6rem">Relaciones</div>
+      <div style="display:flex;flex-direction:column;gap:.5rem">
+        <div><div style="display:flex;align-items:center;gap:.5rem;margin-bottom:2px"><svg width="40" height="12" viewBox="0 0 40 12"><line x1="0" y1="6" x2="34" y2="6" stroke="var(--c-purple)" stroke-width="1.5"/><path d="M28 2L36 6L28 10" fill="none" stroke="var(--c-purple)" stroke-width="1.5"/></svg><span style="font-size:12px;font-weight:500">Asociación</span></div><div style="font-size:11px;color:var(--muted)">Línea sólida entre actor y caso de uso. El actor participa en ese caso.</div></div>
+        <div><div style="display:flex;align-items:center;gap:.5rem;margin-bottom:2px"><svg width="40" height="12" viewBox="0 0 40 12"><line x1="0" y1="6" x2="34" y2="6" stroke="var(--c-blue)" stroke-width="1.2" stroke-dasharray="4,2"/><path d="M28 2L36 6L28 10" fill="none" stroke="var(--c-blue)" stroke-width="1.2"/></svg><span style="font-size:12px;font-weight:500">«include»</span></div><div style="font-size:11px;color:var(--muted)">El caso base siempre incluye al caso destino. Obligatorio.</div></div>
+        <div><div style="display:flex;align-items:center;gap:.5rem;margin-bottom:2px"><svg width="40" height="12" viewBox="0 0 40 12"><line x1="0" y1="6" x2="34" y2="6" stroke="var(--c-amber)" stroke-width="1.2" stroke-dasharray="4,2"/><path d="M28 2L36 6L28 10" fill="none" stroke="var(--c-amber)" stroke-width="1.2"/></svg><span style="font-size:12px;font-weight:500">«extend»</span></div><div style="font-size:11px;color:var(--muted)">El caso extiende al base solo bajo ciertas condiciones. Opcional.</div></div>
+        <div><div style="display:flex;align-items:center;gap:.5rem;margin-bottom:2px"><svg width="40" height="12" viewBox="0 0 40 12"><line x1="0" y1="6" x2="28" y2="6" stroke="var(--c-gray)" stroke-width="1.2"/><polygon points="28,2 36,6 28,10" fill="none" stroke="var(--c-gray)" stroke-width="1.2"/></svg><span style="font-size:12px;font-weight:500">Generalización</span></div><div style="font-size:11px;color:var(--muted)">Un actor hereda el comportamiento de otro más general.</div></div>
+      </div>
+    </div>
+
+    <div style="border:0.5px solid var(--border);border-radius:var(--radius);padding:.8rem">
+      <div style="font-size:11px;font-weight:500;color:var(--c-green);text-transform:uppercase;letter-spacing:.4px;margin-bottom:.6rem">Buenas prácticas de nombrado</div>
+      <div style="display:flex;flex-direction:column;gap:.4rem">
+        <div style="background:rgba(15,110,86,.04);border-radius:4px;padding:.35rem .55rem;font-size:11px;color:var(--muted)">✓ Verbo + objeto: "Autenticar usuario", "Generar reporte"</div>
+        <div style="background:rgba(163,45,45,.04);border-radius:4px;padding:.35rem .55rem;font-size:11px;color:var(--muted)">✗ Solo sustantivo: "Autenticación", "Reporte"</div>
+        <div style="background:rgba(15,110,86,.04);border-radius:4px;padding:.35rem .55rem;font-size:11px;color:var(--muted)">✓ Perspectiva del actor: lo que logra, no cómo funciona</div>
+        <div style="background:rgba(163,45,45,.04);border-radius:4px;padding:.35rem .55rem;font-size:11px;color:var(--muted)">✗ Detalle técnico: "Llamar API de autenticación JWT"</div>
+        <div style="background:rgba(15,110,86,.04);border-radius:4px;padding:.35rem .55rem;font-size:11px;color:var(--muted)">✓ Un caso de uso = un objetivo de negocio completo</div>
+        <div style="background:rgba(163,45,45,.04);border-radius:4px;padding:.35rem .55rem;font-size:11px;color:var(--muted)">✗ Casos demasiado granulares: "Hacer clic en botón Login"</div>
+      </div>
+    </div>
+
+    <div style="border:0.5px solid var(--border);border-radius:var(--radius);padding:.8rem">
+      <div style="font-size:11px;font-weight:500;color:var(--c-amber);text-transform:uppercase;letter-spacing:.4px;margin-bottom:.6rem">Límite del sistema</div>
+      <div style="font-size:11px;color:var(--muted);line-height:1.7;margin-bottom:.6rem">El rectángulo punteado que encierra los casos de uso. Define qué está dentro del sistema y qué es externo. Los actores siempre quedan fuera del límite.</div>
+      <div style="background:rgba(186,117,23,.05);border:0.5px solid rgba(186,117,23,.2);border-radius:4px;padding:.5rem;font-size:11px;color:var(--muted);line-height:1.6">
+        <strong style="color:var(--c-amber)">Regla:</strong> Si un actor puede existir sin el sistema, va fuera del límite. Si solo existe en el contexto del sistema, es un rol interno.
+      </div>
+    </div>
+
+  </div>
+</div>
 `);
 
 
@@ -2768,149 +2823,15 @@ reg('srs-contexto', () => `
 ════════════════════════════════════════ */
 reg('srs-casos', () => `
 <div class="page-header">
-  <div class="page-eyebrow" style="color:var(--c-blue)">● Fase 3 — Especificación</div>
-  <h1 class="page-title">Guía de casos de uso</h1>
-  <p class="page-desc">Los casos de uso describen las interacciones entre los actores y el sistema para alcanzar un objetivo. Son la puente entre el diagrama de contexto y los requisitos funcionales detallados.</p>
-  <div class="std-row"><span class="std-pill">UML 2.5</span><span class="std-pill">IEEE 29148:2018</span><span class="std-pill">BABOK v3</span></div>
+  <div class="page-eyebrow" style="color:var(--c-purple)">● Fase 2 — Análisis</div>
+  <h1 class="page-title">Casos de uso</h1>
+  <p class="page-desc">Define actores y casos de uso del sistema. El diagrama UML se genera automáticamente a partir de los datos registrados.</p>
+  <div class="std-row"><span class="std-pill">UML 2.5</span><span class="std-pill">IEEE 29148:2018</span></div>
 </div>
-
-<div class="tab-nav">
-  <button class="tab-btn on" onclick="tabSel('cu',0,this)">Diagrama de casos de uso</button>
-  <button class="tab-btn" onclick="tabSel('cu',1,this);setTimeout(initSrsCuPlt,60)">Plantilla expandida</button>
-  <button class="tab-btn" onclick="tabSel('cu',2,this)">Elementos clave</button>
-</div>
-
-<div class="tab-panel on" id="cu-0">
-  <div class="card">
-    <div class="card-title">Sistema SGC — Diagrama de casos de uso principales</div>
-    <svg width="100%" viewBox="0 0 680 480" xmlns="http://www.w3.org/2000/svg">
-      <defs><marker id="acu" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>
-
-      <!-- System boundary -->
-      <rect x="160" y="30" width="360" height="420" rx="16" fill="none" stroke="#185FA5" stroke-width="1" stroke-dasharray="5 3"/>
-      <text x="340" y="22" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="11" font-weight="500" fill="#185FA5">Sistema SGC</text>
-
-      <!-- Use cases -->
-      <ellipse cx="340" cy="80"  rx="110" ry="24" fill="#E6F1FB" stroke="#185FA5" stroke-width="1"/>
-      <text x="340" y="80" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" font-weight="500" fill="#042C53">UC-01 Solicitar crédito</text>
-
-      <ellipse cx="340" cy="148" rx="110" ry="24" fill="#E6F1FB" stroke="#185FA5" stroke-width="1"/>
-      <text x="340" y="148" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" font-weight="500" fill="#042C53">UC-02 Consultar score</text>
-
-      <ellipse cx="340" cy="216" rx="110" ry="24" fill="#E6F1FB" stroke="#185FA5" stroke-width="1"/>
-      <text x="340" y="216" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" font-weight="500" fill="#042C53">UC-03 Decidir crédito</text>
-
-      <ellipse cx="340" cy="284" rx="110" ry="24" fill="#E6F1FB" stroke="#185FA5" stroke-width="1"/>
-      <text x="340" y="284" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" font-weight="500" fill="#042C53">UC-04 Notificar resultado</text>
-
-      <ellipse cx="340" cy="352" rx="110" ry="24" fill="#E6F1FB" stroke="#185FA5" stroke-width="1"/>
-      <text x="340" y="352" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" font-weight="500" fill="#042C53">UC-05 Generar reporte</text>
-
-      <ellipse cx="340" cy="420" rx="110" ry="24" fill="#EEEDFE" stroke="#534AB7" stroke-width="1"/>
-      <text x="340" y="420" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" font-weight="500" fill="#26215C">UC-06 Autenticar usuario</text>
-
-      <!-- Actor: Cliente (left) -->
-      <!-- stick figure -->
-      <circle cx="60" cy="126" r="12" fill="none" stroke="#1D9E75" stroke-width="1.5"/>
-      <line x1="60" y1="138" x2="60" y2="176" stroke="#1D9E75" stroke-width="1.5"/>
-      <line x1="40" y1="152" x2="80" y2="152" stroke="#1D9E75" stroke-width="1.5"/>
-      <line x1="60" y1="176" x2="42" y2="196" stroke="#1D9E75" stroke-width="1.5"/>
-      <line x1="60" y1="176" x2="78" y2="196" stroke="#1D9E75" stroke-width="1.5"/>
-      <text x="60" y="210" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="12" font-weight="500" fill="#085041">Cliente</text>
-
-      <!-- Client associations -->
-      <line x1="90" y1="118" x2="228" y2="88"  stroke="#1D9E75" stroke-width="0.8"/>
-      <line x1="90" y1="130" x2="228" y2="216" stroke="#1D9E75" stroke-width="0.8"/>
-      <line x1="90" y1="140" x2="228" y2="284" stroke="#1D9E75" stroke-width="0.8"/>
-
-      <!-- Actor: Analista (left below) -->
-      <circle cx="60" cy="332" r="12" fill="none" stroke="#534AB7" stroke-width="1.5"/>
-      <line x1="60" y1="344" x2="60" y2="382" stroke="#534AB7" stroke-width="1.5"/>
-      <line x1="40" y1="358" x2="80" y2="358" stroke="#534AB7" stroke-width="1.5"/>
-      <line x1="60" y1="382" x2="42" y2="402" stroke="#534AB7" stroke-width="1.5"/>
-      <line x1="60" y1="382" x2="78" y2="402" stroke="#534AB7" stroke-width="1.5"/>
-      <text x="60" y="416" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="12" font-weight="500" fill="#26215C">Analista</text>
-
-      <line x1="90" y1="342" x2="228" y2="352" stroke="#534AB7" stroke-width="0.8"/>
-      <line x1="90" y1="355" x2="228" y2="420" stroke="#534AB7" stroke-width="0.8"/>
-
-      <!-- Actor: Sistema ext (right) -->
-      <circle cx="618" cy="160" r="12" fill="none" stroke="#BA7517" stroke-width="1.5"/>
-      <line x1="618" y1="172" x2="618" y2="210" stroke="#BA7517" stroke-width="1.5"/>
-      <line x1="598" y1="186" x2="638" y2="186" stroke="#BA7517" stroke-width="1.5"/>
-      <line x1="618" y1="210" x2="600" y2="230" stroke="#BA7517" stroke-width="1.5"/>
-      <line x1="618" y1="210" x2="636" y2="230" stroke="#BA7517" stroke-width="1.5"/>
-      <text x="618" y="245" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="11" font-weight="500" fill="#412402">Sistemas</text>
-      <text x="618" y="258" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="11" fill="#BA7517">externos</text>
-
-      <line x1="590" y1="152" x2="452" y2="148" stroke="#BA7517" stroke-width="0.8"/>
-      <line x1="590" y1="168" x2="452" y2="284" stroke="#BA7517" stroke-width="0.8"/>
-
-      <!-- include relationship UC-03 includes UC-02 -->
-      <line x1="340" y1="204" x2="340" y2="172" stroke="#888780" stroke-width="0.8" stroke-dasharray="4 2" marker-end="url(#acu)"/>
-      <text x="360" y="190" font-family="DM Sans,sans-serif" font-size="9" fill="#888780">include</text>
-
-      <!-- include UC-01 includes UC-06 -->
-      <path d="M 340 404 Q 280 400 280 350 Q 280 100 338 100" fill="none" stroke="#888780" stroke-width="0.8" stroke-dasharray="4 2" marker-end="url(#acu)"/>
-      <text x="242" y="255" font-family="DM Sans,sans-serif" font-size="9" fill="#888780">include</text>
-    </svg>
-  </div>
-</div>
-
-<div class="tab-panel" id="cu-1">
-  <div style="background:rgba(24,95,165,.06);border:0.5px solid rgba(24,95,165,.25);border-radius:var(--radius);padding:.5rem .8rem;font-size:11px;color:var(--c-blue);margin-bottom:.8rem">ⓘ Define los casos de uso reales de tu proyecto. Agrega, edita o elimina según tu sistema.</div>
-  <div id="srs-cu-plt"></div>
-</div>
-
-<div class="tab-panel" id="cu-2">
-  <div class="g2">
-    <div class="card" style="border-left:3px solid var(--c-teal)">
-      <div style="font-size:13px;font-weight:500;color:var(--c-teal);margin-bottom:.4rem">Actor</div>
-      <div style="font-size:11px;color:var(--muted);margin-bottom:.5rem">Rol externo que interactúa con el sistema. Puede ser una persona, un sistema externo o un dispositivo. Un actor nunca forma parte del sistema que se está especificando.</div>
-      <div style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.3px;margin-bottom:.2rem">Regla</div>
-      <div style="font-size:11px;color:var(--text)">Nombrar con el rol, no con el nombre real. ✓ «Analista de crédito» ✗ «Juan Pérez»</div>
-    </div>
-    <div class="card" style="border-left:3px solid var(--c-blue)">
-      <div style="font-size:13px;font-weight:500;color:var(--c-blue);margin-bottom:.4rem">Caso de uso</div>
-      <div style="font-size:11px;color:var(--muted);margin-bottom:.5rem">Funcionalidad que el sistema ofrece a sus actores para alcanzar un objetivo concreto. El nombre siempre comienza con un verbo en infinitivo.</div>
-      <div style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.3px;margin-bottom:.2rem">Regla</div>
-      <div style="font-size:11px;color:var(--text)">✓ «Solicitar crédito», «Consultar saldo» ✗ «Crédito», «Sistema de pagos»</div>
-    </div>
-    <div class="card" style="border-left:3px solid var(--c-purple)">
-      <div style="font-size:13px;font-weight:500;color:var(--c-purple);margin-bottom:.4rem">Relación de asociación</div>
-      <div style="font-size:11px;color:var(--muted);margin-bottom:.5rem">Línea sólida entre un actor y un caso de uso. Indica que el actor participa directamente en la ejecución del caso de uso.</div>
-      <div style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.3px;margin-bottom:.2rem">Regla</div>
-      <div style="font-size:11px;color:var(--text)">Todo actor debe tener al menos una asociación. Un caso de uso sin actor es señal de un requisito técnico, no de negocio.</div>
-    </div>
-    <div class="card" style="border-left:3px solid var(--c-amber)">
-      <div style="font-size:13px;font-weight:500;color:var(--c-amber);margin-bottom:.4rem">«include» y «extend»</div>
-      <div style="font-size:11px;color:var(--muted);margin-bottom:.5rem"><strong>include</strong>: el caso base siempre invoca al incluido (comportamiento obligatorio). <strong>extend</strong>: el caso extensión se invoca solo bajo ciertas condiciones (comportamiento opcional).</div>
-      <div style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.3px;margin-bottom:.2rem">Regla</div>
-      <div style="font-size:11px;color:var(--text)">«Autenticar usuario» es include de casi todos. «Notificar por SMS» puede ser extend si el canal es opcional.</div>
-    </div>
-  </div>
-  <div class="card" style="margin-top:1rem">
-    <div class="card-title">Escala de complejidad recomendada</div>
-    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.6rem;margin-top:.5rem">
-      <div style="background:rgba(15,110,86,.05);border-radius:var(--radius);padding:.65rem;border:0.5px solid rgba(15,110,86,.2)">
-        <div style="font-size:12px;font-weight:500;color:var(--c-green);margin-bottom:.2rem">Simple</div>
-        <div style="font-size:11px;color:var(--muted)">3–5 pasos, un actor, sin bifurcaciones. Ej: Consultar saldo, Ver perfil.</div>
-      </div>
-      <div style="background:rgba(186,117,23,.05);border-radius:var(--radius);padding:.65rem;border:0.5px solid rgba(186,117,23,.2)">
-        <div style="font-size:12px;font-weight:500;color:var(--c-amber);margin-bottom:.2rem">Medio</div>
-        <div style="font-size:11px;color:var(--muted)">5–9 pasos, 1–2 actores, 1–2 flujos alternativos. Ej: Solicitar crédito.</div>
-      </div>
-      <div style="background:rgba(163,45,45,.05);border-radius:var(--radius);padding:.65rem;border:0.5px solid rgba(163,45,45,.2)">
-        <div style="font-size:12px;font-weight:500;color:var(--c-red);margin-bottom:.2rem">Complejo</div>
-        <div style="font-size:11px;color:var(--muted)">9+ pasos, múltiples actores y flujos. Candidato a descomponer en sub-casos.</div>
-      </div>
-    </div>
-  </div>
+<div id="casos-mount"></div>
 `);
 
-/* ════════════════════════════════════════
-   PAGE: GUÍA BPMN
-════════════════════════════════════════ */
+
 reg('srs-bpmn', () => `
 <div class="page-header">
   <div class="page-eyebrow" style="color:var(--c-purple)">● Fase 2 — Análisis</div>
@@ -6494,8 +6415,8 @@ function onPageShow(id) {
   if (id==='eli-plantillas') setTimeout(initEliPlantillas, 50);
   if (id==='srs-bpmn') setTimeout(bpmnLoad, 50);
   if (id==='srs-glosario') initGlosario();
+  if (id==='srs-casos') setTimeout(initCasos, 50);
   if (id==='srs-contexto') setTimeout(function(){ if(document.getElementById('srs-ctx-plt')) initSrsCtxPlt(); }, 200);
-  if (id==='srs-casos') setTimeout(function(){ if(document.getElementById('srs-cu-plt')) initSrsCuPlt(); }, 200);
   if (id==='srs-editor') setTimeout(initSrsEditor, 50);
   if (id==='srs-gherkin') setTimeout(function(){ if(typeof updateGherkin==='function') updateGherkin(); }, 100);
   if (id==='srs-detector') setTimeout(function(){ if(typeof runDetector==='function') runDetector(); }, 100);
@@ -6911,6 +6832,278 @@ function verSet(id,val){
 function verReset(){
   localStorage.removeItem(VER_KEY);
   var el=document.getElementById('ana-ver-mount'); if(el){el.innerHTML='';initAnaVer();}
+}
+
+
+/* ── Casos de uso ── */
+const UC_KEY = 'fw_uc_v1';
+function defUCDiagram(n){
+  return {id:'d'+(n||1), nombre:'Diagrama '+(n||1), sistema:'Sistema', actores:[
+    {id:'A1',nombre:'Usuario final',tipo:'primario'},
+    {id:'A2',nombre:'Administrador',tipo:'primario'},
+  ], casos:[]};
+}
+function defUC(){ return {diagramas:[defUCDiagram(1)], sel:0}; }
+function loadUC(){
+  try{
+    var d=JSON.parse(localStorage.getItem(UC_KEY));
+    if(!d||!d.diagramas||!Array.isArray(d.diagramas)||d.diagramas.length===0) return defUC();
+    return d;
+  }catch(e){return defUC();}
+}
+function saveUC(data){ localStorage.setItem(UC_KEY,JSON.stringify(data)); }
+
+function initCasos(){
+  var el=document.getElementById('casos-mount'); if(!el) return;
+  el.innerHTML='';
+  window._ucCaseSel=window._ucCaseSel||0;
+  renderCasos(loadUC());
+}
+
+function renderCasos(data){
+  var el=document.getElementById('casos-mount'); if(!el) return;
+  function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
+  var dSel = Math.min(data.sel||0, data.diagramas.length-1);
+  var d = data.diagramas[dSel];
+  var cSel = Math.min(window._ucCaseSel||0, d.casos.length-1);
+
+  // ── Diagrams selector bar ──
+  var html = '<div style="display:flex;align-items:center;gap:.4rem;flex-wrap:wrap;margin-bottom:.8rem;padding:.5rem .7rem;background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius)">'
+    +'<span style="font-size:11px;font-weight:500;color:var(--muted);margin-right:.2rem">Diagramas:</span>';
+  data.diagramas.forEach(function(dg,i){
+    var active=i===dSel;
+    html+='<button onclick="ucSelDiagram('+i+')" style="padding:3px 10px;border-radius:5px;border:0.5px solid '+(active?'var(--c-purple)':'var(--border2)')+';background:'+(active?'var(--c-purple)':'var(--surface)')+';color:'+(active?'#fff':'var(--muted)')+';font-size:11px;cursor:pointer;font-family:var(--font-sans)">'+esc(dg.nombre)+'</button>';
+  });
+  html+='<button onclick="ucAddDiagram()" style="padding:3px 10px;border-radius:5px;border:0.5px solid var(--border2);background:var(--surface);color:var(--c-purple);font-size:11px;cursor:pointer;font-family:var(--font-sans)">+ Nuevo</button>';
+  if(data.diagramas.length>1){
+    html+='<button onclick="ucDelDiagram('+dSel+')" style="padding:3px 8px;border-radius:5px;border:0.5px solid rgba(163,45,45,.3);background:var(--surface);color:var(--c-red);font-size:11px;cursor:pointer;font-family:var(--font-sans)">× Eliminar</button>';
+  }
+  // Rename
+  html+='<input id="uc-dname" value="'+esc(d.nombre)+'" style="margin-left:.4rem;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:3px 7px;font-size:11px;color:var(--text);outline:none" oninput="ucRenameDiagram(this.value)">';
+  html+='</div>';
+
+  // ── Tab nav ──
+  html += '<div class="tab-nav" id="uc-tab-nav">'
+    +'<button class="tab-btn on" onclick="ucTabSel(0)">Diagrama</button>'
+    +'<button class="tab-btn" onclick="ucTabSel(1)">Actores y casos de uso</button>'
+    +'</div>';
+
+  // ── PANEL 0: Diagram ──
+  html += '<div id="uc-panel-0" class="tab-panel on">';
+  html += '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.8rem">'
+    +'<div style="display:flex;align-items:center;gap:.5rem">'
+    +'<label style="font-size:11px;color:var(--muted)">Nombre del sistema:</label>'
+    +'<input id="uc-sistema" value="'+esc(d.sistema)+'" style="background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:3px 8px;font-size:12px;color:var(--text);outline:none;font-weight:500" oninput="ucSetSistema(this.value)">'
+    +'</div>'
+    +'<button class="btn btn-sm" onclick="ucExportSVG()" style="color:var(--c-blue);border-color:rgba(24,95,165,.3)">⬇ Exportar SVG</button>'
+    +'</div>';
+  html += '<div id="uc-diagram-wrap" style="background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius);overflow:auto;padding:.5rem">'
+    + buildUCDiagram(d) + '</div>';
+  html += '</div>';
+
+  // ── PANEL 1: Editor ──
+  html += '<div id="uc-panel-1" class="tab-panel" style="display:none">';
+
+  // Actores
+  html += '<div class="card" style="margin-bottom:.8rem">'
+    +'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.6rem">'
+    +'<div class="card-title">Actores</div>'
+    +'<button class="btn btn-sm" style="background:var(--c-purple);color:#fff;border-color:var(--c-purple)" onclick="ucAddActor()">+ Actor</button>'
+    +'</div>';
+  d.actores.forEach(function(a,i){
+    html += '<div style="display:grid;grid-template-columns:60px 1fr 100px 28px;gap:.4rem;align-items:center;margin-bottom:.3rem">'
+      +'<input value="'+esc(a.id)+'" style="background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 6px;font-size:11px;font-family:var(--font-mono);color:var(--c-purple);outline:none;width:100%" oninput="ucSetActor('+i+',\'id\',this.value)">'
+      +'<input value="'+esc(a.nombre)+'" placeholder="Nombre del actor" style="background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 6px;font-size:12px;color:var(--text);outline:none;width:100%" oninput="ucSetActor('+i+',\'nombre\',this.value)">'
+      +'<select style="background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 5px;font-size:11px;color:var(--text);outline:none" onchange="ucSetActor('+i+',\'tipo\',this.value)">'
+      +'<option'+(a.tipo==='primario'?' selected':'')+'>primario</option>'
+      +'<option'+(a.tipo==='secundario'?' selected':'')+'>secundario</option>'
+      +'</select>'
+      +'<button style="background:none;border:none;cursor:pointer;color:var(--muted);font-size:15px" onclick="ucDelActor('+i+')">×</button>'
+      +'</div>';
+  });
+  html += '</div>';
+
+  // Cases list + detail
+  html += '<div style="display:grid;grid-template-columns:200px 1fr;gap:.8rem">';
+  html += '<div>'
+    +'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.4rem">'
+    +'<div class="card-title">Casos de uso</div>'
+    +'<button class="btn btn-sm" style="background:var(--c-purple);color:#fff;border-color:var(--c-purple);font-size:10px" onclick="ucAddCaso()">+</button>'
+    +'</div>';
+  d.casos.forEach(function(cu,i){
+    var active=i===cSel;
+    html+='<div onclick="window._ucCaseSel='+i+';renderCasos(loadUC())" style="padding:.4rem .6rem;border-radius:var(--radius);border:0.5px solid '+(active?'var(--c-purple)':'var(--border)')+';background:'+(active?'rgba(83,52,131,.06)':'var(--surface)')+';cursor:pointer;margin-bottom:.2rem">'
+      +'<div style="font-size:10px;font-family:var(--font-mono);color:var(--c-purple)">'+esc(cu.id)+'</div>'
+      +'<div style="font-size:11px;color:var(--text);margin-top:1px">'+esc(cu.nombre)+'</div>'
+      +'</div>';
+  });
+  html += '</div>';
+
+  if(d.casos.length===0){
+    html+='<div class="card" style="display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:13px">Agrega el primer caso de uso →</div>';
+  } else {
+    var cu=d.casos[cSel];
+    html+='<div class="card">'
+      +'<div style="display:grid;grid-template-columns:90px 1fr;gap:.5rem;margin-bottom:.5rem">'
+      +'<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">ID</label>'
+      +'<input value="'+esc(cu.id)+'" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:4px 7px;font-size:11px;font-family:var(--font-mono);color:var(--c-purple);outline:none" oninput="ucSetCaso('+cSel+',\'id\',this.value)"></div>'
+      +'<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">Nombre</label>'
+      +'<input value="'+esc(cu.nombre)+'" placeholder="Ej: Autenticar usuario" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:4px 7px;font-size:12px;color:var(--text);outline:none" oninput="ucSetCaso('+cSel+',\'nombre\',this.value)"></div>'
+      +'</div>'
+      +'<div style="margin-bottom:.5rem"><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:4px">Actores</label>'
+      +'<div style="display:flex;flex-wrap:wrap;gap:.3rem">'
+      +d.actores.map(function(a){
+        var checked=(cu.actores||[]).indexOf(a.id)>=0;
+        return '<label style="display:flex;align-items:center;gap:4px;padding:3px 8px;border-radius:4px;border:0.5px solid '+(checked?'var(--c-purple)':'var(--border2)')+';background:'+(checked?'rgba(83,52,131,.08)':'var(--surface)')+';cursor:pointer;font-size:11px;color:'+(checked?'var(--c-purple)':'var(--muted)')+'">'
+          +'<input type="checkbox" '+(checked?'checked':'')+' style="cursor:pointer" onchange="ucToggleActor('+cSel+',\''+a.id+'\')">'
+          +esc(a.nombre)+'</label>';
+      }).join('')+'</div></div>'
+      +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-bottom:.5rem">'
+      +'<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">Precondición</label>'
+      +'<textarea placeholder="Estado previo requerido..." style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:4px 7px;font-size:12px;color:var(--text);resize:vertical;outline:none;line-height:1.5" oninput="ucSetCaso('+cSel+',\'pre\',this.value)">'+esc(cu.pre||'')+'</textarea></div>'
+      +'<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">Postcondición</label>'
+      +'<textarea placeholder="Estado final..." style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:4px 7px;font-size:12px;color:var(--text);resize:vertical;outline:none;line-height:1.5" oninput="ucSetCaso('+cSel+',\'post\',this.value)">'+esc(cu.post||'')+'</textarea></div>'
+      +'</div>'
+      +'<div style="margin-bottom:.5rem"><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">Flujo principal</label>'
+      +'<textarea rows="4" placeholder="1. Actor hace...\n2. Sistema responde..." style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:4px 7px;font-size:12px;color:var(--text);font-family:var(--font-mono);resize:vertical;outline:none;line-height:1.6" oninput="ucSetCaso('+cSel+',\'flujo\',this.value)">'+esc(cu.flujo||'')+'</textarea></div>'
+      +'<div style="margin-bottom:.5rem"><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">Flujo alternativo / excepciones</label>'
+      +'<textarea placeholder="Ej: Si credenciales inválidas → mostrar error" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:4px 7px;font-size:12px;color:var(--text);resize:vertical;outline:none;line-height:1.5" oninput="ucSetCaso('+cSel+',\'alt\',this.value)">'+esc(cu.alt||'')+'</textarea></div>'
+      +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-bottom:.6rem">'
+      +'<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">«include»</label>'
+      +'<input value="'+esc(cu.include||'')+'" placeholder="Ej: CU-001" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:4px 7px;font-size:12px;font-family:var(--font-mono);color:var(--c-blue);outline:none" oninput="ucSetCaso('+cSel+',\'include\',this.value)"></div>'
+      +'<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">«extend»</label>'
+      +'<input value="'+esc(cu.extend||'')+'" placeholder="Ej: CU-005" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:4px 7px;font-size:12px;font-family:var(--font-mono);color:var(--c-amber);outline:none" oninput="ucSetCaso('+cSel+',\'extend\',this.value)"></div>'
+      +'</div>'
+      +'<div style="display:flex;justify-content:flex-end">'
+      +'<button class="btn btn-sm" style="color:var(--c-red);border-color:rgba(163,45,45,.3)" onclick="ucDelCaso('+cSel+')">× Eliminar</button>'
+      +'</div></div>';
+  }
+  html+='</div></div>';
+  el.innerHTML=html;
+}
+
+function buildUCDiagram(d){
+  var actores=d.actores||[], casos=d.casos||[], sistema=d.sistema||'Sistema';
+  if(casos.length===0) return '<div style="text-align:center;padding:2rem;color:var(--muted);font-size:13px">Agrega casos de uso para ver el diagrama.</div>';
+  var W=780, marginX=110, rowH=52;
+  var boxH=Math.max(casos.length*rowH+40,120), totalH=boxH+80;
+  var caseY=[], startY=(totalH-casos.length*rowH)/2+20;
+  casos.forEach(function(cu,i){caseY[i]=startY+i*rowH+rowH/2;});
+  function escSVG(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+  var lines=[], actors=[], casesEl=[], rels=[];
+  lines.push('<rect x="'+marginX+'" y="20" width="'+(W-marginX*2)+'" height="'+boxH+'" rx="12" fill="none" stroke="var(--c-purple)" stroke-width="1.2" stroke-dasharray="6,3"/>');
+  lines.push('<text x="'+(marginX+10)+'" y="36" font-family="DM Sans,sans-serif" font-size="11" font-weight="500" fill="var(--c-purple)">'+escSVG(sistema)+'</text>');
+  casos.forEach(function(cu,i){
+    var cy=caseY[i], cx=W/2;
+    casesEl.push('<ellipse cx="'+cx+'" cy="'+cy+'" rx="80" ry="16" fill="var(--surface)" stroke="var(--c-purple)" stroke-width="1"/>');
+    casesEl.push('<text x="'+cx+'" y="'+(cy+1)+'" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="10" fill="var(--text)">'+escSVG(cu.nombre)+'</text>');
+    if(cu.include) cu.include.split(',').forEach(function(id){
+      var j=casos.findIndex(function(c2){return c2.id.trim()===id.trim();});
+      if(j>=0&&j!==i){rels.push('<line x1="'+cx+'" y1="'+(cy-16)+'" x2="'+cx+'" y2="'+(caseY[j]+16)+'" stroke="var(--c-blue)" stroke-width="0.8" stroke-dasharray="4,2" marker-end="url(#arr-uc)"/>');rels.push('<text x="'+(cx+5)+'" y="'+((cy+caseY[j])/2)+'" font-family="DM Sans,sans-serif" font-size="9" fill="var(--c-blue)">«include»</text>');}
+    });
+    if(cu.extend) cu.extend.split(',').forEach(function(id){
+      var j=casos.findIndex(function(c2){return c2.id.trim()===id.trim();});
+      if(j>=0&&j!==i){rels.push('<line x1="'+(cx-20)+'" y1="'+(cy-16)+'" x2="'+(cx-20)+'" y2="'+(caseY[j]+16)+'" stroke="var(--c-amber)" stroke-width="0.8" stroke-dasharray="4,2" marker-end="url(#arr-uc)"/>');rels.push('<text x="'+(cx-60)+'" y="'+((cy+caseY[j])/2)+'" font-family="DM Sans,sans-serif" font-size="9" fill="var(--c-amber)">«extend»</text>');}
+    });
+  });
+  function actorFig(ax,ay,nombre,color){
+    return '<circle cx="'+ax+'" cy="'+(ay-28)+'" r="9" fill="none" stroke="'+color+'" stroke-width="1.2"/>'
+      +'<line x1="'+ax+'" y1="'+(ay-19)+'" x2="'+ax+'" y2="'+(ay-5)+'" stroke="'+color+'" stroke-width="1.2"/>'
+      +'<line x1="'+(ax-12)+'" y1="'+(ay-14)+'" x2="'+(ax+12)+'" y2="'+(ay-14)+'" stroke="'+color+'" stroke-width="1.2"/>'
+      +'<line x1="'+ax+'" y1="'+(ay-5)+'" x2="'+(ax-10)+'" y2="'+ay+'" stroke="'+color+'" stroke-width="1.2"/>'
+      +'<line x1="'+ax+'" y1="'+(ay-5)+'" x2="'+(ax+10)+'" y2="'+ay+'" stroke="'+color+'" stroke-width="1.2"/>'
+      +'<text x="'+ax+'" y="'+(ay+14)+'" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="10" fill="'+color+'">'+escSVG(nombre)+'</text>';
+  }
+  var prim=actores.filter(function(a){return a.tipo==='primario';}),
+      sec=actores.filter(function(a){return a.tipo==='secundario';});
+  var sp1=Math.min(boxH/(Math.max(prim.length,1)+1),60);
+  prim.forEach(function(a,i){
+    var ax=50,ay=40+(i+1)*sp1;
+    actors.push(actorFig(ax,ay,a.nombre,'var(--c-purple)'));
+    casos.forEach(function(cu,ci){if((cu.actores||[]).indexOf(a.id)>=0) rels.push('<line x1="62" y1="'+ay+'" x2="'+(marginX+80)+'" y2="'+caseY[ci]+'" stroke="var(--c-purple)" stroke-width="0.8" opacity="0.5"/>');});
+  });
+  var sp2=Math.min(boxH/(Math.max(sec.length,1)+1),60);
+  sec.forEach(function(a,i){
+    var ax=W-50,ay=40+(i+1)*sp2;
+    actors.push(actorFig(ax,ay,a.nombre,'var(--c-teal)'));
+    casos.forEach(function(cu,ci){if((cu.actores||[]).indexOf(a.id)>=0) rels.push('<line x1="'+(W-62)+'" y1="'+ay+'" x2="'+(W-marginX-80)+'" y2="'+caseY[ci]+'" stroke="var(--c-teal)" stroke-width="0.8" opacity="0.5"/>');});
+  });
+  return '<svg id="uc-svg" width="100%" viewBox="0 0 '+W+' '+totalH+'" xmlns="http://www.w3.org/2000/svg">'
+    +'<defs><marker id="arr-uc" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5"/></marker></defs>'
+    +lines.join('')+rels.join('')+casesEl.join('')+actors.join('')+'</svg>';
+}
+
+function ucSelDiagram(i){
+  var data=loadUC(); data.sel=i; window._ucCaseSel=0; saveUC(data);
+  var el=document.getElementById('casos-mount'); if(el){el.innerHTML='';renderCasos(data);}
+}
+function ucAddDiagram(){
+  var data=loadUC();
+  data.diagramas.push(defUCDiagram(data.diagramas.length+1));
+  data.sel=data.diagramas.length-1; window._ucCaseSel=0; saveUC(data);
+  var el=document.getElementById('casos-mount'); if(el){el.innerHTML='';renderCasos(data);}
+}
+function ucDelDiagram(i){
+  var data=loadUC();
+  if(data.diagramas.length<=1) return;
+  data.diagramas.splice(i,1); data.sel=Math.max(0,i-1); window._ucCaseSel=0; saveUC(data);
+  var el=document.getElementById('casos-mount'); if(el){el.innerHTML='';renderCasos(data);}
+}
+function ucRenameDiagram(v){
+  var data=loadUC(); data.diagramas[data.sel].nombre=v; saveUC(data);
+}
+function ucSetSistema(v){
+  var data=loadUC(); data.diagramas[data.sel].sistema=v; saveUC(data);
+  var wrap=document.getElementById('uc-diagram-wrap');
+  if(wrap) wrap.innerHTML=buildUCDiagram(data.diagramas[data.sel]);
+}
+function ucTabSel(i){
+  document.querySelectorAll('#uc-tab-nav .tab-btn').forEach(function(b,j){b.classList.toggle('on',j===i);});
+  document.getElementById('uc-panel-0').style.display=i===0?'block':'none';
+  document.getElementById('uc-panel-1').style.display=i===1?'block':'none';
+}
+function ucSetActor(i,k,v){
+  var data=loadUC(); data.diagramas[data.sel].actores[i][k]=v; saveUC(data); renderCasos(data);
+}
+function ucAddActor(){
+  var data=loadUC(); var d=data.diagramas[data.sel];
+  d.actores.push({id:'A'+(d.actores.length+1),nombre:'Nuevo actor',tipo:'primario'});
+  saveUC(data); var el=document.getElementById('casos-mount'); if(el){el.innerHTML='';renderCasos(data);}
+}
+function ucDelActor(i){
+  var data=loadUC(); data.diagramas[data.sel].actores.splice(i,1); saveUC(data);
+  var el=document.getElementById('casos-mount'); if(el){el.innerHTML='';renderCasos(data);}
+}
+function ucSetCaso(i,k,v){
+  var data=loadUC(); data.diagramas[data.sel].casos[i][k]=v; saveUC(data);
+  if(k==='nombre'||k==='include'||k==='extend'){
+    var wrap=document.getElementById('uc-diagram-wrap');
+    if(wrap) wrap.innerHTML=buildUCDiagram(data.diagramas[data.sel]);
+  }
+}
+function ucToggleActor(ci,aid){
+  var data=loadUC(); var actores=data.diagramas[data.sel].casos[ci].actores||[];
+  var idx=actores.indexOf(aid); if(idx>=0) actores.splice(idx,1); else actores.push(aid);
+  data.diagramas[data.sel].casos[ci].actores=actores; saveUC(data); renderCasos(data);
+}
+function ucAddCaso(){
+  var data=loadUC(); var d=data.diagramas[data.sel];
+  var n=d.casos.length+1;
+  d.casos.push({id:'CU-'+String(n).padStart(3,'0'),nombre:'Nuevo caso de uso',actores:[],pre:'',post:'',flujo:'',alt:'',include:'',extend:''});
+  window._ucCaseSel=d.casos.length-1; saveUC(data);
+  var el=document.getElementById('casos-mount'); if(el){el.innerHTML='';renderCasos(data);}
+}
+function ucDelCaso(i){
+  var data=loadUC(); data.diagramas[data.sel].casos.splice(i,1);
+  window._ucCaseSel=Math.max(0,i-1); saveUC(data);
+  var el=document.getElementById('casos-mount'); if(el){el.innerHTML='';renderCasos(data);}
+}
+function ucExportSVG(){
+  var svg=document.getElementById('uc-svg'); if(!svg) return;
+  var blob=new Blob([svg.outerHTML],{type:'image/svg+xml'});
+  var a=document.createElement('a'); a.href=URL.createObjectURL(blob);
+  a.download='casos-de-uso.svg'; a.click(); URL.revokeObjectURL(a.href);
 }
 
 buildAll();
