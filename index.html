@@ -2443,6 +2443,133 @@ reg('ana-modelado', () => `
 
   </div>
 </div>
+
+<!-- ── Diagrama de contexto elementos ── -->
+<div class="card" style="margin-top:1rem">
+  <div style="font-size:15px;font-weight:500;font-family:var(--font-serif);margin-bottom:.8rem">Elementos — Diagrama de contexto (Nivel 0)</div>
+  <div class="g2">
+
+    <div style="border:0.5px solid var(--border);border-radius:var(--radius);padding:.8rem">
+      <div style="font-size:11px;font-weight:500;color:var(--c-teal);text-transform:uppercase;letter-spacing:.4px;margin-bottom:.6rem">Entidades externas</div>
+      <div style="display:flex;flex-direction:column;gap:.5rem">
+        <div style="display:flex;gap:.6rem;align-items:flex-start">
+          <svg width="32" height="32" viewBox="0 0 32 32" style="flex-shrink:0"><circle cx="16" cy="16" r="13" fill="none" stroke="var(--c-teal)" stroke-width="1.5"/><text x="16" y="17" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="8" fill="var(--c-teal)">actor</text></svg>
+          <div><div style="font-size:12px;font-weight:500;color:var(--text)">Actor / Usuario</div><div style="font-size:11px;color:var(--muted);line-height:1.5">Persona o rol que interactúa directamente con el sistema enviando o recibiendo datos.</div></div>
+        </div>
+        <div style="display:flex;gap:.6rem;align-items:flex-start">
+          <svg width="32" height="32" viewBox="0 0 32 32" style="flex-shrink:0"><rect x="3" y="3" width="26" height="26" rx="4" fill="none" stroke="var(--c-blue)" stroke-width="1.5"/><text x="16" y="17" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="7" fill="var(--c-blue)">sistema</text></svg>
+          <div><div style="font-size:12px;font-weight:500;color:var(--text)">Sistema externo</div><div style="font-size:11px;color:var(--muted);line-height:1.5">API, base de datos, sistema de terceros o servicio externo con el que el sistema se integra.</div></div>
+        </div>
+        <div style="display:flex;gap:.6rem;align-items:flex-start">
+          <svg width="32" height="32" viewBox="0 0 32 32" style="flex-shrink:0"><rect x="3" y="3" width="26" height="26" rx="4" fill="none" stroke="var(--c-amber)" stroke-width="1.5" stroke-dasharray="4,2"/><text x="16" y="17" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="7" fill="var(--c-amber)">org</text></svg>
+          <div><div style="font-size:12px;font-weight:500;color:var(--text)">Organización</div><div style="font-size:11px;color:var(--muted);line-height:1.5">Entidad organizacional externa (empresa, área, departamento) que provee o consume información.</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div style="border:0.5px solid var(--border);border-radius:var(--radius);padding:.8rem">
+      <div style="font-size:11px;font-weight:500;color:var(--c-blue);text-transform:uppercase;letter-spacing:.4px;margin-bottom:.6rem">Flujos de datos</div>
+      <div style="display:flex;flex-direction:column;gap:.5rem">
+        <div><div style="display:flex;align-items:center;gap:.5rem;margin-bottom:2px"><svg width="60" height="14" viewBox="0 0 60 14"><line x1="0" y1="7" x2="50" y2="7" stroke="var(--c-green)" stroke-width="1.5" marker-end="url(#arr-m1)"/><defs><marker id="arr-m1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M2 1L8 5L2 9" fill="none" stroke="var(--c-green)" stroke-width="1.5"/></marker></defs><text x="52" y="10" font-family="DM Sans,sans-serif" font-size="9" fill="var(--c-green)"></text></svg><span style="font-size:12px;font-weight:500;color:var(--c-green)">Entrada</span></div><div style="font-size:11px;color:var(--muted)">Datos que fluyen desde una entidad externa hacia el sistema central.</div></div>
+        <div><div style="display:flex;align-items:center;gap:.5rem;margin-bottom:2px"><svg width="60" height="14" viewBox="0 0 60 14"><line x1="0" y1="7" x2="50" y2="7" stroke="var(--c-blue)" stroke-width="1.5" marker-end="url(#arr-m2)"/><defs><marker id="arr-m2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M2 1L8 5L2 9" fill="none" stroke="var(--c-blue)" stroke-width="1.5"/></marker></defs></svg><span style="font-size:12px;font-weight:500;color:var(--c-blue)">Salida</span></div><div style="font-size:11px;color:var(--muted)">Datos que el sistema envía hacia una entidad externa como resultado de su procesamiento.</div></div>
+        <div><div style="display:flex;align-items:center;gap:.5rem;margin-bottom:2px"><svg width="60" height="14" viewBox="0 0 60 14"><line x1="0" y1="7" x2="50" y2="7" stroke="var(--c-purple)" stroke-width="1.5" marker-end="url(#arr-m3)" marker-start="url(#arr-m3s)"/><defs><marker id="arr-m3" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M2 1L8 5L2 9" fill="none" stroke="var(--c-purple)" stroke-width="1.5"/></marker><marker id="arr-m3s" viewBox="0 0 10 10" refX="2" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="var(--c-purple)" stroke-width="1.5"/></marker></defs></svg><span style="font-size:12px;font-weight:500;color:var(--c-purple)">Bidireccional</span></div><div style="font-size:11px;color:var(--muted)">Flujo en ambas direcciones: el sistema envía y recibe datos con la misma entidad.</div></div>
+      </div>
+    </div>
+
+    <div style="border:0.5px solid var(--border);border-radius:var(--radius);padding:.8rem">
+      <div style="font-size:11px;font-weight:500;color:var(--c-green);text-transform:uppercase;letter-spacing:.4px;margin-bottom:.6rem">Buenas prácticas</div>
+      <div style="display:flex;flex-direction:column;gap:.4rem">
+        <div style="background:rgba(15,110,86,.04);border-radius:4px;padding:.35rem .55rem;font-size:11px;color:var(--muted)">✓ Solo muestra el sistema a nivel caja negra — sin internos</div>
+        <div style="background:rgba(163,45,45,.04);border-radius:4px;padding:.35rem .55rem;font-size:11px;color:var(--muted)">✗ No incluyas módulos ni componentes internos del sistema</div>
+        <div style="background:rgba(15,110,86,.04);border-radius:4px;padding:.35rem .55rem;font-size:11px;color:var(--muted)">✓ Etiqueta cada flujo con el nombre del dato, no del proceso</div>
+        <div style="background:rgba(163,45,45,.04);border-radius:4px;padding:.35rem .55rem;font-size:11px;color:var(--muted)">✗ No uses verbos en las etiquetas: "Enviar datos" → "Datos del cliente"</div>
+        <div style="background:rgba(15,110,86,.04);border-radius:4px;padding:.35rem .55rem;font-size:11px;color:var(--muted)">✓ Cada entidad externa debe tener al menos un flujo con el sistema</div>
+        <div style="background:rgba(163,45,45,.04);border-radius:4px;padding:.35rem .55rem;font-size:11px;color:var(--muted)">✗ No conectes entidades externas entre sí — solo con el sistema</div>
+      </div>
+    </div>
+
+    <div style="border:0.5px solid var(--border);border-radius:var(--radius);padding:.8rem">
+      <div style="font-size:11px;font-weight:500;color:var(--c-amber);text-transform:uppercase;letter-spacing:.4px;margin-bottom:.6rem">Diferencia con DFD Nivel 1</div>
+      <div style="font-size:11px;color:var(--muted);line-height:1.7;margin-bottom:.5rem">El diagrama de contexto (Nivel 0) muestra el sistema como una sola burbuja. El DFD Nivel 1 descompone esa burbuja en procesos internos.</div>
+      <div style="display:flex;flex-direction:column;gap:.3rem">
+        <div style="display:flex;gap:.5rem;font-size:11px"><span style="color:var(--c-purple);font-weight:500;min-width:60px">Nivel 0</span><span style="color:var(--muted)">Una burbuja = todo el sistema. Define qué entra y qué sale.</span></div>
+        <div style="display:flex;gap:.5rem;font-size:11px"><span style="color:var(--c-blue);font-weight:500;min-width:60px">Nivel 1</span><span style="color:var(--muted)">Múltiples burbujas = procesos internos. Define cómo se transforma la información.</span></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ── BPMN elementos ── -->
+<div class="card" style="margin-top:1rem">
+  <div style="font-size:15px;font-weight:500;font-family:var(--font-serif);margin-bottom:.8rem">Elementos BPMN 2.0 — Referencia rápida</div>
+  <div class="g2">
+
+    <div style="border:0.5px solid var(--border);border-radius:var(--radius);padding:.8rem">
+      <div style="font-size:11px;font-weight:500;color:var(--c-green);text-transform:uppercase;letter-spacing:.4px;margin-bottom:.6rem">Eventos</div>
+      <div style="display:flex;flex-direction:column;gap:.5rem">
+        <div style="display:flex;gap:.6rem;align-items:center">
+          <svg width="28" height="28" viewBox="0 0 28 28"><circle cx="14" cy="14" r="11" fill="none" stroke="var(--c-green)" stroke-width="1.5"/></svg>
+          <div><div style="font-size:12px;font-weight:500;color:var(--text)">Evento de inicio</div><div style="font-size:11px;color:var(--muted)">Círculo simple. Inicia el flujo del proceso.</div></div>
+        </div>
+        <div style="display:flex;gap:.6rem;align-items:center">
+          <svg width="28" height="28" viewBox="0 0 28 28"><circle cx="14" cy="14" r="11" fill="none" stroke="var(--c-red)" stroke-width="3"/></svg>
+          <div><div style="font-size:12px;font-weight:500;color:var(--text)">Evento de fin</div><div style="font-size:11px;color:var(--muted)">Círculo borde grueso. Termina el flujo del proceso.</div></div>
+        </div>
+        <div style="display:flex;gap:.6rem;align-items:center">
+          <svg width="28" height="28" viewBox="0 0 28 28"><circle cx="14" cy="14" r="11" fill="none" stroke="var(--c-amber)" stroke-width="1.5"/><circle cx="14" cy="14" r="8" fill="none" stroke="var(--c-amber)" stroke-width="1"/></svg>
+          <div><div style="font-size:12px;font-weight:500;color:var(--text)">Evento intermedio</div><div style="font-size:11px;color:var(--muted)">Doble círculo. Ocurre durante el proceso (espera, mensaje, error).</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div style="border:0.5px solid var(--border);border-radius:var(--radius);padding:.8rem">
+      <div style="font-size:11px;font-weight:500;color:var(--c-blue);text-transform:uppercase;letter-spacing:.4px;margin-bottom:.6rem">Actividades y compuertas</div>
+      <div style="display:flex;flex-direction:column;gap:.5rem">
+        <div style="display:flex;gap:.6rem;align-items:center">
+          <svg width="44" height="28" viewBox="0 0 44 28"><rect x="2" y="2" width="40" height="24" rx="5" fill="none" stroke="var(--c-blue)" stroke-width="1.5"/></svg>
+          <div><div style="font-size:12px;font-weight:500;color:var(--text)">Tarea</div><div style="font-size:11px;color:var(--muted)">Rectángulo. Unidad de trabajo atómica realizada por un actor o sistema.</div></div>
+        </div>
+        <div style="display:flex;gap:.6rem;align-items:center">
+          <svg width="44" height="28" viewBox="0 0 44 28"><rect x="2" y="2" width="40" height="24" rx="5" fill="none" stroke="var(--c-blue)" stroke-width="1.5"/><rect x="2" y="2" width="40" height="24" rx="5" fill="none" stroke="var(--c-blue)" stroke-width="0.5" transform="translate(3,3)"/></svg>
+          <div><div style="font-size:12px;font-weight:500;color:var(--text)">Subproceso</div><div style="font-size:11px;color:var(--muted)">Rectángulo doble. Agrupa tareas que forman un proceso secundario expandible.</div></div>
+        </div>
+        <div style="display:flex;gap:.6rem;align-items:center">
+          <svg width="28" height="28" viewBox="0 0 28 28"><polygon points="14,2 26,14 14,26 2,14" fill="none" stroke="var(--c-amber)" stroke-width="1.5"/><text x="14" y="15" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" font-weight="700" fill="var(--c-amber)">×</text></svg>
+          <div><div style="font-size:12px;font-weight:500;color:var(--text)">Compuerta exclusiva (XOR)</div><div style="font-size:11px;color:var(--muted)">Solo un camino se ejecuta según la condición.</div></div>
+        </div>
+        <div style="display:flex;gap:.6rem;align-items:center">
+          <svg width="28" height="28" viewBox="0 0 28 28"><polygon points="14,2 26,14 14,26 2,14" fill="none" stroke="var(--c-purple)" stroke-width="1.5"/><text x="14" y="15" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" font-weight="700" fill="var(--c-purple)">+</text></svg>
+          <div><div style="font-size:12px;font-weight:500;color:var(--text)">Compuerta paralela (AND)</div><div style="font-size:11px;color:var(--muted)">Todos los caminos se ejecutan simultáneamente.</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div style="border:0.5px solid var(--border);border-radius:var(--radius);padding:.8rem">
+      <div style="font-size:11px;font-weight:500;color:var(--c-purple);text-transform:uppercase;letter-spacing:.4px;margin-bottom:.6rem">Contenedores</div>
+      <div style="display:flex;flex-direction:column;gap:.5rem">
+        <div style="display:flex;gap:.6rem;align-items:flex-start">
+          <svg width="44" height="36" viewBox="0 0 44 36" style="flex-shrink:0"><rect x="2" y="2" width="40" height="32" rx="3" fill="none" stroke="var(--c-purple)" stroke-width="1.5"/><line x1="2" y1="12" x2="42" y2="12" stroke="var(--c-purple)" stroke-width="0.8"/><text x="22" y="8" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="8" fill="var(--c-purple)">Pool</text></svg>
+          <div><div style="font-size:12px;font-weight:500;color:var(--text)">Pool</div><div style="font-size:11px;color:var(--muted)">Representa un participante del proceso (empresa, sistema, persona). Contiene todos los lanes.</div></div>
+        </div>
+        <div style="display:flex;gap:.6rem;align-items:flex-start">
+          <svg width="44" height="36" viewBox="0 0 44 36" style="flex-shrink:0"><rect x="2" y="2" width="40" height="32" rx="3" fill="none" stroke="var(--c-blue)" stroke-width="1.5"/><line x1="2" y1="18" x2="42" y2="18" stroke="var(--c-blue)" stroke-width="0.8"/><text x="22" y="10" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="7" fill="var(--c-blue)">Lane 1</text><text x="22" y="28" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="7" fill="var(--c-blue)">Lane 2</text></svg>
+          <div><div style="font-size:12px;font-weight:500;color:var(--text)">Lane (carril)</div><div style="font-size:11px;color:var(--muted)">División dentro del pool. Cada lane representa un rol o actor específico dentro del proceso.</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div style="border:0.5px solid var(--border);border-radius:var(--radius);padding:.8rem">
+      <div style="font-size:11px;font-weight:500;color:var(--c-red);text-transform:uppercase;letter-spacing:.4px;margin-bottom:.6rem">Flujos de conexión</div>
+      <div style="display:flex;flex-direction:column;gap:.5rem">
+        <div><div style="display:flex;align-items:center;gap:.5rem;margin-bottom:2px"><svg width="50" height="14" viewBox="0 0 50 14"><line x1="0" y1="7" x2="42" y2="7" stroke="var(--c-blue)" stroke-width="1.5" marker-end="url(#arr-b1)"/><defs><marker id="arr-b1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M2 1L8 5L2 9" fill="none" stroke="var(--c-blue)" stroke-width="1.5"/></marker></defs></svg><span style="font-size:12px;font-weight:500">Flujo de secuencia</span></div><div style="font-size:11px;color:var(--muted)">Línea sólida con flecha. Conecta actividades dentro del mismo pool en orden.</div></div>
+        <div><div style="display:flex;align-items:center;gap:.5rem;margin-bottom:2px"><svg width="50" height="14" viewBox="0 0 50 14"><line x1="0" y1="7" x2="42" y2="7" stroke="var(--c-purple)" stroke-width="1.2" stroke-dasharray="5,3" marker-end="url(#arr-b2)"/><defs><marker id="arr-b2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M2 1L8 5L2 9" fill="none" stroke="var(--c-purple)" stroke-width="1.5"/></marker></defs></svg><span style="font-size:12px;font-weight:500">Flujo de mensaje</span></div><div style="font-size:11px;color:var(--muted)">Línea punteada. Conecta participantes de diferentes pools.</div></div>
+        <div><div style="display:flex;align-items:center;gap:.5rem;margin-bottom:2px"><svg width="50" height="14" viewBox="0 0 50 14"><line x1="0" y1="7" x2="42" y2="7" stroke="var(--c-gray)" stroke-width="1" stroke-dasharray="2,2"/></svg><span style="font-size:12px;font-weight:500">Asociación</span></div><div style="font-size:11px;color:var(--muted)">Línea punteada sin flecha. Vincula un artefacto (comentario, dato) con un elemento.</div></div>
+      </div>
+    </div>
+
+  </div>
+</div>
 `);
 
 
@@ -2721,106 +2848,15 @@ function renderAnaVxE(){
 ════════════════════════════════════════ */
 reg('srs-contexto', () => `
 <div class="page-header">
-  <div class="page-eyebrow" style="color:var(--c-blue)">● Fase 3 — Especificación</div>
-  <h1 class="page-title">Diagrama de contexto del sistema</h1>
-  <p class="page-desc">El diagrama de contexto delimita los límites del sistema, identifica los actores externos y define los flujos de información entre ellos. Es el primer artefacto de la especificación.</p>
-  <div class="std-row"><span class="std-pill">IEEE 29148:2018</span><span class="std-pill">UML 2.5</span><span class="std-pill">BABOK v3</span></div>
+  <div class="page-eyebrow" style="color:var(--c-purple)">● Fase 2 — Análisis</div>
+  <h1 class="page-title">Diagrama de contexto</h1>
+  <p class="page-desc">Define los límites del sistema (nivel 0). Muestra qué actores y sistemas externos interactúan con él y qué datos fluyen en cada dirección.</p>
+  <div class="std-row"><span class="std-pill">UML 2.5</span><span class="std-pill">IEEE 29148:2018</span></div>
 </div>
-
-<div class="tab-nav">
-  <button class="tab-btn on" onclick="tabSel('ctx',0,this)">Diagrama interactivo</button>
-  <button class="tab-btn" onclick="tabSel('ctx',1,this)">Elementos clave</button>
-  <button class="tab-btn" onclick="tabSel('ctx',2,this);setTimeout(initSrsCtxPlt,60)">Plantilla</button>
-</div>
-
-<div class="tab-panel on" id="ctx-0">
-  <div class="card">
-    <div class="card-title">Sistema de gestión de créditos — SGC · Diagrama de contexto nivel 0</div>
-    <p style="font-size:12px;color:var(--muted);margin-bottom:.8rem">Haz clic en cualquier elemento para ver los flujos de información detallados.</p>
-    <svg width="100%" viewBox="0 0 680 440" xmlns="http://www.w3.org/2000/svg" id="ctx-svg">
-      <defs><marker id="ac" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>
-
-      <!-- Sistema central -->
-      <rect x="240" y="170" width="200" height="100" rx="14" fill="#E6F1FB" stroke="#185FA5" stroke-width="2" id="sys-core"/>
-      <text x="340" y="213" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="14" font-weight="500" fill="#042C53">SGC</text>
-      <text x="340" y="231" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#185FA5">Sistema de gestión</text>
-      <text x="340" y="247" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#185FA5">de créditos</text>
-
-      <!-- Actor: Cliente -->
-      <ellipse cx="80" cy="220" rx="50" ry="28" fill="#E1F5EE" stroke="#1D9E75" stroke-width="1"/>
-      <text x="80" y="220" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="12" font-weight="500" fill="#085041">Cliente</text>
-      <line x1="130" y1="212" x2="238" y2="205" stroke="#1D9E75" stroke-width="1" marker-end="url(#ac)"/>
-      <text x="184" y="198" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="10" fill="#0F6E56">Solicitud</text>
-      <line x1="238" y1="225" x2="130" y2="232" stroke="#1D9E75" stroke-width="1" marker-end="url(#ac)"/>
-      <text x="184" y="242" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="10" fill="#0F6E56">Decisión</text>
-
-      <!-- Actor: Analista -->
-      <ellipse cx="80" cy="340" rx="50" ry="28" fill="#EEEDFE" stroke="#534AB7" stroke-width="1"/>
-      <text x="80" y="340" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="12" font-weight="500" fill="#26215C">Analista</text>
-      <path d="M130 330 L240 290" fill="none" stroke="#534AB7" stroke-width="1" marker-end="url(#ac)"/>
-      <text x="180" y="304" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="10" fill="#534AB7">Consultas</text>
-      <path d="M240 310 L130 352" fill="none" stroke="#534AB7" stroke-width="1" marker-end="url(#ac)"/>
-      <text x="180" y="344" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="10" fill="#534AB7">Reportes</text>
-
-      <!-- Actor: Datacredito API -->
-      <ellipse cx="600" cy="160" rx="62" ry="28" fill="#FAEEDA" stroke="#BA7517" stroke-width="1"/>
-      <text x="600" y="155" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" font-weight="500" fill="#412402">API Datacrédito</text>
-      <text x="600" y="170" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="10" fill="#BA7517">Score crediticio</text>
-      <line x1="538" y1="168" x2="442" y2="192" stroke="#BA7517" stroke-width="1" marker-end="url(#ac)"/>
-      <text x="490" y="174" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="10" fill="#BA7517">Score</text>
-      <line x1="442" y1="182" x2="538" y2="158" stroke="#BA7517" stroke-width="1" marker-end="url(#ac)"/>
-      <text x="490" y="162" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="10" fill="#BA7517">Consulta</text>
-
-      <!-- Actor: Core bancario -->
-      <ellipse cx="600" cy="280" rx="62" ry="28" fill="#FCEBEB" stroke="#A32D2D" stroke-width="1"/>
-      <text x="600" y="275" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" font-weight="500" fill="#501313">Core bancario</text>
-      <text x="600" y="290" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="10" fill="#A32D2D">ISO 20022</text>
-      <line x1="538" y1="272" x2="442" y2="252" stroke="#A32D2D" stroke-width="1" marker-end="url(#ac)"/>
-      <text x="490" y="256" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="10" fill="#A32D2D">Datos fin.</text>
-      <line x1="442" y1="265" x2="538" y2="286" stroke="#A32D2D" stroke-width="1" marker-end="url(#ac)"/>
-      <text x="490" y="284" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="10" fill="#A32D2D">Desembolso</text>
-
-      <!-- Actor: Notificaciones -->
-      <ellipse cx="340" cy="390" rx="68" ry="26" fill="#EAF3DE" stroke="#3B6D11" stroke-width="1"/>
-      <text x="340" y="385" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" font-weight="500" fill="#173404">Notificaciones</text>
-      <text x="340" y="399" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="10" fill="#3B6D11">Email · SMS · Push</text>
-      <line x1="340" y1="364" x2="340" y2="270" stroke="#3B6D11" stroke-width="1" marker-end="url(#ac)"/>
-      <text x="355" y="320" font-family="DM Sans,sans-serif" font-size="10" fill="#3B6D11">Envío</text>
-
-      <!-- System boundary label -->
-      <rect x="236" y="165" width="208" height="110" rx="14" fill="none" stroke="#185FA5" stroke-width="1.5" stroke-dasharray="4 2"/>
-      <text x="340" y="158" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="9" fill="#185FA5">Límite del sistema</text>
-    </svg>
-    <div id="ctx-detail" style="margin-top:.7rem;padding:.7rem .9rem;background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius);font-size:12px;color:var(--muted);display:none"></div>
-  </div>
-</div>
-
-<div class="tab-panel" id="ctx-1">
-  <div class="g2">
-    ${[
-      {t:'Sistema central',color:'var(--c-blue)',desc:'El rectángulo central representa el sistema a construir. Define su nombre, su función principal y sus límites. Todo lo que quede fuera del rectángulo es un actor externo.',regla:'El sistema nunca interactúa consigo mismo. Si aparece una flecha que entra y sale del mismo rectángulo, hay un problema de diseño.'},
-      {t:'Actores externos',color:'var(--c-teal)',desc:'Las elipses son entidades externas que intercambian información con el sistema: personas, organizaciones, sistemas externos o dispositivos. Son la fuente o el destino de los flujos.',regla:'Un actor externo nunca está dentro del límite del sistema. Si está dentro, es un componente, no un actor.'},
-      {t:'Flujos de información',color:'var(--c-purple)',desc:'Las flechas representan los flujos de datos entre el sistema y los actores. Cada flecha debe tener un nombre que describa exactamente qué información fluye.',regla:'Cada flecha representa un tipo de dato. "Información" o "datos" no son nombres válidos — deben ser específicos: "Solicitud de crédito", "Score crediticio", "Acta de aprobación".'},
-      {t:'Límite del sistema',color:'var(--c-amber)',desc:'La línea punteada (o el borde del rectángulo central) define exactamente qué está dentro del alcance del sistema. Es la representación visual del alcance documentado en el SRS.',regla:'El límite determina quién es responsable de qué. Lo que queda fuera del límite es responsabilidad de los actores externos, no del sistema a construir.'},
-    ].map(e => `
-    <div class="card" style="border-left:3px solid ${e.color}">
-      <div style="font-size:13px;font-weight:500;font-family:var(--font-serif);margin-bottom:.4rem">${e.t}</div>
-      <div style="font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:.6rem">${e.desc}</div>
-      <div style="background:var(--surface);border-radius:var(--radius);padding:.55rem .75rem;font-size:11px;line-height:1.5">
-        <span style="font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.3px;color:${e.color}">Regla</span><br>${e.regla}
-      </div>
-    </div>`).join('')}
-  </div>
-</div>
-
-<div class="tab-panel" id="ctx-2">
-  <div style="background:rgba(24,95,165,.06);border:0.5px solid rgba(24,95,165,.25);border-radius:var(--radius);padding:.5rem .8rem;font-size:11px;color:var(--c-blue);margin-bottom:.8rem">ⓘ Documenta los actores y exclusiones reales de tu sistema. Cambios guardados automáticamente.</div>
-  <div id="srs-ctx-plt"></div>
+<div id="ctx-mount"></div>
 `);
 
-/* ════════════════════════════════════════
-   PAGE: CASOS DE USO
-════════════════════════════════════════ */
+
 reg('srs-casos', () => `
 <div class="page-header">
   <div class="page-eyebrow" style="color:var(--c-purple)">● Fase 2 — Análisis</div>
@@ -3037,72 +3073,76 @@ reg('srs-bpmn', () => `
 
 <div class="tab-panel" id="bpmn-3">
   <div style="background:rgba(83,52,131,.06);border:0.5px solid rgba(83,52,131,.25);border-radius:var(--radius);padding:.5rem .8rem;font-size:11px;color:var(--c-purple);margin-bottom:1rem">
-    ⓘ Registra los diagramas BPMN reales de tu proyecto. Adjunta los archivos y documenta los hallazgos clave de cada proceso.
+    ⓘ Registra los procesos reales de tu proyecto paso a paso. El panel de comparación muestra As-Is vs To-Be en paralelo. Guardado automático.
   </div>
 
-  <div class="g2">
+  <div class="tab-nav" id="bpmn-sub-nav">
+    <button class="tab-btn on" onclick="bpmnSubTab(0)">As-Is — Estado actual</button>
+    <button class="tab-btn" onclick="bpmnSubTab(1)">To-Be — Estado futuro</button>
+    <button class="tab-btn" onclick="bpmnSubTab(2)">Comparación y hallazgos</button>
+  </div>
+
+  <!-- Sub-panel 0: As-Is -->
+  <div id="bpmn-sub-0" style="padding-top:.8rem">
+    <div class="card" style="margin-bottom:.8rem;border-top:3px solid var(--c-red)">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-bottom:.6rem">
+        <div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">Nombre del proceso</label>
+        <input id="bpmn-asis-nombre" placeholder="Ej: Aprobación de crédito — actual" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:4px 8px;font-size:12px;color:var(--text);outline:none" oninput="bpmnSave()"></div>
+        <div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">Actores / roles</label>
+        <input id="bpmn-asis-actores" placeholder="Ej: Cliente, Analista, Comité" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:4px 8px;font-size:12px;color:var(--text);outline:none" oninput="bpmnSave()"></div>
+      </div>
+      <div style="margin-bottom:.5rem"><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">Ineficiencias identificadas</label>
+      <textarea id="bpmn-asis-notas" placeholder="Describe cuellos de botella, esperas, pasos manuales..." style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:4px 8px;font-size:12px;color:var(--text);outline:none;line-height:1.6" oninput="bpmnSave()"></textarea></div>
+    </div>
     <div class="card" style="border-top:3px solid var(--c-red)">
-      <div style="font-size:13px;font-weight:500;font-family:var(--font-serif);color:var(--c-red);margin-bottom:.6rem">Proceso As-Is — Estado actual</div>
-      <div style="margin-bottom:.6rem">
-        <label style="cursor:pointer;display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:var(--radius);border:0.5px solid rgba(163,45,45,.4);background:rgba(163,45,45,.05);font-size:11px;font-weight:500;color:var(--c-red)">
-          📎 Adjuntar diagrama As-Is
-          <input type="file" accept=".pdf,.png,.jpg,.jpeg,.bpmn,.xml,.drawio,.vsdx" style="display:none" onchange="bpmnAdjFile(this,'bpmn-asis-lbl')">
-        </label>
-        <span id="bpmn-asis-lbl" style="font-size:11px;color:var(--c-blue);margin-left:.5rem"></span>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.6rem">
+        <div class="card-title">Pasos del proceso As-Is</div>
+        <button class="btn btn-sm" style="background:var(--c-red);color:#fff;border-color:var(--c-red)" onclick="bpmnAddPaso('asis')">+ Paso</button>
       </div>
-      <div style="margin-bottom:.5rem">
-        <label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.3px;display:block;margin-bottom:3px">Nombre del proceso</label>
-        <input id="bpmn-asis-nombre" placeholder="Ej: Aprobación de crédito — proceso actual" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:5px 8px;font-size:12px;color:var(--text);outline:none" oninput="bpmnSave()">
-      </div>
-      <div style="margin-bottom:.5rem">
-        <label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.3px;display:block;margin-bottom:3px">Actores / roles involucrados</label>
-        <input id="bpmn-asis-actores" placeholder="Ej: Cliente, Analista de crédito, Comité" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:5px 8px;font-size:12px;color:var(--text);outline:none" oninput="bpmnSave()">
-      </div>
-      <div>
-        <label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.3px;display:block;margin-bottom:3px">Ineficiencias y problemas identificados</label>
-        <textarea id="bpmn-asis-notas" rows="4" placeholder="Describe los cuellos de botella, tiempos de espera, pasos manuales, errores frecuentes..." style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:5px 8px;font-size:12px;color:var(--text);font-family:var(--font-sans);resize:vertical;outline:none;line-height:1.6" oninput="bpmnSave()"></textarea>
-      </div>
-    </div>
-
-    <div class="card" style="border-top:3px solid var(--c-green)">
-      <div style="font-size:13px;font-weight:500;font-family:var(--font-serif);color:var(--c-green);margin-bottom:.6rem">Proceso To-Be — Estado futuro</div>
-      <div style="margin-bottom:.6rem">
-        <label style="cursor:pointer;display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:var(--radius);border:0.5px solid rgba(15,110,86,.4);background:rgba(15,110,86,.05);font-size:11px;font-weight:500;color:var(--c-green)">
-          📎 Adjuntar diagrama To-Be
-          <input type="file" accept=".pdf,.png,.jpg,.jpeg,.bpmn,.xml,.drawio,.vsdx" style="display:none" onchange="bpmnAdjFile(this,'bpmn-tobe-lbl')">
-        </label>
-        <span id="bpmn-tobe-lbl" style="font-size:11px;color:var(--c-blue);margin-left:.5rem"></span>
-      </div>
-      <div style="margin-bottom:.5rem">
-        <label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.3px;display:block;margin-bottom:3px">Nombre del proceso</label>
-        <input id="bpmn-tobe-nombre" placeholder="Ej: Aprobación de crédito — proceso digitalizado" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:5px 8px;font-size:12px;color:var(--text);outline:none" oninput="bpmnSave()">
-      </div>
-      <div style="margin-bottom:.5rem">
-        <label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.3px;display:block;margin-bottom:3px">Mejoras y automatizaciones incluidas</label>
-        <input id="bpmn-tobe-mejoras" placeholder="Ej: Formulario digital, API score, motor de decisión" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:5px 8px;font-size:12px;color:var(--text);outline:none" oninput="bpmnSave()">
-      </div>
-      <div>
-        <label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.3px;display:block;margin-bottom:3px">Beneficios esperados</label>
-        <textarea id="bpmn-tobe-notas" rows="4" placeholder="Describe las mejoras de tiempo, reducción de errores, automatizaciones y valor para el negocio..." style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:5px 8px;font-size:12px;color:var(--text);font-family:var(--font-sans);resize:vertical;outline:none;line-height:1.6" oninput="bpmnSave()"></textarea>
-      </div>
+      <div id="bpmn-asis-pasos"></div>
     </div>
   </div>
 
-  <div class="card" style="margin-top:.8rem">
-    <div style="font-size:13px;font-weight:500;font-family:var(--font-serif);margin-bottom:.5rem">Hallazgos clave del modelado</div>
-    <div style="font-size:11px;color:var(--muted);margin-bottom:.5rem">Requisitos que surgieron directamente del análisis BPMN — cada ineficiencia del As-Is genera uno o más RF en el SRS.</div>
-    <textarea id="bpmn-hallazgos" rows="3" placeholder="Ej: RF-001 surge del paso manual de captura de datos (As-Is paso 1). RF-003 surge de la consulta manual al buró (As-Is paso 3)..." style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:5px 8px;font-size:12px;color:var(--text);font-family:var(--font-sans);resize:vertical;outline:none;line-height:1.6" oninput="bpmnSave()"></textarea>
-    <div style="display:flex;gap:.5rem;margin-top:.6rem;align-items:center">
-      <button class="btn" style="background:var(--c-purple);color:#fff;border-color:var(--c-purple)" onclick="bpmnGuardar()">Guardar</button>
-      <span id="bpmn-msg" style="font-size:11px;color:var(--c-green)"></span>
+  <!-- Sub-panel 1: To-Be -->
+  <div id="bpmn-sub-1" style="padding-top:.8rem;display:none">
+    <div class="card" style="margin-bottom:.8rem;border-top:3px solid var(--c-green)">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-bottom:.6rem">
+        <div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">Nombre del proceso</label>
+        <input id="bpmn-tobe-nombre" placeholder="Ej: Aprobación de crédito — digitalizado" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:4px 8px;font-size:12px;color:var(--text);outline:none" oninput="bpmnSave()"></div>
+        <div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">Mejoras incluidas</label>
+        <input id="bpmn-tobe-mejoras" placeholder="Ej: Formulario digital, API score, motor decisión" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:4px 8px;font-size:12px;color:var(--text);outline:none" oninput="bpmnSave()"></div>
+      </div>
+      <div style="margin-bottom:.5rem"><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">Beneficios esperados</label>
+      <textarea id="bpmn-tobe-notas" placeholder="Describe las mejoras de tiempo, errores reducidos, automatizaciones..." style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:4px 8px;font-size:12px;color:var(--text);outline:none;line-height:1.6" oninput="bpmnSave()"></textarea></div>
+    </div>
+    <div class="card" style="border-top:3px solid var(--c-green)">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.6rem">
+        <div class="card-title">Pasos del proceso To-Be</div>
+        <button class="btn btn-sm" style="background:var(--c-green);color:#fff;border-color:var(--c-green)" onclick="bpmnAddPaso('tobe')">+ Paso</button>
+      </div>
+      <div id="bpmn-tobe-pasos"></div>
+    </div>
+  </div>
+
+  <!-- Sub-panel 2: Comparison -->
+  <div id="bpmn-sub-2" style="padding-top:.8rem;display:none">
+    <div class="card" style="margin-bottom:.8rem">
+      <div class="card-title" style="margin-bottom:.6rem">Comparación As-Is vs To-Be</div>
+      <div id="bpmn-comparacion"></div>
+    </div>
+    <div class="card">
+      <div class="card-title" style="margin-bottom:.5rem">Hallazgos clave del modelado</div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:.5rem">Cada ineficiencia del As-Is genera uno o más RF en el SRS.</div>
+      <textarea id="bpmn-hallazgos" placeholder="Ej: RF-001 surge del paso manual de captura (As-Is paso 1)..." style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:5px 8px;font-size:12px;color:var(--text);outline:none;line-height:1.6" oninput="bpmnSave()"></textarea>
+      <div style="display:flex;gap:.5rem;margin-top:.6rem;align-items:center">
+        <button class="btn" style="background:var(--c-purple);color:#fff;border-color:var(--c-purple)" onclick="bpmnGuardar()">Guardar</button>
+        <span id="bpmn-msg" style="font-size:11px;color:var(--c-green)"></span>
+      </div>
     </div>
   </div>
 </div>
 `);
 
-/* ════════════════════════════════════════
-   PAGE: ESPECIFICACIÓN — FLUJO
-════════════════════════════════════════ */
 reg('srs-flujo', () => `
 <div class="page-header">
   <div class="page-eyebrow" style="color:var(--c-blue)">● Fase 3 — Especificación</div>
@@ -6413,10 +6453,10 @@ function onPageShow(id) {
   if (id==='ana-verificacion') setTimeout(initAnaVer, 50);
   if (id==='ana-priorizacion') setTimeout(function(){ initAnaMoscow(); initAnaVxE(); initAnaKano(); }, 50);
   if (id==='eli-plantillas') setTimeout(initEliPlantillas, 50);
-  if (id==='srs-bpmn') setTimeout(bpmnLoad, 50);
+  if (id==='srs-bpmn') setTimeout(function(){ bpmnLoad(); }, 50);
   if (id==='srs-glosario') initGlosario();
   if (id==='srs-casos') setTimeout(initCasos, 50);
-  if (id==='srs-contexto') setTimeout(function(){ if(document.getElementById('srs-ctx-plt')) initSrsCtxPlt(); }, 200);
+  if (id==='srs-contexto') { setTimeout(initCtx, 50); } setTimeout(function(){ if(document.getElementById('srs-ctx-plt')) initSrsCtxPlt(); }, 200);
   if (id==='srs-editor') setTimeout(initSrsEditor, 50);
   if (id==='srs-gherkin') setTimeout(function(){ if(typeof updateGherkin==='function') updateGherkin(); }, 100);
   if (id==='srs-detector') setTimeout(function(){ if(typeof runDetector==='function') runDetector(); }, 100);
@@ -6443,21 +6483,28 @@ onPageShow('home');
 /* ════════════════════════════════════════
    BOOT
 ════════════════════════════════════════ */
-function bpmnAdjFile(input, lblId){
-  var lbl=document.getElementById(lblId);
-  if(lbl && input.files[0]) lbl.textContent='📄 '+input.files[0].name;
+
+function bpmnSubTab(i){
+  [0,1,2].forEach(function(j){
+    var p=document.getElementById('bpmn-sub-'+j);
+    if(p) p.style.display=j===i?'block':'none';
+  });
+  document.querySelectorAll('#bpmn-sub-nav .tab-btn').forEach(function(b,j){b.classList.toggle('on',j===i);});
+  if(i===2) bpmnRenderComparacion();
+}
+
+function bpmnGetData(){
+  try{return JSON.parse(localStorage.getItem('fw_bpmn_v1'))||{asisPasos:[],tobePasos:[]};}catch(e){return{asisPasos:[],tobePasos:[]};}
 }
 function bpmnSave(){
-  var data={
-    asisNombre: document.getElementById('bpmn-asis-nombre')?.value||'',
-    asisActores: document.getElementById('bpmn-asis-actores')?.value||'',
-    asisNotas: document.getElementById('bpmn-asis-notas')?.value||'',
-    tobeNombre: document.getElementById('bpmn-tobe-nombre')?.value||'',
-    tobeMejoras: document.getElementById('bpmn-tobe-mejoras')?.value||'',
-    tobeNotas: document.getElementById('bpmn-tobe-notas')?.value||'',
-    hallazgos: document.getElementById('bpmn-hallazgos')?.value||'',
-  };
-  localStorage.setItem('fw_bpmn_v1', JSON.stringify(data));
+  var data=bpmnGetData();
+  ['bpmn-asis-nombre','bpmn-asis-actores','bpmn-asis-notas',
+   'bpmn-tobe-nombre','bpmn-tobe-mejoras','bpmn-tobe-notas','bpmn-hallazgos']
+  .forEach(function(id){
+    var el=document.getElementById(id);
+    if(el) data[id.replace('bpmn-','').replace(/-/g,'_')]=el.value;
+  });
+  localStorage.setItem('fw_bpmn_v1',JSON.stringify(data));
 }
 function bpmnGuardar(){
   bpmnSave();
@@ -6467,18 +6514,107 @@ function bpmnGuardar(){
 function bpmnLoad(){
   try{
     var data=JSON.parse(localStorage.getItem('fw_bpmn_v1'))||{};
-    var fields={
-      'bpmn-asis-nombre':'asisNombre','bpmn-asis-actores':'asisActores',
-      'bpmn-asis-notas':'asisNotas','bpmn-tobe-nombre':'tobeNombre',
-      'bpmn-tobe-mejoras':'tobeMejoras','bpmn-tobe-notas':'tobeNotas',
-      'bpmn-hallazgos':'hallazgos'
-    };
-    Object.keys(fields).forEach(function(id){
+    var map={'bpmn-asis-nombre':'asis_nombre','bpmn-asis-actores':'asis_actores','bpmn-asis-notas':'asis_notas',
+             'bpmn-tobe-nombre':'tobe_nombre','bpmn-tobe-mejoras':'tobe_mejoras','bpmn-tobe-notas':'tobe_notas','bpmn-hallazgos':'hallazgos'};
+    Object.keys(map).forEach(function(id){
       var el=document.getElementById(id);
-      if(el && data[fields[id]]) el.value=data[fields[id]];
+      if(el&&data[map[id]]) el.value=data[map[id]];
     });
+    bpmnRenderPasos('asis');
+    bpmnRenderPasos('tobe');
   }catch(e){}
 }
+function bpmnAddPaso(tipo){
+  var data=bpmnGetData();
+  var key=tipo==='asis'?'asisPasos':'tobePasos';
+  if(!data[key]) data[key]=[];
+  data[key].push({num:data[key].length+1,desc:'',actor:'',tiempo:'',tipo:'tarea'});
+  localStorage.setItem('fw_bpmn_v1',JSON.stringify(data));
+  bpmnRenderPasos(tipo);
+}
+function bpmnDelPaso(tipo,i){
+  var data=bpmnGetData();
+  var key=tipo==='asis'?'asisPasos':'tobePasos';
+  data[key].splice(i,1);
+  localStorage.setItem('fw_bpmn_v1',JSON.stringify(data));
+  bpmnRenderPasos(tipo);
+}
+function bpmnSetPaso(tipo,i,k,v){
+  var data=bpmnGetData();
+  var key=tipo==='asis'?'asisPasos':'tobePasos';
+  data[key][i][k]=v;
+  localStorage.setItem('fw_bpmn_v1',JSON.stringify(data));
+}
+function bpmnRenderPasos(tipo){
+  var mountId='bpmn-'+tipo+'-pasos';
+  var el=document.getElementById(mountId); if(!el) return;
+  var data=bpmnGetData();
+  var key=tipo==='asis'?'asisPasos':'tobePasos';
+  var pasos=data[key]||[];
+  var col=tipo==='asis'?'var(--c-red)':'var(--c-green)';
+  function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+  var tipoOpts=['tarea','decision','inicio','fin','subproceso'];
+  if(!pasos.length){
+    el.innerHTML='<div style="text-align:center;padding:1rem;color:var(--muted);font-size:12px">No hay pasos. Agrega el primer paso del proceso.</div>';
+    return;
+  }
+  var html='<div style="overflow-x:auto"><table class="data-table" style="min-width:600px">'
+    +'<thead><tr><th>#</th><th>Descripción del paso</th><th>Actor / Lane</th><th>Tiempo est.</th><th>Tipo BPMN</th><th></th></tr></thead><tbody>';
+  pasos.forEach(function(p,i){
+    var tipoSel=tipoOpts.map(function(t){return'<option'+(p.tipo===t?' selected':'')+'>'+t+'</option>';}).join('');
+    html+='<tr>'
+      +'<td><span style="font-family:var(--font-mono);color:'+col+';font-size:12px;font-weight:600">'+(i+1)+'</span></td>'
+      +'<td><input class="bpmn-paso-inp" data-tipo="'+tipo+'" data-idx="'+i+'" data-key="desc" value="'+esc(p.desc)+'" placeholder="Describe el paso..." style="width:100%;min-width:180px;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 6px;font-size:12px;color:var(--text);outline:none"></td>'
+      +'<td><input class="bpmn-paso-inp" data-tipo="'+tipo+'" data-idx="'+i+'" data-key="actor" value="'+esc(p.actor)+'" placeholder="Ej: Analista" style="width:100%;min-width:100px;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 6px;font-size:12px;color:var(--text);outline:none"></td>'
+      +'<td><input class="bpmn-paso-inp" data-tipo="'+tipo+'" data-idx="'+i+'" data-key="tiempo" value="'+esc(p.tiempo)+'" placeholder="2h" style="width:60px;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 6px;font-size:12px;color:var(--text);outline:none"></td>'
+      +'<td><select class="bpmn-paso-inp" data-tipo="'+tipo+'" data-idx="'+i+'" data-key="tipo" style="background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 5px;font-size:11px;color:var(--text);outline:none">'+tipoSel+'</select></td>'
+      +'<td><button class="bpmn-del-btn" data-tipo="'+tipo+'" data-idx="'+i+'" style="background:none;border:none;cursor:pointer;color:var(--muted);font-size:15px">×</button></td>'
+      +'</tr>';
+  });
+  html+='</tbody></table></div>';
+  el.innerHTML=html;
+  // Add event listeners after render
+  el.querySelectorAll('.bpmn-paso-inp').forEach(function(inp){
+    inp.addEventListener('input', function(){
+      bpmnSetPaso(this.dataset.tipo, parseInt(this.dataset.idx), this.dataset.key, this.value);
+    });
+    inp.addEventListener('change', function(){
+      bpmnSetPaso(this.dataset.tipo, parseInt(this.dataset.idx), this.dataset.key, this.value);
+    });
+  });
+  el.querySelectorAll('.bpmn-del-btn').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      bpmnDelPaso(this.dataset.tipo, parseInt(this.dataset.idx));
+    });
+  });
+}
+function bpmnRenderComparacion(){
+  var el=document.getElementById('bpmn-comparacion'); if(!el) return;
+  var data=bpmnGetData();
+  var asis=data.asisPasos||[], tobe=data.tobePasos||[];
+  var max=Math.max(asis.length,tobe.length);
+  function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+  if(!max){el.innerHTML='<div style="text-align:center;padding:1rem;color:var(--muted);font-size:12px">Agrega pasos en As-Is y To-Be para ver la comparación.</div>';return;}
+  var html='<div style="overflow-x:auto"><table class="data-table" style="min-width:500px">'
+    +'<thead><tr>'
+    +'<th style="width:40px">#</th>'
+    +'<th style="color:var(--c-red)">As-Is — Estado actual</th>'
+    +'<th style="color:var(--c-green)">To-Be — Estado futuro</th>'
+    +'</tr></thead><tbody>';
+  for(var i=0;i<max;i++){
+    var a=asis[i], t=tobe[i];
+    var changed=a&&t&&(a.desc!==t.desc||a.actor!==t.actor);
+    var bg=changed?'rgba(83,52,131,.03)':'';
+    html+='<tr style="background:'+bg+'">'
+      +'<td><span style="font-family:var(--font-mono);font-size:12px;font-weight:600;color:var(--muted)">'+(i+1)+'</span></td>'
+      +'<td style="padding:.5rem .8rem">'+(a?'<div style="font-size:12px;color:var(--text)">'+esc(a.desc||'—')+'</div>'+(a.actor?'<div style="font-size:10px;color:var(--muted);margin-top:2px">'+esc(a.actor)+(a.tiempo?' · '+esc(a.tiempo):'')+'</div>':''):'<span style="color:var(--muted);font-size:11px;font-style:italic">Sin paso equivalente</span>')+'</td>'
+      +'<td style="padding:.5rem .8rem">'+(t?'<div style="font-size:12px;color:var(--text)">'+esc(t.desc||'—')+'</div>'+(t.actor?'<div style="font-size:10px;color:var(--muted);margin-top:2px">'+esc(t.actor)+(t.tiempo?' · '+esc(t.tiempo):'')+'</div>':''):'<span style="color:var(--muted);font-size:11px;font-style:italic">Paso eliminado en To-Be</span>')+'</td>'
+      +'</tr>';
+  }
+  html+='</tbody></table></div>';
+  el.innerHTML=html;
+}
+
 
 function skTab(i){
   document.querySelectorAll('#sk-tab-nav .tab-btn').forEach(function(b,j){b.classList.toggle('on',j===i);});
@@ -6898,7 +7034,7 @@ function renderCasos(data){
     +'</div>'
     +'<button class="btn btn-sm" onclick="ucExportSVG()" style="color:var(--c-blue);border-color:rgba(24,95,165,.3)">⬇ Exportar SVG</button>'
     +'</div>';
-  html += '<div id="uc-diagram-wrap" style="background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius);overflow:auto;padding:.5rem">'
+  html += '<div id="uc-diagram-wrap" style="background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius);overflow:visible;padding:1rem 2rem">'
     + buildUCDiagram(d) + '</div>';
   html += '</div>';
 
@@ -6986,8 +7122,12 @@ function renderCasos(data){
 function buildUCDiagram(d){
   var actores=d.actores||[], casos=d.casos||[], sistema=d.sistema||'Sistema';
   if(casos.length===0) return '<div style="text-align:center;padding:2rem;color:var(--muted);font-size:13px">Agrega casos de uso para ver el diagrama.</div>';
-  var W=780, marginX=110, rowH=52;
-  var boxH=Math.max(casos.length*rowH+40,120), totalH=boxH+80;
+  var W=900, marginX=160, rowH=60;
+  var prim=actores.filter(function(a){return a.tipo==='primario';});
+  var sec=actores.filter(function(a){return a.tipo==='secundario';});
+  var maxActores=Math.max(prim.length,sec.length,1);
+  var boxH=Math.max(casos.length*rowH+40, maxActores*70+40, 140);
+  var totalH=boxH+80;
   var caseY=[], startY=(totalH-casos.length*rowH)/2+20;
   casos.forEach(function(cu,i){caseY[i]=startY+i*rowH+rowH/2;});
   function escSVG(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
@@ -7015,21 +7155,20 @@ function buildUCDiagram(d){
       +'<line x1="'+ax+'" y1="'+(ay-5)+'" x2="'+(ax+10)+'" y2="'+ay+'" stroke="'+color+'" stroke-width="1.2"/>'
       +'<text x="'+ax+'" y="'+(ay+14)+'" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="10" fill="'+color+'">'+escSVG(nombre)+'</text>';
   }
-  var prim=actores.filter(function(a){return a.tipo==='primario';}),
-      sec=actores.filter(function(a){return a.tipo==='secundario';});
+  // prim/sec already declared above
   var sp1=Math.min(boxH/(Math.max(prim.length,1)+1),60);
   prim.forEach(function(a,i){
-    var ax=50,ay=40+(i+1)*sp1;
+    var ax=70,ay=40+(i+1)*sp1;
     actors.push(actorFig(ax,ay,a.nombre,'var(--c-purple)'));
-    casos.forEach(function(cu,ci){if((cu.actores||[]).indexOf(a.id)>=0) rels.push('<line x1="62" y1="'+ay+'" x2="'+(marginX+80)+'" y2="'+caseY[ci]+'" stroke="var(--c-purple)" stroke-width="0.8" opacity="0.5"/>');});
+    casos.forEach(function(cu,ci){if((cu.actores||[]).indexOf(a.id)>=0) rels.push('<line x1="82" y1="'+ay+'" x2="'+(marginX+4)+'" y2="'+caseY[ci]+'" stroke="var(--c-purple)" stroke-width="0.8" opacity="0.5"/>');});
   });
   var sp2=Math.min(boxH/(Math.max(sec.length,1)+1),60);
   sec.forEach(function(a,i){
-    var ax=W-50,ay=40+(i+1)*sp2;
+    var ax=W-70,ay=40+(i+1)*sp2;
     actors.push(actorFig(ax,ay,a.nombre,'var(--c-teal)'));
-    casos.forEach(function(cu,ci){if((cu.actores||[]).indexOf(a.id)>=0) rels.push('<line x1="'+(W-62)+'" y1="'+ay+'" x2="'+(W-marginX-80)+'" y2="'+caseY[ci]+'" stroke="var(--c-teal)" stroke-width="0.8" opacity="0.5"/>');});
+    casos.forEach(function(cu,ci){if((cu.actores||[]).indexOf(a.id)>=0) rels.push('<line x1="'+(W-82)+'" y1="'+ay+'" x2="'+(W-marginX-80)+'" y2="'+caseY[ci]+'" stroke="var(--c-teal)" stroke-width="0.8" opacity="0.5"/>');});
   });
-  return '<svg id="uc-svg" width="100%" viewBox="0 0 '+W+' '+totalH+'" xmlns="http://www.w3.org/2000/svg">'
+  return '<svg id="uc-svg" width="100%" viewBox="0 0 '+W+' '+totalH+'" xmlns="http://www.w3.org/2000/svg" style="overflow:visible">'
     +'<defs><marker id="arr-uc" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5"/></marker></defs>'
     +lines.join('')+rels.join('')+casesEl.join('')+actors.join('')+'</svg>';
 }
@@ -7104,6 +7243,244 @@ function ucExportSVG(){
   var blob=new Blob([svg.outerHTML],{type:'image/svg+xml'});
   var a=document.createElement('a'); a.href=URL.createObjectURL(blob);
   a.download='casos-de-uso.svg'; a.click(); URL.revokeObjectURL(a.href);
+}
+
+/* ── Diagrama de contexto ── */
+const CTX_KEY = 'fw_ctx_v1';
+function defCTX(){
+  return {
+    sistema: 'Sistema',
+    entidades: [
+      {id:'E1', nombre:'Usuario final', tipo:'actor', descripcion:'Persona que usa el sistema'},
+      {id:'E2', nombre:'Administrador', tipo:'actor', descripcion:'Gestiona configuración'},
+      {id:'E3', nombre:'Base de datos', tipo:'sistema', descripcion:'Almacenamiento persistente'},
+      {id:'E4', nombre:'API externa', tipo:'sistema', descripcion:'Servicio de terceros'},
+    ],
+    flujos: [
+      {id:'F1', desde:'E1', hasta:'sistema', etiqueta:'Solicitud', tipo:'entrada'},
+      {id:'F2', desde:'sistema', hasta:'E1', etiqueta:'Respuesta', tipo:'salida'},
+      {id:'F3', desde:'sistema', hasta:'E3', etiqueta:'Datos', tipo:'salida'},
+      {id:'F4', desde:'E3', hasta:'sistema', etiqueta:'Consulta', tipo:'entrada'},
+      {id:'F5', desde:'sistema', hasta:'E4', etiqueta:'Request', tipo:'salida'},
+    ]
+  };
+}
+function loadCTX(){ try{var d=JSON.parse(localStorage.getItem(CTX_KEY)); return (d&&d.sistema)?d:defCTX();}catch(e){return defCTX();} }
+function saveCTX(d){ localStorage.setItem(CTX_KEY,JSON.stringify(d)); }
+
+function initCtx(){
+  var el=document.getElementById('ctx-mount'); if(!el) return;
+  el.innerHTML='';
+  renderCtx(loadCTX());
+}
+
+function renderCtx(data){
+  var el=document.getElementById('ctx-mount'); if(!el) return;
+  function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
+  var html='<div class="tab-nav" id="ctx-tab-nav">'
+    +'<button class="tab-btn on" onclick="ctxTabSel(0)">Diagrama</button>'
+    +'<button class="tab-btn" onclick="ctxTabSel(1)">Editor</button>'
+    +'</div>';
+
+  // ── PANEL 0: Diagram ──
+  html+='<div id="ctx-panel-0" class="tab-panel on">';
+  html+='<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.8rem">'
+    +'<div style="display:flex;align-items:center;gap:.5rem">'
+    +'<label style="font-size:11px;color:var(--muted)">Nombre del sistema:</label>'
+    +'<input id="ctx-sistema" value="'+esc(data.sistema)+'" style="background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:3px 8px;font-size:12px;color:var(--text);outline:none;font-weight:500" oninput="ctxSetSistema(this.value)">'
+    +'</div>'
+    +'<button class="btn btn-sm" onclick="ctxExportSVG()" style="color:var(--c-blue);border-color:rgba(24,95,165,.3)">⬇ Exportar SVG</button>'
+    +'</div>';
+  html+='<div id="ctx-diagram-wrap" style="background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius);overflow:auto;padding:1rem">'
+    +buildCtxDiagram(data)+'</div>';
+  html+='</div>';
+
+  // ── PANEL 1: Editor ──
+  html+='<div id="ctx-panel-1" class="tab-panel" style="display:none">';
+
+  // Sistema name
+  html+='<div class="card" style="margin-bottom:.8rem">'
+    +'<div class="card-title" style="margin-bottom:.5rem">Sistema central</div>'
+    +'<input id="ctx-sname" value="'+esc(data.sistema)+'" placeholder="Nombre del sistema" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:5px 8px;font-size:13px;font-weight:500;color:var(--text);outline:none" oninput="ctxSetSistema(this.value)">'
+    +'</div>';
+
+  // Entidades
+  html+='<div class="card" style="margin-bottom:.8rem">'
+    +'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.6rem">'
+    +'<div class="card-title">Entidades externas</div>'
+    +'<button class="btn btn-sm" style="background:var(--c-purple);color:#fff;border-color:var(--c-purple)" onclick="ctxAddEntidad()">+ Entidad</button>'
+    +'</div>';
+  data.entidades.forEach(function(e,i){
+    html+='<div style="display:grid;grid-template-columns:50px 1fr 90px 1fr 28px;gap:.4rem;align-items:center;margin-bottom:.4rem">'
+      +'<input value="'+esc(e.id)+'" style="background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 6px;font-size:11px;font-family:var(--font-mono);color:var(--c-purple);outline:none;width:100%" oninput="ctxSetE('+i+',\'id\',this.value)">'
+      +'<input value="'+esc(e.nombre)+'" placeholder="Nombre" style="background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 6px;font-size:12px;color:var(--text);outline:none;width:100%" oninput="ctxSetE('+i+',\'nombre\',this.value)">'
+      +'<select style="background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 5px;font-size:11px;outline:none" onchange="ctxSetE('+i+',\'tipo\',this.value)">'
+      +'<option'+(e.tipo==='actor'?' selected':'')+'>actor</option>'
+      +'<option'+(e.tipo==='sistema'?' selected':'')+'>sistema</option>'
+      +'<option'+(e.tipo==='organizacion'?' selected':'')+'>organización</option>'
+      +'</select>'
+      +'<input value="'+esc(e.descripcion||'')+'" placeholder="Descripción..." style="background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 6px;font-size:11px;color:var(--muted);outline:none;width:100%" oninput="ctxSetE('+i+',\'descripcion\',this.value)">'
+      +'<button style="background:none;border:none;cursor:pointer;color:var(--muted);font-size:15px" onclick="ctxDelE('+i+')">×</button>'
+      +'</div>';
+  });
+  html+='</div>';
+
+  // Flujos
+  html+='<div class="card">'
+    +'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.6rem">'
+    +'<div class="card-title">Flujos de datos</div>'
+    +'<button class="btn btn-sm" style="background:var(--c-teal);color:#fff;border-color:var(--c-teal)" onclick="ctxAddFlujo()">+ Flujo</button>'
+    +'</div>'
+    +'<div style="overflow-x:auto"><table class="data-table" style="min-width:600px">'
+    +'<thead><tr><th>Desde</th><th>Hasta</th><th>Etiqueta del dato</th><th>Tipo</th><th></th></tr></thead><tbody>';
+
+  var entOpts = '<option value="sistema">'+esc(data.sistema)+'</option>'
+    + data.entidades.map(function(e){return'<option value="'+esc(e.id)+'">'+esc(e.nombre)+'</option>';}).join('');
+
+  data.flujos.forEach(function(f,i){
+    html+='<tr>'
+      +'<td><select style="background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 5px;font-size:11px;outline:none;width:100%" onchange="ctxSetF('+i+',\'desde\',this.value)">'
+      +data.entidades.concat([{id:'sistema',nombre:data.sistema}]).map(function(e){return'<option value="'+esc(e.id)+'"'+(f.desde===e.id?' selected':'')+'>'+esc(e.nombre)+'</option>';}).join('')
+      +'</select></td>'
+      +'<td><select style="background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 5px;font-size:11px;outline:none;width:100%" onchange="ctxSetF('+i+',\'hasta\',this.value)">'
+      +data.entidades.concat([{id:'sistema',nombre:data.sistema}]).map(function(e){return'<option value="'+esc(e.id)+'"'+(f.hasta===e.id?' selected':'')+'>'+esc(e.nombre)+'</option>';}).join('')
+      +'</select></td>'
+      +'<td><input value="'+esc(f.etiqueta)+'" placeholder="Ej: Solicitud de crédito" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 6px;font-size:12px;color:var(--text);outline:none" oninput="ctxSetF('+i+',\'etiqueta\',this.value)"></td>'
+      +'<td><select style="background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 5px;font-size:11px;outline:none" onchange="ctxSetF('+i+',\'tipo\',this.value)">'
+      +'<option'+(f.tipo==='entrada'?' selected':'')+'>entrada</option>'
+      +'<option'+(f.tipo==='salida'?' selected':'')+'>salida</option>'
+      +'<option'+(f.tipo==='bidireccional'?' selected':'')+'>bidireccional</option>'
+      +'</select></td>'
+      +'<td><button style="background:none;border:none;cursor:pointer;color:var(--muted);font-size:15px" onclick="ctxDelF('+i+')">×</button></td>'
+      +'</tr>';
+  });
+  html+='</tbody></table></div></div>';
+  html+='</div>'; // close panel-1
+
+  el.innerHTML=html;
+}
+
+function buildCtxDiagram(data){
+  var entidades=data.entidades||[], flujos=data.flujos||[], sistema=data.sistema||'Sistema';
+  var W=720, H=520, cx=W/2, cy=H/2;
+  var sW=160, sH=60;
+
+  // Position entities in a circle around the system
+  var n=entidades.length||1;
+  var radius=Math.min(W,H)*0.36;
+
+  function escSVG(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+  var svgEl=[];
+  var positions={};
+
+  // System box
+  svgEl.push('<rect x="'+(cx-sW/2)+'" y="'+(cy-sH/2)+'" width="'+sW+'" height="'+sH+'" rx="8" fill="rgba(83,52,131,.1)" stroke="var(--c-purple)" stroke-width="2"/>');
+  svgEl.push('<text x="'+cx+'" y="'+cy+'" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="13" font-weight="600" fill="var(--c-purple)">'+escSVG(sistema)+'</text>');
+  positions['sistema']={x:cx,y:cy};
+
+  // Entities around
+  entidades.forEach(function(e,i){
+    var angle=(2*Math.PI*i/n) - Math.PI/2;
+    var ex=cx+radius*Math.cos(angle);
+    var ey=cy+radius*Math.sin(angle);
+    positions[e.id]={x:ex,y:ey};
+    var eW=120, eH=44;
+    var col=e.tipo==='actor'?'var(--c-teal)':e.tipo==='sistema'?'var(--c-blue)':'var(--c-amber)';
+    svgEl.push('<rect x="'+(ex-eW/2)+'" y="'+(ey-eH/2)+'" width="'+eW+'" height="'+eH+'" rx="6" fill="var(--surface)" stroke="'+col+'" stroke-width="1.2"/>');
+    svgEl.push('<text x="'+ex+'" y="'+(ey-7)+'" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" font-weight="500" fill="'+col+'">'+escSVG(e.nombre)+'</text>');
+    svgEl.push('<text x="'+ex+'" y="'+(ey+8)+'" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="9" fill="var(--muted)">'+escSVG(e.tipo)+'</text>');
+  });
+
+  // Draw flows
+  var flowLines=[];
+  flujos.forEach(function(f,i){
+    var p1=positions[f.desde], p2=positions[f.hasta];
+    if(!p1||!p2) return;
+    // Offset slightly for multiple flows between same pair
+    var dx=p2.x-p1.x, dy=p2.y-p1.y;
+    var len=Math.sqrt(dx*dx+dy*dy)||1;
+    var offset=(i%2===0?1:-1)*8;
+    var ox=-dy/len*offset, oy=dx/len*offset;
+    var x1=p1.x+ox, y1=p1.y+oy, x2=p2.x+ox, y2=p2.y+oy;
+    // Shorten to not overlap boxes
+    var shorten=f.desde==='sistema'?sW/2+5:66;
+    var shorten2=f.hasta==='sistema'?sW/2+5:66;
+    var rx=(x2-x1)/len, ry=(y2-y1)/len;
+    x1+=rx*shorten; y1+=ry*shorten;
+    x2-=rx*shorten2; y2-=ry*shorten2;
+    var col=f.tipo==='entrada'?'var(--c-green)':f.tipo==='salida'?'var(--c-blue)':'var(--c-purple)';
+    var mid={x:(x1+x2)/2+ox*0.5, y:(y1+y2)/2+oy*0.5};
+    var mEnd=f.tipo==='bidireccional'?'url(#arr-both)':'url(#arr-ctx)';
+    var mStart=f.tipo==='bidireccional'?'url(#arr-ctx)':'none';
+    flowLines.push('<line x1="'+x1+'" y1="'+y1+'" x2="'+x2+'" y2="'+y2+'" stroke="'+col+'" stroke-width="1.2" marker-end="'+mEnd+'" marker-start="'+mStart+'"/>');
+    flowLines.push('<rect x="'+(mid.x-35)+'" y="'+(mid.y-9)+'" width="70" height="16" rx="3" fill="var(--bg)" opacity="0.85"/>');
+    flowLines.push('<text x="'+mid.x+'" y="'+mid.y+'" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="9" fill="'+col+'">'+escSVG(f.etiqueta)+'</text>');
+  });
+
+  // Legend
+  var legend='<g transform="translate(10,'+(H-60)+'">'
+    +'<rect width="10" height="10" rx="2" fill="none" stroke="var(--c-teal)" stroke-width="1.2"/><text x="14" y="8" font-family="DM Sans,sans-serif" font-size="9" fill="var(--muted)">actor</text>'
+    +'<rect x="50" width="10" height="10" rx="2" fill="none" stroke="var(--c-blue)" stroke-width="1.2"/><text x="64" y="8" font-family="DM Sans,sans-serif" font-size="9" fill="var(--muted)">sistema</text>'
+    +'<rect x="110" width="10" height="10" rx="2" fill="none" stroke="var(--c-amber)" stroke-width="1.2"/><text x="124" y="8" font-family="DM Sans,sans-serif" font-size="9" fill="var(--muted)">organización</text>'
+    +'<line x1="0" y1="28" x2="20" y2="28" stroke="var(--c-green)" stroke-width="1.2" marker-end="url(#arr-ctx)"/><text x="24" y="31" font-family="DM Sans,sans-serif" font-size="9" fill="var(--muted)">entrada</text>'
+    +'<line x1="70" y1="28" x2="90" y2="28" stroke="var(--c-blue)" stroke-width="1.2" marker-end="url(#arr-ctx)"/><text x="94" y="31" font-family="DM Sans,sans-serif" font-size="9" fill="var(--muted)">salida</text>'
+    +'<line x1="130" y1="28" x2="150" y2="28" stroke="var(--c-purple)" stroke-width="1.2" marker-end="url(#arr-both)" marker-start="url(#arr-ctx)"/><text x="154" y="31" font-family="DM Sans,sans-serif" font-size="9" fill="var(--muted)">bidireccional</text>'
+    +'</g>';
+
+  return '<svg id="ctx-svg" width="100%" viewBox="0 0 '+W+' '+H+'" xmlns="http://www.w3.org/2000/svg">'
+    +'<defs>'
+    +'<marker id="arr-ctx" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5"/></marker>'
+    +'<marker id="arr-both" viewBox="0 0 10 10" refX="2" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5"/></marker>'
+    +'</defs>'
+    +flowLines.join('')+svgEl.join('')+legend
+    +'</svg>';
+}
+
+function ctxTabSel(i){
+  document.querySelectorAll('#ctx-tab-nav .tab-btn').forEach(function(b,j){b.classList.toggle('on',j===i);});
+  document.getElementById('ctx-panel-0').style.display=i===0?'block':'none';
+  document.getElementById('ctx-panel-1').style.display=i===1?'block':'none';
+}
+function ctxSetSistema(v){
+  var data=loadCTX(); data.sistema=v; saveCTX(data);
+  var si=document.getElementById('ctx-sistema'); if(si&&si!==document.activeElement) si.value=v;
+  var sn=document.getElementById('ctx-sname'); if(sn&&sn!==document.activeElement) sn.value=v;
+  var wrap=document.getElementById('ctx-diagram-wrap'); if(wrap) wrap.innerHTML=buildCtxDiagram(data);
+}
+function ctxSetE(i,k,v){
+  var data=loadCTX(); data.entidades[i][k]=v; saveCTX(data);
+  var wrap=document.getElementById('ctx-diagram-wrap'); if(wrap) wrap.innerHTML=buildCtxDiagram(data);
+}
+function ctxAddEntidad(){
+  var data=loadCTX();
+  data.entidades.push({id:'E'+(data.entidades.length+1),nombre:'Nueva entidad',tipo:'actor',descripcion:''});
+  saveCTX(data); var el=document.getElementById('ctx-mount'); if(el){el.innerHTML='';renderCtx(data);}
+}
+function ctxDelE(i){
+  var data=loadCTX(); data.entidades.splice(i,1); saveCTX(data);
+  var el=document.getElementById('ctx-mount'); if(el){el.innerHTML='';renderCtx(data);}
+}
+function ctxSetF(i,k,v){
+  var data=loadCTX(); data.flujos[i][k]=v; saveCTX(data);
+  var wrap=document.getElementById('ctx-diagram-wrap'); if(wrap) wrap.innerHTML=buildCtxDiagram(data);
+}
+function ctxAddFlujo(){
+  var data=loadCTX();
+  var firstE=data.entidades[0]?data.entidades[0].id:'sistema';
+  data.flujos.push({id:'F'+(data.flujos.length+1),desde:firstE,hasta:'sistema',etiqueta:'Dato',tipo:'entrada'});
+  saveCTX(data); var el=document.getElementById('ctx-mount'); if(el){el.innerHTML='';renderCtx(data);}
+}
+function ctxDelF(i){
+  var data=loadCTX(); data.flujos.splice(i,1); saveCTX(data);
+  var el=document.getElementById('ctx-mount'); if(el){el.innerHTML='';renderCtx(data);}
+}
+function ctxExportSVG(){
+  var svg=document.getElementById('ctx-svg'); if(!svg) return;
+  var blob=new Blob([svg.outerHTML],{type:'image/svg+xml'});
+  var a=document.createElement('a'); a.href=URL.createObjectURL(blob);
+  a.download='diagrama-contexto.svg'; a.click(); URL.revokeObjectURL(a.href);
 }
 
 buildAll();
