@@ -2880,8 +2880,10 @@ reg('srs-bpmn', () => `
   <label style="cursor:pointer;display:inline-flex;align-items:center;gap:6px;padding:5px 11px;border-radius:var(--radius);border:0.5px solid rgba(163,45,45,.4);background:rgba(163,45,45,.05);font-size:11px;font-weight:500;color:var(--c-red)">📎 As-Is (estado actual)<input type="file" accept=".svg,.png,.jpg,.jpeg,.pdf,.bpmn,.xml,.drawio,.vsdx" style="display:none" onchange="srsBpmnAdj(this,'asis')"></label>
   <label style="cursor:pointer;display:inline-flex;align-items:center;gap:6px;padding:5px 11px;border-radius:var(--radius);border:0.5px solid rgba(15,110,86,.4);background:rgba(15,110,86,.05);font-size:11px;font-weight:500;color:var(--c-green)">📎 To-Be (estado futuro)<input type="file" accept=".svg,.png,.jpg,.jpeg,.pdf,.bpmn,.xml,.drawio,.vsdx" style="display:none" onchange="srsBpmnAdj(this,'tobe')"></label>
 </div>
-<div id="bpmn-adj-asis" style="margin-top:.4rem"></div>
-<div id="bpmn-adj-tobe" style="margin-top:.4rem"></div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:.8rem;margin-top:.4rem">
+  <div id="bpmn-adj-asis"></div>
+  <div id="bpmn-adj-tobe"></div>
+</div>
     <span id="srs-bpmn-adj-lbl" style="font-size:11px;color:var(--c-blue)"></span>
   </div></div>
 
