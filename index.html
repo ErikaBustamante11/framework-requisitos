@@ -2587,88 +2587,106 @@ reg('ana-gap', () => `
 <div class="page-header">
   <div class="page-eyebrow" style="color:var(--c-purple)">● Fase 2 — Análisis</div>
   <h1 class="page-title">GAP Analysis — As-Is vs. To-Be</h1>
-  <p class="page-desc">Mapa de brechas entre el proceso actual y el proceso futuro. Cada brecha genera uno o más requisitos documentados. Los campos son editables.</p>
-  <div class="std-row"><span class="std-pill">ISO 19510 (BPMN 2.0)</span><span class="std-pill">BABOK v3</span></div>
+  <p class="page-desc">Mapa de brechas entre el proceso actual y el proceso futuro. Cada brecha genera uno o más requisitos documentados.</p>
+  <div class="std-row"><span class="std-pill">BABOK v3 §9.4</span><span class="std-pill">ISO 29148</span></div>
 </div>
-<div id="ana-gap-mount"></div>
+
+<div class="tab-nav" id="gap-tab-nav">
+  <button class="tab-btn on" onclick="gapTabSel(0)">Mi proyecto</button>
+  <button class="tab-btn" onclick="gapTabSel(1)">Guía de uso</button>
+</div>
+
+<div id="gap-panel-0" class="tab-panel on">
+  <div id="ana-gap-mount"></div>
+</div>
+
+<div id="gap-panel-1" class="tab-panel" style="display:none">
+
+  <div class="card" style="margin-bottom:.8rem;border-left:3px solid var(--c-purple)">
+    <div style="font-size:13px;font-weight:600;color:var(--c-purple);margin-bottom:.4rem">¿Qué es el GAP Analysis?</div>
+    <p style="font-size:12px;color:var(--muted);line-height:1.7;margin-bottom:.5rem">El GAP Analysis (análisis de brechas) compara el <strong style="color:var(--text)">estado actual del proceso (As-Is)</strong> con el <strong style="color:var(--text)">estado deseado (To-Be)</strong>. Cada diferencia entre ambos estados es una <em>brecha</em> que el sistema debe resolver.</p>
+    <p style="font-size:12px;color:var(--muted);line-height:1.7">En el framework, cada brecha se convierte directamente en uno o más Requisitos Funcionales (RF) del SRS. Es el puente entre el modelado BPMN y la especificación.</p>
+  </div>
+
+  <div class="g2" style="margin-bottom:.8rem">
+    <div style="border:0.5px solid var(--border);border-radius:var(--radius);padding:.8rem;border-top:3px solid var(--c-red)">
+      <div style="font-size:11px;font-weight:600;color:var(--c-red);text-transform:uppercase;letter-spacing:.4px;margin-bottom:.5rem">As-Is — Estado actual</div>
+      <p style="font-size:11px;color:var(--muted);line-height:1.6">Describe <strong style="color:var(--text)">cómo funciona el proceso hoy</strong>, incluyendo sus ineficiencias, cuellos de botella y limitaciones. Se obtiene del diagrama BPMN As-Is y las sesiones de elicitación.</p>
+      <div style="margin-top:.5rem;font-size:11px;color:var(--muted)">Ejemplo: <em>"El candidato se registra manualmente en 3 plataformas distintas sin integración entre ellas."</em></div>
+    </div>
+    <div style="border:0.5px solid var(--border);border-radius:var(--radius);padding:.8rem;border-top:3px solid var(--c-green)">
+      <div style="font-size:11px;font-weight:600;color:var(--c-green);text-transform:uppercase;letter-spacing:.4px;margin-bottom:.5rem">To-Be — Estado futuro</div>
+      <p style="font-size:11px;color:var(--muted);line-height:1.6">Describe <strong style="color:var(--text)">cómo debería funcionar el proceso con el nuevo sistema</strong>. Se obtiene del BPMN To-Be y los objetivos del proyecto definidos en el contexto.</p>
+      <div style="margin-top:.5rem;font-size:11px;color:var(--muted)">Ejemplo: <em>"El candidato se registra una sola vez en el Portal GO y los datos se sincronizan automáticamente."</em></div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:.8rem">
+    <div style="font-size:13px;font-weight:500;font-family:var(--font-serif);margin-bottom:.7rem">Cómo llenar cada campo</div>
+    <div style="display:flex;flex-direction:column;gap:.6rem">
+
+      <div style="display:grid;grid-template-columns:120px 1fr;gap:.6rem;padding:.6rem;background:var(--surface2);border-radius:6px">
+        <div style="font-size:11px;font-weight:600;color:var(--c-purple)">ID de brecha</div>
+        <div style="font-size:11px;color:var(--muted);line-height:1.5">Código único. Usa el formato <code style="background:var(--surface);padding:1px 5px;border-radius:3px;font-size:10px">GAP-001</code>, <code style="background:var(--surface);padding:1px 5px;border-radius:3px;font-size:10px">GAP-002</code>, etc. Este ID se referencia en el SRS cuando describes el origen de cada RF.</div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:120px 1fr;gap:.6rem;padding:.6rem;background:var(--surface2);border-radius:6px">
+        <div style="font-size:11px;font-weight:600;color:var(--c-purple)">Proceso</div>
+        <div style="font-size:11px;color:var(--muted);line-height:1.5">El nombre del proceso del BPMN al que pertenece esta brecha. Ej: <em>"Registro de candidato"</em>, <em>"Proceso de aprobación"</em>. Ayuda a agrupar brechas por área.</div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:120px 1fr;gap:.6rem;padding:.6rem;background:var(--surface2);border-radius:6px">
+        <div style="font-size:11px;font-weight:600;color:var(--c-purple)">As-Is</div>
+        <div style="font-size:11px;color:var(--muted);line-height:1.5">Describe el problema actual en <strong style="color:var(--text)">una oración concreta</strong>. No escribas causas ni soluciones aquí — solo el estado actual problemático. Ej: <em>"Los datos del candidato se duplican manualmente en 3 sistemas."</em></div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:120px 1fr;gap:.6rem;padding:.6rem;background:var(--surface2);border-radius:6px">
+        <div style="font-size:11px;font-weight:600;color:var(--c-purple)">To-Be</div>
+        <div style="font-size:11px;color:var(--muted);line-height:1.5">Describe la solución esperada en términos de <strong style="color:var(--text)">comportamiento del sistema</strong>, no de tecnología. Ej: <em>"El sistema registra al candidato una sola vez y sincroniza automáticamente con todos los módulos."</em></div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:120px 1fr;gap:.6rem;padding:.6rem;background:rgba(186,117,23,.05);border-radius:6px;border:0.5px solid rgba(186,117,23,.2)">
+        <div style="font-size:11px;font-weight:600;color:var(--c-amber)">Impacto ⚠️</div>
+        <div>
+          <div style="font-size:11px;color:var(--muted);line-height:1.5;margin-bottom:.5rem">El impacto <strong style="color:var(--text)">no es un porcentaje</strong> — es una valoración cualitativa de qué tan crítica es esta brecha para el negocio. Usa esta escala:</div>
+          <div style="display:flex;flex-direction:column;gap:.3rem">
+            <div style="display:flex;gap:.5rem;align-items:flex-start"><span style="background:rgba(163,45,45,.1);color:var(--c-red);font-size:10px;font-weight:700;padding:2px 7px;border-radius:10px;white-space:nowrap">ALTO</span><div style="font-size:11px;color:var(--muted)">Bloquea el funcionamiento del sistema o genera pérdidas directas. Sin resolverlo el proyecto no tiene sentido. Ej: duplicación de datos que impide trazabilidad.</div></div>
+            <div style="display:flex;gap:.5rem;align-items:flex-start"><span style="background:rgba(186,117,23,.1);color:var(--c-amber);font-size:10px;font-weight:700;padding:2px 7px;border-radius:10px;white-space:nowrap">MEDIO</span><div style="font-size:11px;color:var(--muted)">Degrada la experiencia o eficiencia pero hay un workaround manual. Ej: el analista tiene que exportar datos a Excel para cruzar información.</div></div>
+            <div style="display:flex;gap:.5rem;align-items:flex-start"><span style="background:rgba(15,110,86,.1);color:var(--c-green);font-size:10px;font-weight:700;padding:2px 7px;border-radius:10px;white-space:nowrap">BAJO</span><div style="font-size:11px;color:var(--muted)">Mejora la experiencia pero no es crítico. El proceso funciona aunque sea con más pasos. Ej: falta de notificaciones automáticas.</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:120px 1fr;gap:.6rem;padding:.6rem;background:var(--surface2);border-radius:6px">
+        <div style="font-size:11px;font-weight:600;color:var(--c-purple)">RF asociados</div>
+        <div style="font-size:11px;color:var(--muted);line-height:1.5">Escribe los IDs de los requisitos funcionales que resuelven esta brecha. Ej: <code style="background:var(--surface);padding:1px 5px;border-radius:3px;font-size:10px">RF-001, RF-002</code>. Esto crea la trazabilidad que necesitas para el SRS y la RTM.</div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="card">
+    <div style="font-size:13px;font-weight:500;font-family:var(--font-serif);margin-bottom:.6rem">Tipos de brecha más comunes</div>
+    <div class="g2">
+      <div style="display:flex;gap:.5rem;align-items:flex-start;padding:.5rem;background:var(--surface2);border-radius:6px">
+        <div style="font-size:18px">⚙️</div><div><div style="font-size:11px;font-weight:500;color:var(--text)">Proceso</div><div style="font-size:11px;color:var(--muted)">Pasos manuales, duplicados o sin automatizar. La más común en proyectos de digitalización.</div></div>
+      </div>
+      <div style="display:flex;gap:.5rem;align-items:flex-start;padding:.5rem;background:var(--surface2);border-radius:6px">
+        <div style="font-size:18px">🗄️</div><div><div style="font-size:11px;font-weight:500;color:var(--text)">Datos</div><div style="font-size:11px;color:var(--muted)">Información dispersa, sin integración o sin trazabilidad entre sistemas.</div></div>
+      </div>
+      <div style="display:flex;gap:.5rem;align-items:flex-start;padding:.5rem;background:var(--surface2);border-radius:6px">
+        <div style="font-size:18px">💻</div><div><div style="font-size:11px;font-weight:500;color:var(--text)">Tecnología</div><div style="font-size:11px;color:var(--muted)">Sistemas que no se comunican, tecnología obsoleta o sin API disponible.</div></div>
+      </div>
+      <div style="display:flex;gap:.5rem;align-items:flex-start;padding:.5rem;background:var(--surface2);border-radius:6px">
+        <div style="font-size:18px">👥</div><div><div style="font-size:11px;font-weight:500;color:var(--text)">Personas</div><div style="font-size:11px;color:var(--muted)">Roles sin acceso, capacitación insuficiente o responsabilidades poco claras.</div></div>
+      </div>
+    </div>
+  </div>
+
+</div>
 `);
 
-function initAnaGap(){
-  var el=document.getElementById('ana-gap-mount'); if(!el||el.innerHTML.trim()) return;
-  renderAnaGap();
-}
-function renderAnaGap(){
-  var el=document.getElementById('ana-gap-mount'); if(!el) return;
-  var g=ANA.gap;
-  var css='<style>'
-    +'.gline{display:flex;align-items:flex-start;gap:6px;padding:5px 0;border-bottom:0.5px solid var(--border)}'
-    +'.gline:last-child{border-bottom:none}'
-    +'.ginp{flex:1;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:5px 8px;font-size:12px;color:var(--text);font-family:var(--font-sans);outline:none}'
-    +'.ginp:focus{border-color:var(--c-purple)}'
-    +'.gbdel{background:none;border:none;cursor:pointer;color:var(--muted);font-size:16px;padding:0 2px;line-height:1}'
-    +'.gbdel:hover{color:var(--c-red)}'
-    +'.brow{display:grid;grid-template-columns:1fr 110px 70px 1fr 28px;gap:5px;align-items:center;padding:6px 0;border-bottom:0.5px solid var(--border)}'
-    +'.brow:last-child{border-bottom:none}'
-    +'.brow input,.brow select{background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:4px 7px;font-size:12px;color:var(--text);font-family:var(--font-sans);outline:none}'
-    +'.brow input:focus,.brow select:focus{border-color:var(--c-purple)}'
-    +'</style>';
 
-  function escH(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
-
-  // As-Is list
-  var asIs='<div class="card" style="border-left:3px solid var(--c-red);margin-bottom:1rem">'
-    +'<div class="card-title" style="color:var(--c-red);margin-bottom:.5rem">Proceso actual (As-Is)</div>'
-    +g.asIs.map(function(s,i){
-      return '<div class="gline"><div style="width:5px;height:5px;border-radius:50%;background:var(--c-red);flex-shrink:0;margin-top:7px"></div>'
-        +'<input class="ginp" value="'+escH(s)+'" oninput="ANA.gap.asIs['+i+']=this.value;anaSave()">'
-        +'<button class="gbdel" onclick="ANA.gap.asIs.splice('+i+',1);anaSave();renderAnaGap()">×</button></div>';
-    }).join('')
-    +'<button class="btn btn-sm" style="margin-top:.5rem" onclick="ANA.gap.asIs.push(\'\');anaSave();renderAnaGap()">+ Paso As-Is</button>'
-    +'</div>';
-
-  // To-Be list
-  var toBe='<div class="card" style="border-left:3px solid var(--c-green);margin-bottom:1rem">'
-    +'<div class="card-title" style="color:var(--c-green);margin-bottom:.5rem">Proceso futuro (To-Be)</div>'
-    +g.toBe.map(function(s,i){
-      return '<div class="gline"><div style="width:5px;height:5px;border-radius:50%;background:var(--c-green);flex-shrink:0;margin-top:7px"></div>'
-        +'<input class="ginp" value="'+escH(s)+'" oninput="ANA.gap.toBe['+i+']=this.value;anaSave()">'
-        +'<button class="gbdel" onclick="ANA.gap.toBe.splice('+i+',1);anaSave();renderAnaGap()">×</button></div>';
-    }).join('')
-    +'<button class="btn btn-sm" style="margin-top:.5rem" onclick="ANA.gap.toBe.push(\'\');anaSave();renderAnaGap()">+ Paso To-Be</button>'
-    +'</div>';
-
-  // Brechas table
-  var tipos=['Automatización','Eliminación','Integración','Optimización','Simplificación','Nuevo proceso'];
-  var hdr='<div style="display:grid;grid-template-columns:1fr 110px 70px 1fr 28px;gap:5px;font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.3px;border-bottom:0.5px solid var(--border2);padding-bottom:4px;margin-bottom:3px">'
-    +'<span>Brecha</span><span>Tipo</span><span>Impacto</span><span>Requisitos generados</span><span></span></div>';
-  var brechas='<div class="card" style="margin-bottom:.8rem">'
-    +'<div class="card-title" style="margin-bottom:.5rem">Brechas identificadas y requisitos generados</div>'
-    +hdr
-    +g.brechas.map(function(b,i){
-      return '<div class="brow">'
-        +'<input value="'+escH(b.titulo)+'" placeholder="Descripción de la brecha..." oninput="ANA.gap.brechas['+i+'].titulo=this.value;anaSave()">'
-        +'<select onchange="ANA.gap.brechas['+i+'].tipo=this.value;anaSave()">'+tipos.map(function(t){return'<option'+(b.tipo===t?' selected':'')+'>'+t+'</option>';}).join('')+'</select>'
-        +'<input type="number" min="0" max="100" value="'+escH(String(b.impacto))+'" oninput="ANA.gap.brechas['+i+'].impacto=parseInt(this.value)||0;anaSave()" style="text-align:center">'
-        +'<input value="'+escH(b.reqs)+'" placeholder="RF-001, RNF-001..." oninput="ANA.gap.brechas['+i+'].reqs=this.value;anaSave()">'
-        +'<button class="gbdel" onclick="ANA.gap.brechas.splice('+i+',1);anaSave();renderAnaGap()">×</button>'
-        +'</div>';
-    }).join('')
-    +'<button class="btn btn-sm" style="margin-top:.6rem" onclick="ANA.gap.brechas.push({titulo:\'\',tipo:\'Automatización\',impacto:0,reqs:\'\'});anaSave();renderAnaGap()">+ Brecha</button>'
-    +'</div>';
-
-  var bar='<div style="display:flex;align-items:center;gap:.5rem;margin-top:.5rem">'
-    +'<button class="btn" style="background:var(--c-purple);color:#fff;border-color:var(--c-purple)" onclick="anaSave();anaSaved(\'gap-msg\')">Guardar GAP</button>'
-    +'<button class="btn btn-sm" onclick="anaRestoreGAP()">↺ Restaurar ejemplos</button>'
-    +'<span id="gap-msg" style="font-size:11px;color:var(--c-green)"></span></div>';
-
-  var tip='<div style="background:rgba(83,52,131,.07);border:0.5px solid rgba(83,52,131,.3);border-radius:var(--radius);padding:.5rem .8rem;font-size:11px;color:var(--c-purple);margin-bottom:1rem">ⓘ Todos los campos son editables. Modifica los ejemplos según el proceso real de tu proyecto.</div>';
-
-  el.innerHTML = css+tip+'<div class="g2" style="margin-bottom:.8rem">'+asIs+toBe+'</div>'+brechas+bar;
-}
-
-/* ════════════════════════════════════════
-   PAGE: PRIORIZACIÓN
-════════════════════════════════════════ */
 reg('ana-verificacion', () => `
 <div class="page-header">
   <div class="page-eyebrow" style="color:var(--c-purple)">● Fase 2 — Análisis</div>
@@ -6505,7 +6523,7 @@ function onPageShow(id) {
   // ana-modelado is now static
   if (id==='eli-tecnicas') setTimeout(initEliTecnicas, 50);
   if (id==='ana-estructuracion') setTimeout(initAnaEstr, 50);
-  if (id==='ana-gap') setTimeout(initAnaGap, 50);
+  if (id==='ana-gap') { setTimeout(initAnaGap, 50); var g0=document.getElementById('gap-panel-0'); var g1=document.getElementById('gap-panel-1'); if(g0)g0.style.display='block'; if(g1)g1.style.display='none'; document.querySelectorAll('#gap-tab-nav .tab-btn').forEach(function(b,j){b.classList.toggle('on',j===0);}); }
   // renderAnaUC is called inside initAnaModelado
   if (id==='ana-verificacion') setTimeout(initAnaVer, 50);
   if (id==='ana-priorizacion') setTimeout(function(){ initAnaMoscow(); initAnaVxE(); initAnaKano(); }, 50);
@@ -7640,6 +7658,88 @@ function ctxExportSVG(){
   a.download='diagrama-contexto.svg'; a.click(); URL.revokeObjectURL(a.href);
 }
 
+function gapTabSel(i){
+  document.querySelectorAll('#gap-tab-nav .tab-btn').forEach(function(b,j){b.classList.toggle('on',j===i);});
+  document.getElementById('gap-panel-0').style.display=i===0?'block':'none';
+  document.getElementById('gap-panel-1').style.display=i===1?'block':'none';
+}
+
+function initAnaGap(){
+  var el=document.getElementById('ana-gap-mount'); if(!el||el.innerHTML.trim()) return;
+  renderAnaGap();
+}
+function renderAnaGap(){
+  var el=document.getElementById('ana-gap-mount'); if(!el) return;
+  var g=ANA.gap;
+  var css='<style>'
+    +'.gline{display:flex;align-items:flex-start;gap:6px;padding:5px 0;border-bottom:0.5px solid var(--border)}'
+    +'.gline:last-child{border-bottom:none}'
+    +'.ginp{flex:1;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:5px 8px;font-size:12px;color:var(--text);font-family:var(--font-sans);outline:none}'
+    +'.ginp:focus{border-color:var(--c-purple)}'
+    +'.gbdel{background:none;border:none;cursor:pointer;color:var(--muted);font-size:16px;padding:0 2px;line-height:1}'
+    +'.gbdel:hover{color:var(--c-red)}'
+    +'.brow{display:grid;grid-template-columns:1fr 110px 70px 1fr 28px;gap:5px;align-items:center;padding:6px 0;border-bottom:0.5px solid var(--border)}'
+    +'.brow:last-child{border-bottom:none}'
+    +'.brow input,.brow select{background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:4px 7px;font-size:12px;color:var(--text);font-family:var(--font-sans);outline:none}'
+    +'.brow input:focus,.brow select:focus{border-color:var(--c-purple)}'
+    +'</style>';
+
+  function escH(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
+  // As-Is list
+  var asIs='<div class="card" style="border-left:3px solid var(--c-red);margin-bottom:1rem">'
+    +'<div class="card-title" style="color:var(--c-red);margin-bottom:.5rem">Proceso actual (As-Is)</div>'
+    +g.asIs.map(function(s,i){
+      return '<div class="gline"><div style="width:5px;height:5px;border-radius:50%;background:var(--c-red);flex-shrink:0;margin-top:7px"></div>'
+        +'<input class="ginp" value="'+escH(s)+'" oninput="ANA.gap.asIs['+i+']=this.value;anaSave()">'
+        +'<button class="gbdel" onclick="ANA.gap.asIs.splice('+i+',1);anaSave();renderAnaGap()">×</button></div>';
+    }).join('')
+    +'<button class="btn btn-sm" style="margin-top:.5rem" onclick="ANA.gap.asIs.push(\'\');anaSave();renderAnaGap()">+ Paso As-Is</button>'
+    +'</div>';
+
+  // To-Be list
+  var toBe='<div class="card" style="border-left:3px solid var(--c-green);margin-bottom:1rem">'
+    +'<div class="card-title" style="color:var(--c-green);margin-bottom:.5rem">Proceso futuro (To-Be)</div>'
+    +g.toBe.map(function(s,i){
+      return '<div class="gline"><div style="width:5px;height:5px;border-radius:50%;background:var(--c-green);flex-shrink:0;margin-top:7px"></div>'
+        +'<input class="ginp" value="'+escH(s)+'" oninput="ANA.gap.toBe['+i+']=this.value;anaSave()">'
+        +'<button class="gbdel" onclick="ANA.gap.toBe.splice('+i+',1);anaSave();renderAnaGap()">×</button></div>';
+    }).join('')
+    +'<button class="btn btn-sm" style="margin-top:.5rem" onclick="ANA.gap.toBe.push(\'\');anaSave();renderAnaGap()">+ Paso To-Be</button>'
+    +'</div>';
+
+  // Brechas table
+  var tipos=['Automatización','Eliminación','Integración','Optimización','Simplificación','Nuevo proceso'];
+  var hdr='<div style="display:grid;grid-template-columns:1fr 110px 70px 1fr 28px;gap:5px;font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.3px;border-bottom:0.5px solid var(--border2);padding-bottom:4px;margin-bottom:3px">'
+    +'<span>Brecha</span><span>Tipo</span><span>Impacto</span><span>Requisitos generados</span><span></span></div>';
+  var brechas='<div class="card" style="margin-bottom:.8rem">'
+    +'<div class="card-title" style="margin-bottom:.5rem">Brechas identificadas y requisitos generados</div>'
+    +hdr
+    +g.brechas.map(function(b,i){
+      return '<div class="brow">'
+        +'<input value="'+escH(b.titulo)+'" placeholder="Descripción de la brecha..." oninput="ANA.gap.brechas['+i+'].titulo=this.value;anaSave()">'
+        +'<select onchange="ANA.gap.brechas['+i+'].tipo=this.value;anaSave()">'+tipos.map(function(t){return'<option'+(b.tipo===t?' selected':'')+'>'+t+'</option>';}).join('')+'</select>'
+        +'<select oninput="ANA.gap.brechas['+i+'].impacto=this.value;anaSave()" style="background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:2px 4px;font-size:11px;color:var(--text);outline:none">'
+        +'<option value="Alto"'+(b.impacto==="Alto"||b.impacto===3||b.impacto===4||b.impacto===5?' selected':'')+'>Alto</option>'
+        +'<option value="Medio"'+(b.impacto==="Medio"||b.impacto===2?' selected':'')+'>Medio</option>'
+        +'<option value="Bajo"'+(b.impacto==="Bajo"||b.impacto===1||b.impacto===0?' selected':'')+'>Bajo</option>'
+        +'</select>'
+        +'<input value="'+escH(b.reqs)+'" placeholder="RF-001, RNF-001..." oninput="ANA.gap.brechas['+i+'].reqs=this.value;anaSave()">'
+        +'<button class="gbdel" onclick="ANA.gap.brechas.splice('+i+',1);anaSave();renderAnaGap()">×</button>'
+        +'</div>';
+    }).join('')
+    +'<button class="btn btn-sm" style="margin-top:.6rem" onclick="ANA.gap.brechas.push({titulo:\'\',tipo:\'Automatización\',impacto:0,reqs:\'\'});anaSave();renderAnaGap()">+ Brecha</button>'
+    +'</div>';
+
+  var bar='<div style="display:flex;align-items:center;gap:.5rem;margin-top:.5rem">'
+    +'<button class="btn" style="background:var(--c-purple);color:#fff;border-color:var(--c-purple)" onclick="anaSave();anaSaved(\'gap-msg\')">Guardar GAP</button>'
+    +'<button class="btn btn-sm" onclick="anaRestoreGAP()">↺ Restaurar ejemplos</button>'
+    +'<span id="gap-msg" style="font-size:11px;color:var(--c-green)"></span></div>';
+
+  var tip='<div style="background:rgba(83,52,131,.07);border:0.5px solid rgba(83,52,131,.3);border-radius:var(--radius);padding:.5rem .8rem;font-size:11px;color:var(--c-purple);margin-bottom:1rem">ⓘ Todos los campos son editables. Modifica los ejemplos según el proceso real de tu proyecto.</div>';
+
+  el.innerHTML = css+tip+'<div class="g2" style="margin-bottom:.8rem">'+asIs+toBe+'</div>'+brechas+bar;
+}
 buildAll();
 </script>
 </body>
