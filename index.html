@@ -7364,134 +7364,117 @@ function renderCtx(data){
 function buildCtxDiagram(data){
   var entidades=data.entidades||[], flujos=data.flujos||[], sistema=data.sistema||'Sistema';
   if(entidades.length===0) return '<div style="text-align:center;padding:2rem;color:var(--muted);font-size:13px">Agrega entidades en el Editor para ver el diagrama.</div>';
-
   function escSVG(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 
-  var n = entidades.length;
-  // Layout: place entities in a grid around the center
-  // Top row, right col, bottom row, left col
-  var eW=130, eH=48, sW=160, sH=56;
-  var cols = Math.ceil(Math.sqrt(n));
-  var rows = Math.ceil(n / cols);
-  
-  // Grid spacing
-  var hGap = 180, vGap = 90;
-  var gridW = cols * hGap;
-  var gridH = rows * vGap;
-  
-  // Canvas size
-  var padding = 80;
-  var W = Math.max(700, gridW + padding*2);
-  var H = Math.max(500, gridH + padding*2 + 120);
-  var cx = W/2, cy = H/2;
+  var n=entidades.length;
+  var eW=136, eH=50, sW=170, sH=60;
 
-  // Position entities: distribute evenly around center
-  // sides: top, right, bottom, left
-  var positions = {};
-  var sides = { top:[], right:[], bottom:[], left:[] };
-  
-  // Distribute entities across 4 sides
-  entidades.forEach(function(e, i){
-    var side = ['top','right','bottom','left'][i % 4];
-    sides[side].push(e);
+  // Canvas: scale with number of entities
+  var radius = Math.max(200, n * 38);
+  var W = radius*2 + 220, H = radius*2 + 180;
+  var cx=W/2, cy=H/2+10;
+
+  // Position entities evenly in a circle
+  var positions={};
+  positions['sistema']={x:cx, y:cy, w:sW, h:sH};
+  entidades.forEach(function(e,i){
+    var angle = (2*Math.PI*i/n) - Math.PI/2;
+    positions[e.id]={
+      x: cx + radius*Math.cos(angle),
+      y: cy + radius*Math.sin(angle),
+      w: eW, h: eH
+    };
   });
 
-  function positionSide(list, side){
-    var count = list.length;
-    list.forEach(function(e, i){
-      var t = count > 1 ? (i/(count-1)) - 0.5 : 0;
-      var spread = Math.min(count * 140, W * 0.6);
-      var x, y;
-      if(side==='top')    { x = cx + t*spread; y = padding; }
-      if(side==='bottom') { x = cx + t*spread; y = H - padding - eH; }
-      if(side==='left')   { x = padding; y = cy + t*spread - eH/2; }
-      if(side==='right')  { x = W - padding - eW; y = cy + t*spread - eH/2; }
-      positions[e.id] = {x: x + eW/2, y: y + eH/2};
-    });
+  // Get intersection point of line from center of box to target
+  function boxEdge(pos, tx, ty){
+    var dx=tx-pos.x, dy=ty-pos.y;
+    var hw=pos.w/2+2, hh=pos.h/2+2;
+    var scaleX = dx!==0 ? hw/Math.abs(dx) : Infinity;
+    var scaleY = dy!==0 ? hh/Math.abs(dy) : Infinity;
+    var scale = Math.min(scaleX, scaleY);
+    return {x: pos.x+dx*scale, y: pos.y+dy*scale};
   }
-  
-  ['top','right','bottom','left'].forEach(function(s){ positionSide(sides[s], s); });
-  positions['sistema'] = {x: cx, y: cy};
 
   var svgEl=[], flowLines=[];
 
   // System box
-  svgEl.push('<rect x="'+(cx-sW/2)+'" y="'+(cy-sH/2)+'" width="'+sW+'" height="'+sH+'" rx="10" fill="rgba(83,52,131,.08)" stroke="var(--c-purple)" stroke-width="2"/>');
-  svgEl.push('<text x="'+cx+'" y="'+cy+'" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="13" font-weight="600" fill="var(--c-purple)">'+escSVG(sistema)+'</text>');
+  svgEl.push('<rect x="'+(cx-sW/2)+'" y="'+(cy-sH/2)+'" width="'+sW+'" height="'+sH+'" rx="12" fill="rgba(83,52,131,.1)" stroke="var(--c-purple)" stroke-width="2.5"/>');
+  svgEl.push('<text x="'+cx+'" y="'+cy+'" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="13" font-weight="700" fill="var(--c-purple)">'+escSVG(sistema)+'</text>');
 
   // Entity boxes
   entidades.forEach(function(e){
-    var pos = positions[e.id];
-    if(!pos) return;
-    var col = e.tipo==='actor'?'var(--c-teal)':e.tipo==='sistema'?'var(--c-blue)':'var(--c-amber)';
-    svgEl.push('<rect x="'+(pos.x-eW/2)+'" y="'+(pos.y-eH/2)+'" width="'+eW+'" height="'+eH+'" rx="7" fill="var(--surface)" stroke="'+col+'" stroke-width="1.3"/>');
-    // Name - wrap if long
-    var name = escSVG(e.nombre);
-    if(name.length > 18){
-      var mid = Math.floor(name.length/2);
-      var sp = name.lastIndexOf(' ', mid);
-      if(sp < 0) sp = mid;
-      svgEl.push('<text x="'+pos.x+'" y="'+(pos.y-8)+'" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" font-weight="500" fill="'+col+'">'+name.substring(0,sp)+'</text>');
-      svgEl.push('<text x="'+pos.x+'" y="'+(pos.y+6)+'" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" font-weight="500" fill="'+col+'">'+name.substring(sp+1)+'</text>');
-    } else {
-      svgEl.push('<text x="'+pos.x+'" y="'+(pos.y-7)+'" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" font-weight="500" fill="'+col+'">'+name+'</text>');
-    }
-    svgEl.push('<text x="'+pos.x+'" y="'+(pos.y+10)+'" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="9" fill="var(--muted)">'+escSVG(e.tipo)+'</text>');
+    var pos=positions[e.id]; if(!pos) return;
+    var col=e.tipo==='actor'?'var(--c-teal)':e.tipo==='sistema'?'var(--c-blue)':'var(--c-amber)';
+    svgEl.push('<rect x="'+(pos.x-eW/2)+'" y="'+(pos.y-eH/2)+'" width="'+eW+'" height="'+eH+'" rx="8" fill="var(--surface)" stroke="'+col+'" stroke-width="1.5"/>');
+    var name=escSVG(e.nombre);
+    // Split long names
+    var lines=[];
+    if(name.length>16){
+      var words=name.split(' ');
+      var line='';
+      words.forEach(function(w){
+        if((line+' '+w).trim().length>16&&line){ lines.push(line.trim()); line=w; }
+        else line=(line+' '+w).trim();
+      });
+      if(line) lines.push(line);
+    } else { lines=[name]; }
+    var totalH=(lines.length-1)*14;
+    lines.forEach(function(l,li){
+      svgEl.push('<text x="'+pos.x+'" y="'+(pos.y-totalH/2+li*14-7)+'" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" font-weight="500" fill="'+col+'">'+l+'</text>');
+    });
+    svgEl.push('<text x="'+pos.x+'" y="'+(pos.y+eH/2-10)+'" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="9" fill="var(--muted)">'+escSVG(e.tipo)+'</text>');
   });
 
-  // Draw flows
-  var flowCount = {};
+  // Group flows by entity pair to offset parallel flows
+  var pairOffset={};
+  flujos.forEach(function(f){
+    var key=[f.desde,f.hasta].sort().join('|');
+    pairOffset[key]=(pairOffset[key]||0);
+  });
+  var pairCount={};
+
   flujos.forEach(function(f, fi){
     var p1=positions[f.desde], p2=positions[f.hasta];
     if(!p1||!p2) return;
+    var e1=boxEdge(p1,p2.x,p2.y), e2=boxEdge(p2,p1.x,p1.y);
+    var col=f.tipo==='entrada'?'var(--c-green)':f.tipo==='salida'?'var(--c-blue)':'var(--c-purple)';
+    var mEnd=f.tipo==='bidireccional'?'url(#arr-ctx-both)':'url(#arr-ctx-end)';
+    var mStart=f.tipo==='bidireccional'?'url(#arr-ctx-end)':'none';
 
-    var dx=p2.x-p1.x, dy=p2.y-p1.y;
-    var len=Math.sqrt(dx*dx+dy*dy)||1;
-    var nx=dx/len, ny=dy/len;
+    // Offset for multiple flows between same pair
+    var key=[f.desde,f.hasta].sort().join('|');
+    var cnt=pairCount[key]||0; pairCount[key]=cnt+1;
+    var dx=e2.x-e1.x, dy=e2.y-e1.y, len=Math.sqrt(dx*dx+dy*dy)||1;
+    var perpX=-dy/len, perpY=dx/len;
+    var off=(cnt-(flujos.filter(function(ff){return [ff.desde,ff.hasta].sort().join('|')===key;}).length-1)/2)*18;
+    var cx2=(e1.x+e2.x)/2+perpX*off+perpX*30;
+    var cy2=(e1.y+e2.y)/2+perpY*off+perpY*30;
 
-    // Shorten line to box edges
-    var sh1 = f.desde==='sistema' ? sW/2+4 : eW/2+4;
-    var sh2 = f.hasta==='sistema'  ? sW/2+4 : eW/2+4;
-    // Use height for top/bottom
-    var sh1h = f.desde==='sistema' ? sH/2+4 : eH/2+4;
-    var sh2h = f.hasta==='sistema'  ? sH/2+4 : eH/2+4;
-    var shortenStart = Math.abs(nx) > Math.abs(ny) ? sh1 : sh1h;
-    var shortenEnd   = Math.abs(nx) > Math.abs(ny) ? sh2 : sh2h;
+    flowLines.push('<path d="M'+e1.x.toFixed(1)+','+e1.y.toFixed(1)+' Q'+cx2.toFixed(1)+','+cy2.toFixed(1)+' '+e2.x.toFixed(1)+','+e2.y.toFixed(1)+'" fill="none" stroke="'+col+'" stroke-width="1.4" marker-end="'+mEnd+'" '+(mStart!=='none'?'marker-start="'+mStart+'"':'')+' opacity="0.85"/>');
 
-    var x1=p1.x+nx*shortenStart, y1=p1.y+ny*shortenStart;
-    var x2=p2.x-nx*shortenEnd,   y2=p2.y-ny*shortenEnd;
-
-    // Curve control point (slight arc to avoid overlap)
-    var key = [f.desde,f.hasta].sort().join('-');
-    flowCount[key] = (flowCount[key]||0) + 1;
-    var offset = (flowCount[key]-1) * 20;
-    var perpX = -ny*offset, perpY = nx*offset;
-    var midX = (x1+x2)/2 + perpX, midY = (y1+y2)/2 + perpY;
-
-    var col = f.tipo==='entrada'?'var(--c-green)':f.tipo==='salida'?'var(--c-blue)':'var(--c-purple)';
-    var mEnd = f.tipo==='bidireccional'?'url(#arr-ctx-both)':'url(#arr-ctx-end)';
-    var mStart = f.tipo==='bidireccional'?'url(#arr-ctx-end)':'none';
-
-    flowLines.push('<path d="M'+x1+','+y1+' Q'+midX+','+midY+' '+x2+','+y2+'" fill="none" stroke="'+col+'" stroke-width="1.3" marker-end="'+mEnd+'" marker-start="'+mStart+'"/>');
-    
-    // Label at curve midpoint
-    var labelX = midX, labelY = midY;
-    var lw = Math.min((f.etiqueta||'').length * 6 + 10, 120);
-    flowLines.push('<rect x="'+(labelX-lw/2)+'" y="'+(labelY-9)+'" width="'+lw+'" height="16" rx="3" fill="var(--bg)" opacity="0.9"/>');
-    flowLines.push('<text x="'+labelX+'" y="'+labelY+'" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="9" font-weight="500" fill="'+col+'">'+escSVG(f.etiqueta||'')+'</text>');
+    // Label positioned along curve at t=0.5
+    var lx=0.25*e1.x+0.5*cx2+0.25*e2.x;
+    var ly=0.25*e1.y+0.5*cy2+0.25*e2.y;
+    var label=escSVG(f.etiqueta||'');
+    if(label){
+      var lw=Math.min(label.length*6+14, 130);
+      flowLines.push('<rect x="'+(lx-lw/2).toFixed(1)+'" y="'+(ly-9).toFixed(1)+'" width="'+lw+'" height="17" rx="3" fill="var(--bg)" opacity="0.92"/>');
+      flowLines.push('<text x="'+lx.toFixed(1)+'" y="'+ly.toFixed(1)+'" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="9" font-weight="500" fill="'+col+'">'+label+'</text>');
+    }
   });
 
   // Legend
-  var lx=10, ly=H-36;
-  var legend='<rect x="'+lx+'" y="'+ly+'" width="420" height="26" rx="4" fill="var(--surface)" opacity="0.85"/>'
-    +'<circle cx="'+(lx+12)+'" cy="'+(ly+13)+'" r="5" fill="none" stroke="var(--c-teal)" stroke-width="1.3"/><text x="'+(lx+20)+'" y="'+(ly+14)+'" font-family="DM Sans,sans-serif" font-size="9" fill="var(--muted)">actor</text>'
-    +'<rect x="'+(lx+58)+'" y="'+(ly+8)+'" width="10" height="10" rx="2" fill="none" stroke="var(--c-blue)" stroke-width="1.3"/><text x="'+(lx+72)+'" y="'+(ly+14)+'" font-family="DM Sans,sans-serif" font-size="9" fill="var(--muted)">sistema</text>'
-    +'<rect x="'+(lx+122)+'" y="'+(ly+8)+'" width="10" height="10" rx="2" fill="none" stroke="var(--c-amber)" stroke-width="1.3"/><text x="'+(lx+136)+'" y="'+(ly+14)+'" font-family="DM Sans,sans-serif" font-size="9" fill="var(--muted)">organización</text>'
-    +'<line x1="'+(lx+208)+'" y1="'+(ly+13)+'" x2="'+(lx+224)+'" y2="'+(ly+13)+'" stroke="var(--c-green)" stroke-width="1.3" marker-end="url(#arr-ctx-end)"/><text x="'+(lx+228)+'" y="'+(ly+14)+'" font-family="DM Sans,sans-serif" font-size="9" fill="var(--muted)">entrada</text>'
-    +'<line x1="'+(lx+270)+'" y1="'+(ly+13)+'" x2="'+(lx+286)+'" y2="'+(ly+13)+'" stroke="var(--c-blue)" stroke-width="1.3" marker-end="url(#arr-ctx-end)"/><text x="'+(lx+290)+'" y="'+(ly+14)+'" font-family="DM Sans,sans-serif" font-size="9" fill="var(--muted)">salida</text>'
-    +'<line x1="'+(lx+324)+'" y1="'+(ly+13)+'" x2="'+(lx+340)+'" y2="'+(ly+13)+'" stroke="var(--c-purple)" stroke-width="1.3" marker-end="url(#arr-ctx-both)" marker-start="url(#arr-ctx-end)"/><text x="'+(lx+344)+'" y="'+(ly+14)+'" font-family="DM Sans,sans-serif" font-size="9" fill="var(--muted)">bidireccional</text>';
+  var lx=8, ly=H-30;
+  var legend='<rect x="'+lx+'" y="'+(ly-6)+'" width="430" height="22" rx="4" fill="var(--surface)" opacity="0.9"/>'
+    +'<circle cx="'+(lx+11)+'" cy="'+ly+'" r="5" fill="none" stroke="var(--c-teal)" stroke-width="1.3"/><text x="'+(lx+20)+'" y="'+(ly+1)+'" font-family="DM Sans,sans-serif" font-size="9" dominant-baseline="central" fill="var(--muted)">actor</text>'
+    +'<rect x="'+(lx+58)+'" y="'+(ly-5)+'" width="10" height="10" rx="2" fill="none" stroke="var(--c-blue)" stroke-width="1.3"/><text x="'+(lx+72)+'" y="'+(ly+1)+'" font-family="DM Sans,sans-serif" font-size="9" dominant-baseline="central" fill="var(--muted)">sistema</text>'
+    +'<rect x="'+(lx+122)+'" y="'+(ly-5)+'" width="10" height="10" rx="2" fill="none" stroke="var(--c-amber)" stroke-width="1.3"/><text x="'+(lx+136)+'" y="'+(ly+1)+'" font-family="DM Sans,sans-serif" font-size="9" dominant-baseline="central" fill="var(--muted)">organización</text>'
+    +'<line x1="'+(lx+204)+'" y1="'+ly+'" x2="'+(lx+220)+'" y2="'+ly+'" stroke="var(--c-green)" stroke-width="1.3" marker-end="url(#arr-ctx-end)"/><text x="'+(lx+224)+'" y="'+(ly+1)+'" font-family="DM Sans,sans-serif" font-size="9" dominant-baseline="central" fill="var(--muted)">entrada</text>'
+    +'<line x1="'+(lx+264)+'" y1="'+ly+'" x2="'+(lx+280)+'" y2="'+ly+'" stroke="var(--c-blue)" stroke-width="1.3" marker-end="url(#arr-ctx-end)"/><text x="'+(lx+284)+'" y="'+(ly+1)+'" font-family="DM Sans,sans-serif" font-size="9" dominant-baseline="central" fill="var(--muted)">salida</text>'
+    +'<line x1="'+(lx+318)+'" y1="'+ly+'" x2="'+(lx+334)+'" y2="'+ly+'" stroke="var(--c-purple)" stroke-width="1.3" marker-end="url(#arr-ctx-both)" marker-start="url(#arr-ctx-end)"/><text x="'+(lx+338)+'" y="'+(ly+1)+'" font-family="DM Sans,sans-serif" font-size="9" dominant-baseline="central" fill="var(--muted)">bidireccional</text>';
 
-  return '<svg id="ctx-svg" width="100%" viewBox="0 0 '+W+' '+H+'" xmlns="http://www.w3.org/2000/svg" style="overflow:visible">'
+  return '<svg id="ctx-svg" width="100%" viewBox="0 0 '+W.toFixed(0)+' '+H.toFixed(0)+'" xmlns="http://www.w3.org/2000/svg">'
     +'<defs>'
     +'<marker id="arr-ctx-end" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5"/></marker>'
     +'<marker id="arr-ctx-both" viewBox="0 0 10 10" refX="2" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5"/></marker>'
