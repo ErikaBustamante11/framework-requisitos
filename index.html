@@ -629,12 +629,10 @@ textarea { field-sizing: content; min-height: 2em; }
     <div class="nav-group">
       <span class="nav-label">Fase 1 · Elicitación</span>
       <button class="nav-item" onclick="nav('eli-flujo')"><div class="nav-pip" style="background:var(--c-teal)"></div>Flujo de actividades</button>
-      <button class="nav-item" onclick="nav('eli-overview')"><div class="nav-pip" style="background:var(--c-teal)"></div>Visión general</button>
       <button class="nav-item" onclick="nav('campo-proyecto')"><div class="nav-pip" style="background:var(--c-teal)"></div>Contexto del proyecto</button>
       <button class="nav-item" onclick="nav('eli-stakeholders')"><div class="nav-pip" style="background:var(--c-teal)"></div>Mapa de stakeholders</button>
       <button class="nav-item" onclick="nav('eli-tecnicas')"><div class="nav-pip" style="background:var(--c-teal)"></div>Técnicas <span class="nav-count">5</span></button>
-      <button class="nav-item" onclick="nav('eli-plantillas')"><div class="nav-pip" style="background:var(--c-teal)"></div>Plantillas de sesión</button>
-      <button class="nav-item" onclick="nav('campo-sesiones')"><div class="nav-pip" style="background:var(--c-teal)"></div>Mis sesiones</button>
+      <button class="nav-item" onclick="nav('eli-sesiones')"><div class="nav-pip" style="background:var(--c-teal)"></div>Sesiones de elicitación</button>
       <button class="nav-item" onclick="nav('eli-pc1')"><div class="nav-pip" style="background:var(--c-teal)"></div>Punto de control PC1</button>
     </div>
     <div class="nav-group">
@@ -1713,6 +1711,24 @@ function delEliArt(tecId, extraIdx) {
 /* ════════════════════════════════════════
    PAGE: PLANTILLAS
 ════════════════════════════════════════ */
+reg('eli-sesiones', () => `
+<div class="page-header">
+  <div class="page-eyebrow" style="color:var(--c-teal)">● Fase 1 — Elicitación</div>
+  <h1 class="page-title">Sesiones de elicitación</h1>
+  <p class="page-desc">Planifica y documenta cada sesión. La minuta editable registra participantes, requisitos y hallazgos. Todo se guarda automáticamente.</p>
+</div>
+<div class="tab-nav" id="ses-tab-nav">
+  <button class="tab-btn on" onclick="sesTabSel(0)">Plantillas de sesión</button>
+  <button class="tab-btn" onclick="sesTabSel(1)">Mis sesiones</button>
+</div>
+<div id="ses-panel-0" class="tab-panel on">
+  <div id="eli-plt-mount"></div>
+</div>
+<div id="ses-panel-1" class="tab-panel" style="display:none">
+  <div id="cses-mount"></div>
+</div>
+`);
+
 reg('eli-plantillas', () => `
 <div class="page-header">
   <div class="page-eyebrow" style="color:var(--c-teal)">● Fase 1 — Elicitación</div>
@@ -2939,11 +2955,10 @@ reg('srs-bpmn', () => `
 <div class="tab-nav">
   <button class="tab-btn on" onclick="tabSel('bpmn',0,this)">Mis diagramas</button>
   <button class="tab-btn" onclick="tabSel('bpmn',1,this)">Elementos principales</button>
-  <button class="tab-btn" onclick="tabSel('bpmn',2,this)">Reglas de modelado</button>
-  <button class="tab-btn" onclick="tabSel('bpmn',3,this)">Ejemplo As-Is / To-Be</button>
+  <button class="tab-btn" onclick="tabSel('bpmn',2,this)">Ejemplo As-Is / To-Be</button>
 </div>
 
-<div class="tab-panel" id="bpmn-3">
+<div class="tab-panel" id="bpmn-1">
   <div class="g2">
     <div class="card" style="border-left:3px solid var(--c-green)">
       <div class="card-title" style="color:var(--c-green)">Eventos</div>
@@ -3004,41 +3019,6 @@ reg('srs-bpmn', () => `
         <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.2rem"><div style="font-size:12px;font-weight:500">Artefacto de datos</div><span style="font-size:10px;padding:1px 6px;border-radius:3px;background:rgba(83,52,131,.1);color:var(--c-purple)">Página con esquina doblada</span></div>
         <div style="font-size:11px;color:var(--muted)">Documento o dato producido o consumido por una actividad.</div>
       </div>
-    </div>
-  </div>
-</div>
-
-<div class="tab-panel" id="bpmn-1">
-  <div class="g2">
-    <div class="card-sm" style="border-left:3px solid var(--c-green)">
-      <div style="font-size:12px;font-weight:500;margin-bottom:.4rem">Un evento de inicio siempre</div>
-      <div style="background:rgba(15,110,86,.04);border-radius:4px;padding:.35rem .55rem;font-size:11px;margin-bottom:.3rem;color:var(--muted)">✓ Nombrar con sustantivo: "Solicitud recibida"</div>
-      <div style="background:rgba(163,45,45,.04);border-radius:4px;padding:.35rem .55rem;font-size:11px;color:var(--muted)">✗ Verbos en el evento de inicio: "Iniciar proceso"</div>
-    </div>
-    <div class="card-sm" style="border-left:3px solid var(--c-blue)">
-      <div style="font-size:12px;font-weight:500;margin-bottom:.4rem">Tareas nombradas con verbo</div>
-      <div style="background:rgba(15,110,86,.04);border-radius:4px;padding:.35rem .55rem;font-size:11px;margin-bottom:.3rem;color:var(--muted)">✓ "Validar documentos", "Consultar score", "Notificar resultado"</div>
-      <div style="background:rgba(163,45,45,.04);border-radius:4px;padding:.35rem .55rem;font-size:11px;color:var(--muted)">✗ "Documentos", "Score", "Notificación" (sin verbo)</div>
-    </div>
-    <div class="card-sm" style="border-left:3px solid var(--c-amber)">
-      <div style="font-size:12px;font-weight:500;margin-bottom:.4rem">Compuertas con pregunta</div>
-      <div style="background:rgba(15,110,86,.04);border-radius:4px;padding:.35rem .55rem;font-size:11px;margin-bottom:.3rem;color:var(--muted)">✓ "¿Score &gt; 680?" — respuesta: Sí / No</div>
-      <div style="background:rgba(163,45,45,.04);border-radius:4px;padding:.35rem .55rem;font-size:11px;color:var(--muted)">✗ "Decisión" o "Verificar" — no especifica la condición</div>
-    </div>
-    <div class="card-sm" style="border-left:3px solid var(--c-purple)">
-      <div style="font-size:12px;font-weight:500;margin-bottom:.4rem">Artefactos conectados</div>
-      <div style="background:rgba(15,110,86,.04);border-radius:4px;padding:.35rem .55rem;font-size:11px;margin-bottom:.3rem;color:var(--muted)">✓ Los documentos se conectan con asociaciones punteadas a las tareas que los producen o consumen</div>
-      <div style="background:rgba(163,45,45,.04);border-radius:4px;padding:.35rem .55rem;font-size:11px;color:var(--muted)">✗ Artefactos flotantes sin conexión a ninguna actividad</div>
-    </div>
-    <div class="card-sm" style="border-left:3px solid var(--c-red)">
-      <div style="font-size:12px;font-weight:500;margin-bottom:.4rem">As-Is sin juicios de valor</div>
-      <div style="background:rgba(15,110,86,.04);border-radius:4px;padding:.35rem .55rem;font-size:11px;margin-bottom:.3rem;color:var(--muted)">✓ Modelar el proceso tal como ocurre hoy, con sus ineficiencias incluidas</div>
-      <div style="background:rgba(163,45,45,.04);border-radius:4px;padding:.35rem .55rem;font-size:11px;color:var(--muted)">✗ Mejorar el proceso mientras se modela el As-Is — eso es el To-Be</div>
-    </div>
-    <div class="card-sm" style="border-left:3px solid var(--c-gray)">
-      <div style="font-size:12px;font-weight:500;margin-bottom:.4rem">Un proceso por diagrama</div>
-      <div style="background:rgba(15,110,86,.04);border-radius:4px;padding:.35rem .55rem;font-size:11px;margin-bottom:.3rem;color:var(--muted)">✓ Un diagrama = un proceso de negocio con inicio y fin claros</div>
-      <div style="background:rgba(163,45,45,.04);border-radius:4px;padding:.35rem .55rem;font-size:11px;color:var(--muted)">✗ Múltiples procesos no relacionados en el mismo diagrama</div>
     </div>
   </div>
 </div>
@@ -5566,27 +5546,66 @@ function srsCtxAdj(input){
 /* attach bpmn */
 function srsBpmnAdj(input, tipo){
   var file=input.files[0]; if(!file) return;
-  var previewId = tipo==='tobe' ? 'bpmn-adj-tobe' : 'bpmn-adj-asis';
-  var preview=document.getElementById(previewId);
+  var previewId='bpmn-adj-'+tipo;
   var isSVG=file.name.toLowerCase().endsWith('.svg');
   var isImg=/\.(png|jpg|jpeg|gif|webp|svg)$/i.test(file.name);
   var label=tipo==='tobe'?'To-Be — Estado futuro':'As-Is — Estado actual';
   var col=tipo==='tobe'?'var(--c-green)':'var(--c-red)';
   var reader=new FileReader();
   reader.onload=function(e){
-    if(preview){
-      var header='<div style="font-size:10px;font-weight:600;color:'+col+';text-transform:uppercase;letter-spacing:.4px;margin-bottom:.4rem">'+label+'</div>';
-      if(isSVG){
-        preview.innerHTML='<div style="border:0.5px solid var(--border);border-radius:var(--radius);padding:.8rem;background:var(--surface);overflow:auto">'+header+e.target.result+'</div>';
-      } else if(isImg){
-        preview.innerHTML='<div style="border:0.5px solid var(--border);border-radius:var(--radius);padding:.8rem;background:var(--surface)">'+header+'<img src="'+e.target.result+'" style="max-width:100%;border-radius:4px" alt="'+label+'"></div>';
-      } else {
-        preview.innerHTML='<div style="font-size:11px;color:'+col+';padding:.3rem 0">✓ '+file.name+' ('+Math.round(file.size/1024)+'KB)</div>';
-      }
-    }
+    var content=e.target.result;
+    // Save to localStorage
+    try{
+      var stored=JSON.parse(localStorage.getItem('fw_bpmn_diagrams')||'{}');
+      stored[tipo]={name:file.name, content:content, isSVG:isSVG, isImg:isImg};
+      localStorage.setItem('fw_bpmn_diagrams',JSON.stringify(stored));
+    }catch(err){}
+    bpmnShowPreview(tipo, file.name, content, isSVG, isImg, label, col);
   };
   if(isSVG) reader.readAsText(file);
   else reader.readAsDataURL(file);
+}
+
+function bpmnShowPreview(tipo, name, content, isSVG, isImg, label, col){
+  var preview=document.getElementById('bpmn-adj-'+tipo);
+  if(!preview) return;
+  if(!label) label=tipo==='tobe'?'To-Be — Estado futuro':'As-Is — Estado actual';
+  if(!col) col=tipo==='tobe'?'var(--c-green)':'var(--c-red)';
+  var header='<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.4rem">'
+    +'<div style="font-size:10px;font-weight:600;color:'+col+';text-transform:uppercase;letter-spacing:.4px">'+label+'</div>'
+    +'<button class="bpmn-clr-btn" data-tipo="'+tipo+'" style="background:none;border:none;cursor:pointer;font-size:11px;color:var(--muted)">× Quitar</button>'
+    +'</div>';
+  if(isSVG){
+    preview.innerHTML='<div style="border:0.5px solid var(--border);border-radius:var(--radius);padding:.8rem;background:var(--surface);overflow:auto">'+header+content+'</div>';
+  } else if(isImg){
+    preview.innerHTML='<div style="border:0.5px solid var(--border);border-radius:var(--radius);padding:.8rem;background:var(--surface)">'+header+'<img src="'+content+'" style="max-width:100%;border-radius:4px" alt="'+label+'"></div>';
+  } else {
+    preview.innerHTML='<div style="font-size:11px;color:'+col+';padding:.3rem 0">'+header+'✓ '+name+'</div>';
+  }
+  var btn=preview.querySelector('.bpmn-clr-btn');
+  if(btn) btn.addEventListener('click',function(){ bpmnClearAdj(this.dataset.tipo); });
+}
+
+function bpmnClearAdj(tipo){
+  try{
+    var stored=JSON.parse(localStorage.getItem('fw_bpmn_diagrams')||'{}');
+    delete stored[tipo];
+    localStorage.setItem('fw_bpmn_diagrams',JSON.stringify(stored));
+  }catch(e){}
+  var el=document.getElementById('bpmn-adj-'+tipo);
+  if(el) el.innerHTML='';
+}
+
+function bpmnLoadDiagrams(){
+  try{
+    var stored=JSON.parse(localStorage.getItem('fw_bpmn_diagrams')||'{}');
+    ['asis','tobe'].forEach(function(tipo){
+      if(stored[tipo]){
+        var d=stored[tipo];
+        bpmnShowPreview(tipo, d.name, d.content, d.isSVG, d.isImg, null, null);
+      }
+    });
+  }catch(e){}
 }
 
 /* ── CTX plantilla ── */
@@ -6547,6 +6566,7 @@ function onPageShow(id) {
   if (id==='campo-proyecto') setTimeout(initCampoProyecto, 50);
   if (id==='campo-stakeholders') setTimeout(initCampoSK, 50);
   if (id==='campo-sesiones') setTimeout(initCampoSes, 50);
+  if (id==='eli-sesiones') { setTimeout(initEliPlantillas, 50); var s0=document.getElementById('ses-panel-0'); var s1=document.getElementById('ses-panel-1'); if(s0)s0.style.display='block'; if(s1)s1.style.display='none'; document.querySelectorAll('#ses-tab-nav .tab-btn').forEach(function(b,j){b.classList.toggle('on',j===0);}); }
   if (id==='eli-pc1') setTimeout(initEliPC1, 50);
   if (id==='eli-stakeholders') { var p0=document.getElementById('sk-panel-0'); var p1=document.getElementById('sk-panel-1'); if(p0)p0.style.display='block'; if(p1)p1.style.display='none'; document.querySelectorAll('#sk-tab-nav .tab-btn').forEach(function(b,j){b.classList.toggle('on',j===0);}); }
   if (id==='campo-resultados') setTimeout(initCampoResultados, 50);
@@ -6587,6 +6607,7 @@ function bpmnGuardar(){
   if(m){m.textContent='✓ Guardado';setTimeout(function(){m.textContent='';},1800);}
 }
 function bpmnLoad(){
+  bpmnLoadDiagrams();
   try{
     var data=JSON.parse(localStorage.getItem('fw_bpmn_v1'))||{};
     var map={'bpmn-asis-nombre':'asis_nombre','bpmn-asis-actores':'asis_actores','bpmn-asis-notas':'asis_notas',
@@ -7740,6 +7761,14 @@ function renderAnaGap(){
 
   el.innerHTML = css+tip+'<div class="g2" style="margin-bottom:.8rem">'+asIs+toBe+'</div>'+brechas+bar;
 }
+function sesTabSel(i){
+  document.querySelectorAll('#ses-tab-nav .tab-btn').forEach(function(b,j){b.classList.toggle('on',j===i);});
+  document.getElementById('ses-panel-0').style.display=i===0?'block':'none';
+  document.getElementById('ses-panel-1').style.display=i===1?'block':'none';
+  if(i===0){ var m=document.getElementById('eli-plt-mount'); if(m&&!m.innerHTML.trim()) initEliPlantillas(); }
+  if(i===1){ var m=document.getElementById('cses-mount'); if(m&&!m.innerHTML.trim()) initCampoSes(); }
+}
+
 buildAll();
 </script>
 </body>
