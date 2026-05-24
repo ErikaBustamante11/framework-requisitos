@@ -2691,6 +2691,7 @@ reg('ana-priorizacion', () => `
   <button class="tab-btn on" onclick="tabSel('prio',0,this)">MoSCoW</button>
   <button class="tab-btn" onclick="tabSel('prio',1,this)">Modelo de Kano</button>
   <button class="tab-btn" onclick="tabSel('prio',2,this)">Valor vs. Esfuerzo</button>
+  <button class="tab-btn" onclick="tabSel('prio',3,this)">Guía de técnicas</button>
 </div>
 
 <div class="tab-panel on" id="prio-0">
@@ -2698,41 +2699,71 @@ reg('ana-priorizacion', () => `
 </div>
 
 <div class="tab-panel" id="prio-1">
-  <div class="card" style="margin-bottom:.8rem;font-size:12px;color:var(--muted);line-height:1.7;border-left:3px solid var(--c-purple)">
-    El modelo de Kano (Noriaki Kano, 1984) clasifica los atributos del producto según su impacto en la satisfacción del usuario. A diferencia de MoSCoW que ordena por urgencia, Kano ordena por tipo de valor percibido. Se aplica con encuestas funcionales/disfuncionales antes de la especificación.
-  </div>
   <div id="ana-kano-mount"></div>
-  <div class="g3" style="margin-bottom:1rem">
-    ${[
-      {t:'Básicos (Must-be)',color:'var(--c-red)',bg:'rgba(163,45,45,.05)',bc:'rgba(163,45,45,.2)',
-       desc:'Si no están presentes el usuario queda insatisfecho. Su presencia no genera satisfacción extra — simplemente se esperan.',
-       ej:['Login seguro y confiable','No perder datos del formulario','Disponibilidad del sistema 99%'],
-       pregF:'¿Cómo se sentiría si el sistema tuviera [función]?',pregD:'¿Cómo se sentiría si el sistema NO tuviera [función]?'},
-      {t:'Desempeño (One-dimensional)',color:'var(--c-blue)',bg:'rgba(24,95,165,.04)',bc:'rgba(24,95,165,.18)',
-       desc:'A más de esta funcionalidad, más satisfacción. Relación lineal y directa. Son los que los usuarios piden explícitamente.',
-       ej:['Velocidad de carga del dashboard','Cantidad de filtros en reportes','Formatos de exportación disponibles'],
-       pregF:'¿Cómo se sentiría si el sistema fuera más rápido?',pregD:'¿Cómo se sentiría si el sistema fuera más lento?'},
-      {t:'Atractivos (Delighters)',color:'var(--c-green)',bg:'rgba(15,110,86,.04)',bc:'rgba(15,110,86,.2)',
-       desc:'El usuario no los espera, pero cuando los descubre generan alta satisfacción. Su ausencia no genera insatisfacción.',
-       ej:['Sugerencias inteligentes de decisión','Dashboard personalizado automáticamente','Modo offline con sincronización posterior'],
-       pregF:'¿Cómo se sentiría si el sistema sugiriera acciones proactivas?',pregD:'¿Cómo se sentiría si el sistema no lo hiciera?'},
-    ].map(k => `
-    <div style="border-radius:var(--radius-lg);padding:1rem;border:0.5px solid ${k.bc};background:${k.bg}">
-      <div style="font-size:13px;font-weight:500;color:${k.color};margin-bottom:.4rem;font-family:var(--font-serif)">${k.t}</div>
-      <div style="font-size:12px;color:var(--muted);margin-bottom:.7rem;line-height:1.6">${k.desc}</div>
-      <div class="card-title">Ejemplos</div>
-      ${k.ej.map(e => `<div style="display:flex;gap:.5rem;padding:3px 0;font-size:11px;border-bottom:0.5px solid var(--border)"><div style="width:5px;height:5px;border-radius:50%;background:${k.color};flex-shrink:0;margin-top:4px"></div>${e}</div>`).join('')}
-      <div style="margin-top:.7rem;background:var(--surface);border-radius:var(--radius);padding:.55rem .7rem">
-        <div style="font-size:10px;font-weight:500;color:${k.color};text-transform:uppercase;margin-bottom:.3rem">Pregunta funcional</div>
-        <div style="font-size:11px;color:var(--muted)">${k.pregF}</div>
-        <div style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;margin-top:.4rem;margin-bottom:.3rem">Pregunta disfuncional</div>
-        <div style="font-size:11px;color:var(--muted)">${k.pregD}</div>
-      </div>
-    </div>`).join('')}
-  </div>
 </div>
 <div class="tab-panel" id="prio-2">
   <div id="ana-vxe-mount"></div>
+</div>
+
+<div class="tab-panel" id="prio-3">
+  <div class="card" style="margin-bottom:1rem">
+    <div style="font-size:15px;font-weight:500;font-family:var(--font-serif);margin-bottom:.2rem">¿Cuándo usar cada técnica?</div>
+    <p style="font-size:12px;color:var(--muted);line-height:1.7">Las tres técnicas son complementarias. MoSCoW define urgencia, Kano define valor percibido y Valor vs. Esfuerzo define viabilidad. En proyectos reales se recomienda aplicarlas en secuencia.</p>
+  </div>
+
+  <div class="g3" style="margin-bottom:1rem">
+    <div style="border:0.5px solid var(--border);border-radius:var(--radius);padding:.9rem;border-top:3px solid var(--c-red)">
+      <div style="font-size:13px;font-weight:600;color:var(--c-red);margin-bottom:.3rem">1. MoSCoW</div>
+      <div style="font-size:11px;color:var(--muted);line-height:1.6;margin-bottom:.6rem">Clasifica requisitos por urgencia e impacto en el sprint o release. Ideal para negociar alcance con el cliente.</div>
+      <div style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:.4rem">Categorías</div>
+      <div style="display:flex;flex-direction:column;gap:.3rem">
+        <div style="display:flex;gap:.5rem;align-items:flex-start"><span style="font-size:10px;font-weight:700;color:var(--c-red);min-width:16px">M</span><div style="font-size:11px;color:var(--muted)"><strong style="color:var(--text)">Must have</strong> — Sin esto el sistema no funciona. No negociable.</div></div>
+        <div style="display:flex;gap:.5rem;align-items:flex-start"><span style="font-size:10px;font-weight:700;color:var(--c-amber);min-width:16px">S</span><div style="font-size:11px;color:var(--muted)"><strong style="color:var(--text)">Should have</strong> — Importante pero hay workaround temporal.</div></div>
+        <div style="display:flex;gap:.5rem;align-items:flex-start"><span style="font-size:10px;font-weight:700;color:var(--c-blue);min-width:16px">C</span><div style="font-size:11px;color:var(--muted)"><strong style="color:var(--text)">Could have</strong> — Deseable si hay tiempo y presupuesto.</div></div>
+        <div style="display:flex;gap:.5rem;align-items:flex-start"><span style="font-size:10px;font-weight:700;color:var(--muted);min-width:16px">W</span><div style="font-size:11px;color:var(--muted)"><strong style="color:var(--text)">Won't have</strong> — Fuera de alcance en este ciclo.</div></div>
+      </div>
+      <div style="margin-top:.7rem;padding:.5rem;background:rgba(163,45,45,.04);border-radius:4px;font-size:11px;color:var(--muted)"><strong style="color:var(--c-red)">Cuándo usarlo:</strong> Al inicio del proyecto para alinear expectativas con el cliente y definir el MVP.</div>
+    </div>
+
+    <div style="border:0.5px solid var(--border);border-radius:var(--radius);padding:.9rem;border-top:3px solid var(--c-purple)">
+      <div style="font-size:13px;font-weight:600;color:var(--c-purple);margin-bottom:.3rem">2. Modelo de Kano</div>
+      <div style="font-size:11px;color:var(--muted);line-height:1.6;margin-bottom:.6rem">Clasifica funcionalidades según cómo afectan la satisfacción del usuario. Ideal para decidir qué diferencia el producto.</div>
+      <div style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:.4rem">Categorías</div>
+      <div style="display:flex;flex-direction:column;gap:.3rem">
+        <div style="display:flex;gap:.5rem;align-items:flex-start"><span style="font-size:16px;min-width:20px">🔴</span><div style="font-size:11px;color:var(--muted)"><strong style="color:var(--text)">Básicos (Must-be)</strong> — Su ausencia genera insatisfacción. Su presencia no sorprende.</div></div>
+        <div style="display:flex;gap:.5rem;align-items:flex-start"><span style="font-size:16px;min-width:20px">🔵</span><div style="font-size:11px;color:var(--muted)"><strong style="color:var(--text)">Desempeño (One-dim.)</strong> — Más es mejor. Relación lineal con satisfacción.</div></div>
+        <div style="display:flex;gap:.5rem;align-items:flex-start"><span style="font-size:16px;min-width:20px">🟢</span><div style="font-size:11px;color:var(--muted)"><strong style="color:var(--text)">Atractivos (Delighters)</strong> — No esperados. Su presencia deleita al usuario.</div></div>
+        <div style="display:flex;gap:.5rem;align-items:flex-start"><span style="font-size:16px;min-width:20px">⚪</span><div style="font-size:11px;color:var(--muted)"><strong style="color:var(--text)">Indiferente</strong> — Su presencia o ausencia no afecta la satisfacción.</div></div>
+      </div>
+      <div style="margin-top:.7rem;padding:.5rem;background:rgba(83,52,131,.04);border-radius:4px;font-size:11px;color:var(--muted)"><strong style="color:var(--c-purple)">Cuándo usarlo:</strong> Después de MoSCoW para profundizar en qué características generan valor diferencial.</div>
+    </div>
+
+    <div style="border:0.5px solid var(--border);border-radius:var(--radius);padding:.9rem;border-top:3px solid var(--c-teal)">
+      <div style="font-size:13px;font-weight:600;color:var(--c-teal);margin-bottom:.3rem">3. Valor vs. Esfuerzo</div>
+      <div style="font-size:11px;color:var(--muted);line-height:1.6;margin-bottom:.6rem">Matriz 2×2 que combina el valor de negocio con el esfuerzo técnico. Ideal para definir el orden de implementación.</div>
+      <div style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:.4rem">Cuadrantes</div>
+      <div style="display:flex;flex-direction:column;gap:.3rem">
+        <div style="display:flex;gap:.5rem;align-items:flex-start"><span style="font-size:11px;font-weight:700;color:var(--c-green);min-width:60px">Alto/Bajo</span><div style="font-size:11px;color:var(--muted)"><strong style="color:var(--text)">Quick wins</strong> — Alto valor, bajo esfuerzo. Implementar primero.</div></div>
+        <div style="display:flex;gap:.5rem;align-items:flex-start"><span style="font-size:11px;font-weight:700;color:var(--c-blue);min-width:60px">Alto/Alto</span><div style="font-size:11px;color:var(--muted)"><strong style="color:var(--text)">Grandes proyectos</strong> — Planificar cuidadosamente.</div></div>
+        <div style="display:flex;gap:.5rem;align-items:flex-start"><span style="font-size:11px;font-weight:700;color:var(--c-amber);min-width:60px">Bajo/Bajo</span><div style="font-size:11px;color:var(--muted)"><strong style="color:var(--text)">Fill-ins</strong> — Hacer si queda tiempo.</div></div>
+        <div style="display:flex;gap:.5rem;align-items:flex-start"><span style="font-size:11px;font-weight:700;color:var(--c-red);min-width:60px">Bajo/Alto</span><div style="font-size:11px;color:var(--muted)"><strong style="color:var(--text)">Ingrata</strong> — Evitar o eliminar del backlog.</div></div>
+      </div>
+      <div style="margin-top:.7rem;padding:.5rem;background:rgba(29,158,117,.04);border-radius:4px;font-size:11px;color:var(--muted)"><strong style="color:var(--c-teal)">Cuándo usarlo:</strong> Al final para ordenar el backlog priorizado y definir sprints o fases de entrega.</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div style="font-size:13px;font-weight:500;font-family:var(--font-serif);margin-bottom:.6rem">Flujo recomendado de aplicación</div>
+    <div style="display:flex;align-items:center;gap:.4rem;flex-wrap:wrap">
+      <div style="padding:.4rem .8rem;border-radius:20px;background:rgba(163,45,45,.08);border:0.5px solid rgba(163,45,45,.3);font-size:11px;font-weight:500;color:var(--c-red)">1. MoSCoW → define Must/Should</div>
+      <div style="font-size:16px;color:var(--muted)">→</div>
+      <div style="padding:.4rem .8rem;border-radius:20px;background:rgba(83,52,131,.08);border:0.5px solid rgba(83,52,131,.3);font-size:11px;font-weight:500;color:var(--c-purple)">2. Kano → clasifica valor percibido</div>
+      <div style="font-size:16px;color:var(--muted)">→</div>
+      <div style="padding:.4rem .8rem;border-radius:20px;background:rgba(29,158,117,.08);border:0.5px solid rgba(29,158,117,.3);font-size:11px;font-weight:500;color:var(--c-teal)">3. Valor/Esfuerzo → ordena implementación</div>
+      <div style="font-size:16px;color:var(--muted)">→</div>
+      <div style="padding:.4rem .8rem;border-radius:20px;background:rgba(24,95,165,.08);border:0.5px solid rgba(24,95,165,.3);font-size:11px;font-weight:500;color:var(--c-blue)">Backlog priorizado para Fase 3</div>
+    </div>
+  </div>
 </div>
 `);
 
@@ -5719,7 +5750,8 @@ function anaAddKanoItem(ci){
 
 
 function initAnaKano(){
-  var el=document.getElementById('ana-kano-mount'); if(!el||el.innerHTML.trim()) return;
+  var el=document.getElementById('ana-kano-mount'); if(!el) return;
+  el.innerHTML='';
   renderAnaKano();
 }
 function renderAnaKano(){
