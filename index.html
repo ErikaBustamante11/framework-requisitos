@@ -2876,18 +2876,19 @@ reg('srs-bpmn', () => `
   <div class="std-row"><span class="std-pill">ISO 19510 (BPMN 2.0)</span><span class="std-pill">BABOK v3</span></div>
 
   <div style="display:flex;align-items:center;gap:.6rem;margin-top:.6rem;flex-wrap:wrap">
-    <label style="cursor:pointer;display:inline-flex;align-items:center;gap:6px;padding:5px 11px;border-radius:var(--radius);border:0.5px solid rgba(186,117,23,.4);background:rgba(186,117,23,.06);font-size:11px;font-weight:500;color:var(--c-amber)">📎 Adjuntar diagrama BPMN<input type="file" accept=".pdf,.png,.jpg,.bpmn,.xml,.drawio,.vsdx" style="display:none" onchange="srsBpmnAdj(this)"></label>
+    <label style="cursor:pointer;display:inline-flex;align-items:center;gap:6px;padding:5px 11px;border-radius:var(--radius);border:0.5px solid rgba(186,117,23,.4);background:rgba(186,117,23,.06);font-size:11px;font-weight:500;color:var(--c-amber)">📎 Adjuntar diagrama BPMN<input type="file" accept=".svg,.png,.jpg,.pdf,.bpmn,.xml,.drawio,.vsdx" style="display:none" onchange="srsBpmnAdj(this)"></label>
+<div id="bpmn-adj-preview" style="margin-top:.6rem"></div>
     <span id="srs-bpmn-adj-lbl" style="font-size:11px;color:var(--c-blue)"></span>
   </div></div>
 
 <div class="tab-nav">
-  <button class="tab-btn on" onclick="tabSel('bpmn',0,this)">Elementos principales</button>
-  <button class="tab-btn" onclick="tabSel('bpmn',1,this)">Reglas de modelado</button>
-  <button class="tab-btn" onclick="tabSel('bpmn',2,this)">Ejemplo As-Is / To-Be</button>
-  <button class="tab-btn" onclick="tabSel('bpmn',3,this)">Mis diagramas</button>
+  <button class="tab-btn on" onclick="tabSel('bpmn',0,this)">Mis diagramas</button>
+  <button class="tab-btn" onclick="tabSel('bpmn',1,this)">Elementos principales</button>
+  <button class="tab-btn" onclick="tabSel('bpmn',2,this)">Reglas de modelado</button>
+  <button class="tab-btn" onclick="tabSel('bpmn',3,this)">Ejemplo As-Is / To-Be</button>
 </div>
 
-<div class="tab-panel on" id="bpmn-0">
+<div class="tab-panel" id="bpmn-3">
   <div class="g2">
     <div class="card" style="border-left:3px solid var(--c-green)">
       <div class="card-title" style="color:var(--c-green)">Eventos</div>
@@ -3071,7 +3072,7 @@ reg('srs-bpmn', () => `
   </div>
 </div>
 
-<div class="tab-panel" id="bpmn-3">
+<div class="tab-panel on" id="bpmn-0">
   <div style="background:rgba(83,52,131,.06);border:0.5px solid rgba(83,52,131,.25);border-radius:var(--radius);padding:.5rem .8rem;font-size:11px;color:var(--c-purple);margin-bottom:1rem">
     ⓘ Registra los procesos reales de tu proyecto paso a paso. El panel de comparación muestra As-Is vs To-Be en paralelo. Guardado automático.
   </div>
@@ -5509,10 +5510,28 @@ function srsCtxAdj(input){
 }
 /* attach bpmn */
 function srsBpmnAdj(input){
-  if(!input.files||!input.files[0]) return;
-  var n=input.files[0].name; if(!SRS.bpmn) SRS.bpmn={};
-  SRS.bpmn.adjunto=n; srsSave();
-  var el=document.getElementById('srs-bpmn-adj-lbl'); if(el) el.textContent='✓ '+n;
+  var file=input.files[0]; if(!file) return;
+  var lbl=document.getElementById('bpmn-file-lbl');
+  var preview=document.getElementById('bpmn-adj-preview');
+  var isSVG=file.name.toLowerCase().endsWith('.svg');
+  var isImg=/\.(png|jpg|jpeg|gif|webp|svg)$/i.test(file.name);
+  var reader=new FileReader();
+  reader.onload=function(e){
+    if(lbl) lbl.textContent='✓ '+file.name;
+    if(preview){
+      if(isImg||isSVG){
+        if(isSVG){
+          preview.innerHTML='<div style="border:0.5px solid var(--border);border-radius:var(--radius);padding:.8rem;background:var(--surface);overflow:auto">'+e.target.result+'</div>';
+        } else {
+          preview.innerHTML='<img src="'+e.target.result+'" style="max-width:100%;border-radius:var(--radius);border:0.5px solid var(--border)" alt="Diagrama BPMN">';
+        }
+      } else {
+        preview.innerHTML='<div style="font-size:11px;color:var(--c-teal)">✓ Archivo adjunto: '+file.name+' ('+Math.round(file.size/1024)+'KB)</div>';
+      }
+    }
+  };
+  if(isSVG) reader.readAsText(file);
+  else reader.readAsDataURL(file);
 }
 
 /* ── CTX plantilla ── */
