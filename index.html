@@ -651,9 +651,11 @@ textarea { field-sizing: content; min-height: 2em; }
       <span class="nav-label">Fase 3 · Especificación</span>
       <button class="nav-item" onclick="nav('srs-flujo')"><div class="nav-pip" style="background:var(--c-blue)"></div>Flujo de actividades</button>
       <button class="nav-item" onclick="nav('srs-editor')"><div class="nav-pip" style="background:var(--c-blue)"></div>Editor SRS <span class="nav-count">12 RF</span></button>
-      <button class="nav-item" onclick="nav('srs-gherkin')"><div class="nav-pip" style="background:var(--c-blue)"></div>Constructor Gherkin</button>
-      <button class="nav-item" onclick="nav('srs-detector')"><div class="nav-pip" style="background:var(--c-blue)"></div>Detector de ambigüedad</button>
+      <button class="nav-item" onclick="nav('srs-hu')"><div class="nav-pip" style="background:var(--c-blue)"></div>Historias de usuario</button>
       <button class="nav-item" onclick="nav('srs-glosario')"><div class="nav-pip" style="background:var(--c-blue)"></div>Glosario técnico</button>
+      <button class="nav-item" onclick="nav('srs-checklist')"><div class="nav-pip" style="background:var(--c-blue)"></div>Checklist calidad SRS</button>
+      <button class="nav-item" onclick="nav('srs-rtm')"><div class="nav-pip" style="background:var(--c-blue)"></div>Matriz de trazabilidad</button>
+      <button class="nav-item" onclick="nav('srs-walkthrough')"><div class="nav-pip" style="background:var(--c-blue)"></div>Walkthrough SRS</button>
     </div>
     <div class="nav-group">
       <span class="nav-label">Fase 4 · Validación</span>
@@ -808,27 +810,58 @@ const GLOSARIO = [
 ];
 
 const AMBIG_WORDS = [
+  // Tiempo sin métrica
   {w:'rápido',sev:'high',msg:'Sin métrica de tiempo',fix:'Reemplazar con: "en menos de X segundos"'},
   {w:'rápida',sev:'high',msg:'Sin métrica de tiempo',fix:'Usar tiempo concreto'},
+  {w:'rápidamente',sev:'high',msg:'Sin métrica de tiempo',fix:'Especificar tiempo concreto en segundos/minutos'},
+  {w:'inmediato',sev:'high',msg:'Sin métrica de tiempo',fix:'Especificar: "en menos de 1 segundo"'},
+  {w:'inmediatamente',sev:'high',msg:'Sin métrica de tiempo',fix:'Especificar tiempo concreto'},
+  {w:'oportuno',sev:'high',msg:'Sin métrica de tiempo',fix:'Definir tiempo máximo de respuesta'},
+  // Criterios subjetivos
   {w:'fácil',sev:'high',msg:'Criterio subjetivo',fix:'"El usuario completa en < 2 pasos"'},
+  {w:'simple',sev:'high',msg:'Criterio subjetivo',fix:'Definir número de pasos o clics máximos'},
   {w:'amigable',sev:'high',msg:'Sin criterio medible',fix:'WCAG 2.1 AA o tasa de error < 5%'},
+  {w:'intuitivo',sev:'high',msg:'Criterio subjetivo',fix:'Definir métrica de usabilidad medible'},
   {w:'adecuado',sev:'high',msg:'Término vago',fix:'Definir el criterio exacto'},
   {w:'apropiado',sev:'high',msg:'Criterio no definido',fix:'Especificar qué lo hace apropiado'},
+  {w:'correcto',sev:'medium',msg:'Término vago — ¿correcto según qué criterio?',fix:'Especificar la regla de validación exacta'},
+  {w:'bueno',sev:'high',msg:'Criterio subjetivo',fix:'Definir métrica cuantificable'},
+  {w:'buena',sev:'high',msg:'Criterio subjetivo',fix:'Definir métrica cuantificable'},
+  {w:'mejor',sev:'medium',msg:'Comparativo relativo sin referencia',fix:'"mejor que X" o especificar umbral'},
+  // Calidad sin métrica
   {w:'eficiente',sev:'medium',msg:'Sin métrica de eficiencia',fix:'N recursos para Y operaciones'},
   {w:'suficiente',sev:'medium',msg:'Término relativo',fix:'Añadir cantidad concreta'},
   {w:'robusto',sev:'medium',msg:'Sin criterio de robustez',fix:'Especificar disponibilidad o MTBF'},
+  {w:'estable',sev:'medium',msg:'Sin criterio de estabilidad',fix:'Especificar uptime o MTBF concreto'},
+  {w:'seguro',sev:'medium',msg:'Sin criterio de seguridad',fix:'Especificar estándar: OWASP, AES-256, TLS 1.3'},
+  {w:'escalable',sev:'medium',msg:'Sin métrica de escalabilidad',fix:'Especificar: "soportar hasta N usuarios concurrentes"'},
+  // Listas abiertas
   {w:'etc',sev:'high',msg:'Lista incompleta',fix:'Enumerar todos los elementos'},
   {w:'entre otros',sev:'high',msg:'Lista abierta',fix:'Listar todos los casos cubiertos'},
+  {w:'y/o',sev:'medium',msg:'Ambigüedad lógica — AND u OR',fix:'Usar "y" o "o" según corresponda'},
+  // Modales incorrectos
   {w:'deberá',sev:'high',msg:'Modal incorrecto — usar DEBE (IEEE 29148)',fix:'Reemplazar con "DEBE"'},
   {w:'podrá',sev:'high',msg:'Modal incorrecto — usar DEBE o DEBERÍA (IEEE 29148)',fix:'DEBE para obligatorio, DEBERÍA para recomendado'},
   {w:'debería',sev:'high',msg:'Modal incorrecto — usar DEBE para obligatorio (IEEE 29148)',fix:'Reemplazar con "DEBE" si es obligatorio'},
   {w:'podría',sev:'medium',msg:'Modal demasiado débil — especificar si es obligatorio',fix:'DEBE para obligatorio, DEBERÍA para opcional'},
   {w:'puede ',sev:'medium',msg:'Modal ambiguo — no expresa obligatoriedad',fix:'DEBE para obligatorio, DEBERÍA para recomendado'},
-  {w:'podría',sev:'medium',msg:'Modal demasiado débil',fix:'DEBE para obligatorio, DEBERÍA para recomendado'},
+  // Cantidades vagas
   {w:'varios',sev:'low',msg:'Cantidad indeterminada',fix:'Número exacto'},
   {w:'muchos',sev:'low',msg:'Cantidad indeterminada',fix:'Usar número concreto'},
+  {w:'pocos',sev:'low',msg:'Cantidad indeterminada',fix:'Usar número concreto'},
+  {w:'algunos',sev:'low',msg:'Cantidad indeterminada',fix:'Especificar cantidad'},
+  {w:'grande',sev:'low',msg:'Tamaño sin definir',fix:'Especificar en MB, GB o número de registros'},
+  // Verbos vagos
   {w:'proporcionar',sev:'low',msg:'Verbo vago',fix:'Usar verbo específico: mostrar, calcular, enviar'},
   {w:'manejar',sev:'low',msg:'Verbo vago',fix:'Especificar: procesar, validar, almacenar'},
+  {w:'gestionar',sev:'low',msg:'Verbo vago',fix:'Especificar: crear, editar, eliminar, consultar'},
+  {w:'soportar',sev:'low',msg:'Verbo vago',fix:'Especificar qué funcionalidad exacta se soporta'},
+  {w:'permitir',sev:'low',msg:'Verbo vago',fix:'Especificar qué acción exacta se permite y bajo qué condición'},
+  {w:'garantizar',sev:'medium',msg:'Verbo sin criterio de verificación',fix:'Especificar cómo se mide la garantía'},
+  {w:'asegurar',sev:'medium',msg:'Verbo sin criterio de verificación',fix:'Definir qué métrica o prueba lo verifica'},
+  {w:'optimizar',sev:'medium',msg:'Sin métrica de optimización',fix:'Especificar valor actual y valor objetivo'},
+  {w:'mejorar',sev:'medium',msg:'Sin métrica de mejora',fix:'"mejorar de X a Y en métrica Z"'},
+  {w:'integrar',sev:'low',msg:'Verbo vago de integración',fix:'Especificar protocolo, endpoint y formato de datos'},
 ];
 
 const UAT_CASES = [
@@ -1850,7 +1883,7 @@ function renderEliPlantillas() {
   /* save bar */
   p1 += '<div style="display:flex;align-items:center;gap:.5rem;margin-top:1rem;padding-top:.8rem;border-top:0.5px solid var(--border)">';
   p1 += '<button class="btn" style="background:var(--c-teal);color:#fff;border-color:var(--c-teal)" onclick="eliSaveMinuta()">Guardar minuta</button>';
-  p1 += '<button class="btn btn-sm" onclick="eliRestoreEjemplos()">↺ Restaurar ejemplos</button>';
+  p1 += '';
   p1 += '<button class="btn btn-sm" style="color:var(--c-red)" onclick="eliLimpiarMinuta()">✕ Limpiar</button>';
   p1 += '<span id="m-msg" style="font-size:11px;color:var(--c-green)"></span></div>';
   p1 += '</div></div>';
@@ -2845,7 +2878,7 @@ function renderAnaMoscow(){
 
   var bar='<div style="display:flex;align-items:center;gap:.5rem;margin-top:.8rem">'
     +'<button class="btn" style="background:var(--c-purple);color:#fff;border-color:var(--c-purple)" onclick="anaSave();anaSaved(\'mos-msg\')">Guardar MoSCoW</button>'
-    +'<button class="btn btn-sm" onclick="anaRestoreMoscow()">↺ Restaurar ejemplos</button>'
+    +''
     +'<span id="mos-msg" style="font-size:11px;color:var(--c-green)"></span></div>';
 
   var tip='<div style="background:rgba(83,52,131,.07);border:0.5px solid rgba(83,52,131,.3);border-radius:var(--radius);padding:.5rem .8rem;font-size:11px;color:var(--c-purple);margin-bottom:1rem">ⓘ Edita ID y descripción de cada requisito. Usa + para agregar y × para eliminar. Los cambios se guardan automáticamente.</div>';
@@ -2855,7 +2888,8 @@ function renderAnaMoscow(){
 
 /* ── Valor vs. Esfuerzo editable ── */
 function initAnaVxE(){
-  var el=document.getElementById('ana-vxe-mount'); if(!el||el.innerHTML.trim()) return;
+  var el=document.getElementById('ana-vxe-mount'); if(!el) return;
+  el.innerHTML='';
   renderAnaVxE();
 }
 function renderAnaVxE(){
@@ -3322,9 +3356,7 @@ reg('srs-editor', () => `
 <div id="srs-editor-mount"></div>
 `);
 
-/* ════════════════════════════════════════
-   PAGE: GHERKIN CONSTRUCTOR
-════════════════════════════════════════ */
+
 reg('srs-gherkin', () => `
 <div class="page-header">
   <div class="page-eyebrow" style="color:var(--c-blue)">● Fase 3 — Especificación</div>
@@ -3353,6 +3385,7 @@ reg('srs-gherkin', () => `
     </div>
   </div>
 </div>
+<div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem;background:rgba(24,95,165,.05);border:0.5px solid rgba(24,95,165,.2);border-radius:var(--radius);padding:.6rem 1rem;margin-bottom:1rem"><button class="btn btn-sm" onclick="nav('srs-detector')" style="color:var(--c-blue);border-color:rgba(24,95,165,.3)">← Detector de ambigüedad</button><div style="text-align:center;flex:1"><div style="font-size:10px;font-weight:500;color:var(--c-blue);text-transform:uppercase;letter-spacing:.4px">Paso 4 de 4</div><div style="font-size:11px;color:var(--muted)">Escribe los criterios de aceptación del RF validado</div></div><div></div></div>
 `);
 
 /* ════════════════════════════════════════
@@ -3419,6 +3452,70 @@ reg('srs-detector', () => `
 </div>
 `);
 
+reg('srs-detector', () => `
+<div class="page-header">
+  <div class="page-eyebrow" style="color:var(--c-blue)">● Fase 3 — Especificación</div>
+  <h1 class="page-title">Detector de ambigüedad</h1>
+  <p class="page-desc">Analiza tus requisitos en tiempo real e identifica términos vagos, modales incorrectos y problemas de calidad según IEEE 29148.</p>
+</div>
+
+<div class="g2">
+  <div class="card">
+    <div class="card-title">Escribe o pega tu requisito</div>
+    <textarea id="req-input" rows="5" oninput="runDetector()" style="margin-bottom:.7rem">El sistema deberá ser rápido y proporcionar una interfaz amigable para que el usuario pueda realizar las tareas fácilmente en un tiempo adecuado.</textarea>
+    <div style="display:flex;align-items:center;gap:.8rem;padding-top:.7rem;border-top:0.5px solid var(--border)">
+      <div style="font-size:28px;font-weight:500;font-family:var(--font-serif)" id="det-score">0</div>
+      <div style="font-size:11px;color:var(--muted);width:40px">/ 100</div>
+      <div style="flex:1;height:6px;background:var(--surface2);border-radius:3px;overflow:hidden"><div style="height:100%;border-radius:3px;transition:width .5s" id="det-fill"></div></div>
+      <div style="font-size:12px;font-weight:500;min-width:80px" id="det-label">Calidad baja</div>
+    </div>
+    <div style="margin-top:.8rem">
+      <div class="card-title">Ejemplos rápidos</div>
+      <div style="display:flex;flex-wrap:wrap;gap:4px">
+        <button class="btn btn-sm" onclick="setExample('El sistema deberá ser rápido y fácil de usar.')">Malo: vago</button>
+        <button class="btn btn-sm" onclick="setExample('El sistema DEBE responder el 95% de las peticiones en menos de 3 segundos bajo 500 usuarios concurrentes, medido con Gatling.')">Bueno: preciso</button>
+        <button class="btn btn-sm" onclick="setExample('El sistema manejará varios formatos de archivo de manera eficiente.')">Malo: ambiguo</button>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">Problemas detectados</div>
+    <div id="det-issues"></div>
+    <div style="margin-top:.8rem">
+      <div class="card-title">Sugerencia mejorada</div>
+      <div id="det-sugg" style="font-size:12px;background:rgba(15,110,86,.05);border:0.5px solid rgba(15,110,86,.2);border-radius:var(--radius);padding:.65rem .8rem;color:var(--text);line-height:1.6;min-height:50px"></div>
+    </div>
+  </div>
+</div>
+
+<div style="margin-top:1.5rem">
+  <h3 style="font-family:var(--font-serif);font-size:16px;font-weight:500;margin-bottom:.8rem">8 reglas de escritura de requisitos</h3>
+  <div class="g2">
+    ${[
+      {r:'R1',c:'var(--c-red)',n:'Usar el modal correcto (IEEE 29148 §5.2)',b:'El sistema podrá permitir exportar reportes.',g:'El sistema DEBE permitir exportar reportes a PDF y XLSX.'},
+      {r:'R2',c:'var(--c-blue)',n:'Un requisito = una capacidad',b:'DEBE autenticar usuarios y registrar la sesión.',g:'RF-001: DEBE autenticar. RF-002: DEBE registrar la sesión.'},
+      {r:'R3',c:'var(--c-green)',n:'Verbos activos y específicos',b:'El sistema manejará los errores de forma adecuada.',g:'El sistema DEBE mostrar mensaje de error en < 1 segundo.'},
+      {r:'R4',c:'var(--c-amber)',n:'Todo atributo de calidad necesita métrica',b:'El sistema debe ser altamente disponible.',g:'El sistema DEBE tener disponibilidad ≥ 99.5% Lun–Sáb 6–22h.'},
+      {r:'R5',c:'var(--c-purple)',n:'Especificar el sujeto explícitamente',b:'Se deben validar los campos del formulario.',g:'El sistema DEBE validar cada campo en tiempo real (< 500ms).'},
+      {r:'R6',c:'var(--c-gray)',n:'Sin negativos dobles ni condicionales vagos',b:'No deberá fallar excepto cuando no haya conexión.',g:'DEBE mostrar estado "Sin conexión" y encolar operaciones.'},
+      {r:'R7',c:'var(--c-red)',n:'Listas explícitas — sin "etc." ni "entre otros"',b:'Debe exportar a PDF, Excel, etc.',g:'DEBE exportar a: PDF, XLSX, CSV y JSON exclusivamente.'},
+      {r:'R8',c:'var(--c-blue)',n:'Criterio de verificación obligatorio',b:'El sistema debe notificar al usuario.',g:'Given decisión / When 30s / Then notificación por email Y SMS.'},
+    ].map(r => `
+    <div class="card-sm" style="border-left:3px solid ${r.c}">
+      <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.4rem">
+        <div style="width:22px;height:22px;border-radius:50%;background:${r.c};display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:500;color:#fff;flex-shrink:0">${r.r}</div>
+        <div style="font-size:12px;font-weight:500">${r.n}</div>
+      </div>
+      <div style="background:rgba(163,45,45,.04);border-radius:4px;padding:.35rem .55rem;font-size:11px;font-family:var(--font-mono);margin-bottom:.3rem;color:var(--muted)">✗ ${r.b}</div>
+      <div style="background:rgba(15,110,86,.04);border-radius:4px;padding:.35rem .55rem;font-size:11px;font-family:var(--font-mono);color:var(--muted)">✓ ${r.g}</div>
+    </div>`).join('')}
+  </div>
+</div>
+`);
+
+/* ════════════════════════════════════════
+   PAGE: GLOSARIO
+════════════════════════════════════════ */
 /* ════════════════════════════════════════
    PAGE: GLOSARIO
 ════════════════════════════════════════ */
@@ -3434,6 +3531,155 @@ reg('srs-glosario', () => `
 <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:.8rem" id="glos-filters"></div>
 <div id="glos-terms"></div>
 `);
+
+/* ════════════════════════════════════════
+   PAGE: HISTORIAS DE USUARIO
+════════════════════════════════════════ */
+reg('srs-hu', () => `
+<div class="page-header">
+  <div class="page-eyebrow" style="color:var(--c-blue)">● Fase 3 — Especificación</div>
+  <h1 class="page-title">Historias de usuario</h1>
+  <p class="page-desc">Captura el "quién, qué y para qué" de cada funcionalidad antes de redactar los RF. Cada HU se convierte en uno o más requisitos funcionales del SRS.</p>
+  <div class="std-row"><span class="std-pill">IEEE 29148:2018</span><span class="std-pill">BABOK v3</span></div>
+</div>
+<div id="srs-hu-mount"></div>
+`);
+
+
+/* ════════════════════════════════════════
+   PAGE: CHECKLIST CALIDAD SRS
+════════════════════════════════════════ */
+reg('srs-checklist', () => `
+<div class="page-header">
+  <div class="page-eyebrow" style="color:var(--c-blue)">● Fase 3 — Especificación</div>
+  <h1 class="page-title">Checklist de calidad del SRS</h1>
+  <p class="page-desc">24 ítems en 5 dimensiones para verificar que el SRS cumple los estándares antes de enviarlo a revisión formal.</p>
+  <div class="std-row"><span class="std-pill">IEEE 29148:2018</span><span class="std-pill">ISO/IEC 25010</span></div>
+</div>
+<div id="srs-checklist-mount"></div>
+`);
+
+/* ════════════════════════════════════════
+   PAGE: MATRIZ DE TRAZABILIDAD RTM
+════════════════════════════════════════ */
+reg('srs-rtm', () => `
+<div class="page-header">
+  <div class="page-eyebrow" style="color:var(--c-blue)">● Fase 3 — Especificación</div>
+  <h1 class="page-title">Matriz de trazabilidad (RTM)</h1>
+  <p class="page-desc">Vincula cada requisito con su origen en elicitación, su criterio de verificación y su caso de prueba UAT. Base para el baseline.</p>
+  <div class="std-row"><span class="std-pill">IEEE 29148 §6.3</span><span class="std-pill">IEEE 1028</span></div>
+</div>
+
+<div class="tab-nav" id="rtm-tab-nav">
+  <button class="tab-btn on" onclick="rtmTabSel(0)">Mi proyecto</button>
+  <button class="tab-btn" onclick="rtmTabSel(1)">Guía de uso</button>
+</div>
+
+<div id="rtm-panel-0" class="tab-panel on">
+  <div id="srs-rtm-mount"></div>
+</div>
+
+<div id="rtm-panel-1" class="tab-panel" style="display:none">
+
+  <div class="card" style="margin-bottom:.8rem;border-left:3px solid var(--c-blue)">
+    <div style="font-size:13px;font-weight:600;color:var(--c-blue);margin-bottom:.4rem">¿Qué es la RTM?</div>
+    <p style="font-size:12px;color:var(--muted);line-height:1.7;margin-bottom:.5rem">La Matriz de Trazabilidad de Requisitos (Requirements Traceability Matrix) es un documento que conecta cada requisito con su <strong style="color:var(--text)">origen</strong> (sesión de elicitación, brecha GAP o historia de usuario) y su <strong style="color:var(--text)">medio de verificación</strong> (caso de prueba, escenario Gherkin o inspección).</p>
+    <p style="font-size:12px;color:var(--muted);line-height:1.7">En el framework, la RTM se construye en Fase 3 con los requisitos del SRS y se actualiza en Fase 4 durante la validación. Es la evidencia que demuestra que cada necesidad del negocio fue especificada y probada.</p>
+  </div>
+
+  <div class="g2" style="margin-bottom:.8rem">
+    <div style="border:0.5px solid var(--border);border-radius:var(--radius);padding:.8rem;border-top:3px solid var(--c-purple)">
+      <div style="font-size:11px;font-weight:600;color:var(--c-purple);margin-bottom:.4rem">¿Por qué es importante?</div>
+      <div style="display:flex;flex-direction:column;gap:.3rem">
+        <div style="font-size:11px;color:var(--muted)">🔗 Evita requisitos huérfanos — sin origen documentado</div>
+        <div style="font-size:11px;color:var(--muted)">🧪 Garantiza cobertura de pruebas — nada se queda sin verificar</div>
+        <div style="font-size:11px;color:var(--muted)">📋 Facilita auditorías e inspecciones formales (IEEE 1028)</div>
+        <div style="font-size:11px;color:var(--muted)">🔄 Permite gestión de impacto al cambiar un requisito</div>
+        <div style="font-size:11px;color:var(--muted)">✅ Es el artefacto de cierre de Fase 3 para el baseline</div>
+      </div>
+    </div>
+    <div style="border:0.5px solid var(--border);border-radius:var(--radius);padding:.8rem;border-top:3px solid var(--c-teal)">
+      <div style="font-size:11px;font-weight:600;color:var(--c-teal);margin-bottom:.4rem">¿Qué requisitos incluye?</div>
+      <div style="display:flex;flex-direction:column;gap:.3rem">
+        <div style="display:flex;gap:.5rem;align-items:flex-start"><span style="background:rgba(24,95,165,.1);color:var(--c-blue);font-size:10px;font-weight:700;padding:1px 6px;border-radius:8px;flex-shrink:0">RF</span><div style="font-size:11px;color:var(--muted)">Requisitos funcionales — cada comportamiento del sistema</div></div>
+        <div style="display:flex;gap:.5rem;align-items:flex-start"><span style="background:rgba(83,52,131,.1);color:var(--c-purple);font-size:10px;font-weight:700;padding:1px 6px;border-radius:8px;flex-shrink:0">RNF</span><div style="font-size:11px;color:var(--muted)">Requisitos no funcionales — rendimiento, seguridad, usabilidad</div></div>
+        <div style="display:flex;gap:.5rem;align-items:flex-start"><span style="background:rgba(29,158,117,.1);color:var(--c-teal);font-size:10px;font-weight:700;padding:1px 6px;border-radius:8px;flex-shrink:0">SA</span><div style="font-size:11px;color:var(--muted)">Supuestos — condiciones asumidas como verdaderas</div></div>
+        <div style="display:flex;gap:.5rem;align-items:flex-start"><span style="background:rgba(186,117,23,.1);color:var(--c-amber);font-size:10px;font-weight:700;padding:1px 6px;border-radius:8px;flex-shrink:0">RC</span><div style="font-size:11px;color:var(--muted)">Restricciones — límites técnicos, regulatorios o de negocio</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:.8rem">
+    <div style="font-size:13px;font-weight:500;font-family:var(--font-serif);margin-bottom:.7rem">Cómo diligenciar cada campo</div>
+    <div style="display:flex;flex-direction:column;gap:.5rem">
+
+      <div style="display:grid;grid-template-columns:130px 1fr;gap:.6rem;padding:.5rem;background:var(--surface2);border-radius:6px">
+        <div style="font-size:11px;font-weight:600;color:var(--c-blue)">Origen (GAP/HU/Sesión)</div>
+        <div style="font-size:11px;color:var(--muted);line-height:1.5">¿De dónde viene este requisito? Escribe el ID de la brecha GAP, la historia de usuario o la sesión de elicitación que lo generó. Ej: <code style="background:var(--surface);padding:1px 4px;border-radius:3px;font-size:10px">GAP-003, HU-002</code></div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:130px 1fr;gap:.6rem;padding:.5rem;background:var(--surface2);border-radius:6px">
+        <div style="font-size:11px;font-weight:600;color:var(--c-blue)">Caso de prueba / Gherkin</div>
+        <div style="font-size:11px;color:var(--muted);line-height:1.5">Solo para RF. El ID del caso de prueba o escenario Gherkin que verifica este requisito. Ej: <code style="background:var(--surface);padding:1px 4px;border-radius:3px;font-size:10px">CP-005, ESC-002</code></div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:130px 1fr;gap:.6rem;padding:.5rem;background:rgba(186,117,23,.05);border-radius:6px;border:0.5px solid rgba(186,117,23,.2)">
+        <div style="font-size:11px;font-weight:600;color:var(--c-amber)">Estado ⚠️</div>
+        <div>
+          <div style="font-size:11px;color:var(--muted);line-height:1.5;margin-bottom:.4rem">El estado refleja qué tan avanzada está la trazabilidad de ese requisito:</div>
+          <div style="display:flex;flex-direction:column;gap:.3rem">
+            <div style="display:flex;gap:.5rem;align-items:flex-start"><span style="background:var(--surface2);color:var(--muted);font-size:10px;font-weight:700;padding:2px 7px;border-radius:10px;white-space:nowrap">PENDIENTE</span><div style="font-size:11px;color:var(--muted)">El requisito existe en el SRS pero aún no tiene origen ni caso de prueba documentado.</div></div>
+            <div style="display:flex;gap:.5rem;align-items:flex-start"><span style="background:rgba(29,158,117,.1);color:var(--c-teal);font-size:10px;font-weight:700;padding:2px 7px;border-radius:10px;white-space:nowrap">TRAZADO</span><div style="font-size:11px;color:var(--muted)">Tiene origen documentado y caso de prueba asignado, pero aún no ha sido ejecutado ni verificado.</div></div>
+            <div style="display:flex;gap:.5rem;align-items:flex-start"><span style="background:rgba(15,110,86,.1);color:var(--c-green);font-size:10px;font-weight:700;padding:2px 7px;border-radius:10px;white-space:nowrap">VERIFICADO</span><div style="font-size:11px;color:var(--muted)">El requisito fue implementado, probado y validado. Listo para el baseline.</div></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="card">
+    <div style="font-size:13px;font-weight:500;font-family:var(--font-serif);margin-bottom:.6rem">Flujo de llenado recomendado</div>
+    <div style="display:flex;align-items:center;gap:.4rem;flex-wrap:wrap">
+      <div style="padding:.4rem .8rem;border-radius:20px;background:rgba(24,95,165,.08);border:0.5px solid rgba(24,95,165,.3);font-size:11px;color:var(--c-blue)">1. Importar RF desde Editor SRS</div>
+      <div style="font-size:16px;color:var(--muted)">→</div>
+      <div style="padding:.4rem .8rem;border-radius:20px;background:rgba(83,52,131,.08);border:0.5px solid rgba(83,52,131,.3);font-size:11px;color:var(--c-purple)">2. Llenar origen (GAP/HU)</div>
+      <div style="font-size:16px;color:var(--muted)">→</div>
+      <div style="padding:.4rem .8rem;border-radius:20px;background:rgba(29,158,117,.08);border:0.5px solid rgba(29,158,117,.3);font-size:11px;color:var(--c-teal)">3. Asignar caso de prueba</div>
+      <div style="font-size:16px;color:var(--muted)">→</div>
+      <div style="padding:.4rem .8rem;border-radius:20px;background:rgba(15,110,86,.08);border:0.5px solid rgba(15,110,86,.3);font-size:11px;color:var(--c-green)">4. Marcar Verificado en Fase 4</div>
+    </div>
+  </div>
+
+</div>
+`);
+
+/* ════════════════════════════════════════
+   PAGE: WALKTHROUGH SRS
+════════════════════════════════════════ */
+reg('srs-walkthrough', () => `
+<div class="page-header">
+  <div class="page-eyebrow" style="color:var(--c-blue)">● Fase 3 — Especificación</div>
+  <h1 class="page-title">Walkthrough con stakeholders</h1>
+  <p class="page-desc">Revisión informal del SRS con los stakeholders antes de la inspección formal. Detecta problemas de comprensión y alinea expectativas.</p>
+  <div class="std-row"><span class="std-pill">IEEE 1028 §5.3</span><span class="std-pill">IEEE 29148 §6.3</span></div>
+</div>
+<div id="srs-wt-mount"></div>
+`);
+
+/* ════════════════════════════════════════
+   PAGE: VERSIONES DEL SRS
+════════════════════════════════════════ */
+reg('srs-versiones', () => `
+<div class="page-header">
+  <div class="page-eyebrow" style="color:var(--c-blue)">● Fase 3 — Especificación</div>
+  <h1 class="page-title">Control de versiones del SRS</h1>
+  <p class="page-desc">Historial de cambios del SRS desde v0.1 hasta el baseline aprobado. Cada versión documenta qué cambió y por qué.</p>
+  <div class="std-row"><span class="std-pill">IEEE 29148 §6.4</span><span class="std-pill">ISO 12207</span></div>
+</div>
+<div id="srs-ver-mount"></div>
+`);
+
 
 /* ════════════════════════════════════════
    PAGE: VALIDACIÓN — FLUJO
@@ -3771,7 +4017,8 @@ function renderValTecnicas(){
 
   var tab1p = '<div style="display:'+(curTab===1?'block':'none')+'">'
     +(typeof plantillas[t.key]==='string'?plantillas[t.key]:plantillas[t.key])
-    +'</div>';
+    +'</div>'
+  +'<div id="srse-4" style="display:none" id="srse-det-panel"></div>';
 
   el.innerHTML = nav + innerTabs + tab0 + tab1p;
 
@@ -4064,7 +4311,7 @@ function renderValUat(){
     html += '</div>';
   });
 
-  html += '<div style="margin-top:.8rem"><button class="btn btn-sm" onclick="uatRestore()">↺ Restaurar ejemplos</button></div>';
+  html += '<div style="margin-top:.8rem"></div>';
   el.innerHTML = html;
 }
 
@@ -4807,7 +5054,7 @@ function renderMiPlan(){
 
   var addBtn='<div style="display:flex;gap:.5rem;margin-top:.5rem;align-items:center">'
     +'<button class="btn btn-sm" style="color:var(--c-gray);border-color:rgba(0,0,0,.2)" onclick="planAddAct()">+ Actividad</button>'
-    +'<button class="btn btn-sm" onclick="planReset()">↺ Restaurar plan base</button>'
+    +''
     +'<span style="font-size:11px;color:var(--muted)">Guardado automáticamente</span></div>';
 
   el.innerHTML='<div style="background:rgba(24,95,165,.06);border:0.5px solid rgba(24,95,165,.25);border-radius:var(--radius);padding:.5rem .8rem;font-size:11px;color:var(--c-blue);margin-bottom:.8rem">ⓘ Documenta tu plan real de implementación del framework en la empresa del caso de estudio. Guardado automático.</div>'
@@ -5655,7 +5902,7 @@ function renderSrsCtxPlt(){
     +'<button class="btn btn-sm" style="margin-top:.4rem" onclick="SRS.ctx.exclusiones=SRS.ctx.exclusiones||[];SRS.ctx.exclusiones.push(\'\');srsSave();renderSrsCtxPlt()">+ Exclusión</button>'
     +'<div style="display:flex;gap:.5rem;margin-top:.8rem;align-items:center">'
     +'<button class="btn" style="background:var(--c-blue);color:#fff;border-color:var(--c-blue)" onclick="srsSave();srsSaved(\'srs-ctx-plt-msg\')">Guardar plantilla</button>'
-    +'<button class="btn btn-sm" onclick="SRS.ctx=defaultSRS().ctx;srsSave();var e=document.getElementById(\'srs-ctx-plt\');if(e){e.innerHTML=\'\';renderSrsCtxPlt();}">↺ Restaurar ejemplos</button>'
+    +''
     +'<span id="srs-ctx-plt-msg" style="font-size:11px;color:var(--c-green)"></span></div></div>';
 }
 
@@ -5706,7 +5953,7 @@ function renderSrsCuPlt(){
     +ta('Flujo principal — camino feliz (un paso por línea)','flujo','1. Actor hace...\n2. Sistema responde...',5)
     +'<div style="display:flex;gap:.5rem;margin-top:.6rem;align-items:center">'
     +'<button class="btn" style="background:var(--c-blue);color:#fff;border-color:var(--c-blue)" onclick="srsSave();srsSaved(\'srs-cu-plt-msg\')">Guardar</button>'
-    +'<button class="btn btn-sm" onclick="SRS.casos=defaultSRS().casos;srsSave();window._srsCuSel=0;renderSrsCuPlt()">↺ Restaurar</button>'
+    +''
     +'<span id="srs-cu-plt-msg" style="font-size:11px;color:var(--c-green)"></span></div></div>';
 
   el.innerHTML='<div style="display:grid;grid-template-columns:200px 1fr;gap:12px">'+list+detail+'</div>';
@@ -5759,7 +6006,7 @@ function renderAnaUC(){
     +inp('Flujo alternativo / excepción','alt','Ej: Si el token expira, redirigir a login',2)
     +'<div style="display:flex;gap:.5rem;margin-top:.6rem;align-items:center">'
     +'<button class="btn" style="background:var(--c-purple);color:#fff;border-color:var(--c-purple)" onclick="anaUCSave()">Guardar casos de uso</button>'
-    +'<button class="btn btn-sm" onclick="anaUCRestore()">↺ Restaurar ejemplos</button>'
+    +''
     +'<span id="uc-msg" style="font-size:11px;color:var(--c-green)"></span>'
     +'</div></div>';
 
@@ -5789,6 +6036,11 @@ function anaAddKanoItem(ci){
 function initAnaKano(){
   var el=document.getElementById('ana-kano-mount'); if(!el) return;
   el.innerHTML='';
+  // Migrate old object format to array
+  if(ANA.kano && !Array.isArray(ANA.kano)){
+    ANA.kano=defaultANA().kano;
+    anaSave();
+  }
   renderAnaKano();
 }
 function renderAnaKano(){
@@ -5850,6 +6102,8 @@ function renderSrsEditor(){
     +'<button class="tab-btn'+(_t===1?' on':'')+' " onclick="srseTab(1,this)">Req. funcionales (RF)</button>'
     +'<button class="tab-btn" onclick="srseTab(2,this)">Req. no funcionales (RNF)</button>'
     +'<button class="tab-btn" onclick="srseTab(3,this)">Supuestos y restricciones</button>'
+    +'<button class="tab-btn" onclick="srseTab(4,this)">Verificar calidad</button>'
+    +'<button class="tab-btn" onclick="srseTab(5,this)">Versiones</button>'
     +'</div>';
 
   // Portada
@@ -5903,8 +6157,9 @@ function renderSrsEditor(){
     +rfRows
     +'<div style="display:flex;gap:.5rem;margin-top:.5rem;align-items:center">'
     +'<button class="btn btn-sm" style="color:var(--c-blue);border-color:rgba(24,95,165,.4)" onclick="srsAddRF()">+ RF</button>'
+    +'<button class="btn btn-sm" style="color:var(--c-teal);border-color:rgba(29,158,117,.4)" onclick="srsImportRF()">⬇ Importar RF desde A1</button>'
     +'<button class="btn" style="background:var(--c-blue);color:#fff;border-color:var(--c-blue)" onclick="srsSave();srsSaved(\'srs-rf-msg\')">Guardar RF</button>'
-    +'<button class="btn btn-sm" onclick="SRS.rfs=defaultSRS().rfs;srsSave();renderSrsEditor()">↺ Restaurar</button>'
+    +''
     +'<span id="srs-rf-msg" style="font-size:11px;color:var(--c-green)"></span></div></div>';
 
   // RNF tab
@@ -5926,6 +6181,7 @@ function renderSrsEditor(){
     +rnfRows
     +'<div style="display:flex;gap:.5rem;margin-top:.6rem;align-items:center">'
     +'<button class="btn btn-sm" style="color:var(--c-purple);border-color:rgba(83,52,131,.4)" onclick="srsAddRNF()">+ RNF</button>'
+    +'<button class="btn btn-sm" style="color:var(--c-teal);border-color:rgba(29,158,117,.4)" onclick="srsImportRNF()">⬇ Importar RNF desde A1</button>'
     +'<button class="btn" style="background:var(--c-purple);color:#fff;border-color:var(--c-purple)" onclick="srsSave();srsSaved(\'srs-rnf-msg\')">Guardar RNF</button>'
     +'<span id="srs-rnf-msg" style="font-size:11px;color:var(--c-green)"></span></div>'
     +'</div></div>';
@@ -5936,22 +6192,31 @@ function renderSrsEditor(){
   var rcRows=rcs.map(function(r,i){return '<div style="display:flex;gap:5px;align-items:center;padding:4px 0;border-bottom:0.5px solid var(--border)"><input value="'+escHS(r.id)+'" style="width:65px;flex-shrink:0;font-family:var(--font-mono);font-size:11px;color:var(--c-amber);background:var(--surface);border:0.5px solid var(--border2);border-radius:4px;padding:3px 6px;outline:none" oninput="SRS.rcs['+i+'].id=this.value;srsSave()"><input value="'+escHS(r.t)+'" placeholder="Tipo..." style="width:120px;flex-shrink:0;background:var(--surface);border:0.5px solid var(--border2);border-radius:4px;padding:3px 6px;font-size:12px;font-weight:500;color:var(--text);font-family:var(--font-sans);outline:none" oninput="SRS.rcs['+i+'].t=this.value;srsSave()"><input value="'+escHS(r.v)+'" placeholder="Valor..." style="flex:1;background:var(--surface);border:0.5px solid var(--border2);border-radius:4px;padding:3px 6px;font-size:12px;color:var(--text);font-family:var(--font-sans);outline:none" oninput="SRS.rcs['+i+'].v=this.value;srsSave()"><button style="background:none;border:none;cursor:pointer;color:var(--muted);font-size:15px;flex-shrink:0" onclick="SRS.rcs.splice('+i+',1);srsSave();renderSrsEditor()">×</button></div>';}).join('');
 
   var tab3='<div class="tab-panel" id="srse-3"><div class="g2">'
-    +'<div class="card"><div class="card-title">Supuestos (SA)</div>'+saRows+'<button class="btn btn-sm" style="margin-top:.5rem" onclick="srsAddSA()">+ Supuesto</button></div>'
-    +'<div class="card"><div class="card-title">Restricciones (RC)</div>'+rcRows+'<button class="btn btn-sm" style="margin-top:.5rem" onclick="srsAddRC()">+ Restricción</button></div>'
+    +'<div class="card"><div class="card-title">Supuestos (SA)</div>'+saRows+'<button class="btn btn-sm" style="margin-top:.5rem" onclick="srsAddSA()">+ Supuesto</button>'
+    +'<button class="btn btn-sm" style="color:var(--c-teal);border-color:rgba(29,158,117,.4)" onclick="srsImportSA()">⬇ Importar SA desde A1</button></div>'
+    +'<div class="card"><div class="card-title">Restricciones (RC)</div>'+rcRows+'<button class="btn btn-sm" style="margin-top:.5rem" onclick="srsAddRC()">+ Restricción</button>'
+    +'<button class="btn btn-sm" style="color:var(--c-teal);border-color:rgba(29,158,117,.4)" onclick="srsImportRC()">⬇ Importar RC desde A1</button></div>'
     +'</div>'
     +'<div style="display:flex;gap:.5rem;margin-top:.6rem;align-items:center">'
     +'<button class="btn" style="background:var(--c-blue);color:#fff;border-color:var(--c-blue)" onclick="srsSave();srsSaved(\'srs-sarc-msg\')">Guardar SA/RC</button>'
     +'<span id="srs-sarc-msg" style="font-size:11px;color:var(--c-green)"></span></div></div>';
 
-  el.innerHTML=tabs+tab0+tab1+tab2+tab3;
+  var tab4='<div id="srse-4" style="display:none"></div>';
+  var tab5='<div id="srse-5" style="display:none"><div id="srse-ver-inline"></div></div>';
+  el.innerHTML=tabs+tab0+tab1+tab2+tab3+tab4+tab5;
   setTimeout(function(){srseTab(window._srseTab||0);},0);
 }
 function srseTab(i,btn){
   window._srseTab=i;
   document.querySelectorAll('#srs-editor-mount .tab-btn').forEach(function(b,j){b.classList.toggle('on',j===i);});
-  ['srse-0','srse-1','srse-2','srse-3'].forEach(function(id,j){
+  ['srse-0','srse-1','srse-2','srse-3','srse-4','srse-5'].forEach(function(id,j){
     var e=document.getElementById(id); if(e) e.style.display=j===i?'block':'none';
   });
+  if(i===4){
+    var p=document.getElementById('srse-4');
+    if(p){p.innerHTML='';renderDetectorInline(p);}
+  }
+  if(i===5) renderSrsVerInline();
 }
 function srsAddRF(){ SRS.rfs=SRS.rfs||[]; var n=SRS.rfs.length+1; SRS.rfs.push({id:'RF-'+String(n).padStart(3,'0'),titulo:'',prioridad:'Must',estado:'Borrador',desc:'',given:'',when:'',then:''}); srsSave(); renderSrsEditor(); }
 function srsAddRNF(){ SRS.rnfs=SRS.rnfs||[]; var n=SRS.rnfs.length+1; SRS.rnfs.push({id:'RNF-'+String(n).padStart(3,'0'),cat:'Rendimiento',atributo:'',valor:'',metodo:''}); srsSave(); renderSrsEditor(); }
@@ -5980,11 +6245,28 @@ function defaultANA() {
       could:  [{id:'RF-020',desc:'Modo oscuro / claro configurable por usuario'},{id:'RF-021',desc:'Análisis predictivo básico de cartera'},{id:'RF-022',desc:'App móvil nativa iOS y Android'}],
       wont:   [{id:'RF-030',desc:'Integración con redes sociales'},{id:'RF-031',desc:'Motor de IA generativa para decisiones'},{id:'RF-032',desc:'Marketplace de integraciones externas'}],
     },
-    kano: {
-      basic:       [{id:'RF-001',desc:'Autenticación segura'},{id:'RF-002',desc:'Dashboard principal'},{id:'RF-003',desc:'Consulta score'}],
-      performance: [{id:'RF-004',desc:'Motor de decisión automática'},{id:'RF-010',desc:'Notificaciones multicanal'},{id:'RF-011',desc:'Filtros avanzados'}],
-      excitement:  [{id:'RF-020',desc:'Modo oscuro'},{id:'RF-021',desc:'Análisis predictivo'},{id:'RF-022',desc:'App móvil nativa'}],
-    },
+    kano: [
+      {cat:'Básicos (Must-be)', color:'var(--c-red)', bc:'rgba(163,45,45,.2)', bg:'rgba(163,45,45,.06)',
+       desc:'Su ausencia genera insatisfacción. Su presencia no sorprende — simplemente se espera.',
+       items:[
+        {id:'RF-001',nota:'Autenticación segura',func:'',disfunc:'',respF:'',respD:'',pregF:'¿Cómo te sentirías si el sistema tuviera autenticación segura?',pregD:'¿Cómo te sentirías si NO la tuviera?'},
+        {id:'RF-002',nota:'Dashboard principal',func:'',disfunc:'',respF:'',respD:'',pregF:'¿Cómo te sentirías si el sistema tuviera dashboard?',pregD:'¿Cómo te sentirías si NO lo tuviera?'}
+      ]},
+      {cat:'Desempeño (One-dimensional)', color:'var(--c-blue)', bc:'rgba(24,95,165,.2)', bg:'rgba(24,95,165,.06)',
+       desc:'Más es mejor. Relación lineal con satisfacción — los usuarios lo piden explícitamente.',
+       items:[
+        {id:'RF-003',nota:'Velocidad de carga del dashboard',func:'',disfunc:'',respF:'',respD:'',pregF:'¿Cómo te sentirías si el sistema fuera más rápido?',pregD:'¿Cómo te sentirías si fuera más lento?'},
+        {id:'RF-004',nota:'Cantidad de filtros en reportes',func:'',disfunc:'',respF:'',respD:'',pregF:'¿Cómo te sentirías si hubiera más filtros?',pregD:'¿Cómo te sentirías si hubiera menos?'}
+      ]},
+      {cat:'Atractivos (Delighters)', color:'var(--c-green)', bc:'rgba(15,110,86,.2)', bg:'rgba(15,110,86,.06)',
+       desc:'No esperados. Su presencia deleita al usuario. Su ausencia no genera insatisfacción.',
+       items:[
+        {id:'RF-005',nota:'Sugerencias inteligentes de decisión',func:'',disfunc:'',respF:'',respD:'',pregF:'¿Cómo te sentirías si el sistema sugiriera acciones proactivas?',pregD:'¿Cómo te sentirías si no lo hiciera?'}
+      ]},
+      {cat:'Indiferente', color:'var(--muted)', bc:'rgba(120,120,120,.2)', bg:'rgba(120,120,120,.04)',
+       desc:'Su presencia o ausencia no afecta la satisfacción del usuario.',
+       items:[]}
+    ],
     vxe: [
       {req:'Login SSO',valor:90,esfuerzo:20},{req:'Dashboard KPIs',valor:85,esfuerzo:35},
       {req:'Score API',valor:95,esfuerzo:40},{req:'Motor decisión',valor:90,esfuerzo:70},
@@ -6548,6 +6830,11 @@ function onPageShow(id) {
   if (id==='ana-priorizacion') setTimeout(function(){ initAnaMoscow(); initAnaVxE(); initAnaKano(); }, 50);
   if (id==='eli-plantillas') setTimeout(initEliPlantillas, 50);
   if (id==='srs-bpmn') setTimeout(function(){ bpmnLoad(); }, 50);
+  if (id==='srs-hu') setTimeout(initSrsHU, 50);
+  if (id==='srs-checklist') setTimeout(initSrsChecklist, 50);
+  if (id==='srs-rtm') { setTimeout(initSrsRtm, 50); var p0=document.getElementById('rtm-panel-0'); var p1=document.getElementById('rtm-panel-1'); if(p0)p0.style.display='block'; if(p1)p1.style.display='none'; document.querySelectorAll('#rtm-tab-nav .tab-btn').forEach(function(b,j){b.classList.toggle('on',j===0);}); }
+  if (id==='srs-walkthrough') setTimeout(initSrsWalkthrough, 50);
+  if (id==='srs-versiones') setTimeout(initSrsVersiones, 50);
   if (id==='srs-glosario') initGlosario();
   if (id==='srs-casos') setTimeout(initCasos, 50);
   if (id==='srs-contexto') { setTimeout(initCtx, 50); } setTimeout(function(){ if(document.getElementById('srs-ctx-plt')) initSrsCtxPlt(); }, 200);
@@ -7754,7 +8041,7 @@ function renderAnaGap(){
 
   var bar='<div style="display:flex;align-items:center;gap:.5rem;margin-top:.5rem">'
     +'<button class="btn" style="background:var(--c-purple);color:#fff;border-color:var(--c-purple)" onclick="anaSave();anaSaved(\'gap-msg\')">Guardar GAP</button>'
-    +'<button class="btn btn-sm" onclick="anaRestoreGAP()">↺ Restaurar ejemplos</button>'
+    +''
     +'<span id="gap-msg" style="font-size:11px;color:var(--c-green)"></span></div>';
 
   var tip='<div style="background:rgba(83,52,131,.07);border:0.5px solid rgba(83,52,131,.3);border-radius:var(--radius);padding:.5rem .8rem;font-size:11px;color:var(--c-purple);margin-bottom:1rem">ⓘ Todos los campos son editables. Modifica los ejemplos según el proceso real de tu proyecto.</div>';
@@ -7767,6 +8054,1321 @@ function sesTabSel(i){
   document.getElementById('ses-panel-1').style.display=i===1?'block':'none';
   if(i===0){ var m=document.getElementById('eli-plt-mount'); if(m&&!m.innerHTML.trim()) initEliPlantillas(); }
   if(i===1){ var m=document.getElementById('cses-mount'); if(m&&!m.innerHTML.trim()) initCampoSes(); }
+}
+
+/* ── SRS Checklist calidad (24 ítems) ── */
+const SRS_CK_KEY = 'fw_srs_ck_v1';
+const SRS_CK_ITEMS = [
+  {dim:'Completitud',id:'ck01',text:'Todos los RF tienen ID único, título, descripción, prioridad y criterio de aceptación'},
+  {dim:'Completitud',id:'ck02',text:'Todos los RNF tienen umbral numérico medible (tiempo, %, usuarios, MB)'},
+  {dim:'Completitud',id:'ck03',text:'El SRS incluye sección de supuestos y restricciones'},
+  {dim:'Completitud',id:'ck04',text:'El SRS incluye portada con versión, fecha, autores y estado'},
+  {dim:'Completitud',id:'ck05',text:'Todos los actores del diagrama de contexto tienen al menos un RF asociado'},
+  {dim:'Verificabilidad',id:'ck06',text:'Cada RF tiene al menos un criterio de aceptación en formato Given/When/Then'},
+  {dim:'Verificabilidad',id:'ck07',text:'Ningún RF usa términos vagos sin resolver (manejar, rápido, adecuado, etc.)'},
+  {dim:'Verificabilidad',id:'ck08',text:'Todos los RNF pueden verificarse con una prueba concreta (carga, seguridad, usabilidad)'},
+  {dim:'Verificabilidad',id:'ck09',text:'Las condiciones de éxito y fallo están definidas para cada RF crítico'},
+  {dim:'Consistencia',id:'ck10',text:'No existen RF que se contradigan entre sí'},
+  {dim:'Consistencia',id:'ck11',text:'Los IDs de RF no están duplicados'},
+  {dim:'Consistencia',id:'ck12',text:'Los términos del glosario se usan de forma uniforme en todo el documento'},
+  {dim:'Consistencia',id:'ck13',text:'La prioridad MoSCoW del Editor SRS coincide con la del análisis de Fase 2'},
+  {dim:'Trazabilidad',id:'ck14',text:'Cada RF puede vincularse a al menos una sesión de elicitación o brecha GAP'},
+  {dim:'Trazabilidad',id:'ck15',text:'La RTM está construida con al menos los RF Must y Should'},
+  {dim:'Trazabilidad',id:'ck16',text:'Cada RF tiene asignado un método de verificación (prueba, inspección, demo)'},
+  {dim:'Claridad',id:'ck17',text:'Todos los RF usan modal DEBE o DEBE NO (no deberá, podrá, podría)'},
+  {dim:'Claridad',id:'ck18',text:'El sujeto de cada RF es siempre "El sistema" o el actor correspondiente'},
+  {dim:'Claridad',id:'ck19',text:'No hay uso de "etc.", "entre otros", "y/o" en los RF'},
+  {dim:'Claridad',id:'ck20',text:'Cada RF expresa exactamente una funcionalidad (no RF compuestos con "y")'},
+  {dim:'Aprobación',id:'ck21',text:'El SRS ha sido revisado en walkthrough con al menos un stakeholder'},
+  {dim:'Aprobación',id:'ck22',text:'Los defectos del walkthrough están registrados y resueltos o diferidos'},
+  {dim:'Aprobación',id:'ck23',text:'El SRS está en versión v1.0 o superior (no borrador v0.x)'},
+  {dim:'Aprobación',id:'ck24',text:'El Product Owner o sponsor ha firmado o confirmado el alcance del SRS'},
+];
+function initSrsCk(){
+  var el=document.getElementById('srs-ck-mount'); if(!el) return;
+  el.innerHTML='';
+  var data; try{data=JSON.parse(localStorage.getItem(SRS_CK_KEY))||{};}catch(e){data={};}
+  renderSrsCk(data);
+}
+function renderSrsCk(data){
+  var el=document.getElementById('srs-ck-mount'); if(!el) return;
+  var total=0,ok=0,na=0;
+  SRS_CK_ITEMS.forEach(function(d){d.items.forEach(function(i){total++;if(data[i.id]==='ok')ok++;if(data[i.id]==='na')na++;});});
+  var pct=Math.round(ok/total*100);
+  var ready=pct>=80;
+  var col=ready?'var(--c-green)':pct>=50?'var(--c-amber)':'var(--c-gray)';
+  var dimColors={
+    'Completitud':'var(--c-blue)',
+    'Consistencia':'var(--c-purple)',
+    'Verificabilidad':'var(--c-teal)',
+    'Trazabilidad':'var(--c-amber)',
+    'Calidad del documento':'var(--c-green)'
+  };
+  var html='<div class="card" style="margin-bottom:1rem">'
+    +'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.5rem">'
+    +'<div style="font-size:13px;font-weight:500;color:'+col+'">'+(ready?'✓ SRS listo para validación':pct>=50?'⏳ En progreso — '+ok+'/'+total+' ítems':'○ Checklist por completar')+'</div>'
+    +'<div style="font-size:28px;font-weight:500;font-family:var(--font-serif);color:'+col+'">'+pct+'%</div>'
+    +'</div>'
+    +'<div style="height:7px;background:var(--surface2);border-radius:4px;overflow:hidden">'
+    +'<div style="height:100%;width:'+pct+'%;background:'+col+';border-radius:4px;transition:width .5s"></div>'
+    +'</div></div>';
+  SRS_CK_ITEMS.forEach(function(dim){
+    var dimOk=dim.items.filter(function(i){return data[i.id]==='ok';}).length;
+    var dc=dimColors[dim.dim]||'var(--muted)';
+    html+='<div class="card" style="margin-bottom:.6rem">'
+      +'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.5rem">'
+      +'<div style="font-size:12px;font-weight:500;color:'+dc+'">'+dim.dim+'</div>'
+      +'<div style="font-size:11px;color:var(--muted)">'+dimOk+'/'+dim.items.length+'</div></div>';
+    dim.items.forEach(function(item){
+      var val=data[item.id]||'';
+      html+='<div style="display:flex;align-items:flex-start;gap:.6rem;padding:.4rem 0;border-bottom:0.5px solid var(--border)">'
+        +'<div style="display:flex;gap:4px;flex-shrink:0;padding-top:1px">'
+        +'<button class="srs-ck-btn" data-id="'+item.id+'" data-val="ok" style="width:24px;height:24px;border-radius:4px;border:0.5px solid '+(val==='ok'?'var(--c-green)':'var(--border2)')+';background:'+(val==='ok'?'var(--c-green)':'var(--surface)')+';color:'+(val==='ok'?'#fff':'var(--muted)')+';font-size:12px;cursor:pointer">✓</button>'
+        +'<button class="srs-ck-btn" data-id="'+item.id+'" data-val="na" style="width:24px;height:24px;border-radius:4px;border:0.5px solid '+(val==='na'?'var(--c-amber)':'var(--border2)')+';background:'+(val==='na'?'var(--c-amber)':'var(--surface)')+';color:'+(val==='na'?'#fff':'var(--muted)')+';font-size:10px;cursor:pointer">N/A</button>'
+        +'</div>'
+        +'<div style="font-size:12px;color:var(--text);line-height:1.5">'+item.text+'</div></div>';
+    });
+    html+='</div>';
+  });
+  html+='<div style="display:flex;gap:.5rem;margin-top:.5rem">'
+    +'<button class="btn btn-sm" onclick="srsCkReset()">↺ Reiniciar</button>'
+    +'<span style="font-size:11px;color:var(--muted)">Guardado automáticamente</span></div>';
+  el.innerHTML=html;
+  el.querySelectorAll('.srs-ck-btn').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      var d; try{d=JSON.parse(localStorage.getItem(SRS_CK_KEY))||{};}catch(e){d={};}
+      if(d[this.dataset.id]===this.dataset.val) delete d[this.dataset.id]; else d[this.dataset.id]=this.dataset.val;
+      localStorage.setItem(SRS_CK_KEY,JSON.stringify(d)); renderSrsCk(d);
+    });
+  });
+}
+function srsCkReset(){ localStorage.removeItem(SRS_CK_KEY); initSrsCk(); }
+
+/* ── RTM ── */
+const RTM_KEY = 'fw_srs_rtm_v1';
+function initSrsRtm(){
+  var el=document.getElementById('srs-rtm-mount'); if(!el) return;
+  el.innerHTML=''; renderSrsRtm();
+}
+function renderSrsRtm(){
+  var el=document.getElementById('srs-rtm-mount'); if(!el) return;
+  var data; try{data=JSON.parse(localStorage.getItem(RTM_KEY))||{items:[]};}catch(e){data={items:[]};}
+  function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+  function saveRow(reqId,key,val){
+    if(!data.items) data.items=[];
+    var row=data.items.find(function(r){return r.reqId===reqId;});
+    if(!row){row={reqId:reqId};data.items.push(row);}
+    row[key]=val;
+    localStorage.setItem(RTM_KEY,JSON.stringify(data));
+  }
+
+  var srsData; try{srsData=JSON.parse(localStorage.getItem(SRS_KEY))||defaultSRS();}catch(e){srsData=defaultSRS();}
+  var allReqs=[];
+  (srsData.rfs||[]).forEach(function(r){if(r.desc) allReqs.push({id:r.id,tipo:'RF',desc:r.desc,prio:r.prio||'Alta'});});
+  (srsData.rnfs||[]).forEach(function(r){var d=(r.atributo||r.cat||'')+(r.valor?' — '+r.valor:'');if(d.trim()) allReqs.push({id:r.id,tipo:'RNF',desc:d.trim(),prio:r.cat||'—'});});
+  (srsData.sas||[]).forEach(function(r){if(r.desc) allReqs.push({id:r.id,tipo:'SA',desc:r.desc,prio:'—'});});
+  (srsData.rcs||[]).forEach(function(r){var d=[r.t,r.v].filter(Boolean).join(' — ');if(d) allReqs.push({id:r.id,tipo:'RC',desc:d,prio:'—'});});
+
+  if(!allReqs.length){
+    el.innerHTML='<div class="card" style="text-align:center;padding:2rem;color:var(--muted)">No hay requisitos en el SRS. Agrega RF, RNF, supuestos o restricciones primero.</div>';
+    return;
+  }
+
+  var tipoColors={RF:'var(--c-blue)',RNF:'var(--c-purple)',SA:'var(--c-teal)',RC:'var(--c-amber)'};
+
+  // KPIs
+  var trazados=allReqs.filter(function(r){
+    var row=(data.items||[]).find(function(x){return x.reqId===r.id;})||{};
+    return row.estadoTraz==='Trazado'||row.estadoTraz==='Verificado';
+  }).length;
+  var implementados=allReqs.filter(function(r){
+    var row=(data.items||[]).find(function(x){return x.reqId===r.id;})||{};
+    return row.estadoImpl==='Implementado'||row.estadoImpl==='Verificado';
+  }).length;
+  var verificados=allReqs.filter(function(r){
+    var row=(data.items||[]).find(function(x){return x.reqId===r.id;})||{};
+    return row.estadoImpl==='Verificado';
+  }).length;
+  var pct=Math.round(trazados/allReqs.length*100);
+
+  var html='<div class="kpi-grid" style="margin-bottom:1rem">'
+    +'<div class="kpi"><div class="kpi-num" style="color:var(--c-blue)">'+allReqs.length+'</div><div class="kpi-label">Total</div></div>'
+    +'<div class="kpi"><div class="kpi-num" style="color:var(--c-teal)">'+trazados+'</div><div class="kpi-label">Trazados</div></div>'
+    +'<div class="kpi"><div class="kpi-num" style="color:var(--c-amber)">'+implementados+'</div><div class="kpi-label">Implementados</div></div>'
+    +'<div class="kpi"><div class="kpi-num" style="color:var(--c-green)">'+verificados+'</div><div class="kpi-label">Verificados</div></div>'
+    +'</div>'
+    +'<div style="height:6px;background:var(--surface2);border-radius:4px;overflow:hidden;margin-bottom:1rem">'
+    +'<div style="height:100%;width:'+pct+'%;background:var(--c-teal);border-radius:4px;transition:width .4s"></div>'
+    +'</div>';
+
+  var tipos=['RF','RNF','SA','RC'];
+  var tipoLabel={RF:'Requisitos Funcionales',RNF:'Requisitos No Funcionales',SA:'Supuestos',RC:'Restricciones'};
+  var metodos=['—','Prueba funcional','Prueba de rendimiento','Prueba de seguridad','Inspección de código','Revisión documental','Demo / UAT','Prueba automatizada'];
+  var estadosImpl=['Pendiente','En análisis','En desarrollo','Implementado','Verificado','Rechazado'];
+  var estadosTraz=['Pendiente','Trazado','Verificado'];
+
+  tipos.forEach(function(tipo){
+    var reqs=allReqs.filter(function(r){return r.tipo===tipo;});
+    if(!reqs.length) return;
+    var col=tipoColors[tipo];
+    html+='<div style="margin-bottom:1.2rem">'
+      +'<div style="font-size:11px;font-weight:600;color:'+col+';text-transform:uppercase;letter-spacing:.5px;margin-bottom:.5rem;display:flex;align-items:center;gap:.4rem">'
+      +'<span style="width:8px;height:8px;border-radius:50%;background:'+col+';display:inline-block"></span>'+tipoLabel[tipo]+' ('+reqs.length+')</div>';
+
+    reqs.forEach(function(req){
+      var row=(data.items||[]).find(function(x){return x.reqId===req.id;})||{};
+      var estadoTraz=row.estadoTraz||'Pendiente';
+      var estadoImpl=row.estadoImpl||'Pendiente';
+      var trazCol=estadoTraz==='Verificado'?'var(--c-green)':estadoTraz==='Trazado'?'var(--c-teal)':'var(--muted)';
+      var implCol=estadoImpl==='Verificado'?'var(--c-green)':estadoImpl==='Implementado'?'var(--c-blue)':estadoImpl==='En desarrollo'?'var(--c-amber)':estadoImpl==='Rechazado'?'var(--c-red)':'var(--muted)';
+
+      html+='<div style="border:0.5px solid var(--border);border-radius:var(--radius);padding:.7rem;margin-bottom:.4rem;background:var(--surface)">'
+        // Header
+        +'<div style="display:flex;align-items:flex-start;gap:.5rem;margin-bottom:.6rem;flex-wrap:wrap">'
+        +'<span style="font-family:var(--font-mono);font-size:11px;font-weight:700;color:'+col+';flex-shrink:0">'+esc(req.id)+'</span>'
+        +'<span style="font-size:12px;color:var(--text);flex:1;min-width:0;word-break:break-word">'+esc(req.desc)+'</span>'
+        +'<div style="display:flex;gap:.3rem;flex-shrink:0">'
+        +'<span style="padding:1px 7px;border-radius:10px;font-size:10px;font-weight:600;border:0.5px solid '+trazCol+';color:'+trazCol+'">'+estadoTraz+'</span>'
+        +'<span style="padding:1px 7px;border-radius:10px;font-size:10px;font-weight:600;border:0.5px solid '+implCol+';color:'+implCol+'">'+estadoImpl+'</span>'
+        +'</div>'
+        +'</div>'
+        // Fields — row 1
+        +'<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.4rem;margin-bottom:.4rem">'
+        // Origen
+        +'<div><label style="font-size:9px;font-weight:600;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">Origen (GAP/HU/Sesión)</label>'
+        +'<input class="rtm-inp" data-req="'+esc(req.id)+'" data-key="origen" value="'+esc(row.origen||'')+'" placeholder="GAP-001, HU-001..." style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 6px;font-size:11px;outline:none"></div>'
+        // Responsable
+        +'<div><label style="font-size:9px;font-weight:600;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">Responsable / Dueño</label>'
+        +'<input class="rtm-inp" data-req="'+esc(req.id)+'" data-key="responsable" value="'+esc(row.responsable||'')+'" placeholder="Nombre o rol..." style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 6px;font-size:11px;outline:none"></div>'
+        // Componente
+        +'<div><label style="font-size:9px;font-weight:600;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">Componente del sistema</label>'
+        +'<input class="rtm-inp" data-req="'+esc(req.id)+'" data-key="componente" value="'+esc(row.componente||'')+'" placeholder="Módulo, servicio..." style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 6px;font-size:11px;outline:none"></div>'
+        +'</div>'
+        // Fields — row 2
+        +'<div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:.4rem;margin-bottom:.4rem">'
+        // Caso de prueba (only RF)
+        +(tipo==='RF'?'<div><label style="font-size:9px;font-weight:600;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">Caso de prueba</label>'
+        +'<input class="rtm-inp" data-req="'+esc(req.id)+'" data-key="cp" value="'+esc(row.cp||'')+'" placeholder="CP-001..." style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 6px;font-size:11px;outline:none"></div>'
+        :'<div><label style="font-size:9px;font-weight:600;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">Referencia verificación</label>'
+        +'<input class="rtm-inp" data-req="'+esc(req.id)+'" data-key="cp" value="'+esc(row.cp||'')+'" placeholder="Doc, prueba..." style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 6px;font-size:11px;outline:none"></div>')
+        // Método verificación
+        +'<div><label style="font-size:9px;font-weight:600;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">Método verificación</label>'
+        +'<select class="rtm-inp" data-req="'+esc(req.id)+'" data-key="metodo" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 4px;font-size:10px;outline:none">'
+        +metodos.map(function(m){return '<option'+(row.metodo===m?' selected':'')+'>'+m+'</option>';}).join('')
+        +'</select></div>'
+        // Estado trazabilidad
+        +'<div><label style="font-size:9px;font-weight:600;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">Estado trazabilidad</label>'
+        +'<select class="rtm-inp" data-req="'+esc(req.id)+'" data-key="estadoTraz" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 4px;font-size:10px;outline:none;color:'+trazCol+'">'
+        +estadosTraz.map(function(s){return '<option'+(estadoTraz===s?' selected':'')+'>'+s+'</option>';}).join('')
+        +'</select></div>'
+        // Estado implementación
+        +'<div><label style="font-size:9px;font-weight:600;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">Estado implementación</label>'
+        +'<select class="rtm-inp" data-req="'+esc(req.id)+'" data-key="estadoImpl" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 4px;font-size:10px;outline:none;color:'+implCol+'">'
+        +estadosImpl.map(function(s){return '<option'+(estadoImpl===s?' selected':'')+'>'+s+'</option>';}).join('')
+        +'</select></div>'
+        +'</div>'
+        // Observaciones
+        +'<div><label style="font-size:9px;font-weight:600;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">Observaciones</label>'
+        +'<input class="rtm-inp" data-req="'+esc(req.id)+'" data-key="obs" value="'+esc(row.obs||'')+'" placeholder="Notas, acuerdos, dependencias..." style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 6px;font-size:11px;outline:none"></div>'
+        +'</div>';
+    });
+    html+='</div>';
+  });
+
+  html+='<div style="font-size:11px;color:var(--muted);margin-top:.3rem">Guardado automáticamente</div>';
+  el.innerHTML=html;
+
+  el.querySelectorAll('.rtm-inp').forEach(function(inp){
+    inp.addEventListener('input',function(){saveRow(this.dataset.req,this.dataset.key,this.value);});
+    inp.addEventListener('change',function(){
+      saveRow(this.dataset.req,this.dataset.key,this.value);
+      if(this.dataset.key==='estadoTraz'||this.dataset.key==='estadoImpl') renderSrsRtm();
+    });
+  });
+}
+function rtmSaveRow(rfId,key,val){
+  var data; try{data=JSON.parse(localStorage.getItem(RTM_KEY))||{items:[]};}catch(e){data={items:[]};}
+  if(!data.items) data.items=[];
+  var row=data.items.find(function(r){return r.rfId===rfId;});
+  if(!row){ row={rfId:rfId}; data.items.push(row); }
+  row[key]=val;
+  localStorage.setItem(RTM_KEY,JSON.stringify(data));
+}
+
+/* ── Walkthrough SRS ── */
+const WT_KEY = 'fw_srs_wt_v1';
+function initSrsWt(){
+  var el=document.getElementById('srs-wt-mount'); if(!el) return;
+  el.innerHTML=''; renderSrsWt();
+}
+function renderSrsWt(){
+  var el=document.getElementById('srs-wt-mount'); if(!el) return;
+  var data; try{data=JSON.parse(localStorage.getItem(WT_KEY))||{sesiones:[]};}catch(e){data={sesiones:[]};}
+  function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+  var html='<div style="background:rgba(24,95,165,.05);border:0.5px solid rgba(24,95,165,.2);border-radius:var(--radius);padding:.5rem .8rem;font-size:11px;color:var(--c-blue);margin-bottom:1rem">'
+    +'ⓘ El walkthrough es una revisión guiada del SRS con stakeholders. Documenta cada observación para resolverla antes de la firma.</div>'
+    +'<div class="card" style="margin-bottom:.8rem">'
+    +'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.6rem">'
+    +'<div class="card-title">Sesiones de walkthrough</div>'
+    +'<button class="btn btn-sm" style="background:var(--c-blue);color:#fff;border-color:var(--c-blue)" onclick="wtAddSesion()">+ Sesión</button>'
+    +'</div><div id="wt-sesiones"></div></div>';
+  el.innerHTML=html;
+  renderWtSesiones(data);
+}
+function renderWtSesiones(data){
+  var el=document.getElementById('wt-sesiones'); if(!el) return;
+  function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+  if(!data.sesiones||!data.sesiones.length){
+    el.innerHTML='<div style="text-align:center;padding:1rem;color:var(--muted);font-size:12px">No hay sesiones. Agrega la primera sesión de revisión.</div>';
+    return;
+  }
+  var html='';
+  data.sesiones.forEach(function(s,i){
+    html+='<div style="border:0.5px solid var(--border);border-radius:var(--radius);padding:.8rem;margin-bottom:.6rem">'
+      +'<div style="display:grid;grid-template-columns:1fr 1fr 1fr 28px;gap:.4rem;margin-bottom:.5rem">'
+      +'<div><label style="font-size:10px;color:var(--muted);display:block;margin-bottom:2px">Fecha</label>'
+      +'<input class="wt-inp" data-idx="'+i+'" data-key="fecha" type="date" value="'+esc(s.fecha||'')+'" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 6px;font-size:12px;color:var(--text);outline:none"></div>'
+      +'<div><label style="font-size:10px;color:var(--muted);display:block;margin-bottom:2px">Participantes</label>'
+      +'<input class="wt-inp" data-idx="'+i+'" data-key="participantes" value="'+esc(s.participantes||'')+'" placeholder="Nombres o roles..." style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 6px;font-size:12px;color:var(--text);outline:none"></div>'
+      +'<div><label style="font-size:10px;color:var(--muted);display:block;margin-bottom:2px">Estado</label>'
+      +'<select class="wt-inp" data-idx="'+i+'" data-key="estado" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 5px;font-size:11px;outline:none">'
+      +'<option'+(s.estado==='Pendiente'||!s.estado?' selected':'')+'>Pendiente</option>'
+      +'<option'+(s.estado==='En revisión'?' selected':'')+'>En revisión</option>'
+      +'<option'+(s.estado==='Aprobado'?' selected':'')+'>Aprobado</option>'
+      +'<option'+(s.estado==='Con observaciones'?' selected':'')+'>Con observaciones</option>'
+      +'</select></div>'
+      +'<button class="wt-del" data-idx="'+i+'" style="background:none;border:none;cursor:pointer;color:var(--muted);font-size:15px;align-self:end">×</button>'
+      +'</div>'
+      +'<div><label style="font-size:10px;color:var(--muted);display:block;margin-bottom:2px">Observaciones / acuerdos</label>'
+      +'<textarea class="wt-inp" data-idx="'+i+'" data-key="observaciones" placeholder="Registra cada observación y el acuerdo tomado..." style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:4px 6px;font-size:12px;color:var(--text);resize:vertical;outline:none;line-height:1.5">'+esc(s.observaciones||'')+'</textarea></div>'
+      +'</div>';
+  });
+  el.innerHTML=html;
+  el.querySelectorAll('.wt-inp').forEach(function(inp){
+    inp.addEventListener('input',function(){ wtSave(parseInt(this.dataset.idx),this.dataset.key,this.value); });
+    inp.addEventListener('change',function(){ wtSave(parseInt(this.dataset.idx),this.dataset.key,this.value); });
+  });
+  el.querySelectorAll('.wt-del').forEach(function(btn){
+    btn.addEventListener('click',function(){ wtDel(parseInt(this.dataset.idx)); });
+  });
+}
+function wtSave(i,k,v){
+  var data; try{data=JSON.parse(localStorage.getItem(WT_KEY))||{sesiones:[]};}catch(e){data={sesiones:[]};}
+  if(data.sesiones[i]) data.sesiones[i][k]=v;
+  localStorage.setItem(WT_KEY,JSON.stringify(data));
+}
+function wtAddSesion(){
+  var data; try{data=JSON.parse(localStorage.getItem(WT_KEY))||{sesiones:[]};}catch(e){data={sesiones:[]};}
+  data.sesiones.push({fecha:'',participantes:'',estado:'Pendiente',observaciones:''});
+  localStorage.setItem(WT_KEY,JSON.stringify(data)); renderWtSesiones(data);
+}
+function wtDel(i){
+  var data; try{data=JSON.parse(localStorage.getItem(WT_KEY))||{sesiones:[]};}catch(e){data={sesiones:[]};}
+  data.sesiones.splice(i,1); localStorage.setItem(WT_KEY,JSON.stringify(data)); renderWtSesiones(data);
+}
+
+/* ── Versiones SRS ── */
+const VER_SRS_KEY = 'fw_srs_ver_v1';
+function initSrsVer(){
+  var el=document.getElementById('srs-ver-mount'); if(!el) return;
+  el.innerHTML=''; renderSrsVer();
+}
+function renderSrsVer(){
+  var el=document.getElementById('srs-ver-mount'); if(!el) return;
+  var data; try{data=JSON.parse(localStorage.getItem(VER_SRS_KEY))||{versiones:[{version:'v0.1',fecha:'',autor:'',cambios:'Versión inicial — estructura base del SRS',estado:'Borrador'}]};}catch(e){data={versiones:[]};}
+  function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+  var html='<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.8rem">'
+    +'<div style="font-size:11px;color:var(--muted)">'+data.versiones.length+' versión(es) registrada(s)</div>'
+    +'<button class="btn btn-sm" style="background:var(--c-blue);color:#fff;border-color:var(--c-blue)" onclick="verAddVersion()">+ Nueva versión</button>'
+    +'</div>';
+  if(data.versiones.length){
+    html+='<div style="overflow-x:auto"><table class="data-table" style="min-width:700px">'
+      +'<thead><tr><th>Versión</th><th>Fecha</th><th>Autor</th><th>Descripción de cambios</th><th>Estado</th><th></th></tr></thead><tbody>';
+    data.versiones.forEach(function(v,i){
+      var stateCol=v.estado==='Aprobado'?'var(--c-green)':v.estado==='En revisión'?'var(--c-amber)':'var(--muted)';
+      html+='<tr>'
+        +'<td><span style="font-family:var(--font-mono);color:var(--c-blue);font-size:12px;font-weight:600">'+esc(v.version)+'</span></td>'
+        +'<td><input class="ver-inp" data-idx="'+i+'" data-key="fecha" type="date" value="'+esc(v.fecha||'')+'" style="background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 5px;font-size:11px;outline:none"></td>'
+        +'<td><input class="ver-inp" data-idx="'+i+'" data-key="autor" value="'+esc(v.autor||'')+'" placeholder="Nombre..." style="min-width:100px;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 5px;font-size:11px;outline:none"></td>'
+        +'<td><input class="ver-inp" data-idx="'+i+'" data-key="cambios" value="'+esc(v.cambios||'')+'" placeholder="Qué cambió en esta versión..." style="width:100%;min-width:200px;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 5px;font-size:12px;outline:none"></td>'
+        +'<td><select class="ver-inp" data-idx="'+i+'" data-key="estado" style="background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 5px;font-size:11px;color:'+stateCol+';outline:none">'
+        +'<option'+(v.estado==='Borrador'||!v.estado?' selected':'')+'>Borrador</option>'
+        +'<option'+(v.estado==='En revisión'?' selected':'')+'>En revisión</option>'
+        +'<option'+(v.estado==='Aprobado'?' selected':'')+'>Aprobado</option>'
+        +'<option'+(v.estado==='Rechazado'?' selected':'')+'>Rechazado</option>'
+        +'</select></td>'
+        +'<td><button class="ver-del" data-idx="'+i+'" style="background:none;border:none;cursor:pointer;color:var(--muted);font-size:15px">×</button></td>'
+        +'</tr>';
+    });
+    html+='</tbody></table></div>';
+  } else {
+    html+='<div class="card" style="text-align:center;color:var(--muted);font-size:13px">No hay versiones. Agrega la primera.</div>';
+  }
+  el.innerHTML=html;
+  el.querySelectorAll('.ver-inp').forEach(function(inp){
+    inp.addEventListener('input',function(){ verSaveRow(parseInt(this.dataset.idx),this.dataset.key,this.value); });
+    inp.addEventListener('change',function(){ verSaveRow(parseInt(this.dataset.idx),this.dataset.key,this.value); });
+  });
+  el.querySelectorAll('.ver-del').forEach(function(btn){
+    btn.addEventListener('click',function(){ verDelVersion(parseInt(this.dataset.idx)); });
+  });
+}
+function verSaveRow(i,k,v){
+  var data; try{data=JSON.parse(localStorage.getItem(VER_SRS_KEY))||{versiones:[]};}catch(e){data={versiones:[]};}
+  if(data.versiones[i]) data.versiones[i][k]=v;
+  localStorage.setItem(VER_SRS_KEY,JSON.stringify(data));
+}
+function verAddVersion(){
+  var data; try{data=JSON.parse(localStorage.getItem(VER_SRS_KEY))||{versiones:[]};}catch(e){data={versiones:[]};}
+  var n=data.versiones.length;
+  var major=Math.floor(n/10), minor=n%10;
+  data.versiones.push({version:'v'+major+'.'+minor,fecha:'',autor:'',cambios:'',estado:'Borrador'});
+  localStorage.setItem(VER_SRS_KEY,JSON.stringify(data)); renderSrsVer();
+}
+function verDelVersion(i){
+  var data; try{data=JSON.parse(localStorage.getItem(VER_SRS_KEY))||{versiones:[]};}catch(e){data={versiones:[]};}
+  data.versiones.splice(i,1); localStorage.setItem(VER_SRS_KEY,JSON.stringify(data)); renderSrsVer();
+}
+
+var CK_KEY='fw_srs_ck_v1';
+function initSrsChecklist(){
+  var el=document.getElementById('srs-checklist-mount'); if(!el) return;
+  el.innerHTML='';
+  var data; try{data=JSON.parse(localStorage.getItem(CK_KEY))||{};}catch(e){data={};}
+  renderSrsChecklist(data);
+}
+
+
+const HU_KEY = 'fw_srs_hu_v1';
+function defHU(){ return { items:[
+  {id:'HU-001',otros:'RNF-001',rol:'Analista de crédito',quiero:'consultar el score crediticio del cliente de forma automática',para:'reducir el tiempo de evaluación de 2 días a menos de 1 hora',prioridad:'Must',estado:'Aprobada',rfs:'RF-003',criterios:'Dado que el analista abre la solicitud\nCuando el sistema consulta el score\nEntonces el resultado aparece en menos de 3 segundos'},
+  {id:'HU-002',otros:'',rol:'Cliente',quiero:'completar mi solicitud de crédito en línea desde cualquier dispositivo',para:'no tener que ir a una sucursal física',prioridad:'Must',estado:'Aprobada',rfs:'RF-001, RF-002',criterios:'Dado que el cliente accede al portal\nCuando completa todos los campos obligatorios\nEntonces puede enviar la solicitud sin errores'},
+  {id:'HU-003',otros:'',rol:'Administrador',quiero:'configurar las reglas del motor de decisión sin programar',para:'ajustar los criterios de aprobación según la política vigente',prioridad:'Should',estado:'En revisión',rfs:'RF-004',criterios:'Dado que el admin accede al módulo de reglas\nCuando modifica un umbral\nEntonces el cambio aplica en la próxima evaluación sin reiniciar el sistema'},
+]}; }
+function initSrsHU(){
+  var el=document.getElementById('srs-hu-mount'); if(!el||el.innerHTML.trim()) return;
+  var data; try{data=JSON.parse(localStorage.getItem(HU_KEY))||defHU();}catch(e){data=defHU();}
+  // Migrate: ensure all items have escenarios array
+  var migrated=false;
+  (data.items||[]).forEach(function(h){
+    if(!h.escenarios){
+      h.escenarios=[];
+      // If old criterios text exists, create one escenario from it
+      if(h.criterios && h.criterios.trim()){
+        var lines=h.criterios.split('\n');
+        var esc={titulo:'Escenario 1',contexto:'',accion:'',resultado:'',y:''};
+        lines.forEach(function(l){
+          var lt=l.trim().toLowerCase();
+          if(lt.startsWith('dado que')) esc.contexto=l.replace(/dado que/i,'').trim();
+          else if(lt.startsWith('cuando')) esc.accion=l.replace(/cuando/i,'').trim();
+          else if(lt.startsWith('entonces')) esc.resultado=l.replace(/entonces/i,'').trim();
+          else if(lt.startsWith('y ')) esc.y=l.replace(/^y /i,'').trim();
+        });
+        if(esc.contexto||esc.accion||esc.resultado) h.escenarios.push(esc);
+      }
+      migrated=true;
+    }
+  });
+  if(migrated) localStorage.setItem(HU_KEY,JSON.stringify(data));
+  window._huSel=window._huSel||0;
+  renderSrsHU(data);
+}
+
+var SRS_VER_KEY='fw_srs_ver_v1';
+function defSrsVer(){ return {versiones:[{version:'v0.1',fecha:'',autor:'',cambios:'Versión inicial — estructura base del SRS',estado:'Borrador'}]}; }
+function initSrsVersiones(){
+  var el=document.getElementById('srs-ver-mount'); if(!el) return;
+  el.innerHTML='';
+  var data; try{data=JSON.parse(localStorage.getItem(SRS_VER_KEY))||defSrsVer();}catch(e){data=defSrsVer();}
+  renderSrsVersiones(data);
+}
+
+var WT_SRS_KEY='fw_srs_wt_v1';
+function defWtSrs(){ return {sesiones:[]}; }
+function initSrsWalkthrough(){
+  var el=document.getElementById('srs-wt-mount'); if(!el) return;
+  el.innerHTML='';
+  var d; try{d=JSON.parse(localStorage.getItem(WT_SRS_KEY))||defWtSrs();}catch(e){d=defWtSrs();}
+  renderSrsWalkthrough(d);
+}
+
+function renderSrsChecklist(data){
+  var el=document.getElementById('srs-checklist-mount'); if(!el) return;
+  function save(){ localStorage.setItem(CK_KEY,JSON.stringify(data)); }
+
+  var dims=[...new Set(SRS_CK_ITEMS.map(function(i){return i.dim;}))];
+  var dimColors={'Completitud':'var(--c-blue)','Verificabilidad':'var(--c-purple)','Consistencia':'var(--c-amber)','Trazabilidad':'var(--c-green)','Claridad':'var(--c-teal)','Aprobación':'var(--c-green)'};
+
+  var total=SRS_CK_ITEMS.length;
+  var checked=SRS_CK_ITEMS.filter(function(i){return data[i.id]==='ok';}).length;
+  var na=SRS_CK_ITEMS.filter(function(i){return data[i.id]==='na';}).length;
+  var pct=Math.round(checked/total*100);
+  var gVar=pct===100?'--c-green':pct>=60?'--c-blue':'--c-gray';
+
+  var html='<div class="card" style="margin-bottom:1rem;background:rgba('+( pct===100?'15,110,86':pct>=60?'24,95,165':'0,0,0')+',.04);border-color:rgba('+(pct===100?'15,110,86':pct>=60?'24,95,165':'0,0,0')+',.2)">'
+    +'<div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem;margin-bottom:.5rem">'
+    +'<div><div style="font-size:13px;font-weight:500;color:var('+gVar+');">'
+    +(pct===100?'✓ SRS listo para inspección formal':pct>=60?'⏳ En progreso — '+checked+' de '+total+' ítems aprobados':'○ Checklist por completar')
+    +'</div><div style="font-size:11px;color:var(--muted);margin-top:2px">'+checked+' OK · '+na+' N/A · '+(total-checked-na)+' pendientes</div></div>'
+    +'<div style="font-size:28px;font-weight:500;font-family:var(--font-serif);color:var('+gVar+')">'+pct+'%</div>'
+    +'</div>'
+    +'<div style="height:7px;background:var(--surface2);border-radius:4px;overflow:hidden">'
+    +'<div style="height:100%;width:'+pct+'%;background:var('+gVar+');border-radius:4px;transition:width .5s"></div>'
+    +'</div></div>';
+
+  dims.forEach(function(dim){
+    var items=SRS_CK_ITEMS.filter(function(i){return i.dim===dim;});
+    var dimOk=items.filter(function(i){return data[i.id]==='ok';}).length;
+    var col=dimColors[dim]||'var(--c-gray)';
+    html+='<div class="card" style="margin-bottom:.6rem">'
+      +'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.5rem">'
+      +'<div style="font-size:12px;font-weight:500;color:'+col+'">'+dim+'</div>'
+      +'<div style="font-size:11px;color:var(--muted)">'+dimOk+' / '+items.length+'</div>'
+      +'</div>';
+    items.forEach(function(item){
+      var val=data[item.id]||'';
+      html+='<div style="display:flex;align-items:flex-start;gap:.6rem;padding:.4rem 0;border-bottom:0.5px solid var(--border)">'
+        +'<div style="display:flex;gap:4px;flex-shrink:0;padding-top:1px">'
+        +'<button style="width:24px;height:24px;border-radius:4px;border:0.5px solid '+(val==='ok'?'var(--c-green)':'var(--border2)')+';background:'+(val==='ok'?'var(--c-green)':'var(--surface)')+';color:'+(val==='ok'?'#fff':'var(--muted)')+';font-size:12px;cursor:pointer;flex-shrink:0" onclick="ckSet(\''+item.id+'\',\'ok\')">✓</button>'
+        +'<button style="width:24px;height:24px;border-radius:4px;border:0.5px solid '+(val==='na'?'var(--c-amber)':'var(--border2)')+';background:'+(val==='na'?'var(--c-amber)':'var(--surface)')+';color:'+(val==='na'?'#fff':'var(--muted)')+';font-size:10px;cursor:pointer;flex-shrink:0" onclick="ckSet(\''+item.id+'\',\'na\')">N/A</button>'
+        +'</div>'
+        +'<div style="font-size:12px;color:var(--text);line-height:1.5">'+item.text+'</div>'
+        +'</div>';
+    });
+    html+='</div>';
+  });
+
+  html+='<div style="display:flex;gap:.5rem;margin-top:.5rem;align-items:center">'
+    +'<button class="btn" style="background:var(--c-blue);color:#fff;border-color:var(--c-blue)" onclick="ckReset()">↺ Reiniciar</button>'
+    +'<span style="font-size:11px;color:var(--muted)">Cambios guardados automáticamente</span></div>';
+
+  el.innerHTML=html;
+}
+
+function renderSrsHU(data){
+  var el=document.getElementById('srs-hu-mount'); if(!el) return;
+  function save(){localStorage.setItem(HU_KEY,JSON.stringify(data));}
+  function e(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
+  var items=data.items||[];
+  var sel=Math.min(window._huSel||0, items.length-1);
+  var priOpts=['Must','Should','Could','Won\'t'];
+  var estOpts=['Borrador','En revisión','Aprobada','Rechazada'];
+  var estColor={'Borrador':'var(--muted)','En revisión':'var(--c-amber)','Aprobada':'var(--c-green)','Rechazada':'var(--c-red)'};
+  var priColor={'Must':'var(--c-red)','Should':'var(--c-amber)','Could':'var(--c-blue)','Won\'t':'var(--muted)'};
+
+  // KPIs
+  var html='<div class="kpi-grid" style="margin-bottom:1rem">'
+    +[{n:items.length,l:'Total HU',c:'var(--c-blue)'},
+      {n:items.filter(function(h){return h.estado==='Aprobada';}).length,l:'Aprobadas',c:'var(--c-green)'},
+      {n:items.filter(function(h){return h.prioridad==='Must';}).length,l:'Must have',c:'var(--c-red)'},
+      {n:items.filter(function(h){return h.rfs;}).length,l:'Con RF vinculado',c:'var(--c-purple)'},
+    ].map(function(k){return'<div class="kpi"><div class="kpi-num" style="color:'+k.c+'">'+k.n+'</div><div class="kpi-label">'+k.l+'</div></div>';}).join('')
+    +'</div>';
+
+  // List + detail layout
+  html+='<div style="display:grid;grid-template-columns:220px 1fr;gap:1rem">';
+
+  // Left: list
+  html+='<div>'
+    +'<div style="margin-bottom:.5rem;display:flex;gap:.4rem">'
+    +'<button class="btn btn-sm" style="flex:1;background:var(--c-blue);color:#fff;border-color:var(--c-blue)" onclick="huAdd()">+ Nueva HU</button>'
+    +'</div>';
+  items.forEach(function(h,i){
+    var active=i===sel;
+    var ec=estColor[h.estado]||'var(--muted)';
+    var pc=priColor[h.prioridad]||'var(--muted)';
+    html+='<div onclick="window._huSel='+i+';renderSrsHU(JSON.parse(localStorage.getItem(\''+HU_KEY+'\')||\'{}\')||defHU())" style="padding:.5rem .7rem;border-radius:var(--radius);border:0.5px solid '+(active?'var(--c-blue)':'var(--border)')+';background:'+(active?'rgba(24,95,165,.06)':'var(--surface)')+';cursor:pointer;margin-bottom:.3rem">'
+      +'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:2px">'
+      +'<span style="font-size:11px;font-family:var(--font-mono);color:var(--c-blue)">'+e(h.id)+'</span>'
+      +'<span style="font-size:10px;font-weight:500;color:'+pc+'">'+e(h.prioridad)+'</span>'
+      +'</div>'
+      +'<div style="font-size:11px;color:var(--text);line-height:1.4">Como <strong>'+e(h.rol||'...')+'</strong></div>'
+      +'<div style="font-size:10px;color:'+ec+';margin-top:2px">'+e(h.estado)+'</div>'
+      +'</div>';
+  });
+  html+='</div>';
+
+  // Right: detail
+  if(items.length===0){
+    html+='<div class="card" style="display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:13px">No hay historias de usuario. Crea la primera.</div>';
+  } else {
+    var h=items[sel];
+    html+='<div style="min-width:0;overflow:hidden">'
+      +'<div class="card" style="margin-bottom:.6rem">'
+      +'<div style="display:grid;grid-template-columns:80px 1fr 100px 120px;gap:.5rem;margin-bottom:.6rem">'
+      // ID
+      +'<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.3px;display:block;margin-bottom:2px">ID</label>'
+      +'<input value="'+e(h.id)+'" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:4px 7px;font-size:11px;font-family:var(--font-mono);color:var(--c-blue);outline:none" oninput="huSet('+sel+',\'id\',this.value)"></div>'
+      // Rol
+      +'<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.3px;display:block;margin-bottom:2px">Como (rol)</label>'
+      +'<input value="'+e(h.rol)+'" placeholder="Ej: Analista de crédito, Cliente..." style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:4px 7px;font-size:12px;color:var(--text);outline:none" oninput="huSet('+sel+',\'rol\',this.value)"></div>'
+      // Prioridad
+      +'<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.3px;display:block;margin-bottom:2px">Prioridad</label>'
+      +'<select style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:4px 6px;font-size:12px;outline:none" onchange="huSet('+sel+',\'prioridad\',this.value)">'+priOpts.map(function(o){return'<option'+(h.prioridad===o?' selected':'')+'>'+o+'</option>';}).join('')+'</select></div>'
+      // Estado
+      +'<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.3px;display:block;margin-bottom:2px">Estado</label>'
+      +'<select style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:4px 6px;font-size:12px;color:'+(estColor[h.estado]||'var(--text)')+';outline:none" onchange="huSet('+sel+',\'estado\',this.value)">'+estOpts.map(function(o){return'<option'+(h.estado===o?' selected':'')+'>'+o+'</option>';}).join('')+'</select></div>'
+      +'</div>'
+      // Quiero
+      +'<div style="margin-bottom:.5rem"><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.3px;display:block;margin-bottom:2px">Quiero (funcionalidad)</label>'
+      +'<textarea rows="2" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:4px 8px;font-size:12px;color:var(--text);font-family:var(--font-sans);resize:vertical;outline:none;line-height:1.5" placeholder="Ej: consultar el score crediticio de forma automática..." oninput="huSet('+sel+',\'quiero\',this.value)">'+e(h.quiero||'')+'</textarea></div>'
+      // Para
+      +'<div style="margin-bottom:.5rem"><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.3px;display:block;margin-bottom:2px">Para (beneficio)</label>'
+      +'<textarea rows="2" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:4px 8px;font-size:12px;color:var(--text);font-family:var(--font-sans);resize:vertical;outline:none;line-height:1.5" placeholder="Ej: reducir el tiempo de evaluación de 2 días a menos de 1 hora..." oninput="huSet('+sel+',\'para\',this.value)">'+e(h.para||'')+'</textarea></div>'
+      // RF vinculados
+      +'<div style="display:grid;grid-template-columns:1fr;gap:.5rem;margin-bottom:.5rem">'
+      +'<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.3px;display:block;margin-bottom:2px">RF vinculados</label>'
+      +'<div id="hu-rf-sel-'+sel+'" style="display:flex;flex-wrap:wrap;gap:4px;min-height:32px;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:4px 8px">'+huBuildChips(h.rfs,sel,"rfs")+'</div>'
+      +'<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.3px;display:block;margin-bottom:2px">RNF / Supuestos / Restricciones</label>'
+      +'<div id="hu-ot-sel-'+sel+'" style="display:flex;flex-wrap:wrap;gap:4px;min-height:32px;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:4px 8px">'+huBuildChips(h.otros,sel,"otros")+'</div>'
+      +'</div>'
+      // Criterios de aceptación — múltiples escenarios
+      +'<div style="margin-top:.5rem">'      +'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.5rem">'      +'<label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.3px">Escenarios Gherkin (Given · When · Then)</label>'      +'<button class="btn btn-sm" style="font-size:10px;background:var(--c-blue);color:#fff;border-color:var(--c-blue)" onclick="huAddEscenario('+sel+')">+ Escenario</button>'      +'</div>'      +'<div id="hu-escenarios-'+sel+'">'+huBuildEscenarios(h,sel)+'</div>'      +'</div>'      +'<button class="btn btn-sm" style="color:var(--c-red);border-color:rgba(163,45,45,.3)" onclick="huDel('+sel+')">× Eliminar HU</button>'
+      +'</div>'
+      +'<div style="display:flex;justify-content:flex-end;margin-top:.6rem">'
+      +'<button class="btn btn-sm" style="background:var(--c-blue);color:#fff;border-color:var(--c-blue)" onclick="nav(\'srs-editor\')">Redactar RF en Editor SRS →</button>'
+      +'</div>'
+      +'</div>';
+  }
+
+  html+='</div>';
+  el.innerHTML=html;
+  // Bind escenarios
+  (data.items||[]).forEach(function(_,si){ huBindEscenarios(si); });
+}
+
+function renderSrsVersiones(data){
+  var el=document.getElementById('srs-ver-mount'); if(!el) return;
+  function save(){localStorage.setItem(SRS_VER_KEY,JSON.stringify(data));}
+  function e(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
+  var estOpts=['Borrador','En revisión','Aprobado con obs.','Baseline'];
+  var estColor={'Borrador':'var(--muted)','En revisión':'var(--c-amber)','Aprobado con obs.':'var(--c-blue)','Baseline':'var(--c-green)'};
+
+  var tip='<div style="background:rgba(24,95,165,.06);border:0.5px solid rgba(24,95,165,.25);border-radius:var(--radius);padding:.5rem .8rem;font-size:11px;color:var(--c-blue);margin-bottom:.8rem">'
+    +'ⓘ Registra cada versión del SRS desde el primer borrador v0.1 hasta el baseline v1.0 aprobado. Guardado automático.</div>';
+
+  // Form nueva versión
+  var form='<div class="card" style="margin-bottom:1rem">'
+    +'<div class="card-title" style="margin-bottom:.6rem">Registrar nueva versión</div>'
+    +'<div style="display:grid;grid-template-columns:80px 1fr 1fr 140px;gap:.5rem;margin-bottom:.5rem">'
+    +'<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.3px;display:block;margin-bottom:2px">Tag</label>'
+    +'<input id="srsver-tag" placeholder="v0.2" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:5px 8px;font-size:12px;font-family:var(--font-mono);color:var(--c-blue);outline:none"></div>'
+    +'<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.3px;display:block;margin-bottom:2px">Fecha</label>'
+    +'<input id="srsver-fecha" type="date" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:5px 8px;font-size:12px;color:var(--text);outline:none"></div>'
+    +'<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.3px;display:block;margin-bottom:2px">Autor</label>'
+    +'<input id="srsver-autor" placeholder="Nombre · Rol" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:5px 8px;font-size:12px;color:var(--text);outline:none"></div>'
+    +'<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.3px;display:block;margin-bottom:2px">Estado</label>'
+    +'<select id="srsver-estado" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:5px 8px;font-size:12px;color:var(--text);outline:none">'
+    +estOpts.map(function(o){return'<option>'+o+'</option>';}).join('')+'</select></div>'
+    +'</div>'
+    +'<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.3px;display:block;margin-bottom:2px">Cambios incluidos</label>'
+    +'<textarea id="srsver-cambios" rows="2" placeholder="Describe qué cambió en esta versión..." style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:5px 8px;font-size:12px;color:var(--text);resize:vertical;outline:none;line-height:1.6"></textarea></div>'
+    +'<button class="btn btn-sm" style="background:var(--c-blue);color:#fff;border-color:var(--c-blue);margin-top:.5rem" onclick="srsVerAdd()">+ Registrar versión</button>'
+    +'</div>';
+
+  // Historial
+  var hist='';
+  var vers=data.versiones||[];
+  vers.forEach(function(v,i){
+    var col=estColor[v.estado]||'var(--muted)';
+    hist+='<div style="display:flex;gap:.8rem;margin-bottom:.5rem;align-items:flex-start">'
+      +(i<vers.length-1?'<div style="display:flex;flex-direction:column;align-items:center"><div style="width:10px;height:10px;border-radius:50%;background:'+col+';flex-shrink:0"></div><div style="width:1px;flex:1;background:var(--border);margin:3px 0"></div></div>':'<div style="width:10px;height:10px;border-radius:50%;background:'+col+';flex-shrink:0;margin-top:1px"></div>')
+      +'<div class="card-sm" style="flex:1">'
+      +'<div style="display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;margin-bottom:.3rem">'
+      +'<span style="font-size:13px;font-weight:500;font-family:var(--font-mono);color:var(--c-blue)">'+e(v.tag)+'</span>'
+      +'<span style="font-size:11px;padding:2px 8px;border-radius:8px;background:'+col+'18;color:'+col+';font-weight:500">'+e(v.estado)+'</span>'
+      +(v.autor?'<span style="font-size:11px;color:var(--muted)">'+e(v.autor)+'</span>':'')
+      +'<span style="font-size:11px;color:var(--muted);margin-left:auto">'+e(v.fecha)+'</span>'
+      +'<button style="background:none;border:none;cursor:pointer;color:var(--muted);font-size:14px" onclick="srsVerDel('+i+')">×</button>'
+      +'</div>'
+      +'<div style="font-size:12px;color:var(--muted)">'+e(v.cambios)+'</div>'
+      +'</div></div>';
+  });
+
+  el.innerHTML=tip+form+(hist?'<div class="card-title" style="margin-bottom:.6rem">Historial</div>'+hist:'');
+}
+
+function renderSrsWalkthrough(d){
+  var el=document.getElementById('srs-wt-mount'); if(!el) return;
+  function save(){localStorage.setItem(WT_SRS_KEY,JSON.stringify(d));}
+  function e(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+  function fi(lbl,key,ph){return'<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.3px;display:block;margin-bottom:2px">'+lbl+'</label><input value="'+e(d[key]||'')+'" placeholder="'+ph+'" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:5px 8px;font-size:12px;color:var(--text);font-family:var(--font-sans);outline:none" oninput="wtSrsSet(\''+key+'\',this.value)"></div>';}
+  function ta(lbl,key,ph,rows){return'<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.3px;display:block;margin-bottom:2px">'+lbl+'</label><textarea rows="'+(rows||2)+'" placeholder="'+ph+'" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:5px 8px;font-size:12px;color:var(--text);font-family:var(--font-sans);resize:vertical;outline:none;line-height:1.6" oninput="wtSrsSet(\''+key+'\',this.value)">'+e(d[key]||'')+'</textarea></div>';}
+
+  var decOpts=['Pendiente','Aprobado con observaciones','Requiere revisión','Aprobado sin observaciones'];
+  var decColor={'Pendiente':'var(--muted)','Aprobado sin observaciones':'var(--c-green)','Aprobado con observaciones':'var(--c-amber)','Requiere revisión':'var(--c-red)'};
+
+  var header='<div class="card" style="margin-bottom:.8rem">'
+    +'<div class="card-title" style="margin-bottom:.6rem">Datos de la sesión</div>'
+    +'<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.5rem;margin-bottom:.5rem">'
+    +fi('Fecha','fecha','AAAA-MM-DD')+fi('Moderador','moderador','Nombre · Rol')+fi('Versión SRS revisada','version','Ej: v0.3')
+    +'</div>'
+    +fi('Participantes','participantes','Nombres y roles separados por coma')
+    +'<div style="margin-top:.5rem">'+ta('Objetivo de la sesión','objetivo','¿Qué se busca validar en este walkthrough?',2)+'</div>'
+    +'</div>';
+
+  var hallazgos='<div class="card" style="margin-bottom:.8rem">'
+    +'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.5rem">'
+    +'<div class="card-title">Hallazgos registrados</div>'
+    +'<button class="btn btn-sm" onclick="wtSrsAddH()">+ Hallazgo</button>'
+    +'</div>';
+  (d.hallazgos||[]).forEach(function(h,i){
+    hallazgos+='<div style="display:grid;grid-template-columns:1fr 80px 28px;gap:.4rem;align-items:center;margin-bottom:.4rem">'
+      +'<input value="'+e(h.texto||'')+'" placeholder="Describe el hallazgo o comentario del stakeholder..." style="background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:4px 8px;font-size:12px;color:var(--text);outline:none;width:100%" oninput="wtSrsHSet('+i+',\'texto\',this.value)">'
+      +'<select style="font-size:11px;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:3px 5px;outline:none" onchange="wtSrsHSet('+i+',\'tipo\',this.value)">'
+      +['Defecto','Consulta','Sugerencia','Aprobado'].map(function(t){return'<option'+(h.tipo===t?' selected':'')+'>'+t+'</option>';}).join('')
+      +'</select>'
+      +'<button style="background:none;border:none;cursor:pointer;color:var(--muted);font-size:15px" onclick="wtSrsDelH('+i+')">×</button>'
+      +'</div>';
+  });
+  hallazgos+='</div>';
+
+  var decSel='<div class="card" style="margin-bottom:.8rem">'
+    +'<div class="card-title" style="margin-bottom:.6rem">Decisión del walkthrough</div>'
+    +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:.8rem;margin-bottom:.8rem">'
+    +decOpts.map(function(opt){
+      var active=d.decision===opt;
+      var col=decColor[opt]||'var(--muted)';
+      return'<div style="border-radius:var(--radius);padding:.8rem;text-align:center;cursor:pointer;border:1.5px solid '+(active?col:'var(--border)')+';background:'+(active?col+'18':'var(--surface)')+'" onclick="wtSrsSet(\'decision\',\''+opt+'\')">'
+        +'<div style="font-size:12px;font-weight:500;color:'+col+'">'+opt+'</div>'
+        +'</div>';
+    }).join('')
+    +'</div>'
+    +ta('Acuerdos alcanzados','acuerdos','Lista los acuerdos y compromisos de la sesión...',2)
+    +'<div style="margin-top:.5rem">'+ta('Próximos pasos','proximos','Acciones a tomar antes de la inspección formal...',2)+'</div>'
+    +'<div style="display:flex;gap:.5rem;margin-top:.8rem;align-items:center">'
+    +'<button class="btn" style="background:var(--c-blue);color:#fff;border-color:var(--c-blue)" onclick="wtSrsGuardar()">Guardar walkthrough</button>'
+    +'<span id="wt-srs-msg" style="font-size:11px;color:var(--c-green)"></span>'
+    +'</div></div>';
+
+  el.innerHTML=header+hallazgos+decSel;
+}
+
+
+
+function huDel(i){
+  var data; try{data=JSON.parse(localStorage.getItem(HU_KEY))||defHU();}catch(e){data=defHU();}
+  data.items.splice(i,1);
+  window._huSel=Math.max(0,i-1);
+  localStorage.setItem(HU_KEY,JSON.stringify(data));
+  var el=document.getElementById('srs-hu-mount'); if(el){el.innerHTML='';initSrsHU();}
+}
+
+function huAdd(){
+  var data; try{data=JSON.parse(localStorage.getItem(HU_KEY))||defHU();}catch(e){data=defHU();}
+  var n=data.items.length+1;
+  data.items.push({id:'HU-'+String(n).padStart(3,'0'),rol:'',quiero:'',para:'',prioridad:'Must',estado:'Borrador',rfs:'',otros:'',criterios:'',escenarios:[]});
+  window._huSel=data.items.length-1;
+  localStorage.setItem(HU_KEY,JSON.stringify(data));
+  renderSrsHU(data);
+}
+
+function huGherkinAdd(sel, tipo){
+  var ta=document.getElementById('hu-criterios-'+sel);
+  if(!ta) return;
+  var prefixes={'dado':'Dado que ','cuando':'Cuando ','entonces':'Entonces ','y':'Y '};
+  var prefix=prefixes[tipo]||'';
+  var val=ta.value;
+  if(val&&!val.endsWith('\n')) val+='\n';
+  ta.value=val+prefix;
+  ta.focus();
+  ta.setSelectionRange(ta.value.length, ta.value.length);
+  // Save
+  var data; try{data=JSON.parse(localStorage.getItem(HU_KEY))||defHU();}catch(e){data=defHU();}
+  data.items[sel].criterios=ta.value;
+  localStorage.setItem(HU_KEY,JSON.stringify(data));
+}
+
+function huSet(i,k,v){
+  var data; try{data=JSON.parse(localStorage.getItem(HU_KEY))||defHU();}catch(e){data=defHU();}
+  data.items[i][k]=v; localStorage.setItem(HU_KEY,JSON.stringify(data));
+  // Only re-render list panel for fields that show in the left sidebar
+  if(k==='rol'||k==='estado'||k==='prioridad'){
+    // Update only the left panel items without rebuilding the whole page
+    var list=document.querySelectorAll('#srs-hu-mount > div > div:first-child > div[onclick]');
+    var items=data.items;
+    var estColor={'Borrador':'var(--muted)','En revisión':'var(--c-amber)','Aprobada':'var(--c-green)','Rechazada':'var(--c-red)'};
+    var priColor={'Must':'var(--c-red)','Should':'var(--c-amber)','Could':'var(--c-blue)','Wont':'var(--muted)'};
+    list.forEach(function(el,j){
+      var h=items[j]; if(!h) return;
+      var idEl=el.querySelector('span:first-child'); if(idEl) idEl.style.color='var(--c-blue)';
+      var rolEl=el.querySelector('div[style*="font-size:11px"]'); if(rolEl) rolEl.innerHTML='Como <strong>'+(h.rol||'')+'</strong>';
+      var estEl=el.querySelector('div[style*="font-size:10px"]'); if(estEl){estEl.textContent=h.estado||'';estEl.style.color=estColor[h.estado]||'var(--muted)';}
+    });
+    // Update preview
+    var preview=document.querySelector('#srs-hu-mount .card[style*="rgba(24,95,165"] div[style*="font-size:13px"]');
+    if(preview){
+      var h=items[i];
+      preview.innerHTML='Como <strong>'+(h.rol||'___')+'</strong>, quiero <em>'+(h.quiero||'___')+'</em> para <em>'+(h.para||'___')+'</em>.';
+    }
+  }
+  // Update preview for text fields without re-render
+  if(k==='quiero'||k==='para'){
+    var h=data.items[i];
+    var preview=document.querySelector('#srs-hu-mount .card[style*="rgba(24,95,165"] div[style*="font-size:13px"]');
+    if(preview) preview.innerHTML='Como <strong>'+(h.rol||'___')+'</strong>, quiero <em>'+(h.quiero||'___')+'</em> para <em>'+(h.para||'___')+'</em>.';
+  }
+}
+
+function srsImportFromEstr(tipoFilter){
+  try{
+    var estr=JSON.parse(localStorage.getItem('fw_ana_estr_v1'))||{items:[]};
+    var items=estr.items||[];
+    var depurados=items.filter(function(i){
+      return i.estado==='Depurado' && (!tipoFilter || i.tipo===tipoFilter);
+    });
+    if(!depurados.length){
+      alert('No hay requisitos'+(tipoFilter?' de tipo '+tipoFilter:'')+' con estado "Depurado" en A1 Estructuración.');
+      return;
+    }
+    var srsData; try{srsData=JSON.parse(localStorage.getItem(SRS_KEY))||defaultSRS();}catch(e){srsData=defaultSRS();}
+    var added=0;
+
+    depurados.forEach(function(item){
+      var tipo=item.tipo||'RF';
+      if(tipo==='RF'){
+        srsData.rfs=srsData.rfs||[];
+        var exists=srsData.rfs.find(function(r){return r.id===item.id;});
+        if(exists) return;
+        srsData.rfs.push({id:item.id,desc:item.desc||'',prio:item.prioridad||'Alta',
+          titulo:item.desc||'',estado:'Borrador',given:'',when:'',then:''});
+        added++;
+      } else if(tipo==='RNF'){
+        srsData.rnfs=srsData.rnfs||[];
+        var exists=srsData.rnfs.find(function(r){return r.id===item.id;});
+        if(exists) return;
+        srsData.rnfs.push({id:item.id,cat:'General',atributo:item.desc||'',valor:'',metodo:''});
+        added++;
+      } else if(tipo==='SA'){
+        srsData.sas=srsData.sas||[];
+        var exists=srsData.sas.find(function(r){return r.id===item.id;});
+        if(exists) return;
+        srsData.sas.push({id:item.id,desc:item.desc||''});
+        added++;
+      } else if(tipo==='RC'){
+        srsData.rcs=srsData.rcs||[];
+        var exists=srsData.rcs.find(function(r){return r.id===item.id;});
+        if(exists) return;
+        srsData.rcs.push({id:item.id,t:item.desc||'',v:''});
+        added++;
+      }
+    });
+
+    localStorage.setItem(SRS_KEY,JSON.stringify(srsData));
+    SRS=loadSRS();
+    var el=document.getElementById('srs-editor-mount');
+    if(el){el.innerHTML='';renderSrsEditor();}
+    alert('✓ '+added+' requisito(s) importado(s) desde A1 Estructuración.');
+  }catch(err){
+    alert('Error al importar: '+err.message);
+  }
+}
+
+function huGetSrsItems(){
+  var srs; try{srs=JSON.parse(localStorage.getItem(SRS_KEY))||defaultSRS();}catch(e){srs=defaultSRS();}
+  var items=[];
+  (srs.rfs||[]).forEach(function(r){
+    items.push({id:r.id,label:r.id+' — '+(r.desc||'').substring(0,40),group:'RF',
+      fullDesc:r.desc||'',prio:r.prio||'',given:r.given||'',when:r.when||'',then:r.then||''});
+  });
+  (srs.rnfs||[]).forEach(function(r){
+    var d=(r.atributo||r.cat||'')+(r.valor?' — '+r.valor:'');
+    items.push({id:r.id,label:r.id+' — '+d.substring(0,40),group:'RNF',
+      fullDesc:d,prio:r.cat||'',metodo:r.metodo||''});
+  });
+  (srs.sas||[]).forEach(function(r){
+    items.push({id:r.id,label:r.id+' — '+(r.desc||'').substring(0,40),group:'SA',fullDesc:r.desc||''});
+  });
+  (srs.rcs||[]).forEach(function(r){
+    var d=[r.t,r.v].filter(Boolean).join(' — ');
+    items.push({id:r.id,label:r.id+' — '+d.substring(0,40),group:'RC',fullDesc:d});
+  });
+  return items;
+}
+
+function huBuildChips(val, sel, field){
+  var linked=(val||'').split(',').map(function(s){return s.trim();}).filter(Boolean);
+  var items=huGetSrsItems();
+  var filterField=field==='rfs'?['RF']:['RNF','SA','RC'];
+  var available=items.filter(function(i){return filterField.indexOf(i.group)>=0 && linked.indexOf(i.id)<0;});
+  var colMap={RF:'var(--c-blue)',RNF:'var(--c-purple)',SA:'var(--c-teal)',RC:'var(--c-amber)'};
+  var html='<div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:.4rem">';
+  linked.forEach(function(id){
+    var item=items.find(function(i){return i.id===id;})||{id:id,label:id,group:'RF'};
+    var col=colMap[item.group]||'var(--muted)';
+    html+='<span style="display:inline-flex;align-items:center;gap:3px;padding:2px 7px;border-radius:10px;background:rgba(24,95,165,.08);border:0.5px solid '+col+';font-size:10px;font-family:var(--font-mono);color:'+col+'">'+id
+      +'<button onclick="huRemoveLink('+sel+',\''+field+'\',\''+id+'\')" style="background:none;border:none;cursor:pointer;color:'+col+';padding:0;font-size:11px;line-height:1">×</button></span>';
+  });
+  if(available.length){
+    html+='<select onchange="huAddLink('+sel+',\''+field+'\',this)" style="background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:2px 5px;font-size:10px;color:var(--muted);outline:none;max-width:200px">'
+      +'<option value="">+ Vincular...</option>';
+    available.forEach(function(i){ html+='<option value="'+i.id+'">'+i.label+'</option>'; });
+    html+='</select>';
+  }
+  html+='</div>';
+  if(linked.length){
+    html+='<div style="display:flex;flex-direction:column;gap:.3rem">';
+    linked.forEach(function(id){
+      var item=items.find(function(i){return i.id===id;});
+      if(!item) return;
+      var col=colMap[item.group]||'var(--muted)';
+      var bgMap={RF:'rgba(24,95,165,.04)',RNF:'rgba(83,52,131,.04)',SA:'rgba(29,158,117,.04)',RC:'rgba(186,117,23,.04)'};
+      var bg=bgMap[item.group]||'var(--surface2)';
+      html+='<div style="background:'+bg+';border:0.5px solid var(--border);border-radius:6px;padding:.4rem .6rem">'
+        +'<div style="display:flex;align-items:center;gap:.4rem;margin-bottom:2px">'
+        +'<span style="font-family:var(--font-mono);font-size:10px;font-weight:700;color:'+col+'">'+item.id+'</span>'
+        +'<span style="font-size:10px;color:var(--muted)">['+item.group+']</span>'
+        +(item.prio?'<span style="font-size:9px;padding:1px 5px;border-radius:8px;background:var(--surface2);color:var(--muted)">'+item.prio+'</span>':'')
+        +'</div>'
+        +'<div style="font-size:11px;color:var(--text);line-height:1.5">'+item.fullDesc+'</div>'
+        +(item.given||item.when||item.then?
+          '<div style="margin-top:.3rem;font-size:10px;color:var(--muted);font-style:italic;line-height:1.5">'
+          +(item.given?'<div>Dado que: '+item.given+'</div>':'')
+          +(item.when?'<div>Cuando: '+item.when+'</div>':'')
+          +(item.then?'<div>Entonces: '+item.then+'</div>':'')
+          +'</div>':'')
+        +(item.metodo?'<div style="font-size:10px;color:var(--muted);margin-top:2px">Verificación: '+item.metodo+'</div>':'')
+        +'</div>';
+    });
+    html+='</div>';
+  }
+  return html;
+}
+
+function huAddLink(sel,field,selectEl){
+  if(!selectEl.value) return;
+  var data; try{data=JSON.parse(localStorage.getItem(HU_KEY))||defHU();}catch(e){data=defHU();}
+  var h=data.items[sel]; if(!h) return;
+  var current=(h[field]||'').split(',').map(function(s){return s.trim();}).filter(Boolean);
+  if(current.indexOf(selectEl.value)<0) current.push(selectEl.value);
+  h[field]=current.join(', ');
+  localStorage.setItem(HU_KEY,JSON.stringify(data));
+  selectEl.value='';
+  // Re-render chips only
+  var mountId=field==='rfs'?'hu-rf-sel-'+sel:'hu-ot-sel-'+sel;
+  var el=document.getElementById(mountId);
+  if(el) el.innerHTML=huBuildChips(h[field],sel,field);
+}
+
+function huRemoveLink(sel,field,id){
+  var data; try{data=JSON.parse(localStorage.getItem(HU_KEY))||defHU();}catch(e){data=defHU();}
+  var h=data.items[sel]; if(!h) return;
+  var current=(h[field]||'').split(',').map(function(s){return s.trim();}).filter(Boolean);
+  h[field]=current.filter(function(i){return i!==id;}).join(', ');
+  localStorage.setItem(HU_KEY,JSON.stringify(data));
+  var mountId=field==='rfs'?'hu-rf-sel-'+sel:'hu-ot-sel-'+sel;
+  var el=document.getElementById(mountId);
+  if(el) el.innerHTML=huBuildChips(h[field],sel,field);
+}
+
+function huBuildEscenarios(h, sel){
+  var escenarios = (h && h.escenarios) ? h.escenarios : [];
+  if(!escenarios.length) return '<div style="text-align:center;padding:.8rem;color:var(--muted);font-size:12px;border:0.5px dashed var(--border2);border-radius:var(--radius)">Sin escenarios. Agrega el primero →</div>';
+  
+  var html = '';
+  escenarios.forEach(function(esc, ei){
+    var previewLines = [];
+    if(esc.contexto) previewLines.push('  Dado que ' + esc.contexto);
+    if(esc.accion)   previewLines.push('  Cuando ' + esc.accion);
+    if(esc.resultado)previewLines.push('  Entonces ' + esc.resultado);
+    if(esc.y)        previewLines.push('  Y ' + esc.y);
+    var preview = 'Escenario: '+(esc.titulo||'Sin título')+'\n' + previewLines.join('\n');
+    
+    html += '<div style="border:0.5px solid var(--border);border-radius:var(--radius);padding:.7rem;margin-bottom:.5rem;width:100%;box-sizing:border-box">'
+      + '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.5rem">'
+      + '<input class="hu-esc-inp" data-sel="'+sel+'" data-ei="'+ei+'" data-key="titulo" value="'+(esc.titulo||'')+'" placeholder="Nombre del escenario..." style="flex:1;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 7px;font-size:12px;font-weight:500;color:var(--text);outline:none;margin-right:.4rem">'
+      + '<button class="hu-esc-del" data-sel="'+sel+'" data-ei="'+ei+'" style="background:none;border:none;cursor:pointer;color:var(--muted);font-size:14px">×</button>'
+      + '</div>'
+      + '<div style="display:grid;grid-template-columns:1fr 1fr;gap:.4rem;margin-bottom:.5rem">'
+      // Dado que
+      + '<div><label style="font-size:9px;font-weight:600;color:var(--c-teal);text-transform:uppercase;display:block;margin-bottom:2px">Dado que (contexto)</label>'
+      + '<textarea class="hu-esc-inp" data-sel="'+sel+'" data-ei="'+ei+'" data-key="contexto" placeholder="El usuario está en la pantalla de registro..." style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 6px;font-size:11px;color:var(--text);resize:vertical;outline:none;line-height:1.5">'+escH(esc.contexto||'')+'</textarea></div>'
+      // Cuando
+      + '<div><label style="font-size:9px;font-weight:600;color:var(--c-blue);text-transform:uppercase;display:block;margin-bottom:2px">Cuando (acción)</label>'
+      + '<textarea class="hu-esc-inp" data-sel="'+sel+'" data-ei="'+ei+'" data-key="accion" placeholder="Ingresa sus credenciales y hace clic en Entrar..." style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 6px;font-size:11px;color:var(--text);resize:vertical;outline:none;line-height:1.5">'+escH(esc.accion||'')+'</textarea></div>'
+      // Entonces
+      + '<div><label style="font-size:9px;font-weight:600;color:var(--c-purple);text-transform:uppercase;display:block;margin-bottom:2px">Entonces (resultado)</label>'
+      + '<textarea class="hu-esc-inp" data-sel="'+sel+'" data-ei="'+ei+'" data-key="resultado" placeholder="El sistema muestra el dashboard..." style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 6px;font-size:11px;color:var(--text);resize:vertical;outline:none;line-height:1.5">'+escH(esc.resultado||'')+'</textarea></div>'
+      // Y
+      + '<div><label style="font-size:9px;font-weight:600;color:var(--c-amber);text-transform:uppercase;display:block;margin-bottom:2px">Y (condición adicional)</label>'
+      + '<textarea class="hu-esc-inp" data-sel="'+sel+'" data-ei="'+ei+'" data-key="y" placeholder="Y registra el evento en el log..." style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 6px;font-size:11px;color:var(--text);resize:vertical;outline:none;line-height:1.5">'+escH(esc.y||'')+'</textarea></div>'
+      + '</div>'
+      // Preview
+      + '<div style="background:var(--surface2);border-radius:4px;padding:.4rem .6rem">'
+      + '<div style="font-size:9px;font-weight:600;color:var(--muted);text-transform:uppercase;margin-bottom:3px">Vista previa .feature</div>'
+      + '<pre style="font-family:var(--font-mono);font-size:10px;color:var(--c-teal);margin:0;white-space:pre-wrap;line-height:1.6">'+escH(preview)+'</pre>'
+      + '</div>'
+      + '</div>';
+  });
+  return html;
+}
+
+function escH(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+function huAddEscenario(sel){
+  var data; try{data=JSON.parse(localStorage.getItem(HU_KEY))||defHU();}catch(e){data=defHU();}
+  var h=data.items[sel]; if(!h) return;
+  if(!h.escenarios) h.escenarios=[];
+  var n = h.escenarios.length+1;
+  h.escenarios.push({titulo:'Escenario '+n, contexto:'', accion:'', resultado:'', y:''});
+  localStorage.setItem(HU_KEY, JSON.stringify(data));
+  var mount = document.getElementById('hu-escenarios-'+sel);
+  if(mount){ mount.innerHTML = huBuildEscenarios(h, sel); huBindEscenarios(sel); }
+}
+
+function huBindEscenarios(sel){
+  var mount = document.getElementById('hu-escenarios-'+sel);
+  if(!mount) return;
+  mount.querySelectorAll('.hu-esc-inp').forEach(function(inp){
+    inp.addEventListener('input', function(){
+      var s=parseInt(this.dataset.sel), ei=parseInt(this.dataset.ei), k=this.dataset.key;
+      var data; try{data=JSON.parse(localStorage.getItem(HU_KEY))||defHU();}catch(e){data=defHU();}
+      if(data.items[s] && data.items[s].escenarios && data.items[s].escenarios[ei]){
+        data.items[s].escenarios[ei][k]=this.value;
+        localStorage.setItem(HU_KEY,JSON.stringify(data));
+        // Update preview
+        var esc = data.items[s].escenarios[ei];
+        var lines=[];
+        if(esc.contexto) lines.push('  Dado que '+esc.contexto);
+        if(esc.accion)   lines.push('  Cuando '+esc.accion);
+        if(esc.resultado)lines.push('  Entonces '+esc.resultado);
+        if(esc.y)        lines.push('  Y '+esc.y);
+        var preview='Escenario: '+(esc.titulo||'Sin título')+'\n'+lines.join('\n');
+        var preEl=this.closest('[style*="border:0.5px solid var(--border)"]');
+        if(preEl){ var pre=preEl.querySelector('pre'); if(pre) pre.textContent=preview; }
+      }
+    });
+  });
+  mount.querySelectorAll('.hu-esc-del').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var s=parseInt(this.dataset.sel), ei=parseInt(this.dataset.ei);
+      var data; try{data=JSON.parse(localStorage.getItem(HU_KEY))||defHU();}catch(e){data=defHU();}
+      if(data.items[s] && data.items[s].escenarios){
+        data.items[s].escenarios.splice(ei,1);
+        localStorage.setItem(HU_KEY,JSON.stringify(data));
+        var mount2=document.getElementById('hu-escenarios-'+s);
+        if(mount2){ mount2.innerHTML=huBuildEscenarios(data.items[s],s); huBindEscenarios(s); }
+      }
+    });
+  });
+}
+
+function renderDetectorInline(el){
+  if(!el) return;
+
+  // Load all requirements from SRS
+  var srs; try{srs=JSON.parse(localStorage.getItem(SRS_KEY))||defaultSRS();}catch(e){srs=defaultSRS();}
+  var allReqs=[];
+  (srs.rfs||[]).forEach(function(r){ if(r.desc) allReqs.push({id:r.id,tipo:'RF',texto:r.desc,given:r.given||'',when:r.when||'',then:r.then||'',gherkin:r.gherkin||''}); });
+  (srs.rnfs||[]).forEach(function(r){ var txt=(r.atributo||r.cat||'')+(r.valor?' — '+r.valor:'')+(r.desc?' '+r.desc:''); if(txt.trim()) allReqs.push({id:r.id,tipo:'RNF',texto:txt.trim()}); });
+  (srs.sas||[]).forEach(function(r){ if(r.desc) allReqs.push({id:r.id,tipo:'SA',texto:r.desc}); });
+  (srs.rcs||[]).forEach(function(r){ var txt=[r.t,r.v,r.desc].filter(Boolean).join(' — '); if(txt.trim()) allReqs.push({id:r.id,tipo:'RC',texto:txt.trim()}); });
+
+  function analyzeReq(texto, tipo, req){
+    var issues=[], penalty=0;
+    var t=texto.toLowerCase();
+    var words=t.split(/\s+/).filter(Boolean);
+
+    // 1. Ambiguous words check
+    AMBIG_WORDS.forEach(function(a){
+      if(t.indexOf(a.w.toLowerCase())>=0){issues.push(a);penalty+=a.sev==='high'?25:a.sev==='medium'?15:8;}
+    });
+
+    if(tipo==='RF'){
+      // 2. Modal check
+      var hasModal=t.indexOf('debe')>=0||t.indexOf('must')>=0;
+      if(!hasModal){
+        issues.push({w:'[sin modal]',sev:'high',msg:'Falta DEBE/MUST (IEEE 29148 §5.2)',fix:'Iniciar con: "El sistema DEBE..."'});
+        penalty+=25;
+      }
+
+      // 3. Actor check — must mention system, user or a role
+      var hasActor=/sistema|usuario|administrador|cliente|operador|analista|gestor/.test(t);
+      if(!hasActor){
+        issues.push({w:'[sin actor]',sev:'high',msg:'No se identifica quién ejecuta o recibe la acción',fix:'Especificar: "El sistema DEBE..." o "El usuario DEBE..."'});
+        penalty+=20;
+      }
+
+      // 4. Action specificity — verb too generic without complement
+      var vagueVerbs=['permitir','gestionar','manejar','soportar','proporcionar','integrar'];
+      vagueVerbs.forEach(function(v){
+        if(t.indexOf(v)>=0 && words.length < 10){
+          issues.push({w:'[acción incompleta]',sev:'medium',msg:'Verbo "'+v+'" sin suficiente detalle — ¿qué exactamente?',fix:'Especificar la acción concreta: qué datos, bajo qué condición, con qué resultado'});
+          penalty+=15;
+        }
+      });
+
+      // 5. Too short for RF
+      if(words.length < 7){
+        issues.push({w:'[incompleto]',sev:'high',msg:'RF demasiado corto — falta detalle funcional',fix:'Incluir: actor + acción + objeto + condición + resultado esperado'});
+        penalty+=20;
+      }
+
+      // 6. No testable condition
+      var hasCondition=/cuando|si |al |en caso|después|antes|mientras|para que|hasta que|siempre que/.test(t);
+      var hasObject=words.length>=8;
+      if(!hasCondition && !hasObject){
+        issues.push({w:'[sin condición]',sev:'medium',msg:'No especifica bajo qué condición aplica',fix:'Agregar: "cuando...", "si...", "al..." para definir el contexto de activación'});
+        penalty+=15;
+      }
+
+      // 7. Missing Gherkin — check if RF has any scenario with content
+      if(req){
+        var hasGherkin=false;
+        // Check given/when/then fields (current format)
+        if((req.given&&req.given.trim())||(req.when&&req.when.trim())||(req.then&&req.then.trim())) hasGherkin=true;
+        // Check gherkin field (old format)
+        if(!hasGherkin && req.gherkin && req.gherkin.trim().length>10) hasGherkin=true;
+        // Check escenarios (new format) — pull from HU storage
+        if(!hasGherkin){
+          try{
+            var huData=JSON.parse(localStorage.getItem(HU_KEY))||{items:[]};
+            (huData.items||[]).forEach(function(hu){
+              if(hasGherkin) return;
+              if((hu.rfs||'').indexOf(req.id)>=0){
+                (hu.escenarios||[]).forEach(function(esc){
+                  if(esc.contexto||esc.accion||esc.resultado) hasGherkin=true;
+                });
+              }
+            });
+          }catch(e){}
+        }
+        if(!hasGherkin){
+          issues.push({w:'[sin Gherkin]',sev:'high',msg:'No tiene criterios de aceptación (Given/When/Then)',fix:'Completar los campos Given/When/Then en la sección Req. funcionales del Editor SRS'});
+          penalty+=25;
+        }
+      }
+
+    } else {
+      // Non-RF: just check length
+      if(words.length < 4){
+        issues.push({w:'[muy corto]',sev:'medium',msg:'Descripción demasiado corta',fix:'Añadir contexto específico'});
+        penalty+=15;
+      }
+    }
+
+    var score=Math.max(0,100-penalty);
+    return {issues:issues,score:score};
+  }
+
+  var sevColor={high:'var(--c-red)',medium:'var(--c-amber)',low:'var(--c-blue)'};
+  var sevLabel={high:'Alta','medium':'Media',low:'Baja'};
+
+  // Summary
+  var total=allReqs.length;
+  var ok=0,warn=0,err=0;
+  var results=allReqs.map(function(r){
+    var a=analyzeReq(r.texto,r.tipo,r);
+    if(a.score>=80) ok++;
+    else if(a.score>=50) warn++;
+    else err++;
+    return {req:r, analysis:a};
+  });
+
+  var html='';
+
+  if(!total){
+    html='<div class="card" style="text-align:center;color:var(--muted);font-size:13px;padding:2rem">'
+      +'No hay requisitos en el SRS aún. Agrega RF, RNF, supuestos o restricciones primero.</div>';
+    el.innerHTML=html; return;
+  }
+
+  // KPIs
+  html='<div class="kpi-grid" style="margin-bottom:1rem">'
+    +'<div class="kpi"><div class="kpi-num" style="color:var(--c-green)">'+ok+'</div><div class="kpi-label">Sin problemas</div></div>'
+    +'<div class="kpi"><div class="kpi-num" style="color:var(--c-amber)">'+warn+'</div><div class="kpi-label">Con advertencias</div></div>'
+    +'<div class="kpi"><div class="kpi-num" style="color:var(--c-red)">'+err+'</div><div class="kpi-label">Requieren revisión</div></div>'
+    +'<div class="kpi"><div class="kpi-num" style="color:var(--c-blue)">'+total+'</div><div class="kpi-label">Total analizados</div></div>'
+    +'</div>';
+
+  // Results per requirement
+  results.forEach(function(r){
+    var a=r.analysis, req=r.req;
+    var scoreCol=a.score>=80?'var(--c-green)':a.score>=50?'var(--c-amber)':'var(--c-red)';
+    var tipoCol=req.tipo==='RF'?'var(--c-blue)':req.tipo==='RNF'?'var(--c-purple)':req.tipo==='SA'?'var(--c-teal)':'var(--c-amber)';
+    html+='<div class="card" style="margin-bottom:.5rem;border-left:3px solid '+scoreCol+'">'
+      +'<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:.5rem;margin-bottom:'+(a.issues.length?'.5rem':'0')+'">'
+      +'<div style="display:flex;align-items:flex-start;flex-wrap:wrap;gap:.3rem;margin-bottom:'+(a.issues.length?'.5rem':'0')+'">' 
+      +'<span style="font-family:var(--font-mono);font-size:10px;font-weight:700;color:'+tipoCol+';flex-shrink:0">'+req.id+'</span>'
+      +'<span style="font-size:11px;color:var(--muted);flex-shrink:0">['+req.tipo+']</span>'
+      +'<span style="font-size:12px;color:var(--text);word-break:break-word;white-space:normal">'+req.texto+'</span>'
+      +'</div>'
+      +'<span style="font-size:13px;font-weight:600;color:'+scoreCol+';flex-shrink:0">'+a.score+'%</span>'
+      +'</div>';
+    if(a.issues.length){
+      html+='<div style="display:flex;flex-direction:column;gap:.3rem">';
+      a.issues.forEach(function(issue){
+        var col=sevColor[issue.sev]||'var(--muted)';
+        html+='<div style="display:flex;gap:.5rem;align-items:flex-start;padding:.3rem .5rem;background:rgba(0,0,0,.02);border-radius:4px">'
+          +'<span style="font-size:10px;font-weight:600;color:'+col+';white-space:nowrap;padding-top:1px">⚠ '+issue.w+'</span>'
+          +'<div><div style="font-size:11px;color:var(--text)">'+issue.msg+'</div>'
+          +'<div style="font-size:10px;color:var(--muted);margin-top:1px">Sugerencia: '+issue.fix+'</div></div>'
+          +'</div>';
+      });
+      html+='</div>';
+    } else {
+      html+='<div style="font-size:11px;color:var(--c-green)">✓ Sin problemas detectados</div>';
+    }
+    html+='</div>';
+  });
+
+  // Refresh button
+  html+='<div style="display:flex;justify-content:flex-end;margin-top:.5rem">'
+    +'<button class="btn btn-sm" style="color:var(--c-blue);border-color:rgba(24,95,165,.3)" onclick="var p=document.getElementById(\'srse-4\');if(p){p.innerHTML=\'\';renderDetectorInline(p);}">↺ Re-analizar</button>'
+    +'</div>';
+
+  el.innerHTML=html;
+}
+
+function rtmTabSel(i){
+  document.querySelectorAll('#rtm-tab-nav .tab-btn').forEach(function(b,j){b.classList.toggle('on',j===i);});
+  document.getElementById('rtm-panel-0').style.display=i===0?'block':'none';
+  document.getElementById('rtm-panel-1').style.display=i===1?'block':'none';
+  if(i===0){ var m=document.getElementById('srs-rtm-mount'); if(m&&!m.innerHTML.trim()) renderSrsRtm(); }
+}
+
+function srsImportRF(){ srsImportFromEstr('RF'); }
+function srsImportRNF(){ srsImportFromEstr('RNF'); }
+function srsImportSA(){ srsImportFromEstr('SA'); }
+function srsImportRC(){ srsImportFromEstr('RC'); }
+
+function renderSrsVerInline(){
+  var el=document.getElementById('srse-ver-inline'); if(!el) return;
+  var data; try{data=JSON.parse(localStorage.getItem(SRS_VER_KEY))||{versiones:[]};}catch(e){data={versiones:[]};}
+  function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+  var srs=loadSRS();
+  var rfCount=(srs.rfs||[]).length;
+  var rnfCount=(srs.rnfs||[]).length;
+  var saCount=(srs.sas||[]).length;
+  var rcCount=(srs.rcs||[]).length;
+  var curVersion=(srs.portada&&srs.portada.version)||'v0.1';
+  var curEstado=(srs.portada&&srs.portada.estado)||'Borrador';
+  var estadoCol={'Borrador':'var(--muted)','En revisión':'var(--c-amber)','Aprobado con obs.':'var(--c-blue)','Baseline':'var(--c-green)'}[curEstado]||'var(--muted)';
+
+  // Current state card
+  var html='<div class="card" style="margin-bottom:1rem">'
+    +'<div style="font-size:12px;font-weight:500;margin-bottom:.6rem">Estado actual del SRS</div>'
+    +'<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:.4rem;margin-bottom:.7rem">'
+    +'<div style="text-align:center;padding:.4rem;background:rgba(24,95,165,.05);border-radius:6px"><div style="font-size:18px;font-weight:600;color:var(--c-blue)">'+rfCount+'</div><div style="font-size:10px;color:var(--muted)">RF</div></div>'
+    +'<div style="text-align:center;padding:.4rem;background:rgba(83,52,131,.05);border-radius:6px"><div style="font-size:18px;font-weight:600;color:var(--c-purple)">'+rnfCount+'</div><div style="font-size:10px;color:var(--muted)">RNF</div></div>'
+    +'<div style="text-align:center;padding:.4rem;background:rgba(29,158,117,.05);border-radius:6px"><div style="font-size:18px;font-weight:600;color:var(--c-teal)">'+saCount+'</div><div style="font-size:10px;color:var(--muted)">SA</div></div>'
+    +'<div style="text-align:center;padding:.4rem;background:rgba(186,117,23,.05);border-radius:6px"><div style="font-size:18px;font-weight:600;color:var(--c-amber)">'+rcCount+'</div><div style="font-size:10px;color:var(--muted)">RC</div></div>'
+    +'</div>'
+    +'<div style="display:flex;align-items:center;gap:.5rem;flex-wrap:wrap">'
+    +'<span style="font-size:12px;color:var(--muted)">Versión: <strong>'+esc(curVersion)+'</strong></span>'
+    +'<span style="padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;border:0.5px solid '+estadoCol+';color:'+estadoCol+'">'+esc(curEstado)+'</span>'
+    +'<button class="btn btn-sm" style="background:var(--c-blue);color:#fff;border-color:var(--c-blue);margin-left:auto" onclick="srsAbrirModalVersion()">📌 Guardar versión</button>'
+    +'</div>'
+    +'</div>';
+
+  // Modal (hidden by default)
+  html+='<div id="srs-ver-modal" style="display:none;border:0.5px solid var(--c-blue);border-radius:var(--radius);background:var(--surface);padding:1rem;margin-bottom:1rem">'
+    +'<div style="font-size:13px;font-weight:500;margin-bottom:.7rem;color:var(--c-blue)">📌 Guardar versión</div>'
+    +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-bottom:.5rem">'
+    +'<div><label style="font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">Número de versión</label>'
+    +'<input id="srs-ver-num" value="" placeholder="ej: v0.2" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:4px 7px;font-size:12px;font-family:var(--font-mono);outline:none"></div>'
+    +'<div><label style="font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">Estado</label>'
+    +'<select id="srs-ver-estado" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:4px 5px;font-size:12px;outline:none">'
+    +'<option'+(curEstado==='Borrador'?' selected':'')+'>Borrador</option>'
+    +'<option'+(curEstado==='En revisión'?' selected':'')+'>En revisión</option>'
+    +'<option'+(curEstado==='Aprobado con obs.'?' selected':'')+'>Aprobado con obs.</option>'
+    +'<option'+(curEstado==='Baseline'?' selected':'')+'>Baseline</option>'
+    +'</select></div>'
+    +'</div>'
+    +'<div style="margin-bottom:.5rem"><label style="font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">¿Qué cambió en esta versión?</label>'
+    +'<textarea id="srs-ver-cambios" placeholder="Ej: Se agregaron 3 RF de autenticación. Se ajustaron RNF de rendimiento según feedback de arquitectura." style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:4px 7px;font-size:12px;resize:vertical;outline:none;line-height:1.5;min-height:60px"></textarea></div>'
+    +'<div style="display:flex;gap:.5rem;justify-content:flex-end">'
+    +'<button class="btn btn-sm" onclick="document.getElementById(\'srs-ver-modal\').style.display=\'none\'">Cancelar</button>'
+    +'<button class="btn btn-sm" style="background:var(--c-blue);color:#fff;border-color:var(--c-blue)" onclick="srsConfirmarVersion()">Guardar</button>'
+    +'</div>'
+    +'</div>';
+
+  // History
+  if(!data.versiones||!data.versiones.length){
+    html+='<div style="text-align:center;padding:1.5rem;color:var(--muted);font-size:12px;border:0.5px dashed var(--border2);border-radius:var(--radius)">Sin versiones guardadas aún.</div>';
+    el.innerHTML=html; return;
+  }
+
+  html+='<div style="font-size:12px;font-weight:500;margin-bottom:.5rem">Historial <span style="font-weight:400;color:var(--muted)">('+data.versiones.length+' versión(es))</span></div>';
+
+  var sorted=[].concat(data.versiones).reverse();
+  sorted.forEach(function(v,ri){
+    var realIdx=data.versiones.length-1-ri;
+    var estCol={'Borrador':'var(--muted)','En revisión':'var(--c-amber)','Aprobado con obs.':'var(--c-blue)','Baseline':'var(--c-green)'}[v.estado]||'var(--muted)';
+    var isBase=v.estado==='Baseline';
+    html+='<div style="border:0.5px solid var(--border);border-radius:var(--radius);padding:.7rem;margin-bottom:.4rem;'+(isBase?'border-left:3px solid var(--c-green)':'')+'">'
+      +'<div style="display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;cursor:pointer" onclick="srsToggleVer('+realIdx+')">'
+      +'<span style="font-family:var(--font-mono);font-size:13px;font-weight:700;color:var(--text)">'+esc(v.version)+'</span>'
+      +(isBase?'<span style="font-size:9px;padding:1px 6px;border-radius:8px;background:rgba(15,110,86,.1);color:var(--c-green);font-weight:700">BASELINE</span>':'')
+      +'<span style="padding:2px 7px;border-radius:10px;font-size:10px;border:0.5px solid '+estCol+';color:'+estCol+'">'+esc(v.estado||'Borrador')+'</span>'
+      +(v.fecha?'<span style="font-size:11px;color:var(--muted)">'+esc(v.fecha)+'</span>':'')
+      +(v.autor?'<span style="font-size:11px;color:var(--muted)">· '+esc(v.autor)+'</span>':'')
+      +'<span style="margin-left:auto;font-size:10px;color:var(--muted)">▾</span>'
+      +'</div>'
+      +(v.cambios?'<div style="font-size:11px;color:var(--muted);margin-top:.3rem;line-height:1.5;font-style:italic">'+esc(v.cambios)+'</div>':'')
+      +'<div id="srs-ver-det-'+realIdx+'" style="display:none;margin-top:.6rem;padding-top:.6rem;border-top:0.5px solid var(--border)">'      +'<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:.3rem;margin-bottom:.7rem">'      +'<div style="text-align:center;padding:.3rem;background:rgba(24,95,165,.05);border-radius:4px"><div style="font-size:15px;font-weight:600;color:var(--c-blue)">'+(v.rfCount||0)+'</div><div style="font-size:9px;color:var(--muted)">RF</div></div>'      +'<div style="text-align:center;padding:.3rem;background:rgba(83,52,131,.05);border-radius:4px"><div style="font-size:15px;font-weight:600;color:var(--c-purple)">'+(v.rnfCount||0)+'</div><div style="font-size:9px;color:var(--muted)">RNF</div></div>'      +'<div style="text-align:center;padding:.3rem;background:rgba(29,158,117,.05);border-radius:4px"><div style="font-size:15px;font-weight:600;color:var(--c-teal)">'+(v.saCount||0)+'</div><div style="font-size:9px;color:var(--muted)">SA</div></div>'      +'<div style="text-align:center;padding:.3rem;background:rgba(186,117,23,.05);border-radius:4px"><div style="font-size:15px;font-weight:600;color:var(--c-amber)">'+(v.rcCount||0)+'</div><div style="font-size:9px;color:var(--muted)">RC</div></div>'      +'</div>'      +(v.rfList&&v.rfList.length?        '<div style="margin-bottom:.6rem">'        +'<div style="font-size:10px;font-weight:600;color:var(--c-blue);text-transform:uppercase;letter-spacing:.3px;margin-bottom:.3rem">Requisitos Funcionales (RF)</div>'        +v.rfList.map(function(r){          return '<div style="padding:.3rem .5rem;background:rgba(24,95,165,.03);border:0.5px solid rgba(24,95,165,.15);border-radius:4px;margin-bottom:.2rem">'            +'<div style="display:flex;align-items:center;gap:.4rem;margin-bottom:'+(r.given||r.when||r.then?'2px':'0')+';flex-wrap:wrap">'            +'<span style="font-family:var(--font-mono);font-size:10px;font-weight:700;color:var(--c-blue)">'+esc(r.id)+'</span>'            +(r.prio?'<span style="font-size:9px;padding:1px 5px;border-radius:8px;background:var(--surface2);color:var(--muted)">'+esc(r.prio)+'</span>':'')            +'<span style="font-size:11px;color:var(--text)">'+esc(r.desc)+'</span>'            +'</div>'            +(r.given||r.when||r.then?              '<div style="font-size:10px;color:var(--muted);font-style:italic;line-height:1.5;margin-top:1px">'              +(r.given?'<div>Dado que: '+esc(r.given)+'</div>':'')              +(r.when?'<div>Cuando: '+esc(r.when)+'</div>':'')              +(r.then?'<div>Entonces: '+esc(r.then)+'</div>':'')              +'</div>':'')            +'</div>';        }).join('')        +'</div>':'')      +(!v.rnfList&&!v.saList&&!v.rcList?'<div style="font-size:11px;color:var(--muted);padding:.4rem;background:var(--surface2);border-radius:4px;font-style:italic">ⓘ Esta versión solo guarda RF. Las versiones guardadas a partir de ahora incluirán RNF, SA y RC completos.</div>':'')
+      +(v.rnfList&&v.rnfList.length?        '<div style="margin-bottom:.6rem">'        +'<div style="font-size:10px;font-weight:600;color:var(--c-purple);text-transform:uppercase;letter-spacing:.3px;margin-bottom:.3rem">Requisitos No Funcionales (RNF)</div>'        +v.rnfList.map(function(r){          return '<div style="padding:.3rem .5rem;background:rgba(83,52,131,.03);border:0.5px solid rgba(83,52,131,.15);border-radius:4px;margin-bottom:.2rem">'            +'<div style="display:flex;align-items:center;gap:.4rem;flex-wrap:wrap">'            +'<span style="font-family:var(--font-mono);font-size:10px;font-weight:700;color:var(--c-purple)">'+esc(r.id)+'</span>'            +(r.cat?'<span style="font-size:9px;padding:1px 5px;border-radius:8px;background:var(--surface2);color:var(--muted)">'+esc(r.cat)+'</span>':'')            +(r.atributo?'<span style="font-size:11px;color:var(--text)">'+esc(r.atributo)+'</span>':'')            +(r.valor?'<span style="font-size:10px;color:var(--muted)">→ '+esc(r.valor)+'</span>':'')            +(r.metodo?'<span style="font-size:10px;color:var(--muted)">· '+esc(r.metodo)+'</span>':'')            +'</div></div>';        }).join('')        +'</div>':'')      +(v.saList&&v.saList.length?        '<div style="margin-bottom:.6rem">'        +'<div style="font-size:10px;font-weight:600;color:var(--c-teal);text-transform:uppercase;letter-spacing:.3px;margin-bottom:.3rem">Supuestos (SA)</div>'        +v.saList.map(function(r){          return '<div style="padding:.3rem .5rem;background:rgba(29,158,117,.03);border:0.5px solid rgba(29,158,117,.15);border-radius:4px;margin-bottom:.2rem">'            +'<span style="font-family:var(--font-mono);font-size:10px;font-weight:700;color:var(--c-teal);margin-right:.4rem">'+esc(r.id)+'</span>'            +'<span style="font-size:11px;color:var(--text)">'+esc(r.desc)+'</span></div>';        }).join('')        +'</div>':'')      +(v.rcList&&v.rcList.length?        '<div>'        +'<div style="font-size:10px;font-weight:600;color:var(--c-amber);text-transform:uppercase;letter-spacing:.3px;margin-bottom:.3rem">Restricciones (RC)</div>'        +v.rcList.map(function(r){          return '<div style="padding:.3rem .5rem;background:rgba(186,117,23,.03);border:0.5px solid rgba(186,117,23,.15);border-radius:4px;margin-bottom:.2rem">'            +'<span style="font-family:var(--font-mono);font-size:10px;font-weight:700;color:var(--c-amber);margin-right:.4rem">'+esc(r.id)+'</span>'            +(r.t?'<span style="font-size:11px;color:var(--text)">'+esc(r.t)+'</span>':'')            +(r.v?'<span style="font-size:10px;color:var(--muted)"> — '+esc(r.v)+'</span>':'')            +'</div>';        }).join('')        +'</div>':'')      +'</div>'
+    html+='</div>'; // close outer card
+  });
+
+  el.innerHTML=html;
+}
+
+function srsAbrirModalVersion(){
+  var srs=loadSRS();
+  var data; try{data=JSON.parse(localStorage.getItem(SRS_VER_KEY))||{versiones:[]};}catch(e){data={versiones:[]};}
+  var curVersion=(srs.portada&&srs.portada.version)||'v0.1';
+  // Auto-suggest next minor version
+  var suggested=curVersion;
+  var match=curVersion.match(/^v(\d+)\.(\d+)$/);
+  if(match) suggested='v'+match[1]+'.'+(parseInt(match[2])+1);
+  var modal=document.getElementById('srs-ver-modal');
+  if(!modal) return;
+  var numEl=document.getElementById('srs-ver-num');
+  if(numEl) numEl.value=suggested;
+  // Pre-fill estado
+  var estEl=document.getElementById('srs-ver-estado');
+  if(estEl && srs.portada&&srs.portada.estado) estEl.value=srs.portada.estado;
+  // Clear cambios
+  var cambEl=document.getElementById('srs-ver-cambios');
+  if(cambEl) cambEl.value='';
+  modal.style.display='block';
+}
+
+function srsConfirmarVersion(){
+  var data; try{data=JSON.parse(localStorage.getItem(SRS_VER_KEY))||{versiones:[]};}catch(e){data={versiones:[]};}
+  var srs=loadSRS();
+  var version=document.getElementById('srs-ver-num').value.trim()||'v?';
+  var estado=document.getElementById('srs-ver-estado').value;
+  var cambios=document.getElementById('srs-ver-cambios').value.trim();
+  var today=new Date();
+  var fecha=today.getFullYear()+'-'+String(today.getMonth()+1).padStart(2,'0')+'-'+String(today.getDate()).padStart(2,'0');
+  var autor=(srs.portada&&srs.portada.autor)||'';
+  data.versiones.push({
+    version:version, fecha:fecha, autor:autor, estado:estado, cambios:cambios,
+    rfCount:(srs.rfs||[]).length, rnfCount:(srs.rnfs||[]).length,
+    saCount:(srs.sas||[]).length, rcCount:(srs.rcs||[]).length,
+    rfList:(srs.rfs||[]).map(function(r){return {id:r.id,desc:r.desc||'',prio:r.prio||'',given:r.given||'',when:r.when||'',then:r.then||''};}),
+    rnfList:(srs.rnfs||[]).map(function(r){return {id:r.id,cat:r.cat||'',atributo:r.atributo||'',valor:r.valor||'',metodo:r.metodo||''};}),
+    saList:(srs.sas||[]).map(function(r){return {id:r.id,desc:r.desc||''};}),
+    rcList:(srs.rcs||[]).map(function(r){return {id:r.id,t:r.t||'',v:r.v||''};})  
+  });
+  localStorage.setItem(SRS_VER_KEY,JSON.stringify(data));
+  // Update portada version and estado automatically
+  srs.portada=srs.portada||{};
+  srs.portada.version=version;
+  srs.portada.estado=estado;
+  localStorage.setItem(SRS_KEY,JSON.stringify(srs));
+  SRS=loadSRS();
+  document.getElementById('srs-ver-modal').style.display='none';
+  renderSrsVerInline();
+}
+
+function srsToggleVer(idx){
+  var det=document.getElementById('srs-ver-det-'+idx);
+  if(det) det.style.display=det.style.display==='none'?'block':'none';
 }
 
 buildAll();
