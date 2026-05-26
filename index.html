@@ -2791,7 +2791,7 @@ function renderAnaMoscow(){
         +'<div style="font-size:13px;font-weight:500;color:'+cat.color+';margin-bottom:.25rem;font-family:var(--font-serif)">'+cat.label+'</div>'
         +'<div style="font-size:11px;color:var(--muted);margin-bottom:.6rem;line-height:1.5">'+cat.def+'</div>'
         +rows
-        +'<button class="btn btn-sm" style="margin-top:.5rem;color:'+cat.color+';border-color:'+cat.color+'14" onclick="ANA.moscow.'+cat.key+'.push({id:\'ID-000\',desc:\'\'});anaSave();renderAnaMoscow()">+ Requisito</button>'
+        +'<button class="btn btn-sm" style="margin-top:.5rem" data-catkey="'+cat.key+'" onclick="anaMosAddFromA1(this.dataset.catkey)">+ Desde A1</button>'
         +'</div>';
     }).join('')
     +'</div>';
@@ -2854,9 +2854,9 @@ function renderAnaVxE(){
     +'</div>';
 
   var bar='<div style="display:flex;align-items:center;gap:.5rem;margin-top:.5rem">'
-    +'<button class="btn btn-sm" onclick="ANA.vxe.push({req:\'\',valor:50,esfuerzo:50});anaSave();renderAnaVxE()">+ Requisito</button>'
+    +'<button class="btn btn-sm" onclick="anaVxeAddFromA1()">+ Desde A1</button>'
     +'<button class="btn" style="background:var(--c-blue);color:#fff;border-color:var(--c-blue)" onclick="anaSave();anaSaved(\'vxe-msg\')">Guardar</button>'
-    +'<button class="btn btn-sm" onclick="anaRestoreVxE()">↺ Restaurar ejemplos</button>'
+
     +'<span id="vxe-msg" style="font-size:11px;color:var(--c-green)"></span></div>';
 
   el.innerHTML = tip+'<div class="card" style="margin-bottom:.8rem"><div class="card-title" style="margin-bottom:.6rem">Posicionamiento Valor vs. Esfuerzo</div>'+hdr+rows+'</div>'+leg+bar;
@@ -5950,13 +5950,13 @@ function renderAnaKano(){
       +'<div style="font-size:13px;font-weight:500;color:'+escH(cat.color)+';margin-bottom:.2rem;font-family:var(--font-serif)">'+escH(cat.cat)+'</div>'
       +'<div style="font-size:11px;color:var(--muted);margin-bottom:.6rem;line-height:1.5">'+escH(cat.desc)+'</div>'
       +items
-      +'<button class="btn btn-sm" style="margin-top:.3rem;color:'+escH(cat.color)+'" data-ci="'+ci+'" onclick="anaAddKanoItem(this.dataset.ci)">>+ Atributo</button>'
+      +'<button class="btn btn-sm" style="margin-top:.3rem;color:'+escH(cat.color)+'" data-ci="'+ci+'" onclick="anaKanoAddFromA1(this.dataset.ci)">+ Desde A1</button>'
       +'</div>';
   }).join('');
 
   var bar='<div style="display:flex;align-items:center;gap:.5rem;margin-top:.5rem">'
     +'<button class="btn" style="background:var(--c-purple);color:#fff;border-color:var(--c-purple)" onclick="anaKanoSave()">Guardar Kano</button>'
-    +'<button class="btn btn-sm" onclick="anaKanoRestore()">↺ Restaurar ejemplos</button>'
+
     +'<span id="kano-msg" style="font-size:11px;color:var(--c-green)"></span></div>';
 
   el.innerHTML=tip+cats+bar;
@@ -9371,6 +9371,106 @@ function eliEnviarAEstr(){
   var msg = '✓ '+added+' requisito(s) enviado(s) a A1 Estructuración.';
   if(skipped) msg += '\n'+skipped+' ya existían y no se duplicaron.';
   alert(msg);
+}
+
+function getReqsFromA1(){
+  try{
+    var estr=JSON.parse(localStorage.getItem('fw_ana_estr_v1'))||{items:[]};
+    return (estr.items||[]).filter(function(i){return i.estado!=='Descartado'&&i.estado!=='Duplicado';});
+  }catch(e){return [];}
+}
+
+function anaPriModal(title, available, onConfirmFn){
+  var modal=document.getElementById('ana-req-modal');
+  if(!modal){
+    modal=document.createElement('div');
+    modal.id='ana-req-modal';
+    modal.style.cssText='position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.45);z-index:9999;display:flex;align-items:center;justify-content:center';
+    document.body.appendChild(modal);
+  }
+  window._anaPriOnConfirm=onConfirmFn;
+  modal.innerHTML='<div style="background:var(--bg);border-radius:var(--radius);padding:1.2rem;max-width:520px;width:92%;max-height:80vh;overflow-y:auto;box-shadow:0 8px 32px rgba(0,0,0,.25)">'
+    +'<div style="font-size:14px;font-weight:600;margin-bottom:.3rem">'+title+'</div>'
+    +'<div style="font-size:11px;color:var(--muted);margin-bottom:.7rem">Selecciona los requisitos a agregar:</div>'
+    +'<div id="ana-req-list" style="display:flex;flex-direction:column;gap:.3rem;margin-bottom:.8rem">'
+    +available.map(function(r){
+      return '<label style="display:flex;align-items:flex-start;gap:.5rem;padding:.4rem .5rem;border:0.5px solid var(--border);border-radius:5px;cursor:pointer;background:var(--surface)">'
+        +'<input type="checkbox" value="'+r.id+'" style="margin-top:3px;flex-shrink:0">'
+        +'<div><span style="font-family:var(--font-mono);font-size:10px;font-weight:700;color:var(--c-purple)">'+r.id+'</span>'
+        +'<span style="font-size:10px;color:var(--muted);margin-left:.3rem">['+r.tipo+']</span>'
+        +'<div style="font-size:11px;color:var(--text);line-height:1.4">'+r.desc+'</div></div></label>';
+    }).join('')
+    +'</div>'
+    +'<div style="display:flex;gap:.5rem;justify-content:flex-end">'
+    +'<button onclick="document.getElementById(\'ana-req-modal\').style.display=\'none\'" class="btn btn-sm">Cancelar</button>'
+    +'<button onclick="window._anaPriOnConfirm()" class="btn btn-sm" style="background:var(--c-purple);color:#fff;border-color:var(--c-purple)">Agregar seleccionados</button>'
+    +'</div></div>';
+  modal.style.display='flex';
+}
+
+function anaGetChecked(){
+  return Array.from(document.querySelectorAll('#ana-req-list input[type=checkbox]:checked')).map(function(cb){return cb.value;});
+}
+
+function anaMosAddFromA1(catKey){
+  var reqs=getReqsFromA1();
+  if(!reqs.length){
+    alert('No hay requisitos en A1 Estructuración. Agrega requisitos en la sección Estructuración de Fase 2 primero.');
+    return;
+  }
+  var existing=(ANA.moscow[catKey]||[]).map(function(r){return r.id;});
+  var available=reqs.filter(function(r){return existing.indexOf(r.id)<0;});
+  if(!available.length){alert('Todos los requisitos ya están en esta categoría.');return;}
+  anaPriModal('MoSCoW — '+catKey.toUpperCase(), available, function(){
+    var ids=anaGetChecked(); var reqs2=getReqsFromA1(); var added=0;
+    ids.forEach(function(id){
+      var req=reqs2.find(function(r){return r.id===id;});
+      if(req){if(!ANA.moscow[catKey])ANA.moscow[catKey]=[];ANA.moscow[catKey].push({id:req.id,desc:req.desc});added++;}
+    });
+    anaSave(); document.getElementById('ana-req-modal').style.display='none';
+    if(added) renderAnaMoscow();
+  });
+}
+
+function anaKanoAddFromA1(ci){
+  ci=parseInt(ci);
+  var reqs=getReqsFromA1();
+  if(!reqs.length){
+    alert('No hay requisitos en A1 Estructuración. Agrega requisitos en la sección Estructuración de Fase 2 primero.');
+    return;
+  }
+  var existing=(ANA.kano&&ANA.kano[ci]&&ANA.kano[ci].items||[]).map(function(r){return r.nota.split(' — ')[0];});
+  var available=reqs.filter(function(r){return existing.indexOf(r.id)<0;});
+  if(!available.length){alert('Todos los requisitos ya están en esta categoría.');return;}
+  anaPriModal('Kano — '+((ANA.kano&&ANA.kano[ci]&&ANA.kano[ci].cat)||''), available, function(){
+    var ids=anaGetChecked(); var reqs2=getReqsFromA1(); var added=0;
+    ids.forEach(function(id){
+      var req=reqs2.find(function(r){return r.id===id;});
+      if(req&&ANA.kano[ci]){ANA.kano[ci].items.push({func:'',pregF:'',respF:'',pregD:'',respD:'',nota:req.id+' — '+req.desc.substring(0,50)});added++;}
+    });
+    anaSave(); document.getElementById('ana-req-modal').style.display='none';
+    if(added) renderAnaKano();
+  });
+}
+
+function anaVxeAddFromA1(){
+  var reqs=getReqsFromA1();
+  if(!reqs.length){
+    alert('No hay requisitos en A1 Estructuración. Agrega requisitos en la sección Estructuración de Fase 2 primero.');
+    return;
+  }
+  var existing=(ANA.vxe||[]).map(function(r){return r.req;});
+  var available=reqs.filter(function(r){return existing.indexOf(r.id)<0;});
+  if(!available.length){alert('Todos los requisitos ya están en la matriz.');return;}
+  anaPriModal('Valor vs. Esfuerzo (valor=50, esfuerzo=50 por defecto)', available, function(){
+    var ids=anaGetChecked(); var reqs2=getReqsFromA1(); var added=0;
+    ids.forEach(function(id){
+      var req=reqs2.find(function(r){return r.id===id;});
+      if(req){if(!ANA.vxe)ANA.vxe=[];ANA.vxe.push({req:req.id+' — '+req.desc.substring(0,40),valor:50,esfuerzo:50});added++;}
+    });
+    anaSave(); document.getElementById('ana-req-modal').style.display='none';
+    if(added) renderAnaVxE();
+  });
 }
 
 buildAll();
