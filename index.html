@@ -1889,6 +1889,7 @@ function renderEliPlantillas() {
   p1 += '<button class="btn" style="background:var(--c-teal);color:#fff;border-color:var(--c-teal)" onclick="eliSaveMinuta()">Guardar registro</button>';
   p1 += '';
   p1 += '<button class="btn btn-sm" style="color:var(--c-red)" onclick="eliLimpiarMinuta()">✕ Limpiar</button>';
+  p1 += '<button class="btn" style="background:var(--c-purple);color:#fff;border-color:var(--c-purple);margin-left:.5rem" onclick="eliEnviarAEstr()">⬆ Enviar a Estructuración</button>';
   p1 += '<span id="m-msg" style="font-size:11px;color:var(--c-green)"></span></div>';
   p1 += '</div></div>';
 
@@ -9327,6 +9328,49 @@ function renderDetectorInline(el){
     +'</div>';
 
   el.innerHTML=html;
+}
+
+function eliEnviarAEstr(){
+  var m=ELI.minuta;
+  var estr; try{estr=JSON.parse(localStorage.getItem('fw_ana_estr_v1'))||{items:[]};}catch(e){estr={items:[]};}
+  if(!estr.items) estr.items=[];
+  var existingIds=estr.items.map(function(i){return i.id;});
+  var added=0, skipped=0;
+
+  function addItem(id, desc, tipo, prioridad){
+    if(!desc||!desc.trim()) return;
+    if(existingIds.indexOf(id)>=0){ skipped++; return; }
+    estr.items.push({
+      id:id, desc:desc.trim(), tipo:tipo,
+      prioridad:prioridad||'Alta', estado:'Pendiente',
+      origen:'Registro de elicitación — '+(m.sesionId||'')
+    });
+    existingIds.push(id);
+    added++;
+  }
+
+  // Send RF
+  (m.rfs||[]).forEach(function(r){ addItem(r.id,r.desc,'RF',r.prioridad); });
+  // Send RNF
+  (m.rnfs||[]).forEach(function(r){ addItem(r.id,r.desc,'RNF',r.prioridad); });
+  // Send SA
+  (m.sas||[]).forEach(function(r){ addItem(r.id,r.desc,'Supuesto','Media'); });
+  // Send RC
+  (m.rcs||[]).forEach(function(r){ addItem(r.id,r.desc,'Restricción','Media'); });
+
+  if(!added && !skipped){
+    alert('No hay requisitos en el registro para enviar. Agrega RF, RNF, SA o RC primero.');
+    return;
+  }
+
+  localStorage.setItem('fw_ana_estr_v1', JSON.stringify(estr));
+
+  // Refresh ANA if loaded
+  if(typeof ANA !== 'undefined') ANA = loadANA ? loadANA() : ANA;
+
+  var msg = '✓ '+added+' requisito(s) enviado(s) a A1 Estructuración.';
+  if(skipped) msg += '\n'+skipped+' ya existían y no se duplicaron.';
+  alert(msg);
 }
 
 buildAll();
