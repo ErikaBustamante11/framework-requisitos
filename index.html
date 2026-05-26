@@ -641,9 +641,9 @@ textarea { field-sizing: content; min-height: 2em; }
       <button class="nav-item" onclick="nav('ana-estructuracion')"><div class="nav-pip" style="background:var(--c-purple)"></div>Estructuración de requisitos</button>
       <button class="nav-item" onclick="nav('ana-gap')"><div class="nav-pip" style="background:var(--c-purple)"></div>GAP Analysis</button>
       <button class="nav-item" onclick="nav('ana-modelado')"><div class="nav-pip" style="background:var(--c-purple)"></div>Modelado del sistema</button>
+      <button class="nav-item" onclick="nav('srs-bpmn')"><div class="nav-pip" style="background:var(--c-purple)"></div>Modelado BPMN</button>
       <button class="nav-item" onclick="nav('srs-contexto')"><div class="nav-pip" style="background:var(--c-purple)"></div>Diagrama de contexto</button>
       <button class="nav-item" onclick="nav('srs-casos')"><div class="nav-pip" style="background:var(--c-purple)"></div>Casos de uso</button>
-      <button class="nav-item" onclick="nav('srs-bpmn')"><div class="nav-pip" style="background:var(--c-purple)"></div>Guía BPMN</button>
       <button class="nav-item" onclick="nav('ana-priorizacion')"><div class="nav-pip" style="background:var(--c-purple)"></div>Priorización</button>
       <button class="nav-item" onclick="nav('ana-verificacion')"><div class="nav-pip" style="background:var(--c-purple)"></div>Verificación del modelo</button>
     </div>
@@ -2208,175 +2208,89 @@ function saveEliPQ() { eliSave(); eliSaved('pq-saved-msg'); }
 reg('ana-flujo', () => `
 <div class="page-header">
   <div class="page-eyebrow" style="color:var(--c-purple)">● Fase 2 — Análisis</div>
-  <h1 class="page-title">Flujo de actividades de análisis</h1>
-  <p class="page-desc">Secuencia estructurada de las cinco actividades que transforman los hallazgos de la elicitación en modelos verificables y un backlog priorizado.</p>
-  <div class="std-row"><span class="std-pill">ISO 19510 (BPMN 2.0)</span><span class="std-pill">BABOK v3</span><span class="std-pill">IEEE 29148:2018</span></div>
+  <h1 class="page-title">Flujo de actividades</h1>
+  <p class="page-desc">Secuencia de seis actividades que transforman los requisitos brutos de Fase 1 en un backlog priorizado listo para especificación.</p>
+  <div class="std-row"><span class="std-pill">BABOK v3</span><span class="std-pill">IEEE 29148</span><span class="std-pill">ISO 19510</span></div>
 </div>
+<div class="card" style="padding:1.2rem">
+  <div style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:1rem">SECUENCIA DE ACTIVIDADES — FASE 2</div>
+  <svg width="100%" viewBox="0 0 720 760" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <marker id="af2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+        <path d="M2 1L8 5L2 9" fill="none" stroke="#9A9A94" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </marker>
+    </defs>
 
-<div class="tab-nav">
-  <button class="tab-btn on" onclick="tabSel('anf',0,this)">Flujo de actividades</button>
-  <button class="tab-btn" onclick="tabSel('anf',1,this)">Estructura jerárquica</button>
-</div>
+    <!-- Start -->
+    <rect x="211" y="10" width="238" height="34" rx="17" fill="#F1EFE8" stroke="#888780" stroke-width="0.5"/>
+    <text x="330" y="27" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="12" fill="#444441">Salidas de la Fase 1</text>
+    <line x1="330" y1="44" x2="330" y2="66" stroke="#9A9A94" stroke-width="1" marker-end="url(#af2)"/>
 
-<div class="tab-panel on" id="anf-0">
-  <div class="card" style="margin-bottom:.8rem">
-    <div class="card-title">Secuencia de actividades — Fase 2</div>
-    <svg width="100%" viewBox="0 0 680 540" xmlns="http://www.w3.org/2000/svg">
-      <defs><marker id="aa2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>
+    <!-- A1 -->
+    <rect x="161" y="68" width="338" height="52" rx="10" fill="#EDE8F8" stroke="#533483" stroke-width="1"/>
+    <text x="330" y="87" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="13" font-weight="500" fill="#2D1B6B">A1. Estructuración de requisitos</text>
+    <text x="330" y="105" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#533483">Clasificar · Depurar · Eliminar duplicados</text>
+    <rect x="14" y="78" width="110" height="26" rx="6" fill="#F1EFE8" stroke="#888780" stroke-width="0.5"/>
+    <text x="69" y="91" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="10" fill="#444441">Lista depurada RF/RNF</text>
+    <line x1="124" y1="91" x2="161" y2="91" stroke="#C8C7C1" stroke-width="0.8" stroke-dasharray="4,3" marker-end="url(#af2)"/>
+    <line x1="330" y1="120" x2="330" y2="142" stroke="#9A9A94" stroke-width="1" marker-end="url(#af2)"/>
 
-      <!-- Start -->
-      <rect x="251" y="14" width="178" height="34" rx="17" fill="#F1EFE8" stroke="#888780" stroke-width="0.5"/>
-      <text x="340" y="31" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="12" fill="#444441">Salidas de la Fase 1</text>
+    <!-- A2 -->
+    <rect x="161" y="144" width="338" height="52" rx="10" fill="#EDE8F8" stroke="#533483" stroke-width="1"/>
+    <text x="330" y="163" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="13" font-weight="500" fill="#2D1B6B">A2. GAP Analysis</text>
+    <text x="330" y="181" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#533483">As-Is · To-Be · Brechas → RF vinculados</text>
+    <rect x="14" y="154" width="110" height="26" rx="6" fill="#F1EFE8" stroke="#888780" stroke-width="0.5"/>
+    <text x="69" y="167" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="10" fill="#444441">Mapa de brechas GAP</text>
+    <line x1="124" y1="167" x2="161" y2="167" stroke="#C8C7C1" stroke-width="0.8" stroke-dasharray="4,3" marker-end="url(#af2)"/>
+    <line x1="330" y1="196" x2="330" y2="218" stroke="#9A9A94" stroke-width="1" marker-end="url(#af2)"/>
 
-      <line x1="340" y1="48" x2="340" y2="74" stroke="#9A9A94" stroke-width="1" marker-end="url(#aa2)"/>
+    <!-- A3 -->
+    <rect x="161" y="220" width="338" height="52" rx="10" fill="#EDE8F8" stroke="#533483" stroke-width="1"/>
+    <text x="330" y="239" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="13" font-weight="500" fill="#2D1B6B">A3. Modelado BPMN</text>
+    <text x="330" y="257" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#533483">Diagrama As-Is → To-Be · ISO 19510</text>
+    <rect x="14" y="230" width="110" height="26" rx="6" fill="#F1EFE8" stroke="#888780" stroke-width="0.5"/>
+    <text x="69" y="243" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="10" fill="#444441">BPMN As-Is y To-Be</text>
+    <line x1="124" y1="243" x2="161" y2="243" stroke="#C8C7C1" stroke-width="0.8" stroke-dasharray="4,3" marker-end="url(#af2)"/>
+    <line x1="330" y1="272" x2="330" y2="294" stroke="#9A9A94" stroke-width="1" marker-end="url(#af2)"/>
 
-      <!-- A1 -->
-      <rect x="210" y="76" width="260" height="54" rx="10" fill="#EEEDFE" stroke="#534AB7" stroke-width="1"/>
-      <text x="340" y="96" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="13" font-weight="500" fill="#26215C">A1. Estructuración</text>
-      <text x="340" y="114" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#534AB7">Clasificar, depurar y eliminar duplicados</text>
-      <rect x="44" y="83" width="128" height="30" rx="7" fill="#EEEDFE" stroke="#534AB7" stroke-width="0.5"/>
-      <text x="108" y="98" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#26215C">Lista depurada RF/RNF</text>
-      <line x1="172" y1="98" x2="208" y2="98" stroke="#534AB7" stroke-width="0.5" marker-end="url(#aa2)"/>
+    <!-- A4 -->
+    <rect x="161" y="296" width="338" height="52" rx="10" fill="#EDE8F8" stroke="#533483" stroke-width="1"/>
+    <text x="330" y="315" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="13" font-weight="500" fill="#2D1B6B">A4. Modelado del sistema</text>
+    <text x="330" y="333" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#533483">Diagrama de contexto · Casos de uso UML</text>
+    <rect x="14" y="306" width="110" height="26" rx="6" fill="#F1EFE8" stroke="#888780" stroke-width="0.5"/>
+    <text x="69" y="319" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="10" fill="#444441">Diagramas UML</text>
+    <line x1="124" y1="319" x2="161" y2="319" stroke="#C8C7C1" stroke-width="0.8" stroke-dasharray="4,3" marker-end="url(#af2)"/>
+    <line x1="330" y1="348" x2="330" y2="370" stroke="#9A9A94" stroke-width="1" marker-end="url(#af2)"/>
 
-      <line x1="340" y1="130" x2="340" y2="156" stroke="#9A9A94" stroke-width="1" marker-end="url(#aa2)"/>
+    <!-- A5 -->
+    <rect x="161" y="372" width="338" height="52" rx="10" fill="#EDE8F8" stroke="#533483" stroke-width="1"/>
+    <text x="330" y="391" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="13" font-weight="500" fill="#2D1B6B">A5. Priorización formal</text>
+    <text x="330" y="409" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#533483">MoSCoW · Kano · Valor vs. Esfuerzo</text>
+    <rect x="14" y="382" width="110" height="26" rx="6" fill="#F1EFE8" stroke="#888780" stroke-width="0.5"/>
+    <text x="69" y="395" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="10" fill="#444441">Backlog priorizado</text>
+    <line x1="124" y1="395" x2="161" y2="395" stroke="#C8C7C1" stroke-width="0.8" stroke-dasharray="4,3" marker-end="url(#af2)"/>
+    <line x1="330" y1="424" x2="330" y2="446" stroke="#9A9A94" stroke-width="1" marker-end="url(#af2)"/>
 
-      <!-- A2 -->
-      <rect x="210" y="158" width="260" height="54" rx="10" fill="#EEEDFE" stroke="#534AB7" stroke-width="1"/>
-      <text x="340" y="178" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="13" font-weight="500" fill="#26215C">A2. Modelado BPMN</text>
-      <text x="340" y="196" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#534AB7">Diagrama As-Is → GAP → To-Be</text>
-      <rect x="44" y="165" width="128" height="30" rx="7" fill="#EEEDFE" stroke="#534AB7" stroke-width="0.5"/>
-      <text x="108" y="180" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#26215C">BPMN As-Is y To-Be</text>
-      <line x1="172" y1="180" x2="208" y2="180" stroke="#534AB7" stroke-width="0.5" marker-end="url(#aa2)"/>
+    <!-- A6 -->
+    <rect x="161" y="448" width="338" height="52" rx="10" fill="#E1F5EE" stroke="#1D9E75" stroke-width="1"/>
+    <text x="330" y="467" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="13" font-weight="500" fill="#085041">A6. Verificación del modelo</text>
+    <text x="330" y="485" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#0F6E56">Consistencia · Completitud · Trazabilidad</text>
+    <rect x="14" y="458" width="110" height="26" rx="6" fill="#F1EFE8" stroke="#888780" stroke-width="0.5"/>
+    <text x="69" y="471" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="10" fill="#444441">Modelo verificado</text>
+    <line x1="124" y1="471" x2="161" y2="471" stroke="#C8C7C1" stroke-width="0.8" stroke-dasharray="4,3" marker-end="url(#af2)"/>
+    <line x1="330" y1="500" x2="330" y2="522" stroke="#9A9A94" stroke-width="1" marker-end="url(#af2)"/>
 
-      <line x1="340" y1="212" x2="340" y2="238" stroke="#9A9A94" stroke-width="1" marker-end="url(#aa2)"/>
+    <!-- End -->
+    <rect x="191" y="524" width="278" height="34" rx="17" fill="#F1EFE8" stroke="#888780" stroke-width="0.5"/>
+    <text x="330" y="541" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="12" fill="#444441">Entradas para Especificación (Fase 3)</text>
 
-      <!-- A3 -->
-      <rect x="210" y="240" width="260" height="54" rx="10" fill="#EEEDFE" stroke="#534AB7" stroke-width="1"/>
-      <text x="340" y="260" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="13" font-weight="500" fill="#26215C">A3. Modelado del sistema</text>
-      <text x="340" y="278" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#534AB7">Diagrama de contexto y casos de uso UML</text>
-      <rect x="44" y="247" width="128" height="30" rx="7" fill="#EEEDFE" stroke="#534AB7" stroke-width="0.5"/>
-      <text x="108" y="262" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#26215C">Diagrama contexto UML</text>
-      <line x1="172" y1="262" x2="208" y2="262" stroke="#534AB7" stroke-width="0.5" marker-end="url(#aa2)"/>
-
-      <line x1="340" y1="294" x2="340" y2="320" stroke="#9A9A94" stroke-width="1" marker-end="url(#aa2)"/>
-
-      <!-- A4 -->
-      <rect x="210" y="322" width="260" height="54" rx="10" fill="#E1F5EE" stroke="#1D9E75" stroke-width="1"/>
-      <text x="340" y="342" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="13" font-weight="500" fill="#085041">A4. Priorización formal</text>
-      <text x="340" y="360" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#0F6E56">MoSCoW · Kano · Valor vs. esfuerzo</text>
-      <rect x="44" y="329" width="128" height="30" rx="7" fill="#E1F5EE" stroke="#1D9E75" stroke-width="0.5"/>
-      <text x="108" y="344" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#085041">Backlog priorizado</text>
-      <line x1="172" y1="344" x2="208" y2="344" stroke="#1D9E75" stroke-width="0.5" marker-end="url(#aa2)"/>
-
-      <line x1="340" y1="376" x2="340" y2="402" stroke="#9A9A94" stroke-width="1" marker-end="url(#aa2)"/>
-
-      <!-- A5 -->
-      <rect x="210" y="404" width="260" height="54" rx="10" fill="#E1F5EE" stroke="#1D9E75" stroke-width="1"/>
-      <text x="340" y="424" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="13" font-weight="500" fill="#085041">A5. Verificación del modelo</text>
-      <text x="340" y="442" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#0F6E56">Consistencia, completitud y trazabilidad</text>
-      <rect x="44" y="411" width="128" height="30" rx="7" fill="#E1F5EE" stroke="#1D9E75" stroke-width="0.5"/>
-      <text x="108" y="426" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#085041">Análisis GAP verificado</text>
-      <line x1="172" y1="426" x2="208" y2="426" stroke="#1D9E75" stroke-width="0.5" marker-end="url(#aa2)"/>
-
-      <line x1="340" y1="458" x2="340" y2="484" stroke="#9A9A94" stroke-width="1" marker-end="url(#aa2)"/>
-
-      <!-- End -->
-      <rect x="210" y="486" width="260" height="34" rx="10" fill="#F1EFE8" stroke="#888780" stroke-width="0.5"/>
-      <text x="340" y="503" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="12" fill="#2C2C2A">Entradas para Especificación (Fase 3)</text>
-
-      <text x="28" y="62" font-family="DM Sans,sans-serif" font-size="10" fill="#9A9A94">Artefactos</text>
-    </svg>
-  </div>
-</div>
-
-<div class="tab-panel" id="anf-1">
-  <div class="card">
-    <div class="card-title">Estructura jerárquica — Fase 2</div>
-    <p style="font-size:12px;color:var(--muted);margin-bottom:.8rem;line-height:1.6">Las cinco actividades se organizan en dos bloques: modelado (A1–A3) que transforma necesidades brutas en modelos verificables, y evaluación (A4–A5) que ordena y valida esos modelos antes de pasarlos a la Fase 3.</p>
-    <svg width="100%" viewBox="0 0 740 340" xmlns="http://www.w3.org/2000/svg">
-      <defs><marker id="aa3" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>
-
-      <!-- Root -->
-      <rect x="260" y="14" width="220" height="40" rx="10" fill="#EEEDFE" stroke="#534AB7" stroke-width="1"/>
-      <text x="370" y="34" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="13" font-weight="500" fill="#26215C">Fase 2 — Análisis</text>
-
-      <!-- Root to blocks -->
-      <line x1="370" y1="54" x2="370" y2="76" stroke="#9A9A94" stroke-width="0.5"/>
-      <line x1="190" y1="76" x2="550" y2="76" stroke="#9A9A94" stroke-width="0.5"/>
-      <line x1="190" y1="76" x2="190" y2="96" stroke="#9A9A94" stroke-width="0.5" marker-end="url(#aa3)"/>
-      <line x1="550" y1="76" x2="550" y2="96" stroke="#9A9A94" stroke-width="0.5" marker-end="url(#aa3)"/>
-
-      <!-- Block 1 -->
-      <rect x="84" y="98" width="212" height="38" rx="8" fill="#EEEDFE" stroke="#534AB7" stroke-width="0.8"/>
-      <text x="190" y="117" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="12" font-weight="500" fill="#26215C">Bloque 1 — Modelado</text>
-
-      <!-- Block 2 -->
-      <rect x="444" y="98" width="212" height="38" rx="8" fill="#E1F5EE" stroke="#1D9E75" stroke-width="0.8"/>
-      <text x="550" y="117" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="12" font-weight="500" fill="#085041">Bloque 2 — Evaluación</text>
-
-      <!-- Block 1 to A1 A2 A3 -->
-      <line x1="190" y1="136" x2="190" y2="156" stroke="#9A9A94" stroke-width="0.5"/>
-      <line x1="76"  y1="156" x2="304" y2="156" stroke="#9A9A94" stroke-width="0.5"/>
-      <line x1="76"  y1="156" x2="76"  y2="174" stroke="#9A9A94" stroke-width="0.5" marker-end="url(#aa3)"/>
-      <line x1="190" y1="156" x2="190" y2="174" stroke="#9A9A94" stroke-width="0.5" marker-end="url(#aa3)"/>
-      <line x1="304" y1="156" x2="304" y2="174" stroke="#9A9A94" stroke-width="0.5" marker-end="url(#aa3)"/>
-
-      <!-- A1 -->
-      <rect x="22"  y="176" width="108" height="54" rx="7" fill="#EEEDFE" stroke="#534AB7" stroke-width="0.5"/>
-      <text x="76"  y="194" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" font-weight="600" fill="#26215C">A1</text>
-      <text x="76"  y="208" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="10" fill="#534AB7">Estructuración</text>
-      <text x="76"  y="221" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="10" fill="#534AB7">RF / RNF / RC</text>
-
-      <!-- A2 -->
-      <rect x="136" y="176" width="108" height="54" rx="7" fill="#EEEDFE" stroke="#534AB7" stroke-width="0.5"/>
-      <text x="190" y="194" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" font-weight="600" fill="#26215C">A2</text>
-      <text x="190" y="208" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="10" fill="#534AB7">Modelado BPMN</text>
-      <text x="190" y="221" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="10" fill="#534AB7">As-Is / To-Be</text>
-
-      <!-- A3 -->
-      <rect x="250" y="176" width="108" height="54" rx="7" fill="#EEEDFE" stroke="#534AB7" stroke-width="0.5"/>
-      <text x="304" y="194" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" font-weight="600" fill="#26215C">A3</text>
-      <text x="304" y="208" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="10" fill="#534AB7">Modelado sistema</text>
-      <text x="304" y="221" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="10" fill="#534AB7">Contexto · UML</text>
-
-      <!-- Block 2 to A4 A5 -->
-      <line x1="550" y1="136" x2="550" y2="156" stroke="#9A9A94" stroke-width="0.5"/>
-      <line x1="468" y1="156" x2="632" y2="156" stroke="#9A9A94" stroke-width="0.5"/>
-      <line x1="468" y1="156" x2="468" y2="174" stroke="#9A9A94" stroke-width="0.5" marker-end="url(#aa3)"/>
-      <line x1="632" y1="156" x2="632" y2="174" stroke="#9A9A94" stroke-width="0.5" marker-end="url(#aa3)"/>
-
-      <!-- A4 -->
-      <rect x="414" y="176" width="108" height="54" rx="7" fill="#E1F5EE" stroke="#1D9E75" stroke-width="0.5"/>
-      <text x="468" y="194" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" font-weight="600" fill="#085041">A4</text>
-      <text x="468" y="208" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="10" fill="#0F6E56">Priorización</text>
-      <text x="468" y="221" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="10" fill="#0F6E56">MoSCoW · Kano</text>
-
-      <!-- A5 -->
-      <rect x="578" y="176" width="108" height="54" rx="7" fill="#E1F5EE" stroke="#1D9E75" stroke-width="0.5"/>
-      <text x="632" y="194" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" font-weight="600" fill="#085041">A5</text>
-      <text x="632" y="208" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="10" fill="#0F6E56">Verificación</text>
-      <text x="632" y="221" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="10" fill="#0F6E56">Consistencia</text>
-
-      <!-- Artifacts -->
-      <text x="370" y="258" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="10" fill="#9A9A94">Artefactos producidos</text>
-      <rect x="14"  y="268" width="120" height="26" rx="6" fill="#F1EFE8" stroke="#888780" stroke-width="0.5"/>
-      <text x="74"  y="281" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="10" fill="#444441">Lista RF/RNF/RC</text>
-      <rect x="144" y="268" width="120" height="26" rx="6" fill="#F1EFE8" stroke="#888780" stroke-width="0.5"/>
-      <text x="204" y="281" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="10" fill="#444441">BPMN As-Is/To-Be</text>
-      <rect x="274" y="268" width="120" height="26" rx="6" fill="#F1EFE8" stroke="#888780" stroke-width="0.5"/>
-      <text x="334" y="281" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="10" fill="#444441">Diagrama contexto</text>
-      <rect x="404" y="268" width="120" height="26" rx="6" fill="#F1EFE8" stroke="#888780" stroke-width="0.5"/>
-      <text x="464" y="281" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="10" fill="#444441">Backlog MoSCoW</text>
-      <rect x="534" y="268" width="120" height="26" rx="6" fill="#F1EFE8" stroke="#888780" stroke-width="0.5"/>
-      <text x="594" y="281" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="10" fill="#444441">Análisis GAP verif.</text>
-    </svg>
-  </div>
+    <!-- Artefactos label -->
+    <text x="69" y="62" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="10" fill="#9A9A94">Artefactos</text>
+  </svg>
 </div>
 `);
 
-/* ════════════════════════════════════════
-   PAGE: ANÁLISIS — MODELADO DEL SISTEMA
-════════════════════════════════════════ */
+
 reg('ana-modelado', () => `
 <div class="page-header">
   <div class="page-eyebrow" style="color:var(--c-purple)">● Fase 2 — Análisis</div>
@@ -2970,7 +2884,7 @@ reg('srs-casos', () => `
 reg('srs-bpmn', () => `
 <div class="page-header">
   <div class="page-eyebrow" style="color:var(--c-purple)">● Fase 2 — Análisis</div>
-  <h1 class="page-title">Guía BPMN 2.0</h1>
+  <h1 class="page-title">Modelado BPMN</h1>
   <p class="page-desc">Business Process Model and Notation — estándar ISO 19510 para modelar procesos de negocio. En el framework se usa para construir los diagramas As-Is y To-Be de la Fase 2 y documentar los flujos que originan los requisitos.</p>
   <div class="std-row"><span class="std-pill">ISO 19510 (BPMN 2.0)</span><span class="std-pill">BABOK v3</span></div>
 
@@ -3216,135 +3130,91 @@ reg('srs-bpmn', () => `
 reg('srs-flujo', () => `
 <div class="page-header">
   <div class="page-eyebrow" style="color:var(--c-blue)">● Fase 3 — Especificación</div>
-  <h1 class="page-title">Flujo de actividades de especificación</h1>
-  <p class="page-desc">Secuencia de seis actividades que transforman el backlog priorizado en un SRS formal, verificable y aprobado para iniciar el desarrollo.</p>
-  <div class="std-row"><span class="std-pill">IEEE 29148:2018</span><span class="std-pill">ISO/IEC 25010:2023</span><span class="std-pill">BDD/Gherkin</span></div>
+  <h1 class="page-title">Flujo de actividades</h1>
+  <p class="page-desc">Secuencia de seis bloques que transforman el backlog priorizado en un SRS verificado, trazado y aprobado para validación.</p>
+  <div class="std-row"><span class="std-pill">IEEE 29148:2018</span><span class="std-pill">ISO 25010</span><span class="std-pill">BABOK v3</span></div>
 </div>
+<div class="card" style="padding:1.2rem">
+  <div style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:1rem">SECUENCIA DE ACTIVIDADES — FASE 3</div>
+  <svg width="100%" viewBox="0 0 720 760" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <marker id="af3b" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+        <path d="M2 1L8 5L2 9" fill="none" stroke="#9A9A94" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </marker>
+    </defs>
 
-<div class="tab-nav">
-  <button class="tab-btn on" onclick="tabSel('srsf',0,this)">Flujo de actividades</button>
-  <button class="tab-btn" onclick="tabSel('srsf',1,this)">Técnicas y artefactos</button>
-</div>
+    <!-- Start -->
+    <rect x="211" y="10" width="238" height="34" rx="17" fill="#F1EFE8" stroke="#888780" stroke-width="0.5"/>
+    <text x="330" y="27" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="12" fill="#444441">Backlog priorizado (Fase 2)</text>
+    <line x1="330" y1="44" x2="330" y2="66" stroke="#9A9A94" stroke-width="1" marker-end="url(#af3b)"/>
 
-<div class="tab-panel on" id="srsf-0">
-  <div class="card" style="margin-bottom:.8rem">
-    <div class="card-title">Secuencia de actividades — Fase 3</div>
-    <svg width="100%" viewBox="0 0 680 590" xmlns="http://www.w3.org/2000/svg">
-      <defs><marker id="asrs" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>
+    <!-- B1 -->
+    <rect x="161" y="68" width="338" height="52" rx="10" fill="#EBF3FD" stroke="#185FA5" stroke-width="1"/>
+    <text x="330" y="87" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="13" font-weight="500" fill="#0D3C6B">B1. Estructura del SRS</text>
+    <text x="330" y="105" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#185FA5">Portada · Alcance · Glosario inicial · IEEE 29148</text>
+    <rect x="14" y="78" width="112" height="26" rx="6" fill="#F1EFE8" stroke="#888780" stroke-width="0.5"/>
+    <text x="70" y="91" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="10" fill="#444441">Plantilla SRS v0.1</text>
+    <line x1="126" y1="91" x2="161" y2="91" stroke="#C8C7C1" stroke-width="0.8" stroke-dasharray="4,3" marker-end="url(#af3b)"/>
+    <line x1="330" y1="120" x2="330" y2="142" stroke="#9A9A94" stroke-width="1" marker-end="url(#af3b)"/>
 
-      <!-- Start -->
-      <rect x="251" y="14" width="178" height="34" rx="17" fill="#F1EFE8" stroke="#888780" stroke-width="0.5"/>
-      <text x="340" y="31" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="12" fill="#444441">Backlog priorizado (Fase 2)</text>
-      <line x1="340" y1="48" x2="340" y2="74" stroke="#9A9A94" stroke-width="1" marker-end="url(#asrs)"/>
+    <!-- B2 -->
+    <rect x="161" y="144" width="338" height="52" rx="10" fill="#EBF3FD" stroke="#185FA5" stroke-width="1"/>
+    <text x="330" y="163" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="13" font-weight="500" fill="#0D3C6B">B2. Especificación de requisitos</text>
+    <text x="330" y="181" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#185FA5">RF · RNF · Supuestos · Restricciones (Editor SRS)</text>
+    <rect x="14" y="154" width="112" height="26" rx="6" fill="#F1EFE8" stroke="#888780" stroke-width="0.5"/>
+    <text x="70" y="167" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="10" fill="#444441">SRS con requisitos</text>
+    <line x1="126" y1="167" x2="161" y2="167" stroke="#C8C7C1" stroke-width="0.8" stroke-dasharray="4,3" marker-end="url(#af3b)"/>
+    <!-- Feedback arrow -->
+    <path d="M499 170 Q600 170 600 320 Q600 468 499 468" fill="none" stroke="#E07070" stroke-width="0.8" stroke-dasharray="5,3" marker-end="url(#af3b)"/>
+    <text x="622" y="320" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="9" fill="#E07070" transform="rotate(90,622,320)">Ambigüedad</text>
+    <line x1="330" y1="196" x2="330" y2="218" stroke="#9A9A94" stroke-width="1" marker-end="url(#af3b)"/>
 
-      <!-- B1 -->
-      <rect x="210" y="76" width="260" height="54" rx="10" fill="#E6F1FB" stroke="#185FA5" stroke-width="1"/>
-      <text x="340" y="96" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="13" font-weight="500" fill="#042C53">B1. Estructura del SRS</text>
-      <text x="340" y="114" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#185FA5">Secciones IEEE 29148 · Glosario inicial</text>
-      <rect x="44" y="83" width="128" height="30" rx="7" fill="#E6F1FB" stroke="#185FA5" stroke-width="0.5"/>
-      <text x="108" y="98" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#042C53">Plantilla SRS v0.1</text>
-      <line x1="172" y1="98" x2="208" y2="98" stroke="#185FA5" stroke-width="0.5" marker-end="url(#asrs)"/>
-      <line x1="340" y1="130" x2="340" y2="156" stroke="#9A9A94" stroke-width="1" marker-end="url(#asrs)"/>
+    <!-- B3 -->
+    <rect x="161" y="220" width="338" height="52" rx="10" fill="#EBF3FD" stroke="#185FA5" stroke-width="1"/>
+    <text x="330" y="239" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="13" font-weight="500" fill="#0D3C6B">B3. Historias de usuario y criterios</text>
+    <text x="330" y="257" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#185FA5">HU · Given / When / Then · Vinculación RF</text>
+    <rect x="14" y="230" width="112" height="26" rx="6" fill="#F1EFE8" stroke="#888780" stroke-width="0.5"/>
+    <text x="70" y="243" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="10" fill="#444441">HU + Gherkin</text>
+    <line x1="126" y1="243" x2="161" y2="243" stroke="#C8C7C1" stroke-width="0.8" stroke-dasharray="4,3" marker-end="url(#af3b)"/>
+    <line x1="330" y1="272" x2="330" y2="294" stroke="#9A9A94" stroke-width="1" marker-end="url(#af3b)"/>
 
-      <!-- B2 -->
-      <rect x="210" y="158" width="260" height="54" rx="10" fill="#E6F1FB" stroke="#185FA5" stroke-width="1"/>
-      <text x="340" y="178" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="13" font-weight="500" fill="#042C53">B2. RF — Requisitos funcionales</text>
-      <text x="340" y="196" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#185FA5">ID · DEBE/SHOULD · Criterio de aceptación</text>
-      <rect x="44" y="165" width="128" height="30" rx="7" fill="#E6F1FB" stroke="#185FA5" stroke-width="0.5"/>
-      <text x="108" y="180" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#042C53">Historias de usuario</text>
-      <line x1="172" y1="180" x2="208" y2="180" stroke="#185FA5" stroke-width="0.5" marker-end="url(#asrs)"/>
-      <line x1="340" y1="212" x2="340" y2="238" stroke="#9A9A94" stroke-width="1" marker-end="url(#asrs)"/>
+    <!-- B4 -->
+    <rect x="161" y="296" width="338" height="52" rx="10" fill="#EBF3FD" stroke="#185FA5" stroke-width="1"/>
+    <text x="330" y="315" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="13" font-weight="500" fill="#0D3C6B">B4. Verificar calidad</text>
+    <text x="330" y="333" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#185FA5">Detector ambigüedad · Checklist 45 reglas</text>
+    <rect x="14" y="306" width="112" height="26" rx="6" fill="#F1EFE8" stroke="#888780" stroke-width="0.5"/>
+    <text x="70" y="319" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="10" fill="#444441">SRS depurado</text>
+    <line x1="126" y1="319" x2="161" y2="319" stroke="#C8C7C1" stroke-width="0.8" stroke-dasharray="4,3" marker-end="url(#af3b)"/>
+    <line x1="330" y1="348" x2="330" y2="370" stroke="#9A9A94" stroke-width="1" marker-end="url(#af3b)"/>
 
-      <!-- B3 -->
-      <rect x="210" y="240" width="260" height="54" rx="10" fill="#E6F1FB" stroke="#185FA5" stroke-width="1"/>
-      <text x="340" y="260" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="13" font-weight="500" fill="#042C53">B3. RNF — Requisitos no funcionales</text>
-      <text x="340" y="278" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#185FA5">ISO 25010 · Rendimiento · Seguridad · Usabilidad</text>
-      <rect x="44" y="247" width="128" height="30" rx="7" fill="#E6F1FB" stroke="#185FA5" stroke-width="0.5"/>
-      <text x="108" y="262" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#042C53">Criterios de calidad</text>
-      <line x1="172" y1="262" x2="208" y2="262" stroke="#185FA5" stroke-width="0.5" marker-end="url(#asrs)"/>
-      <line x1="340" y1="294" x2="340" y2="320" stroke="#9A9A94" stroke-width="1" marker-end="url(#asrs)"/>
+    <!-- B5 -->
+    <rect x="161" y="372" width="338" height="52" rx="10" fill="#EBF3FD" stroke="#185FA5" stroke-width="1"/>
+    <text x="330" y="391" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="13" font-weight="500" fill="#0D3C6B">B5. Matriz de trazabilidad (RTM)</text>
+    <text x="330" y="409" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#185FA5">Origen · Componente · Método · Estado</text>
+    <rect x="14" y="382" width="112" height="26" rx="6" fill="#F1EFE8" stroke="#888780" stroke-width="0.5"/>
+    <text x="70" y="395" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="10" fill="#444441">RTM inicial</text>
+    <line x1="126" y1="395" x2="161" y2="395" stroke="#C8C7C1" stroke-width="0.8" stroke-dasharray="4,3" marker-end="url(#af3b)"/>
+    <line x1="330" y1="424" x2="330" y2="446" stroke="#9A9A94" stroke-width="1" marker-end="url(#af3b)"/>
 
-      <!-- B4 -->
-      <rect x="210" y="322" width="260" height="54" rx="10" fill="#E6F1FB" stroke="#185FA5" stroke-width="1"/>
-      <text x="340" y="342" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="13" font-weight="500" fill="#042C53">B4. Criterios Gherkin / BDD</text>
-      <text x="340" y="360" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#185FA5">Given · When · Then por cada RF crítico</text>
-      <rect x="44" y="329" width="128" height="30" rx="7" fill="#E6F1FB" stroke="#185FA5" stroke-width="0.5"/>
-      <text x="108" y="344" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#042C53">Escenarios Gherkin</text>
-      <line x1="172" y1="344" x2="208" y2="344" stroke="#185FA5" stroke-width="0.5" marker-end="url(#asrs)"/>
-      <line x1="340" y1="376" x2="340" y2="402" stroke="#9A9A94" stroke-width="1" marker-end="url(#asrs)"/>
+    <!-- B6 -->
+    <rect x="161" y="448" width="338" height="52" rx="10" fill="#E1F5EE" stroke="#1D9E75" stroke-width="1"/>
+    <text x="330" y="467" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="13" font-weight="500" fill="#085041">B6. Walkthrough · Checklist · Baseline</text>
+    <text x="330" y="485" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#0F6E56">Revisión stakeholders · Versión aprobada · Firma BA</text>
+    <rect x="14" y="458" width="112" height="26" rx="6" fill="#F1EFE8" stroke="#888780" stroke-width="0.5"/>
+    <text x="70" y="471" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="10" fill="#444441">SRS baseline</text>
+    <line x1="126" y1="471" x2="161" y2="471" stroke="#C8C7C1" stroke-width="0.8" stroke-dasharray="4,3" marker-end="url(#af3b)"/>
+    <line x1="330" y1="500" x2="330" y2="522" stroke="#9A9A94" stroke-width="1" marker-end="url(#af3b)"/>
 
-      <!-- B5 -->
-      <rect x="210" y="404" width="260" height="54" rx="10" fill="#E6F1FB" stroke="#185FA5" stroke-width="1"/>
-      <text x="340" y="424" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="13" font-weight="500" fill="#042C53">B5. Detector de ambigüedad</text>
-      <text x="340" y="442" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#185FA5">Revisar lenguaje vago · Aplicar checklist SMART</text>
-      <rect x="44" y="411" width="128" height="30" rx="7" fill="#E6F1FB" stroke="#185FA5" stroke-width="0.5"/>
-      <text x="108" y="426" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#042C53">SRS v1.0 depurado</text>
-      <line x1="172" y1="426" x2="208" y2="426" stroke="#185FA5" stroke-width="0.5" marker-end="url(#asrs)"/>
-      <line x1="340" y1="458" x2="340" y2="484" stroke="#9A9A94" stroke-width="1" marker-end="url(#asrs)"/>
+    <!-- End -->
+    <rect x="191" y="524" width="278" height="34" rx="17" fill="#F1EFE8" stroke="#888780" stroke-width="0.5"/>
+    <text x="330" y="541" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="12" fill="#444441">Entrada para Validación (Fase 4)</text>
 
-      <!-- B6 -->
-      <rect x="210" y="486" width="260" height="54" rx="10" fill="#EAF3DE" stroke="#3B6D11" stroke-width="1"/>
-      <text x="340" y="506" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="13" font-weight="500" fill="#173404">B6. Auto-revisión y cierre</text>
-      <text x="340" y="524" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#3B6D11">Checklist PC3 · RTM inicial · Firma BA</text>
-      <rect x="44" y="493" width="128" height="30" rx="7" fill="#EAF3DE" stroke="#3B6D11" stroke-width="0.5"/>
-      <text x="108" y="508" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#173404">SRS listo para revisión</text>
-      <line x1="172" y1="508" x2="208" y2="508" stroke="#3B6D11" stroke-width="0.5" marker-end="url(#asrs)"/>
-
-      <!-- Retrabajo loop -->
-      <path d="M 470 510 L 580 510 L 580 180 L 472 180" fill="none" stroke="#A32D2D" stroke-width="0.5" stroke-dasharray="4 3" marker-end="url(#asrs)"/>
-      <text x="593" y="348" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="10" fill="#A32D2D">Ambi-</text>
-      <text x="593" y="362" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="10" fill="#A32D2D">güedad</text>
-
-      <line x1="340" y1="540" x2="340" y2="566" stroke="#9A9A94" stroke-width="1" marker-end="url(#asrs)"/>
-      <!-- End -->
-      <rect x="210" y="568" width="260" height="34" rx="10" fill="#F1EFE8" stroke="#888780" stroke-width="0.5"/>
-      <text x="340" y="585" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="12" fill="#2C2C2A">Entrada para Validación (Fase 4)</text>
-
-      <text x="28" y="62" font-family="DM Sans,sans-serif" font-size="10" fill="#9A9A94">Artefactos</text>
-    </svg>
-  </div>
-</div>
-
-<div class="tab-panel" id="srsf-1">
-  <div class="g2" style="margin-bottom:1rem">
-    <div class="card">
-      <div class="card-title">Técnicas principales</div>
-      ${[
-        {t:'IEEE 29148:2018',d:'Estructura y atributos de calidad del SRS',color:'var(--c-blue)'},
-        {t:'Lenguaje natural controlado',d:'Modales DEBE / DEBERÍA / PUEDE correctamente usados',color:'var(--c-blue)'},
-        {t:'BDD / Gherkin',d:'Criterios de aceptación ejecutables: Given-When-Then',color:'var(--c-purple)'},
-        {t:'Detector de ambigüedad',d:'Identificar palabras vagas: rápido, fácil, adecuado, etc.',color:'var(--c-red)'},
-        {t:'Modelo ISO 25010',d:'Clasificar RNF por características de calidad',color:'var(--c-teal)'},
-        {t:'RTM — Matriz de trazabilidad',d:'Vincular cada RF con su origen de negocio y prueba',color:'var(--c-green)'},
-      ].map(t => `<div class="dot-item"><div class="dot" style="background:${t.color}"></div><div><strong style="font-size:12px;font-weight:500">${t.t}</strong><div style="font-size:11px;color:var(--muted)">${t.d}</div></div></div>`).join('')}
-    </div>
-    <div class="card">
-      <div class="card-title">Artefactos producidos</div>
-      ${[
-        {a:'SRS v1.0',d:'Documento completo con todas las secciones IEEE 29148',color:'var(--c-blue)'},
-        {a:'Historias de usuario + Gherkin',d:'RF con criterios de aceptación ejecutables',color:'var(--c-purple)'},
-        {a:'Catálogo RNF',d:'Requisitos no funcionales con umbrales medibles',color:'var(--c-blue)'},
-        {a:'Glosario técnico del dominio',d:'Definiciones acordadas entre negocio y TI',color:'var(--c-teal)'},
-        {a:'RTM inicial (pre-RS)',d:'Trazabilidad backlog → SRS completa',color:'var(--c-green)'},
-        {a:'Checklist PC3 firmado',d:'Punto de control: SRS listo para inspección formal',color:'var(--c-amber)'},
-      ].map(a => `<div class="dot-item"><div class="dot" style="background:${a.color}"></div><div><strong style="font-size:12px;font-weight:500">${a.a}</strong><div style="font-size:11px;color:var(--muted)">${a.d}</div></div></div>`).join('')}
-    </div>
-  </div>
-  <div class="card">
-    <div class="card-title">Criterios de calidad del SRS — IEEE 29148 §5.2</div>
-    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:.6rem;margin-top:.5rem">
-      ${[
-        {q:'Correcto',d:'Cada requisito representa una necesidad real del sistema',c:'var(--c-teal)'},
-        {q:'No ambiguo',d:'Un único significado posible, verificable objetivamente',c:'var(--c-blue)'},
-        {q:'Completo',d:'Cubre todos los casos, escenarios y condiciones',c:'var(--c-purple)'},
-        {q:'Consistente',d:'Sin contradicciones entre requisitos del mismo SRS',c:'var(--c-green)'},
-        {q:'Trazable',d:'Vinculado a su origen y a su prueba de verificación',c:'var(--c-amber)'},
-        {q:'Verificable',d:'Puede comprobarse por prueba, inspección o análisis',c:'var(--c-red)'},
-      ].map(q => `<div style="background:var(--surface);border-left:3px solid ${q.c};border-radius:var(--radius);padding:.6rem .8rem"><div style="font-size:12px;font-weight:500;margin-bottom:2px">${q.q}</div><div style="font-size:11px;color:var(--muted)">${q.d}</div></div>`).join('')}
-    </div>
-  </div>
+    <!-- Artefactos label -->
+    <text x="70" y="62" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="10" fill="#9A9A94">Artefactos</text>
+  </svg>
 </div>
 `);
+
 
 reg('srs-editor', () => `
 <div class="page-header">
@@ -8483,67 +8353,252 @@ function initSrsVersiones(){
   renderSrsVersiones(data);
 }
 
+
 var WT_SRS_KEY='fw_srs_wt_v1';
-function defWtSrs(){ return {sesiones:[]}; }
+function defWtSrs(){ return {sesiones:[],selIdx:0}; }
+
 function initSrsWalkthrough(){
   var el=document.getElementById('srs-wt-mount'); if(!el) return;
   el.innerHTML='';
   var d; try{d=JSON.parse(localStorage.getItem(WT_SRS_KEY))||defWtSrs();}catch(e){d=defWtSrs();}
+  // Migrate: if old single-session format, convert
+  if(!d.sesiones){
+    d={sesiones:[d],selIdx:0};
+    localStorage.setItem(WT_SRS_KEY,JSON.stringify(d));
+  }
+  window._wtSelIdx=d.selIdx||0;
   renderSrsWalkthrough(d);
 }
 
-function renderSrsChecklist(data){
-  var el=document.getElementById('srs-checklist-mount'); if(!el) return;
-  function save(){ localStorage.setItem(CK_KEY,JSON.stringify(data)); }
+function renderSrsWalkthrough(d){
+  var el=document.getElementById('srs-wt-mount'); if(!el) return;
+  function save(){d.selIdx=window._wtSelIdx||0;localStorage.setItem(WT_SRS_KEY,JSON.stringify(d));}
+  function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 
-  var dims=[...new Set(SRS_CK_ITEMS.map(function(i){return i.dim;}))];
-  var dimColors={'Completitud':'var(--c-blue)','Verificabilidad':'var(--c-purple)','Consistencia':'var(--c-amber)','Trazabilidad':'var(--c-green)','Claridad':'var(--c-teal)','Aprobación':'var(--c-green)'};
+  var srs; try{srs=JSON.parse(localStorage.getItem(SRS_KEY))||defaultSRS();}catch(e){srs=defaultSRS();}
+  var curVersion=(srs.portada&&srs.portada.version)||'—';
+  var sesiones=d.sesiones||[];
+  var sel=Math.min(window._wtSelIdx||0, sesiones.length>0?sesiones.length-1:0);
 
-  var total=SRS_CK_ITEMS.length;
-  var checked=SRS_CK_ITEMS.filter(function(i){return data[i.id]==='ok';}).length;
-  var na=SRS_CK_ITEMS.filter(function(i){return data[i.id]==='na';}).length;
-  var pct=Math.round(checked/total*100);
-  var gVar=pct===100?'--c-green':pct>=60?'--c-blue':'--c-gray';
+  // ── Header: session list + new button ────────────────────────────────────
+  var html='<div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.8rem;flex-wrap:wrap">'
+    +'<div style="font-size:12px;font-weight:500;color:var(--text)">Sesiones de walkthrough</div>'
+    +'<button class="btn btn-sm" style="background:var(--c-blue);color:#fff;border-color:var(--c-blue);margin-left:auto" onclick="wtAddSesion()">+ Nueva sesión</button>'
+    +'</div>';
 
-  var html='<div class="card" style="margin-bottom:1rem;background:rgba('+( pct===100?'15,110,86':pct>=60?'24,95,165':'0,0,0')+',.04);border-color:rgba('+(pct===100?'15,110,86':pct>=60?'24,95,165':'0,0,0')+',.2)">'
-    +'<div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem;margin-bottom:.5rem">'
-    +'<div><div style="font-size:13px;font-weight:500;color:var('+gVar+');">'
-    +(pct===100?'✓ SRS listo para inspección formal':pct>=60?'⏳ En progreso — '+checked+' de '+total+' ítems aprobados':'○ Checklist por completar')
-    +'</div><div style="font-size:11px;color:var(--muted);margin-top:2px">'+checked+' OK · '+na+' N/A · '+(total-checked-na)+' pendientes</div></div>'
-    +'<div style="font-size:28px;font-weight:500;font-family:var(--font-serif);color:var('+gVar+')">'+pct+'%</div>'
-    +'</div>'
-    +'<div style="height:7px;background:var(--surface2);border-radius:4px;overflow:hidden">'
-    +'<div style="height:100%;width:'+pct+'%;background:var('+gVar+');border-radius:4px;transition:width .5s"></div>'
-    +'</div></div>';
+  if(!sesiones.length){
+    html+='<div style="text-align:center;padding:2rem;color:var(--muted);font-size:12px;border:0.5px dashed var(--border2);border-radius:var(--radius)">Sin sesiones. Crea la primera.</div>';
+    el.innerHTML=html; return;
+  }
 
-  dims.forEach(function(dim){
-    var items=SRS_CK_ITEMS.filter(function(i){return i.dim===dim;});
-    var dimOk=items.filter(function(i){return data[i.id]==='ok';}).length;
-    var col=dimColors[dim]||'var(--c-gray)';
-    html+='<div class="card" style="margin-bottom:.6rem">'
-      +'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.5rem">'
-      +'<div style="font-size:12px;font-weight:500;color:'+col+'">'+dim+'</div>'
-      +'<div style="font-size:11px;color:var(--muted)">'+dimOk+' / '+items.length+'</div>'
+  // Session tabs
+  html+='<div style="display:flex;gap:.3rem;flex-wrap:wrap;margin-bottom:.8rem">';
+  sesiones.forEach(function(s,i){
+    var active=i===sel;
+    var dec=s.decision||'Pendiente';
+    var decCol={'Pendiente':'var(--muted)','Aprobado sin observaciones':'var(--c-green)','Aprobado con observaciones':'var(--c-amber)','Requiere revisión':'var(--c-red)'}[dec]||'var(--muted)';
+    html+='<div onclick="wtSelSesion('+i+')" style="cursor:pointer;padding:.4rem .8rem;border-radius:var(--radius);border:0.5px solid '+(active?'var(--c-blue)':'var(--border)')+';background:'+(active?'rgba(24,95,165,.06)':'var(--surface)')+';display:flex;align-items:center;gap:.4rem">'
+      +'<span style="font-size:12px;font-weight:'+(active?'600':'400')+';color:'+(active?'var(--c-blue)':'var(--text)')+'">Sesión '+(i+1)+'</span>'
+      +(s.fecha?'<span style="font-size:10px;color:var(--muted)">'+esc(s.fecha)+'</span>':'')
+      +'<span style="width:7px;height:7px;border-radius:50%;background:'+decCol+';flex-shrink:0"></span>'
+      +'<button class="wt-del-ses" data-i="\'+i+\'" style="background:none;border:none;cursor:pointer;color:var(--muted);font-size:12px;padding:0;line-height:1">×</button>'
       +'</div>';
-    items.forEach(function(item){
-      var val=data[item.id]||'';
-      html+='<div style="display:flex;align-items:flex-start;gap:.6rem;padding:.4rem 0;border-bottom:0.5px solid var(--border)">'
-        +'<div style="display:flex;gap:4px;flex-shrink:0;padding-top:1px">'
-        +'<button style="width:24px;height:24px;border-radius:4px;border:0.5px solid '+(val==='ok'?'var(--c-green)':'var(--border2)')+';background:'+(val==='ok'?'var(--c-green)':'var(--surface)')+';color:'+(val==='ok'?'#fff':'var(--muted)')+';font-size:12px;cursor:pointer;flex-shrink:0" onclick="ckSet(\''+item.id+'\',\'ok\')">✓</button>'
-        +'<button style="width:24px;height:24px;border-radius:4px;border:0.5px solid '+(val==='na'?'var(--c-amber)':'var(--border2)')+';background:'+(val==='na'?'var(--c-amber)':'var(--surface)')+';color:'+(val==='na'?'#fff':'var(--muted)')+';font-size:10px;cursor:pointer;flex-shrink:0" onclick="ckSet(\''+item.id+'\',\'na\')">N/A</button>'
+  });
+  html+='</div>';
+
+  // Current session form
+  var s=sesiones[sel]||{};
+  function fi(lbl,key,ph,mono){
+    return '<div><label style="font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.3px;display:block;margin-bottom:2px">'+lbl+'</label>'
+      +'<input value="'+esc(s[key]||'')+'" placeholder="'+ph+'" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:5px 8px;font-size:12px;color:var(--text);outline:none'+(mono?';font-family:var(--font-mono)':'')+'" oninput="wtSrsSetS('+sel+',\''+key+'\',this.value)"></div>';
+  }
+  function ta(lbl,key,ph,rows){
+    return '<div><label style="font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.3px;display:block;margin-bottom:2px">'+lbl+'</label>'
+      +'<textarea rows="'+(rows||2)+'" placeholder="'+ph+'" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:5px 8px;font-size:12px;color:var(--text);resize:vertical;outline:none;line-height:1.6" oninput="wtSrsSetS('+sel+',\''+key+'\',this.value)">'+esc(s[key]||'')+'</textarea></div>';
+  }
+
+  // Session data
+  html+='<div class="card" style="margin-bottom:.8rem">'
+    +'<div class="card-title" style="margin-bottom:.6rem">Datos de la sesión '+(sel+1)+'</div>'
+    +'<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.5rem;margin-bottom:.5rem">'
+    +fi('Fecha','fecha','AAAA-MM-DD',false)+fi('Moderador','moderador','Nombre · Rol',false)
+    +'<div><label style="font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.3px;display:block;margin-bottom:2px">Versión SRS revisada</label>'
+    +'<input value="'+esc(s.version||curVersion)+'" placeholder="Ej: v0.3" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:5px 8px;font-size:12px;color:var(--text);outline:none;font-family:var(--font-mono)" oninput="wtSrsSetS('+sel+',\'version\',this.value)"></div>'
+    +'</div>'
+    +fi('Participantes','participantes','Nombres y roles separados por coma',false)
+    +'<div style="margin-top:.5rem">'+ta('Objetivo de la sesión','objetivo','¿Qué secciones o requisitos se busca validar?',2)+'</div>'
+    +'</div>';
+
+  // Coverage
+  var revisados=s.revisados||[];
+  var allReqsCov=[];
+  (srs.rfs||[]).filter(function(r){return r.desc;}).forEach(function(r){allReqsCov.push({id:r.id,tipo:'RF',col:'var(--c-blue)',bg:'rgba(24,95,165,.08)'});});
+  (srs.rnfs||[]).filter(function(r){return r.atributo||r.cat;}).forEach(function(r){allReqsCov.push({id:r.id,tipo:'RNF',col:'var(--c-purple)',bg:'rgba(83,52,131,.08)'});});
+  (srs.sas||[]).filter(function(r){return r.desc;}).forEach(function(r){allReqsCov.push({id:r.id,tipo:'SA',col:'var(--c-teal)',bg:'rgba(29,158,117,.08)'});});
+  (srs.rcs||[]).filter(function(r){return r.t||r.v;}).forEach(function(r){allReqsCov.push({id:r.id,tipo:'RC',col:'var(--c-amber)',bg:'rgba(186,117,23,.08)'});});
+  var pctCov=allReqsCov.length?Math.round(revisados.length/allReqsCov.length*100):0;
+
+  html+='<div class="card" style="margin-bottom:.8rem">'
+    +'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.5rem">'
+    +'<div class="card-title">Requisitos revisados</div>'
+    +'<span style="font-size:12px;color:var(--muted)">'+revisados.length+'/'+allReqsCov.length+' ('+pctCov+'%)</span>'
+    +'</div>';
+  if(allReqsCov.length){
+    var tipoLabel={RF:'Funcionales',RNF:'No funcionales',SA:'Supuestos',RC:'Restricciones'};
+    ['RF','RNF','SA','RC'].forEach(function(tipo){
+      var group=allReqsCov.filter(function(r){return r.tipo===tipo;});
+      if(!group.length) return;
+      html+='<div style="margin-bottom:.4rem"><div style="font-size:10px;font-weight:600;color:'+group[0].col+';text-transform:uppercase;letter-spacing:.4px;margin-bottom:.3rem">'+tipoLabel[tipo]+'</div><div style="display:flex;flex-wrap:wrap;gap:.3rem">';
+      group.forEach(function(req){
+        var sel2=revisados.indexOf(req.id)>=0;
+        html+='<span onclick="wtToggleReq('+sel+',\''+esc(req.id)+'\')" style="cursor:pointer;padding:2px 8px;border-radius:10px;font-size:10px;font-family:var(--font-mono);font-weight:600;border:0.5px solid '+(sel2?req.col:'var(--border2)')+';background:'+(sel2?req.bg:'var(--surface)')+';color:'+(sel2?req.col:'var(--muted)')+'">'+esc(req.id)+'</span>';
+      });
+      html+='</div></div>';
+    });
+    html+='<div style="height:5px;background:var(--surface2);border-radius:4px;overflow:hidden;margin-top:.4rem"><div style="height:100%;width:'+pctCov+'%;background:var(--c-teal);border-radius:4px;transition:width .4s"></div></div>';
+  } else {
+    html+='<div style="font-size:12px;color:var(--muted);font-style:italic">No hay requisitos en el Editor SRS.</div>';
+  }
+  html+='</div>';
+
+  // Hallazgos
+  var hallazgos=s.hallazgos||[];
+  var pendientes=hallazgos.filter(function(h){return h.estado!=='Resuelto';}).length;
+  var sevColor={'Menor':'var(--muted)','Moderado':'var(--c-amber)','Mayor':'var(--c-red)','Crítico':'var(--c-red)'};
+  html+='<div class="card" style="margin-bottom:.8rem">'
+    +'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.5rem">'
+    +'<div class="card-title">Hallazgos</div>'
+    +'<div style="display:flex;align-items:center;gap:.5rem">'
+    +(pendientes?'<span style="font-size:10px;padding:2px 7px;border-radius:8px;background:rgba(163,45,45,.1);color:var(--c-red);font-weight:600">'+pendientes+' pendiente(s)</span>':'')
+    +'<button class="btn btn-sm" onclick="wtAddH('+sel+')">+ Hallazgo</button>'
+    +'</div></div>';
+  if(!hallazgos.length){
+    html+='<div style="text-align:center;padding:.8rem;color:var(--muted);font-size:12px;border:0.5px dashed var(--border2);border-radius:var(--radius)">Sin hallazgos.</div>';
+  } else {
+    hallazgos.forEach(function(h,hi){
+      var sev=h.severidad||'Menor';
+      var resuelto=h.estado==='Resuelto';
+      html+='<div style="border:0.5px solid var(--border);border-radius:var(--radius);padding:.6rem;margin-bottom:.4rem;background:'+(resuelto?'rgba(15,110,86,.02)':'var(--surface)')+'">'
+        +'<div style="display:grid;grid-template-columns:90px 80px 1fr 90px 28px;gap:.3rem;align-items:center;margin-bottom:.3rem">'
+        +'<select class="wt-hi" data-si="'+sel+'" data-hi="'+hi+'" data-k="tipo" style="font-size:10px;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:2px 4px;outline:none">'
+        +['Defecto','Consulta','Sugerencia','Aprobado'].map(function(t){return'<option'+(h.tipo===t?' selected':'')+'>'+t+'</option>';}).join('')+'</select>'
+        +'<select class="wt-hi" data-si="'+sel+'" data-hi="'+hi+'" data-k="severidad" style="font-size:10px;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:2px 4px;outline:none;color:'+(sevColor[sev]||'var(--muted)')+'">'+['Menor','Moderado','Mayor','Crítico'].map(function(s2){return'<option'+(sev===s2?' selected':'')+'>'+s2+'</option>';}).join('')+'</select>'
+        +'<input class="wt-hi" data-si="'+sel+'" data-hi="'+hi+'" data-k="rfRef" value="'+esc(h.rfRef||'')+'" placeholder="RF-001, RNF-002..." style="background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:2px 6px;font-size:10px;font-family:var(--font-mono);outline:none;width:100%">'
+        +'<select class="wt-hi" data-si="'+sel+'" data-hi="'+hi+'" data-k="estado" style="font-size:10px;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:2px 4px;outline:none;color:'+(resuelto?'var(--c-green)':'var(--c-amber)')+'">'+['Pendiente','En revisión','Resuelto'].map(function(s2){return'<option'+(h.estado===s2?' selected':'')+'>'+s2+'</option>';}).join('')+'</select>'
+        +'<button class="wt-del" data-si="'+sel+'" data-hi="'+hi+'" style="background:none;border:none;cursor:pointer;color:var(--muted);font-size:15px">×</button>'
         +'</div>'
-        +'<div style="font-size:12px;color:var(--text);line-height:1.5">'+item.text+'</div>'
+        +'<input class="wt-hi" data-si="'+sel+'" data-hi="'+hi+'" data-k="texto" value="'+esc(h.texto||'')+'" placeholder="Describe el hallazgo o comentario del stakeholder..." style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 7px;font-size:11px;color:var(--text);outline:none">'
         +'</div>';
     });
-    html+='</div>';
-  });
+  }
+  html+='</div>';
 
-  html+='<div style="display:flex;gap:.5rem;margin-top:.5rem;align-items:center">'
-    +'<button class="btn" style="background:var(--c-blue);color:#fff;border-color:var(--c-blue)" onclick="ckReset()">↺ Reiniciar</button>'
-    +'<span style="font-size:11px;color:var(--muted)">Cambios guardados automáticamente</span></div>';
+  // Decision
+  var decOpts=['Pendiente','Aprobado sin observaciones','Aprobado con observaciones','Requiere revisión'];
+  var decColor={'Pendiente':'var(--muted)','Aprobado sin observaciones':'var(--c-green)','Aprobado con observaciones':'var(--c-amber)','Requiere revisión':'var(--c-red)'};
+  html+='<div class="card">'
+    +'<div class="card-title" style="margin-bottom:.6rem">Decisión</div>'
+    +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-bottom:.8rem">'
+    +decOpts.map(function(opt){
+      var active=(s.decision||'Pendiente')===opt;
+      var col=decColor[opt];
+      return '<div onclick="wtSrsSetS('+sel+',\'decision\',\''+opt+'\')" style="cursor:pointer;border-radius:var(--radius);padding:.6rem;text-align:center;border:1.5px solid '+(active?col:'var(--border)')+';background:'+(active?col.replace('var(','').replace(')','').replace('--',''):'var(--surface)')+'">'
+        +'<div style="font-size:11px;font-weight:500;color:'+col+'">'+opt+'</div></div>';
+    }).join('')
+    +'</div>'
+    +ta('Acuerdos','acuerdos','Lista los acuerdos y compromisos...',2)
+    +'<div style="margin-top:.5rem">'+ta('Próximos pasos','proximos','Acciones antes de la inspección formal...',2)+'</div>'
+    +'<div style="display:flex;gap:.5rem;margin-top:.7rem;align-items:center">'
+    +'<button class="btn" style="background:var(--c-blue);color:#fff;border-color:var(--c-blue)" onclick="wtGuardar()">Guardar sesión</button>'
+    +'<span id="wt-srs-msg" style="font-size:11px;color:var(--c-green)"></span>'
+    +'</div></div>';
 
   el.innerHTML=html;
+  el.querySelectorAll('.wt-del-ses').forEach(function(btn){
+    btn.addEventListener('click',function(e){ e.stopPropagation(); wtDelSesion(parseInt(this.dataset.i)); });
+  });
+
+  // Bind hallazgo inputs
+  el.querySelectorAll('.wt-del-ses').forEach(function(btn){
+    btn.addEventListener('click',function(e){
+      e.stopPropagation();
+      wtDelSesion(parseInt(this.dataset.i));
+    });
+  });
+  el.querySelectorAll('.wt-hi').forEach(function(inp){
+    inp.addEventListener('input',function(){wtHSet(parseInt(this.dataset.si),parseInt(this.dataset.hi),this.dataset.k,this.value);});
+    inp.addEventListener('change',function(){wtHSet(parseInt(this.dataset.si),parseInt(this.dataset.hi),this.dataset.k,this.value);if(this.dataset.k==='estado') renderSrsWalkthrough(d);});
+  });
+  el.querySelectorAll('.wt-del').forEach(function(btn){
+    btn.addEventListener('click',function(){wtDelH(parseInt(this.dataset.si),parseInt(this.dataset.hi));});
+  });
 }
+
+function wtLoad(){ var d; try{d=JSON.parse(localStorage.getItem(WT_SRS_KEY))||defWtSrs();}catch(e){d=defWtSrs();} return d; }
+function wtSave(d){ d.selIdx=window._wtSelIdx||0; localStorage.setItem(WT_SRS_KEY,JSON.stringify(d)); }
+
+function wtAddSesion(){
+  var d=wtLoad(); if(!d.sesiones) d.sesiones=[];
+  var srs; try{srs=JSON.parse(localStorage.getItem(SRS_KEY))||defaultSRS();}catch(e){srs=defaultSRS();}
+  d.sesiones.push({fecha:'',moderador:'',version:(srs.portada&&srs.portada.version)||'',participantes:'',objetivo:'',revisados:[],hallazgos:[],decision:'Pendiente',acuerdos:'',proximos:''});
+  window._wtSelIdx=d.sesiones.length-1;
+  wtSave(d); renderSrsWalkthrough(d);
+}
+
+function wtSelSesion(i){ window._wtSelIdx=i; var d=wtLoad(); renderSrsWalkthrough(d); }
+
+function wtDelSesion(i){
+  var d=wtLoad();
+  if(!d.sesiones||!d.sesiones[i]) return;
+  d.sesiones.splice(i,1);
+  window._wtSelIdx=Math.max(0,Math.min((window._wtSelIdx||0),Math.max(0,d.sesiones.length-1)));
+  wtSave(d); renderSrsWalkthrough(d);
+}
+
+function wtSrsSetS(si,key,val){
+  var d=wtLoad(); if(!d.sesiones||!d.sesiones[si]) return;
+  d.sesiones[si][key]=val; wtSave(d);
+}
+
+function wtToggleReq(si,reqId){
+  var d=wtLoad(); if(!d.sesiones||!d.sesiones[si]) return;
+  var rev=d.sesiones[si].revisados||[];
+  var idx=rev.indexOf(reqId);
+  if(idx>=0) rev.splice(idx,1); else rev.push(reqId);
+  d.sesiones[si].revisados=rev; wtSave(d); renderSrsWalkthrough(d);
+}
+
+function wtAddH(si){
+  var d=wtLoad(); if(!d.sesiones||!d.sesiones[si]) return;
+  if(!d.sesiones[si].hallazgos) d.sesiones[si].hallazgos=[];
+  d.sesiones[si].hallazgos.push({tipo:'Defecto',severidad:'Menor',rfRef:'',texto:'',estado:'Pendiente'});
+  wtSave(d); renderSrsWalkthrough(d);
+}
+
+function wtHSet(si,hi,key,val){
+  var d=wtLoad(); if(!d.sesiones||!d.sesiones[si]||!d.sesiones[si].hallazgos||!d.sesiones[si].hallazgos[hi]) return;
+  d.sesiones[si].hallazgos[hi][key]=val; wtSave(d);
+}
+
+function wtDelH(si,hi){
+  var d=wtLoad(); if(!d.sesiones||!d.sesiones[si]) return;
+  d.sesiones[si].hallazgos.splice(hi,1); wtSave(d); renderSrsWalkthrough(d);
+}
+
+function wtGuardar(){
+  var d=wtLoad(); wtSave(d);
+  var msg=document.getElementById('wt-srs-msg');
+  if(msg){msg.textContent='✓ Guardado';setTimeout(function(){msg.textContent='';},2000);}
+}
+
+// Keep old names for compatibility
+function wtSrsSet(key,val){ var d=wtLoad(); d[key]=val; wtSave(d); }
+function wtSrsAddH(){ wtAddH(window._wtSelIdx||0); }
+function wtSrsHSet(i,k,v){ wtHSet(window._wtSelIdx||0,i,k,v); }
+function wtSrsDelH(i){ wtDelH(window._wtSelIdx||0,i); }
+function wtSrsGuardar(){ wtGuardar(); }
+function wtSrsToggleRF(id){ wtToggleReq(window._wtSelIdx||0,id); }
+
 
 function renderSrsHU(data){
   var el=document.getElementById('srs-hu-mount'); if(!el) return;
@@ -8638,122 +8693,66 @@ function renderSrsHU(data){
   (data.items||[]).forEach(function(_,si){ huBindEscenarios(si); });
 }
 
-function renderSrsVersiones(data){
-  var el=document.getElementById('srs-ver-mount'); if(!el) return;
-  function save(){localStorage.setItem(SRS_VER_KEY,JSON.stringify(data));}
-  function e(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function renderSrsChecklist(data){
+  var el=document.getElementById('srs-checklist-mount'); if(!el) return;
+  function save(){ localStorage.setItem(CK_KEY,JSON.stringify(data)); }
 
-  var estOpts=['Borrador','En revisión','Aprobado con obs.','Baseline'];
-  var estColor={'Borrador':'var(--muted)','En revisión':'var(--c-amber)','Aprobado con obs.':'var(--c-blue)','Baseline':'var(--c-green)'};
+  var dims=[...new Set(SRS_CK_ITEMS.map(function(i){return i.dim;}))];
+  var dimColors={'Completitud':'var(--c-blue)','Verificabilidad':'var(--c-purple)','Consistencia':'var(--c-amber)','Trazabilidad':'var(--c-green)','Claridad':'var(--c-teal)','Aprobación':'var(--c-green)'};
 
-  var tip='<div style="background:rgba(24,95,165,.06);border:0.5px solid rgba(24,95,165,.25);border-radius:var(--radius);padding:.5rem .8rem;font-size:11px;color:var(--c-blue);margin-bottom:.8rem">'
-    +'ⓘ Registra cada versión del SRS desde el primer borrador v0.1 hasta el baseline v1.0 aprobado. Guardado automático.</div>';
+  var total=SRS_CK_ITEMS.length;
+  var checked=SRS_CK_ITEMS.filter(function(i){return data[i.id]==='ok';}).length;
+  var na=SRS_CK_ITEMS.filter(function(i){return data[i.id]==='na';}).length;
+  var pct=Math.round(checked/total*100);
+  var gVar=pct===100?'--c-green':pct>=60?'--c-blue':'--c-gray';
 
-  // Form nueva versión
-  var form='<div class="card" style="margin-bottom:1rem">'
-    +'<div class="card-title" style="margin-bottom:.6rem">Registrar nueva versión</div>'
-    +'<div style="display:grid;grid-template-columns:80px 1fr 1fr 140px;gap:.5rem;margin-bottom:.5rem">'
-    +'<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.3px;display:block;margin-bottom:2px">Tag</label>'
-    +'<input id="srsver-tag" placeholder="v0.2" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:5px 8px;font-size:12px;font-family:var(--font-mono);color:var(--c-blue);outline:none"></div>'
-    +'<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.3px;display:block;margin-bottom:2px">Fecha</label>'
-    +'<input id="srsver-fecha" type="date" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:5px 8px;font-size:12px;color:var(--text);outline:none"></div>'
-    +'<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.3px;display:block;margin-bottom:2px">Autor</label>'
-    +'<input id="srsver-autor" placeholder="Nombre · Rol" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:5px 8px;font-size:12px;color:var(--text);outline:none"></div>'
-    +'<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.3px;display:block;margin-bottom:2px">Estado</label>'
-    +'<select id="srsver-estado" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:5px 8px;font-size:12px;color:var(--text);outline:none">'
-    +estOpts.map(function(o){return'<option>'+o+'</option>';}).join('')+'</select></div>'
+  var html='<div class="card" style="margin-bottom:1rem;background:rgba('+( pct===100?'15,110,86':pct>=60?'24,95,165':'0,0,0')+',.04);border-color:rgba('+(pct===100?'15,110,86':pct>=60?'24,95,165':'0,0,0')+',.2)">'
+    +'<div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem;margin-bottom:.5rem">'
+    +'<div><div style="font-size:13px;font-weight:500;color:var('+gVar+');">'
+    +(pct===100?'✓ SRS listo para inspección formal':pct>=60?'⏳ En progreso — '+checked+' de '+total+' ítems aprobados':'○ Checklist por completar')
+    +'</div><div style="font-size:11px;color:var(--muted);margin-top:2px">'+checked+' OK · '+na+' N/A · '+(total-checked-na)+' pendientes</div></div>'
+    +'<div style="font-size:28px;font-weight:500;font-family:var(--font-serif);color:var('+gVar+')">'+pct+'%</div>'
     +'</div>'
-    +'<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.3px;display:block;margin-bottom:2px">Cambios incluidos</label>'
-    +'<textarea id="srsver-cambios" rows="2" placeholder="Describe qué cambió en esta versión..." style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:5px 8px;font-size:12px;color:var(--text);resize:vertical;outline:none;line-height:1.6"></textarea></div>'
-    +'<button class="btn btn-sm" style="background:var(--c-blue);color:#fff;border-color:var(--c-blue);margin-top:.5rem" onclick="srsVerAdd()">+ Registrar versión</button>'
-    +'</div>';
-
-  // Historial
-  var hist='';
-  var vers=data.versiones||[];
-  vers.forEach(function(v,i){
-    var col=estColor[v.estado]||'var(--muted)';
-    hist+='<div style="display:flex;gap:.8rem;margin-bottom:.5rem;align-items:flex-start">'
-      +(i<vers.length-1?'<div style="display:flex;flex-direction:column;align-items:center"><div style="width:10px;height:10px;border-radius:50%;background:'+col+';flex-shrink:0"></div><div style="width:1px;flex:1;background:var(--border);margin:3px 0"></div></div>':'<div style="width:10px;height:10px;border-radius:50%;background:'+col+';flex-shrink:0;margin-top:1px"></div>')
-      +'<div class="card-sm" style="flex:1">'
-      +'<div style="display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;margin-bottom:.3rem">'
-      +'<span style="font-size:13px;font-weight:500;font-family:var(--font-mono);color:var(--c-blue)">'+e(v.tag)+'</span>'
-      +'<span style="font-size:11px;padding:2px 8px;border-radius:8px;background:'+col+'18;color:'+col+';font-weight:500">'+e(v.estado)+'</span>'
-      +(v.autor?'<span style="font-size:11px;color:var(--muted)">'+e(v.autor)+'</span>':'')
-      +'<span style="font-size:11px;color:var(--muted);margin-left:auto">'+e(v.fecha)+'</span>'
-      +'<button style="background:none;border:none;cursor:pointer;color:var(--muted);font-size:14px" onclick="srsVerDel('+i+')">×</button>'
-      +'</div>'
-      +'<div style="font-size:12px;color:var(--muted)">'+e(v.cambios)+'</div>'
-      +'</div></div>';
-  });
-
-  el.innerHTML=tip+form+(hist?'<div class="card-title" style="margin-bottom:.6rem">Historial</div>'+hist:'');
-}
-
-function renderSrsWalkthrough(d){
-  var el=document.getElementById('srs-wt-mount'); if(!el) return;
-  function save(){localStorage.setItem(WT_SRS_KEY,JSON.stringify(d));}
-  function e(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
-  function fi(lbl,key,ph){return'<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.3px;display:block;margin-bottom:2px">'+lbl+'</label><input value="'+e(d[key]||'')+'" placeholder="'+ph+'" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:5px 8px;font-size:12px;color:var(--text);font-family:var(--font-sans);outline:none" oninput="wtSrsSet(\''+key+'\',this.value)"></div>';}
-  function ta(lbl,key,ph,rows){return'<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.3px;display:block;margin-bottom:2px">'+lbl+'</label><textarea rows="'+(rows||2)+'" placeholder="'+ph+'" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:5px 8px;font-size:12px;color:var(--text);font-family:var(--font-sans);resize:vertical;outline:none;line-height:1.6" oninput="wtSrsSet(\''+key+'\',this.value)">'+e(d[key]||'')+'</textarea></div>';}
-
-  var decOpts=['Pendiente','Aprobado con observaciones','Requiere revisión','Aprobado sin observaciones'];
-  var decColor={'Pendiente':'var(--muted)','Aprobado sin observaciones':'var(--c-green)','Aprobado con observaciones':'var(--c-amber)','Requiere revisión':'var(--c-red)'};
-
-  var header='<div class="card" style="margin-bottom:.8rem">'
-    +'<div class="card-title" style="margin-bottom:.6rem">Datos de la sesión</div>'
-    +'<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.5rem;margin-bottom:.5rem">'
-    +fi('Fecha','fecha','AAAA-MM-DD')+fi('Moderador','moderador','Nombre · Rol')+fi('Versión SRS revisada','version','Ej: v0.3')
-    +'</div>'
-    +fi('Participantes','participantes','Nombres y roles separados por coma')
-    +'<div style="margin-top:.5rem">'+ta('Objetivo de la sesión','objetivo','¿Qué se busca validar en este walkthrough?',2)+'</div>'
-    +'</div>';
-
-  var hallazgos='<div class="card" style="margin-bottom:.8rem">'
-    +'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.5rem">'
-    +'<div class="card-title">Hallazgos registrados</div>'
-    +'<button class="btn btn-sm" onclick="wtSrsAddH()">+ Hallazgo</button>'
-    +'</div>';
-  (d.hallazgos||[]).forEach(function(h,i){
-    hallazgos+='<div style="display:grid;grid-template-columns:1fr 80px 28px;gap:.4rem;align-items:center;margin-bottom:.4rem">'
-      +'<input value="'+e(h.texto||'')+'" placeholder="Describe el hallazgo o comentario del stakeholder..." style="background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:4px 8px;font-size:12px;color:var(--text);outline:none;width:100%" oninput="wtSrsHSet('+i+',\'texto\',this.value)">'
-      +'<select style="font-size:11px;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:3px 5px;outline:none" onchange="wtSrsHSet('+i+',\'tipo\',this.value)">'
-      +['Defecto','Consulta','Sugerencia','Aprobado'].map(function(t){return'<option'+(h.tipo===t?' selected':'')+'>'+t+'</option>';}).join('')
-      +'</select>'
-      +'<button style="background:none;border:none;cursor:pointer;color:var(--muted);font-size:15px" onclick="wtSrsDelH('+i+')">×</button>'
-      +'</div>';
-  });
-  hallazgos+='</div>';
-
-  var decSel='<div class="card" style="margin-bottom:.8rem">'
-    +'<div class="card-title" style="margin-bottom:.6rem">Decisión del walkthrough</div>'
-    +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:.8rem;margin-bottom:.8rem">'
-    +decOpts.map(function(opt){
-      var active=d.decision===opt;
-      var col=decColor[opt]||'var(--muted)';
-      return'<div style="border-radius:var(--radius);padding:.8rem;text-align:center;cursor:pointer;border:1.5px solid '+(active?col:'var(--border)')+';background:'+(active?col+'18':'var(--surface)')+'" onclick="wtSrsSet(\'decision\',\''+opt+'\')">'
-        +'<div style="font-size:12px;font-weight:500;color:'+col+'">'+opt+'</div>'
-        +'</div>';
-    }).join('')
-    +'</div>'
-    +ta('Acuerdos alcanzados','acuerdos','Lista los acuerdos y compromisos de la sesión...',2)
-    +'<div style="margin-top:.5rem">'+ta('Próximos pasos','proximos','Acciones a tomar antes de la inspección formal...',2)+'</div>'
-    +'<div style="display:flex;gap:.5rem;margin-top:.8rem;align-items:center">'
-    +'<button class="btn" style="background:var(--c-blue);color:#fff;border-color:var(--c-blue)" onclick="wtSrsGuardar()">Guardar walkthrough</button>'
-    +'<span id="wt-srs-msg" style="font-size:11px;color:var(--c-green)"></span>'
+    +'<div style="height:7px;background:var(--surface2);border-radius:4px;overflow:hidden">'
+    +'<div style="height:100%;width:'+pct+'%;background:var('+gVar+');border-radius:4px;transition:width .5s"></div>'
     +'</div></div>';
 
-  el.innerHTML=header+hallazgos+decSel;
+  dims.forEach(function(dim){
+    var items=SRS_CK_ITEMS.filter(function(i){return i.dim===dim;});
+    var dimOk=items.filter(function(i){return data[i.id]==='ok';}).length;
+    var col=dimColors[dim]||'var(--c-gray)';
+    html+='<div class="card" style="margin-bottom:.6rem">'
+      +'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.5rem">'
+      +'<div style="font-size:12px;font-weight:500;color:'+col+'">'+dim+'</div>'
+      +'<div style="font-size:11px;color:var(--muted)">'+dimOk+' / '+items.length+'</div>'
+      +'</div>';
+    items.forEach(function(item){
+      var val=data[item.id]||'';
+      html+='<div style="display:flex;align-items:flex-start;gap:.6rem;padding:.4rem 0;border-bottom:0.5px solid var(--border)">'
+        +'<div style="display:flex;gap:4px;flex-shrink:0;padding-top:1px">'
+        +'<button style="width:24px;height:24px;border-radius:4px;border:0.5px solid '+(val==='ok'?'var(--c-green)':'var(--border2)')+';background:'+(val==='ok'?'var(--c-green)':'var(--surface)')+';color:'+(val==='ok'?'#fff':'var(--muted)')+';font-size:12px;cursor:pointer;flex-shrink:0" onclick="ckSet(\''+item.id+'\',\'ok\')">✓</button>'
+        +'<button style="width:24px;height:24px;border-radius:4px;border:0.5px solid '+(val==='na'?'var(--c-amber)':'var(--border2)')+';background:'+(val==='na'?'var(--c-amber)':'var(--surface)')+';color:'+(val==='na'?'#fff':'var(--muted)')+';font-size:10px;cursor:pointer;flex-shrink:0" onclick="ckSet(\''+item.id+'\',\'na\')">N/A</button>'
+        +'</div>'
+        +'<div style="font-size:12px;color:var(--text);line-height:1.5">'+item.text+'</div>'
+        +'</div>';
+    });
+    html+='</div>';
+  });
+
+  html+='<div style="display:flex;gap:.5rem;margin-top:.5rem;align-items:center">'
+    +'<button class="btn" style="background:var(--c-blue);color:#fff;border-color:var(--c-blue)" onclick="ckReset()">↺ Reiniciar</button>'
+    +'<span style="font-size:11px;color:var(--muted)">Cambios guardados automáticamente</span></div>';
+
+  el.innerHTML=html;
 }
 
-
-
-function huDel(i){
-  var data; try{data=JSON.parse(localStorage.getItem(HU_KEY))||defHU();}catch(e){data=defHU();}
-  data.items.splice(i,1);
-  window._huSel=Math.max(0,i-1);
-  localStorage.setItem(HU_KEY,JSON.stringify(data));
-  var el=document.getElementById('srs-hu-mount'); if(el){el.innerHTML='';initSrsHU();}
+function defHU(){
+  return {items:[
+    {id:'HU-001',rol:'Analista de crédito',quiero:'consultar el score crediticio del cliente de forma automática',para:'reducir el tiempo de evaluación de 2 días a menos de 1 hora',prioridad:'Must',estado:'Aprobada',rfs:'RF-001',otros:'',criterios:'',escenarios:[]},
+    {id:'HU-002',rol:'Cliente',quiero:'registrarme una sola vez en el portal',para:'no tener que repetir mis datos en múltiples sistemas',prioridad:'Must',estado:'Aprobada',rfs:'RF-002',otros:'',criterios:'',escenarios:[]},
+    {id:'HU-003',rol:'Administrador',quiero:'configurar las reglas de decisión del motor',para:'adaptar los criterios de aprobación sin intervención de TI',prioridad:'Should',estado:'En revisión',rfs:'',otros:'',criterios:'',escenarios:[]},
+    {id:'HU-004',rol:'Usuario',quiero:'recibir notificaciones en tiempo real',para:'saber el estado de mi solicitud sin tener que consultar manualmente',prioridad:'Must',estado:'Borrador',rfs:'',otros:'',criterios:'',escenarios:[]}
+  ]};
 }
 
 function huAdd(){
@@ -8765,20 +8764,12 @@ function huAdd(){
   renderSrsHU(data);
 }
 
-function huGherkinAdd(sel, tipo){
-  var ta=document.getElementById('hu-criterios-'+sel);
-  if(!ta) return;
-  var prefixes={'dado':'Dado que ','cuando':'Cuando ','entonces':'Entonces ','y':'Y '};
-  var prefix=prefixes[tipo]||'';
-  var val=ta.value;
-  if(val&&!val.endsWith('\n')) val+='\n';
-  ta.value=val+prefix;
-  ta.focus();
-  ta.setSelectionRange(ta.value.length, ta.value.length);
-  // Save
+function huDel(i){
   var data; try{data=JSON.parse(localStorage.getItem(HU_KEY))||defHU();}catch(e){data=defHU();}
-  data.items[sel].criterios=ta.value;
+  data.items.splice(i,1);
+  window._huSel=Math.max(0,i-1);
   localStorage.setItem(HU_KEY,JSON.stringify(data));
+  var el=document.getElementById('srs-hu-mount'); if(el){el.innerHTML='';initSrsHU();}
 }
 
 function huSet(i,k,v){
@@ -8812,58 +8803,20 @@ function huSet(i,k,v){
   }
 }
 
-function srsImportFromEstr(tipoFilter){
-  try{
-    var estr=JSON.parse(localStorage.getItem('fw_ana_estr_v1'))||{items:[]};
-    var items=estr.items||[];
-    var depurados=items.filter(function(i){
-      return i.estado==='Depurado' && (!tipoFilter || i.tipo===tipoFilter);
-    });
-    if(!depurados.length){
-      alert('No hay requisitos'+(tipoFilter?' de tipo '+tipoFilter:'')+' con estado "Depurado" en A1 Estructuración.');
-      return;
-    }
-    var srsData; try{srsData=JSON.parse(localStorage.getItem(SRS_KEY))||defaultSRS();}catch(e){srsData=defaultSRS();}
-    var added=0;
-
-    depurados.forEach(function(item){
-      var tipo=item.tipo||'RF';
-      if(tipo==='RF'){
-        srsData.rfs=srsData.rfs||[];
-        var exists=srsData.rfs.find(function(r){return r.id===item.id;});
-        if(exists) return;
-        srsData.rfs.push({id:item.id,desc:item.desc||'',prio:item.prioridad||'Alta',
-          titulo:item.desc||'',estado:'Borrador',given:'',when:'',then:''});
-        added++;
-      } else if(tipo==='RNF'){
-        srsData.rnfs=srsData.rnfs||[];
-        var exists=srsData.rnfs.find(function(r){return r.id===item.id;});
-        if(exists) return;
-        srsData.rnfs.push({id:item.id,cat:'General',atributo:item.desc||'',valor:'',metodo:''});
-        added++;
-      } else if(tipo==='SA'){
-        srsData.sas=srsData.sas||[];
-        var exists=srsData.sas.find(function(r){return r.id===item.id;});
-        if(exists) return;
-        srsData.sas.push({id:item.id,desc:item.desc||''});
-        added++;
-      } else if(tipo==='RC'){
-        srsData.rcs=srsData.rcs||[];
-        var exists=srsData.rcs.find(function(r){return r.id===item.id;});
-        if(exists) return;
-        srsData.rcs.push({id:item.id,t:item.desc||'',v:''});
-        added++;
-      }
-    });
-
-    localStorage.setItem(SRS_KEY,JSON.stringify(srsData));
-    SRS=loadSRS();
-    var el=document.getElementById('srs-editor-mount');
-    if(el){el.innerHTML='';renderSrsEditor();}
-    alert('✓ '+added+' requisito(s) importado(s) desde A1 Estructuración.');
-  }catch(err){
-    alert('Error al importar: '+err.message);
-  }
+function huGherkinAdd(sel, tipo){
+  var ta=document.getElementById('hu-criterios-'+sel);
+  if(!ta) return;
+  var prefixes={'dado':'Dado que ','cuando':'Cuando ','entonces':'Entonces ','y':'Y '};
+  var prefix=prefixes[tipo]||'';
+  var val=ta.value;
+  if(val&&!val.endsWith('\n')) val+='\n';
+  ta.value=val+prefix;
+  ta.focus();
+  ta.setSelectionRange(ta.value.length, ta.value.length);
+  // Save
+  var data; try{data=JSON.parse(localStorage.getItem(HU_KEY))||defHU();}catch(e){data=defHU();}
+  data.items[sel].criterios=ta.value;
+  localStorage.setItem(HU_KEY,JSON.stringify(data));
 }
 
 function huGetSrsItems(){
@@ -9005,8 +8958,6 @@ function huBuildEscenarios(h, sel){
   return html;
 }
 
-function escH(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-
 function huAddEscenario(sel){
   var data; try{data=JSON.parse(localStorage.getItem(HU_KEY))||defHU();}catch(e){data=defHU();}
   var h=data.items[sel]; if(!h) return;
@@ -9053,6 +9004,157 @@ function huBindEscenarios(sel){
       }
     });
   });
+}
+
+function srsImportFromEstr(tipoFilter){
+  try{
+    var estr=JSON.parse(localStorage.getItem('fw_ana_estr_v1'))||{items:[]};
+    var items=estr.items||[];
+    var depurados=items.filter(function(i){return i.estado==='Depurado'&&(!tipoFilter||i.tipo===tipoFilter);});
+    if(!depurados.length){alert('No hay requisitos'+(tipoFilter?' de tipo '+tipoFilter:'')+' con estado "Depurado" en A1.');return;}
+    var srsData; try{srsData=JSON.parse(localStorage.getItem(SRS_KEY))||defaultSRS();}catch(e){srsData=defaultSRS();}
+    var added=0;
+    depurados.forEach(function(item){
+      var tipo=item.tipo||'RF';
+      if(tipo==='RF'){srsData.rfs=srsData.rfs||[];if(srsData.rfs.find(function(r){return r.id===item.id;})) return;srsData.rfs.push({id:item.id,desc:item.desc||'',prio:item.prioridad||'Alta',titulo:item.desc||'',estado:'Borrador',given:'',when:'',then:''});added++;}
+      else if(tipo==='RNF'){srsData.rnfs=srsData.rnfs||[];if(srsData.rnfs.find(function(r){return r.id===item.id;})) return;srsData.rnfs.push({id:item.id,cat:'General',atributo:item.desc||'',valor:'',metodo:''});added++;}
+      else if(tipo==='SA'){srsData.sas=srsData.sas||[];if(srsData.sas.find(function(r){return r.id===item.id;})) return;srsData.sas.push({id:item.id,desc:item.desc||''});added++;}
+      else if(tipo==='RC'){srsData.rcs=srsData.rcs||[];if(srsData.rcs.find(function(r){return r.id===item.id;})) return;srsData.rcs.push({id:item.id,t:item.desc||'',v:''});added++;}
+    });
+    localStorage.setItem(SRS_KEY,JSON.stringify(srsData));SRS=loadSRS();
+    var el=document.getElementById('srs-editor-mount');if(el){el.innerHTML='';renderSrsEditor();}
+    alert('✓ '+added+' requisito(s) importado(s).');
+  }catch(err){alert('Error: '+err.message);}
+}
+function srsImportRF(){ srsImportFromEstr('RF'); }
+function srsImportRNF(){ srsImportFromEstr('RNF'); }
+function srsImportSA(){ srsImportFromEstr('SA'); }
+function srsImportRC(){ srsImportFromEstr('RC'); }
+
+function srsAbrirModalVersion(){
+  var srs=loadSRS();
+  var data; try{data=JSON.parse(localStorage.getItem(SRS_VER_KEY))||{versiones:[]};}catch(e){data={versiones:[]};}
+  var curVersion=(srs.portada&&srs.portada.version)||'v0.1';
+  var suggested=curVersion;
+  var match=curVersion.match(/^v(\d+)\.(\d+)$/);
+  if(match) suggested='v'+match[1]+'.'+(parseInt(match[2])+1);
+  var modal=document.getElementById('srs-ver-modal');if(!modal) return;
+  var numEl=document.getElementById('srs-ver-num');if(numEl) numEl.value=suggested;
+  var estEl=document.getElementById('srs-ver-estado');if(estEl&&srs.portada&&srs.portada.estado) estEl.value=srs.portada.estado;
+  var cambEl=document.getElementById('srs-ver-cambios');if(cambEl) cambEl.value='';
+  modal.style.display='block';
+}
+
+function srsConfirmarVersion(){
+  var data; try{data=JSON.parse(localStorage.getItem(SRS_VER_KEY))||{versiones:[]};}catch(e){data={versiones:[]};}
+  var srs=loadSRS();
+  var version=document.getElementById('srs-ver-num').value.trim()||'v?';
+  var estado=document.getElementById('srs-ver-estado').value;
+  var cambios=document.getElementById('srs-ver-cambios').value.trim();
+  var today=new Date();
+  var fecha=today.getFullYear()+'-'+String(today.getMonth()+1).padStart(2,'0')+'-'+String(today.getDate()).padStart(2,'0');
+  var autor=(srs.portada&&srs.portada.autor)||'';
+  data.versiones.push({
+    version:version,fecha:fecha,autor:autor,estado:estado,cambios:cambios,
+    rfCount:(srs.rfs||[]).length,rnfCount:(srs.rnfs||[]).length,
+    saCount:(srs.sas||[]).length,rcCount:(srs.rcs||[]).length,
+    rfList:(srs.rfs||[]).map(function(r){return {id:r.id,desc:r.desc||'',prio:r.prio||'',given:r.given||'',when:r.when||'',then:r.then||''};}),
+    rnfList:(srs.rnfs||[]).map(function(r){return {id:r.id,cat:r.cat||'',atributo:r.atributo||'',valor:r.valor||'',metodo:r.metodo||''};}),
+    saList:(srs.sas||[]).map(function(r){return {id:r.id,desc:r.desc||''};}),
+    rcList:(srs.rcs||[]).map(function(r){return {id:r.id,t:r.t||'',v:r.v||''};})
+  });
+  localStorage.setItem(SRS_VER_KEY,JSON.stringify(data));
+  srs.portada=srs.portada||{};srs.portada.version=version;srs.portada.estado=estado;
+  localStorage.setItem(SRS_KEY,JSON.stringify(srs));SRS=loadSRS();
+  document.getElementById('srs-ver-modal').style.display='none';
+  renderSrsVerInline();
+}
+
+function srsToggleVer(idx){
+  var det=document.getElementById('srs-ver-det-'+idx);
+  if(det) det.style.display=det.style.display==='none'?'block':'none';
+}
+
+function renderSrsVerInline(){
+  var el=document.getElementById('srse-ver-inline'); if(!el) return;
+  var data; try{data=JSON.parse(localStorage.getItem(SRS_VER_KEY))||{versiones:[]};}catch(e){data={versiones:[]};}
+  function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+  var srs=loadSRS();
+  var rfCount=(srs.rfs||[]).length;
+  var rnfCount=(srs.rnfs||[]).length;
+  var saCount=(srs.sas||[]).length;
+  var rcCount=(srs.rcs||[]).length;
+  var curVersion=(srs.portada&&srs.portada.version)||'v0.1';
+  var curEstado=(srs.portada&&srs.portada.estado)||'Borrador';
+  var estadoCol={'Borrador':'var(--muted)','En revisión':'var(--c-amber)','Aprobado con obs.':'var(--c-blue)','Baseline':'var(--c-green)'}[curEstado]||'var(--muted)';
+
+  // Current state card
+  var html='<div class="card" style="margin-bottom:1rem">'
+    +'<div style="font-size:12px;font-weight:500;margin-bottom:.6rem">Estado actual del SRS</div>'
+    +'<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:.4rem;margin-bottom:.7rem">'
+    +'<div style="text-align:center;padding:.4rem;background:rgba(24,95,165,.05);border-radius:6px"><div style="font-size:18px;font-weight:600;color:var(--c-blue)">'+rfCount+'</div><div style="font-size:10px;color:var(--muted)">RF</div></div>'
+    +'<div style="text-align:center;padding:.4rem;background:rgba(83,52,131,.05);border-radius:6px"><div style="font-size:18px;font-weight:600;color:var(--c-purple)">'+rnfCount+'</div><div style="font-size:10px;color:var(--muted)">RNF</div></div>'
+    +'<div style="text-align:center;padding:.4rem;background:rgba(29,158,117,.05);border-radius:6px"><div style="font-size:18px;font-weight:600;color:var(--c-teal)">'+saCount+'</div><div style="font-size:10px;color:var(--muted)">SA</div></div>'
+    +'<div style="text-align:center;padding:.4rem;background:rgba(186,117,23,.05);border-radius:6px"><div style="font-size:18px;font-weight:600;color:var(--c-amber)">'+rcCount+'</div><div style="font-size:10px;color:var(--muted)">RC</div></div>'
+    +'</div>'
+    +'<div style="display:flex;align-items:center;gap:.5rem;flex-wrap:wrap">'
+    +'<span style="font-size:12px;color:var(--muted)">Versión: <strong>'+esc(curVersion)+'</strong></span>'
+    +'<span style="padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;border:0.5px solid '+estadoCol+';color:'+estadoCol+'">'+esc(curEstado)+'</span>'
+    +'<button class="btn btn-sm" style="background:var(--c-blue);color:#fff;border-color:var(--c-blue);margin-left:auto" onclick="srsAbrirModalVersion()">📌 Guardar versión</button>'
+    +'</div>'
+    +'</div>';
+
+  // Modal (hidden by default)
+  html+='<div id="srs-ver-modal" style="display:none;border:0.5px solid var(--c-blue);border-radius:var(--radius);background:var(--surface);padding:1rem;margin-bottom:1rem">'
+    +'<div style="font-size:13px;font-weight:500;margin-bottom:.7rem;color:var(--c-blue)">📌 Guardar versión</div>'
+    +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-bottom:.5rem">'
+    +'<div><label style="font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">Número de versión</label>'
+    +'<input id="srs-ver-num" value="" placeholder="ej: v0.2" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:4px 7px;font-size:12px;font-family:var(--font-mono);outline:none"></div>'
+    +'<div><label style="font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">Estado</label>'
+    +'<select id="srs-ver-estado" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:4px 5px;font-size:12px;outline:none">'
+    +'<option'+(curEstado==='Borrador'?' selected':'')+'>Borrador</option>'
+    +'<option'+(curEstado==='En revisión'?' selected':'')+'>En revisión</option>'
+    +'<option'+(curEstado==='Aprobado con obs.'?' selected':'')+'>Aprobado con obs.</option>'
+    +'<option'+(curEstado==='Baseline'?' selected':'')+'>Baseline</option>'
+    +'</select></div>'
+    +'</div>'
+    +'<div style="margin-bottom:.5rem"><label style="font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">¿Qué cambió en esta versión?</label>'
+    +'<textarea id="srs-ver-cambios" placeholder="Ej: Se agregaron 3 RF de autenticación. Se ajustaron RNF de rendimiento según feedback de arquitectura." style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:4px 7px;font-size:12px;resize:vertical;outline:none;line-height:1.5;min-height:60px"></textarea></div>'
+    +'<div style="display:flex;gap:.5rem;justify-content:flex-end">'
+    +'<button class="btn btn-sm" onclick="document.getElementById(\'srs-ver-modal\').style.display=\'none\'">Cancelar</button>'
+    +'<button class="btn btn-sm" style="background:var(--c-blue);color:#fff;border-color:var(--c-blue)" onclick="srsConfirmarVersion()">Guardar</button>'
+    +'</div>'
+    +'</div>';
+
+  // History
+  if(!data.versiones||!data.versiones.length){
+    html+='<div style="text-align:center;padding:1.5rem;color:var(--muted);font-size:12px;border:0.5px dashed var(--border2);border-radius:var(--radius)">Sin versiones guardadas aún.</div>';
+    el.innerHTML=html; return;
+  }
+
+  html+='<div style="font-size:12px;font-weight:500;margin-bottom:.5rem">Historial <span style="font-weight:400;color:var(--muted)">('+data.versiones.length+' versión(es))</span></div>';
+
+  var sorted=[].concat(data.versiones).reverse();
+  sorted.forEach(function(v,ri){
+    var realIdx=data.versiones.length-1-ri;
+    var estCol={'Borrador':'var(--muted)','En revisión':'var(--c-amber)','Aprobado con obs.':'var(--c-blue)','Baseline':'var(--c-green)'}[v.estado]||'var(--muted)';
+    var isBase=v.estado==='Baseline';
+    html+='<div style="border:0.5px solid var(--border);border-radius:var(--radius);padding:.7rem;margin-bottom:.4rem;'+(isBase?'border-left:3px solid var(--c-green)':'')+'">'
+      +'<div style="display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;cursor:pointer" onclick="srsToggleVer('+realIdx+')">'
+      +'<span style="font-family:var(--font-mono);font-size:13px;font-weight:700;color:var(--text)">'+esc(v.version)+'</span>'
+      +(isBase?'<span style="font-size:9px;padding:1px 6px;border-radius:8px;background:rgba(15,110,86,.1);color:var(--c-green);font-weight:700">BASELINE</span>':'')
+      +'<span style="padding:2px 7px;border-radius:10px;font-size:10px;border:0.5px solid '+estCol+';color:'+estCol+'">'+esc(v.estado||'Borrador')+'</span>'
+      +(v.fecha?'<span style="font-size:11px;color:var(--muted)">'+esc(v.fecha)+'</span>':'')
+      +(v.autor?'<span style="font-size:11px;color:var(--muted)">· '+esc(v.autor)+'</span>':'')
+      +'<span style="margin-left:auto;font-size:10px;color:var(--muted)">▾</span>'
+      +'</div>'
+      +(v.cambios?'<div style="font-size:11px;color:var(--muted);margin-top:.3rem;line-height:1.5;font-style:italic">'+esc(v.cambios)+'</div>':'')
+      +'<div id="srs-ver-det-'+realIdx+'" style="display:none;margin-top:.6rem;padding-top:.6rem;border-top:0.5px solid var(--border)">'      +'<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:.3rem;margin-bottom:.7rem">'      +'<div style="text-align:center;padding:.3rem;background:rgba(24,95,165,.05);border-radius:4px"><div style="font-size:15px;font-weight:600;color:var(--c-blue)">'+(v.rfCount||0)+'</div><div style="font-size:9px;color:var(--muted)">RF</div></div>'      +'<div style="text-align:center;padding:.3rem;background:rgba(83,52,131,.05);border-radius:4px"><div style="font-size:15px;font-weight:600;color:var(--c-purple)">'+(v.rnfCount||0)+'</div><div style="font-size:9px;color:var(--muted)">RNF</div></div>'      +'<div style="text-align:center;padding:.3rem;background:rgba(29,158,117,.05);border-radius:4px"><div style="font-size:15px;font-weight:600;color:var(--c-teal)">'+(v.saCount||0)+'</div><div style="font-size:9px;color:var(--muted)">SA</div></div>'      +'<div style="text-align:center;padding:.3rem;background:rgba(186,117,23,.05);border-radius:4px"><div style="font-size:15px;font-weight:600;color:var(--c-amber)">'+(v.rcCount||0)+'</div><div style="font-size:9px;color:var(--muted)">RC</div></div>'      +'</div>'      +(v.rfList&&v.rfList.length?        '<div style="margin-bottom:.6rem">'        +'<div style="font-size:10px;font-weight:600;color:var(--c-blue);text-transform:uppercase;letter-spacing:.3px;margin-bottom:.3rem">Requisitos Funcionales (RF)</div>'        +v.rfList.map(function(r){          return '<div style="padding:.3rem .5rem;background:rgba(24,95,165,.03);border:0.5px solid rgba(24,95,165,.15);border-radius:4px;margin-bottom:.2rem">'            +'<div style="display:flex;align-items:center;gap:.4rem;margin-bottom:'+(r.given||r.when||r.then?'2px':'0')+';flex-wrap:wrap">'            +'<span style="font-family:var(--font-mono);font-size:10px;font-weight:700;color:var(--c-blue)">'+esc(r.id)+'</span>'            +(r.prio?'<span style="font-size:9px;padding:1px 5px;border-radius:8px;background:var(--surface2);color:var(--muted)">'+esc(r.prio)+'</span>':'')            +'<span style="font-size:11px;color:var(--text)">'+esc(r.desc)+'</span>'            +'</div>'            +(r.given||r.when||r.then?              '<div style="font-size:10px;color:var(--muted);font-style:italic;line-height:1.5;margin-top:1px">'              +(r.given?'<div>Dado que: '+esc(r.given)+'</div>':'')              +(r.when?'<div>Cuando: '+esc(r.when)+'</div>':'')              +(r.then?'<div>Entonces: '+esc(r.then)+'</div>':'')              +'</div>':'')            +'</div>';        }).join('')        +'</div>':'')      +(!v.rnfList&&!v.saList&&!v.rcList?'<div style="font-size:11px;color:var(--muted);padding:.4rem;background:var(--surface2);border-radius:4px;font-style:italic">ⓘ Esta versión solo guarda RF. Las versiones guardadas a partir de ahora incluirán RNF, SA y RC completos.</div>':'')
+      +(v.rnfList&&v.rnfList.length?        '<div style="margin-bottom:.6rem">'        +'<div style="font-size:10px;font-weight:600;color:var(--c-purple);text-transform:uppercase;letter-spacing:.3px;margin-bottom:.3rem">Requisitos No Funcionales (RNF)</div>'        +v.rnfList.map(function(r){          return '<div style="padding:.3rem .5rem;background:rgba(83,52,131,.03);border:0.5px solid rgba(83,52,131,.15);border-radius:4px;margin-bottom:.2rem">'            +'<div style="display:flex;align-items:center;gap:.4rem;flex-wrap:wrap">'            +'<span style="font-family:var(--font-mono);font-size:10px;font-weight:700;color:var(--c-purple)">'+esc(r.id)+'</span>'            +(r.cat?'<span style="font-size:9px;padding:1px 5px;border-radius:8px;background:var(--surface2);color:var(--muted)">'+esc(r.cat)+'</span>':'')            +(r.atributo?'<span style="font-size:11px;color:var(--text)">'+esc(r.atributo)+'</span>':'')            +(r.valor?'<span style="font-size:10px;color:var(--muted)">→ '+esc(r.valor)+'</span>':'')            +(r.metodo?'<span style="font-size:10px;color:var(--muted)">· '+esc(r.metodo)+'</span>':'')            +'</div></div>';        }).join('')        +'</div>':'')      +(v.saList&&v.saList.length?        '<div style="margin-bottom:.6rem">'        +'<div style="font-size:10px;font-weight:600;color:var(--c-teal);text-transform:uppercase;letter-spacing:.3px;margin-bottom:.3rem">Supuestos (SA)</div>'        +v.saList.map(function(r){          return '<div style="padding:.3rem .5rem;background:rgba(29,158,117,.03);border:0.5px solid rgba(29,158,117,.15);border-radius:4px;margin-bottom:.2rem">'            +'<span style="font-family:var(--font-mono);font-size:10px;font-weight:700;color:var(--c-teal);margin-right:.4rem">'+esc(r.id)+'</span>'            +'<span style="font-size:11px;color:var(--text)">'+esc(r.desc)+'</span></div>';        }).join('')        +'</div>':'')      +(v.rcList&&v.rcList.length?        '<div>'        +'<div style="font-size:10px;font-weight:600;color:var(--c-amber);text-transform:uppercase;letter-spacing:.3px;margin-bottom:.3rem">Restricciones (RC)</div>'        +v.rcList.map(function(r){          return '<div style="padding:.3rem .5rem;background:rgba(186,117,23,.03);border:0.5px solid rgba(186,117,23,.15);border-radius:4px;margin-bottom:.2rem">'            +'<span style="font-family:var(--font-mono);font-size:10px;font-weight:700;color:var(--c-amber);margin-right:.4rem">'+esc(r.id)+'</span>'            +(r.t?'<span style="font-size:11px;color:var(--text)">'+esc(r.t)+'</span>':'')            +(r.v?'<span style="font-size:10px;color:var(--muted)"> — '+esc(r.v)+'</span>':'')            +'</div>';        }).join('')        +'</div>':'')      +'</div>'
+    html+='</div>'; // close outer card
+  });
+
+  el.innerHTML=html;
 }
 
 function renderDetectorInline(el){
@@ -9220,155 +9322,6 @@ function renderDetectorInline(el){
     +'</div>';
 
   el.innerHTML=html;
-}
-
-function rtmTabSel(i){
-  document.querySelectorAll('#rtm-tab-nav .tab-btn').forEach(function(b,j){b.classList.toggle('on',j===i);});
-  document.getElementById('rtm-panel-0').style.display=i===0?'block':'none';
-  document.getElementById('rtm-panel-1').style.display=i===1?'block':'none';
-  if(i===0){ var m=document.getElementById('srs-rtm-mount'); if(m&&!m.innerHTML.trim()) renderSrsRtm(); }
-}
-
-function srsImportRF(){ srsImportFromEstr('RF'); }
-function srsImportRNF(){ srsImportFromEstr('RNF'); }
-function srsImportSA(){ srsImportFromEstr('SA'); }
-function srsImportRC(){ srsImportFromEstr('RC'); }
-
-function renderSrsVerInline(){
-  var el=document.getElementById('srse-ver-inline'); if(!el) return;
-  var data; try{data=JSON.parse(localStorage.getItem(SRS_VER_KEY))||{versiones:[]};}catch(e){data={versiones:[]};}
-  function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
-  var srs=loadSRS();
-  var rfCount=(srs.rfs||[]).length;
-  var rnfCount=(srs.rnfs||[]).length;
-  var saCount=(srs.sas||[]).length;
-  var rcCount=(srs.rcs||[]).length;
-  var curVersion=(srs.portada&&srs.portada.version)||'v0.1';
-  var curEstado=(srs.portada&&srs.portada.estado)||'Borrador';
-  var estadoCol={'Borrador':'var(--muted)','En revisión':'var(--c-amber)','Aprobado con obs.':'var(--c-blue)','Baseline':'var(--c-green)'}[curEstado]||'var(--muted)';
-
-  // Current state card
-  var html='<div class="card" style="margin-bottom:1rem">'
-    +'<div style="font-size:12px;font-weight:500;margin-bottom:.6rem">Estado actual del SRS</div>'
-    +'<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:.4rem;margin-bottom:.7rem">'
-    +'<div style="text-align:center;padding:.4rem;background:rgba(24,95,165,.05);border-radius:6px"><div style="font-size:18px;font-weight:600;color:var(--c-blue)">'+rfCount+'</div><div style="font-size:10px;color:var(--muted)">RF</div></div>'
-    +'<div style="text-align:center;padding:.4rem;background:rgba(83,52,131,.05);border-radius:6px"><div style="font-size:18px;font-weight:600;color:var(--c-purple)">'+rnfCount+'</div><div style="font-size:10px;color:var(--muted)">RNF</div></div>'
-    +'<div style="text-align:center;padding:.4rem;background:rgba(29,158,117,.05);border-radius:6px"><div style="font-size:18px;font-weight:600;color:var(--c-teal)">'+saCount+'</div><div style="font-size:10px;color:var(--muted)">SA</div></div>'
-    +'<div style="text-align:center;padding:.4rem;background:rgba(186,117,23,.05);border-radius:6px"><div style="font-size:18px;font-weight:600;color:var(--c-amber)">'+rcCount+'</div><div style="font-size:10px;color:var(--muted)">RC</div></div>'
-    +'</div>'
-    +'<div style="display:flex;align-items:center;gap:.5rem;flex-wrap:wrap">'
-    +'<span style="font-size:12px;color:var(--muted)">Versión: <strong>'+esc(curVersion)+'</strong></span>'
-    +'<span style="padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;border:0.5px solid '+estadoCol+';color:'+estadoCol+'">'+esc(curEstado)+'</span>'
-    +'<button class="btn btn-sm" style="background:var(--c-blue);color:#fff;border-color:var(--c-blue);margin-left:auto" onclick="srsAbrirModalVersion()">📌 Guardar versión</button>'
-    +'</div>'
-    +'</div>';
-
-  // Modal (hidden by default)
-  html+='<div id="srs-ver-modal" style="display:none;border:0.5px solid var(--c-blue);border-radius:var(--radius);background:var(--surface);padding:1rem;margin-bottom:1rem">'
-    +'<div style="font-size:13px;font-weight:500;margin-bottom:.7rem;color:var(--c-blue)">📌 Guardar versión</div>'
-    +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-bottom:.5rem">'
-    +'<div><label style="font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">Número de versión</label>'
-    +'<input id="srs-ver-num" value="" placeholder="ej: v0.2" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:4px 7px;font-size:12px;font-family:var(--font-mono);outline:none"></div>'
-    +'<div><label style="font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">Estado</label>'
-    +'<select id="srs-ver-estado" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:4px 5px;font-size:12px;outline:none">'
-    +'<option'+(curEstado==='Borrador'?' selected':'')+'>Borrador</option>'
-    +'<option'+(curEstado==='En revisión'?' selected':'')+'>En revisión</option>'
-    +'<option'+(curEstado==='Aprobado con obs.'?' selected':'')+'>Aprobado con obs.</option>'
-    +'<option'+(curEstado==='Baseline'?' selected':'')+'>Baseline</option>'
-    +'</select></div>'
-    +'</div>'
-    +'<div style="margin-bottom:.5rem"><label style="font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">¿Qué cambió en esta versión?</label>'
-    +'<textarea id="srs-ver-cambios" placeholder="Ej: Se agregaron 3 RF de autenticación. Se ajustaron RNF de rendimiento según feedback de arquitectura." style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:4px 7px;font-size:12px;resize:vertical;outline:none;line-height:1.5;min-height:60px"></textarea></div>'
-    +'<div style="display:flex;gap:.5rem;justify-content:flex-end">'
-    +'<button class="btn btn-sm" onclick="document.getElementById(\'srs-ver-modal\').style.display=\'none\'">Cancelar</button>'
-    +'<button class="btn btn-sm" style="background:var(--c-blue);color:#fff;border-color:var(--c-blue)" onclick="srsConfirmarVersion()">Guardar</button>'
-    +'</div>'
-    +'</div>';
-
-  // History
-  if(!data.versiones||!data.versiones.length){
-    html+='<div style="text-align:center;padding:1.5rem;color:var(--muted);font-size:12px;border:0.5px dashed var(--border2);border-radius:var(--radius)">Sin versiones guardadas aún.</div>';
-    el.innerHTML=html; return;
-  }
-
-  html+='<div style="font-size:12px;font-weight:500;margin-bottom:.5rem">Historial <span style="font-weight:400;color:var(--muted)">('+data.versiones.length+' versión(es))</span></div>';
-
-  var sorted=[].concat(data.versiones).reverse();
-  sorted.forEach(function(v,ri){
-    var realIdx=data.versiones.length-1-ri;
-    var estCol={'Borrador':'var(--muted)','En revisión':'var(--c-amber)','Aprobado con obs.':'var(--c-blue)','Baseline':'var(--c-green)'}[v.estado]||'var(--muted)';
-    var isBase=v.estado==='Baseline';
-    html+='<div style="border:0.5px solid var(--border);border-radius:var(--radius);padding:.7rem;margin-bottom:.4rem;'+(isBase?'border-left:3px solid var(--c-green)':'')+'">'
-      +'<div style="display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;cursor:pointer" onclick="srsToggleVer('+realIdx+')">'
-      +'<span style="font-family:var(--font-mono);font-size:13px;font-weight:700;color:var(--text)">'+esc(v.version)+'</span>'
-      +(isBase?'<span style="font-size:9px;padding:1px 6px;border-radius:8px;background:rgba(15,110,86,.1);color:var(--c-green);font-weight:700">BASELINE</span>':'')
-      +'<span style="padding:2px 7px;border-radius:10px;font-size:10px;border:0.5px solid '+estCol+';color:'+estCol+'">'+esc(v.estado||'Borrador')+'</span>'
-      +(v.fecha?'<span style="font-size:11px;color:var(--muted)">'+esc(v.fecha)+'</span>':'')
-      +(v.autor?'<span style="font-size:11px;color:var(--muted)">· '+esc(v.autor)+'</span>':'')
-      +'<span style="margin-left:auto;font-size:10px;color:var(--muted)">▾</span>'
-      +'</div>'
-      +(v.cambios?'<div style="font-size:11px;color:var(--muted);margin-top:.3rem;line-height:1.5;font-style:italic">'+esc(v.cambios)+'</div>':'')
-      +'<div id="srs-ver-det-'+realIdx+'" style="display:none;margin-top:.6rem;padding-top:.6rem;border-top:0.5px solid var(--border)">'      +'<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:.3rem;margin-bottom:.7rem">'      +'<div style="text-align:center;padding:.3rem;background:rgba(24,95,165,.05);border-radius:4px"><div style="font-size:15px;font-weight:600;color:var(--c-blue)">'+(v.rfCount||0)+'</div><div style="font-size:9px;color:var(--muted)">RF</div></div>'      +'<div style="text-align:center;padding:.3rem;background:rgba(83,52,131,.05);border-radius:4px"><div style="font-size:15px;font-weight:600;color:var(--c-purple)">'+(v.rnfCount||0)+'</div><div style="font-size:9px;color:var(--muted)">RNF</div></div>'      +'<div style="text-align:center;padding:.3rem;background:rgba(29,158,117,.05);border-radius:4px"><div style="font-size:15px;font-weight:600;color:var(--c-teal)">'+(v.saCount||0)+'</div><div style="font-size:9px;color:var(--muted)">SA</div></div>'      +'<div style="text-align:center;padding:.3rem;background:rgba(186,117,23,.05);border-radius:4px"><div style="font-size:15px;font-weight:600;color:var(--c-amber)">'+(v.rcCount||0)+'</div><div style="font-size:9px;color:var(--muted)">RC</div></div>'      +'</div>'      +(v.rfList&&v.rfList.length?        '<div style="margin-bottom:.6rem">'        +'<div style="font-size:10px;font-weight:600;color:var(--c-blue);text-transform:uppercase;letter-spacing:.3px;margin-bottom:.3rem">Requisitos Funcionales (RF)</div>'        +v.rfList.map(function(r){          return '<div style="padding:.3rem .5rem;background:rgba(24,95,165,.03);border:0.5px solid rgba(24,95,165,.15);border-radius:4px;margin-bottom:.2rem">'            +'<div style="display:flex;align-items:center;gap:.4rem;margin-bottom:'+(r.given||r.when||r.then?'2px':'0')+';flex-wrap:wrap">'            +'<span style="font-family:var(--font-mono);font-size:10px;font-weight:700;color:var(--c-blue)">'+esc(r.id)+'</span>'            +(r.prio?'<span style="font-size:9px;padding:1px 5px;border-radius:8px;background:var(--surface2);color:var(--muted)">'+esc(r.prio)+'</span>':'')            +'<span style="font-size:11px;color:var(--text)">'+esc(r.desc)+'</span>'            +'</div>'            +(r.given||r.when||r.then?              '<div style="font-size:10px;color:var(--muted);font-style:italic;line-height:1.5;margin-top:1px">'              +(r.given?'<div>Dado que: '+esc(r.given)+'</div>':'')              +(r.when?'<div>Cuando: '+esc(r.when)+'</div>':'')              +(r.then?'<div>Entonces: '+esc(r.then)+'</div>':'')              +'</div>':'')            +'</div>';        }).join('')        +'</div>':'')      +(!v.rnfList&&!v.saList&&!v.rcList?'<div style="font-size:11px;color:var(--muted);padding:.4rem;background:var(--surface2);border-radius:4px;font-style:italic">ⓘ Esta versión solo guarda RF. Las versiones guardadas a partir de ahora incluirán RNF, SA y RC completos.</div>':'')
-      +(v.rnfList&&v.rnfList.length?        '<div style="margin-bottom:.6rem">'        +'<div style="font-size:10px;font-weight:600;color:var(--c-purple);text-transform:uppercase;letter-spacing:.3px;margin-bottom:.3rem">Requisitos No Funcionales (RNF)</div>'        +v.rnfList.map(function(r){          return '<div style="padding:.3rem .5rem;background:rgba(83,52,131,.03);border:0.5px solid rgba(83,52,131,.15);border-radius:4px;margin-bottom:.2rem">'            +'<div style="display:flex;align-items:center;gap:.4rem;flex-wrap:wrap">'            +'<span style="font-family:var(--font-mono);font-size:10px;font-weight:700;color:var(--c-purple)">'+esc(r.id)+'</span>'            +(r.cat?'<span style="font-size:9px;padding:1px 5px;border-radius:8px;background:var(--surface2);color:var(--muted)">'+esc(r.cat)+'</span>':'')            +(r.atributo?'<span style="font-size:11px;color:var(--text)">'+esc(r.atributo)+'</span>':'')            +(r.valor?'<span style="font-size:10px;color:var(--muted)">→ '+esc(r.valor)+'</span>':'')            +(r.metodo?'<span style="font-size:10px;color:var(--muted)">· '+esc(r.metodo)+'</span>':'')            +'</div></div>';        }).join('')        +'</div>':'')      +(v.saList&&v.saList.length?        '<div style="margin-bottom:.6rem">'        +'<div style="font-size:10px;font-weight:600;color:var(--c-teal);text-transform:uppercase;letter-spacing:.3px;margin-bottom:.3rem">Supuestos (SA)</div>'        +v.saList.map(function(r){          return '<div style="padding:.3rem .5rem;background:rgba(29,158,117,.03);border:0.5px solid rgba(29,158,117,.15);border-radius:4px;margin-bottom:.2rem">'            +'<span style="font-family:var(--font-mono);font-size:10px;font-weight:700;color:var(--c-teal);margin-right:.4rem">'+esc(r.id)+'</span>'            +'<span style="font-size:11px;color:var(--text)">'+esc(r.desc)+'</span></div>';        }).join('')        +'</div>':'')      +(v.rcList&&v.rcList.length?        '<div>'        +'<div style="font-size:10px;font-weight:600;color:var(--c-amber);text-transform:uppercase;letter-spacing:.3px;margin-bottom:.3rem">Restricciones (RC)</div>'        +v.rcList.map(function(r){          return '<div style="padding:.3rem .5rem;background:rgba(186,117,23,.03);border:0.5px solid rgba(186,117,23,.15);border-radius:4px;margin-bottom:.2rem">'            +'<span style="font-family:var(--font-mono);font-size:10px;font-weight:700;color:var(--c-amber);margin-right:.4rem">'+esc(r.id)+'</span>'            +(r.t?'<span style="font-size:11px;color:var(--text)">'+esc(r.t)+'</span>':'')            +(r.v?'<span style="font-size:10px;color:var(--muted)"> — '+esc(r.v)+'</span>':'')            +'</div>';        }).join('')        +'</div>':'')      +'</div>'
-    html+='</div>'; // close outer card
-  });
-
-  el.innerHTML=html;
-}
-
-function srsAbrirModalVersion(){
-  var srs=loadSRS();
-  var data; try{data=JSON.parse(localStorage.getItem(SRS_VER_KEY))||{versiones:[]};}catch(e){data={versiones:[]};}
-  var curVersion=(srs.portada&&srs.portada.version)||'v0.1';
-  // Auto-suggest next minor version
-  var suggested=curVersion;
-  var match=curVersion.match(/^v(\d+)\.(\d+)$/);
-  if(match) suggested='v'+match[1]+'.'+(parseInt(match[2])+1);
-  var modal=document.getElementById('srs-ver-modal');
-  if(!modal) return;
-  var numEl=document.getElementById('srs-ver-num');
-  if(numEl) numEl.value=suggested;
-  // Pre-fill estado
-  var estEl=document.getElementById('srs-ver-estado');
-  if(estEl && srs.portada&&srs.portada.estado) estEl.value=srs.portada.estado;
-  // Clear cambios
-  var cambEl=document.getElementById('srs-ver-cambios');
-  if(cambEl) cambEl.value='';
-  modal.style.display='block';
-}
-
-function srsConfirmarVersion(){
-  var data; try{data=JSON.parse(localStorage.getItem(SRS_VER_KEY))||{versiones:[]};}catch(e){data={versiones:[]};}
-  var srs=loadSRS();
-  var version=document.getElementById('srs-ver-num').value.trim()||'v?';
-  var estado=document.getElementById('srs-ver-estado').value;
-  var cambios=document.getElementById('srs-ver-cambios').value.trim();
-  var today=new Date();
-  var fecha=today.getFullYear()+'-'+String(today.getMonth()+1).padStart(2,'0')+'-'+String(today.getDate()).padStart(2,'0');
-  var autor=(srs.portada&&srs.portada.autor)||'';
-  data.versiones.push({
-    version:version, fecha:fecha, autor:autor, estado:estado, cambios:cambios,
-    rfCount:(srs.rfs||[]).length, rnfCount:(srs.rnfs||[]).length,
-    saCount:(srs.sas||[]).length, rcCount:(srs.rcs||[]).length,
-    rfList:(srs.rfs||[]).map(function(r){return {id:r.id,desc:r.desc||'',prio:r.prio||'',given:r.given||'',when:r.when||'',then:r.then||''};}),
-    rnfList:(srs.rnfs||[]).map(function(r){return {id:r.id,cat:r.cat||'',atributo:r.atributo||'',valor:r.valor||'',metodo:r.metodo||''};}),
-    saList:(srs.sas||[]).map(function(r){return {id:r.id,desc:r.desc||''};}),
-    rcList:(srs.rcs||[]).map(function(r){return {id:r.id,t:r.t||'',v:r.v||''};})  
-  });
-  localStorage.setItem(SRS_VER_KEY,JSON.stringify(data));
-  // Update portada version and estado automatically
-  srs.portada=srs.portada||{};
-  srs.portada.version=version;
-  srs.portada.estado=estado;
-  localStorage.setItem(SRS_KEY,JSON.stringify(srs));
-  SRS=loadSRS();
-  document.getElementById('srs-ver-modal').style.display='none';
-  renderSrsVerInline();
-}
-
-function srsToggleVer(idx){
-  var det=document.getElementById('srs-ver-det-'+idx);
-  if(det) det.style.display=det.style.display==='none'?'block':'none';
 }
 
 buildAll();
