@@ -1766,7 +1766,7 @@ reg('eli-plantillas', () => `
 <div class="page-header">
   <div class="page-eyebrow" style="color:var(--c-teal)">● Fase 1 — Elicitación</div>
   <h1 class="page-title">Plantillas de sesión</h1>
-  <p class="page-desc">Minuta de elicitación editable, gestión de RF / SA / RNF y guía de preguntas con áreas de respuesta. Todo se guarda automáticamente.</p>
+  <p class="page-desc">Registro formal de cada sesión de elicitación. Captura participantes, requisitos funcionales y no funcionales, supuestos, restricciones y próximos pasos. Todo se guarda automáticamente.</p>
 </div>
 <div id="eli-plt-mount"></div>
 `);
@@ -1809,7 +1809,7 @@ function renderEliPlantillas() {
 
   var tabs = '<div class="plt-tab-nav">'
     +'<button class="plt-tab-btn on" onclick="pltTabSel(0,this)">Plan de sesión</button>'
-    +'<button class="plt-tab-btn" onclick="pltTabSel(1,this)">Minuta editable</button>'
+    +'<button class="plt-tab-btn" onclick="pltTabSel(1,this)">Registro de elicitación</button>'
     +'<button class="plt-tab-btn" onclick="pltTabSel(2,this)">Guía de preguntas</button>'
     +'</div>';
 
@@ -1848,6 +1848,10 @@ function renderEliPlantillas() {
     +'</select></div>';
   p1 += fld('Lugar / modalidad','m-lugar',m.lugar,'Presencial / Virtual');
   p1 += '</div>';
+  p1 += '<div style="margin-bottom:.8rem"><label class="eli-lbl">Stakeholder principal</label>'
+    + '<input class="eli-inp" id="m-stakeholder" placeholder="Nombre y rol del stakeholder clave de esta sesión..." value="'+(m.stakeholder||'')+'"> </div>';
+  p1 += '<div style="margin-bottom:.8rem"><label class="eli-lbl">Observaciones generales de la sesión</label>'
+    + '<textarea class="eli-inp" id="m-observaciones" rows="2" placeholder="Contexto, ambiente, condiciones especiales de la sesión..." style="resize:vertical" oninput="eliMsave()">'+(m.observaciones||'')+'</textarea></div>';
   p1 += '<div style="margin-bottom:.8rem"><label class="eli-lbl">Objetivo de la sesión</label>'
     +'<textarea class="eli-ta" id="m-objetivo" rows="2" oninput="eliMsave()">'+escH(m.objetivo)+'</textarea></div>';
 
@@ -1882,7 +1886,7 @@ function renderEliPlantillas() {
 
   /* save bar */
   p1 += '<div style="display:flex;align-items:center;gap:.5rem;margin-top:1rem;padding-top:.8rem;border-top:0.5px solid var(--border)">';
-  p1 += '<button class="btn" style="background:var(--c-teal);color:#fff;border-color:var(--c-teal)" onclick="eliSaveMinuta()">Guardar minuta</button>';
+  p1 += '<button class="btn" style="background:var(--c-teal);color:#fff;border-color:var(--c-teal)" onclick="eliSaveMinuta()">Guardar registro</button>';
   p1 += '';
   p1 += '<button class="btn btn-sm" style="color:var(--c-red)" onclick="eliLimpiarMinuta()">✕ Limpiar</button>';
   p1 += '<span id="m-msg" style="font-size:11px;color:var(--c-green)"></span></div>';
@@ -1931,6 +1935,7 @@ function eliMsave(){
     projeto:g('m-projeto'),
     sesionId:g('m-sesionId'),fecha:g('m-fecha'),analista:g('m-analista'),
     tecnica:g('m-tecnica'),lugar:g('m-lugar'),objetivo:g('m-objetivo'),
+    stakeholder:g('m-stakeholder'),observaciones:g('m-observaciones'),
     pendientes:g('m-pendientes'),proximos:g('m-proximos')});
   ELI.minuta.proyecto=g('m-proyecto');
   eliSave();
