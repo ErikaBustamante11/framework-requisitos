@@ -651,9 +651,9 @@ textarea { field-sizing: content; min-height: 2em; }
       <span class="nav-label">Fase 3 · Especificación</span>
       <button class="nav-item" onclick="nav('srs-flujo')"><div class="nav-pip" style="background:var(--c-blue)"></div>Flujo de actividades</button>
       <button class="nav-item" onclick="nav('srs-editor')"><div class="nav-pip" style="background:var(--c-blue)"></div>Editor SRS <span class="nav-count">12 RF</span></button>
+      <button class="nav-item" onclick="nav('srs-checklist')" style="padding-left:1.8rem"><div class="nav-pip" style="background:var(--c-blue);opacity:.6"></div>↳ Checklist calidad SRS</button>
       <button class="nav-item" onclick="nav('srs-hu')"><div class="nav-pip" style="background:var(--c-blue)"></div>Historias de usuario</button>
       <button class="nav-item" onclick="nav('srs-glosario')"><div class="nav-pip" style="background:var(--c-blue)"></div>Glosario técnico</button>
-      <button class="nav-item" onclick="nav('srs-checklist')"><div class="nav-pip" style="background:var(--c-blue)"></div>Checklist calidad SRS</button>
       <button class="nav-item" onclick="nav('srs-rtm')"><div class="nav-pip" style="background:var(--c-blue)"></div>Matriz de trazabilidad</button>
       <button class="nav-item" onclick="nav('srs-walkthrough')"><div class="nav-pip" style="background:var(--c-blue)"></div>Walkthrough SRS</button>
     </div>
@@ -1206,7 +1206,7 @@ reg('eli-flujo', () => `
       <!-- A3 Documentación -->
       <rect x="210" y="244" width="260" height="56" rx="10" fill="#E1F5EE" stroke="#1D9E75" stroke-width="1"/>
       <text x="340" y="265" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="13" font-weight="500" fill="#085041">A3. Documentación</text>
-      <text x="340" y="283" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#0F6E56">Consolidar, estructurar hallazgos, asignar IDs</text>
+      <text x="340" y="283" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#0F6E56">Registrar hallazgos · IDs · Enviar a Estructuración</text>
       <rect x="44" y="251" width="128" height="30" rx="7" fill="#E1F5EE" stroke="#1D9E75" stroke-width="0.5"/>
       <text x="108" y="266" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#085041">Notas / grabaciones</text>
       <line x1="172" y1="266" x2="208" y2="266" stroke="#1D9E75" stroke-width="0.5" marker-end="url(#aeli)"/>
@@ -1253,7 +1253,7 @@ reg('eli-flujo', () => `
       ${[
         {a:'A1. Preparación',   c:'var(--c-teal)',  ts:['Análisis de stakeholders (influencia × interés)','Revisión de documentación existente','Definición del plan de elicitación','Selección de técnicas según contexto']},
         {a:'A2. Ejecución',     c:'var(--c-teal)',  ts:['Entrevista estructurada / semi-estructurada','Taller JAD (Joint Application Design)','Observación contextual (shadowing)','Prototipado / wireframing','Cuestionarios y encuestas']},
-        {a:'A3. Documentación', c:'var(--c-teal)',  ts:['Minuta de sesión estructurada','Asignación de IDs a cada hallazgo','Clasificación: RF / RNF / SA / RC','Affinity mapping de hallazgos']},
+        {a:'A3. Documentación', c:'var(--c-teal)',  ts:['Registro de elicitación con RF · RNF · SA · RC capturados','Asignación de IDs a cada hallazgo','⬆ Enviar a Estructuración (A1 de Fase 2) — conexión directa','Affinity mapping de hallazgos']},
         {a:'A4. Confirmación',  c:'var(--c-purple)',ts:['Revisión formal con stakeholders (walkthrough)','Validación de la minuta firmada','Detección de brechas y retrabajo','Aprobación PC1: PO + Analista']},
       ].map(t => `
       <div class="dot-item" style="flex-direction:column;align-items:flex-start;padding:.5rem 0">
@@ -1267,7 +1267,7 @@ reg('eli-flujo', () => `
         {a:'Plan de elicitación',          d:'Objetivos, técnicas, agenda y lista de stakeholders a entrevistar',       c:'var(--c-teal)'},
         {a:'Mapa de stakeholders',         d:'Cuadrante influencia × interés con estrategia por cuadrante',             c:'var(--c-teal)'},
         {a:'Guías de preguntas',           d:'Banco de preguntas por técnica y momento de la sesión',                   c:'var(--c-teal)'},
-        {a:'Minuta de elicitación',        d:'RF / RNF / SA / RC capturados, firmados por los participantes',           c:'var(--c-teal)'},
+        {a:'Registro de elicitación',        d:'RF / RNF / SA / RC capturados, firmados por los participantes',           c:'var(--c-teal)'},
         {a:'Notas y grabaciones',          d:'Registro fiel de la sesión para trazabilidad y consulta posterior',       c:'var(--c-teal)'},
         {a:'Lista de supuestos (SA)',       d:'Premisas no verificadas que afectan al diseño del sistema',               c:'var(--c-blue)'},
         {a:'Lista de restricciones (RC)',   d:'Limitaciones técnicas, regulatorias y de negocio no negociables',        c:'var(--c-amber)'},
@@ -2835,7 +2835,7 @@ reg('eli-flujo', () => `
       ${[
         {a:'A1. Preparación',   c:'var(--c-teal)',  ts:['Análisis de stakeholders (influencia × interés)','Revisión de documentación existente','Definición del plan de elicitación','Selección de técnicas según contexto']},
         {a:'A2. Ejecución',     c:'var(--c-teal)',  ts:['Entrevista estructurada / semi-estructurada','Taller JAD (Joint Application Design)','Observación contextual (shadowing)','Prototipado / wireframing','Cuestionarios y encuestas']},
-        {a:'A3. Documentación', c:'var(--c-teal)',  ts:['Minuta de sesión estructurada','Asignación de IDs a cada hallazgo','Clasificación: RF / RNF / SA / RC','Affinity mapping de hallazgos']},
+        {a:'A3. Documentación', c:'var(--c-teal)',  ts:['Registro de elicitación','Asignación de IDs a cada hallazgo','Clasificación: RF / RNF / SA / RC','Affinity mapping de hallazgos']},
         {a:'A4. Confirmación',  c:'var(--c-purple)',ts:['Revisión formal con stakeholders (walkthrough)','Validación de la minuta firmada','Detección de brechas y retrabajo','Aprobación PC1: PO + Analista']},
       ].map(t => `
       <div class="dot-item" style="flex-direction:column;align-items:flex-start;padding:.5rem 0">
@@ -4548,15 +4548,15 @@ reg('srs-flujo', () => `
       <text x="330" y="27" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="12" fill="#444441">Backlog priorizado (Fase 2)</text>
       <line x1="330" y1="44" x2="330" y2="66" stroke="#9A9A94" stroke-width="1" marker-end="url(#af3b)"/>
       <rect x="161" y="68" width="338" height="52" rx="10" fill="#EBF3FD" stroke="#185FA5" stroke-width="1"/>
-      <text x="330" y="87" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="13" font-weight="500" fill="#0D3C6B">B1. Estructura del SRS</text>
-      <text x="330" y="105" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#185FA5">Portada · Alcance · Glosario inicial · IEEE 29148</text>
+      <text x="330" y="87" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="13" font-weight="500" fill="#0D3C6B">B1. Editor SRS — Portada y alcance</text>
+      <text x="330" y="105" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#185FA5">Portada · Alcance · Glosario · Versiones</text>
       <rect x="14" y="78" width="112" height="26" rx="6" fill="#F1EFE8" stroke="#888780" stroke-width="0.5"/>
-      <text x="70" y="91" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="10" fill="#444441">Plantilla SRS v0.1</text>
+      <text x="70" y="91" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="10" fill="#444441">Editor SRS</text>
       <line x1="126" y1="91" x2="161" y2="91" stroke="#C8C7C1" stroke-width="0.8" stroke-dasharray="4,3" marker-end="url(#af3b)"/>
       <line x1="330" y1="120" x2="330" y2="142" stroke="#9A9A94" stroke-width="1" marker-end="url(#af3b)"/>
       <rect x="161" y="144" width="338" height="52" rx="10" fill="#EBF3FD" stroke="#185FA5" stroke-width="1"/>
       <text x="330" y="163" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="13" font-weight="500" fill="#0D3C6B">B2. Especificación de requisitos</text>
-      <text x="330" y="181" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#185FA5">RF · RNF · Supuestos · Restricciones (Editor SRS)</text>
+      <text x="330" y="181" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#185FA5">RF · RNF · SA · RC · Criterios de aceptación</text>
       <rect x="14" y="154" width="112" height="26" rx="6" fill="#F1EFE8" stroke="#888780" stroke-width="0.5"/>
       <text x="70" y="167" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="10" fill="#444441">SRS con requisitos</text>
       <line x1="126" y1="167" x2="161" y2="167" stroke="#C8C7C1" stroke-width="0.8" stroke-dasharray="4,3" marker-end="url(#af3b)"/>
@@ -4565,16 +4565,16 @@ reg('srs-flujo', () => `
       <line x1="330" y1="196" x2="330" y2="218" stroke="#9A9A94" stroke-width="1" marker-end="url(#af3b)"/>
       <rect x="161" y="220" width="338" height="52" rx="10" fill="#EBF3FD" stroke="#185FA5" stroke-width="1"/>
       <text x="330" y="239" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="13" font-weight="500" fill="#0D3C6B">B3. Historias de usuario y criterios</text>
-      <text x="330" y="257" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#185FA5">HU · Given / When / Then · Vinculación RF</text>
+      <text x="330" y="257" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#185FA5">HU · Escenarios Gherkin · Criterios aceptación</text>
       <rect x="14" y="230" width="112" height="26" rx="6" fill="#F1EFE8" stroke="#888780" stroke-width="0.5"/>
       <text x="70" y="243" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="10" fill="#444441">HU + Gherkin</text>
       <line x1="126" y1="243" x2="161" y2="243" stroke="#C8C7C1" stroke-width="0.8" stroke-dasharray="4,3" marker-end="url(#af3b)"/>
       <line x1="330" y1="272" x2="330" y2="294" stroke="#9A9A94" stroke-width="1" marker-end="url(#af3b)"/>
       <rect x="161" y="296" width="338" height="52" rx="10" fill="#EBF3FD" stroke="#185FA5" stroke-width="1"/>
       <text x="330" y="315" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="13" font-weight="500" fill="#0D3C6B">B4. Verificar calidad</text>
-      <text x="330" y="333" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#185FA5">Detector ambigüedad · Checklist 45 reglas</text>
+      <text x="330" y="333" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#185FA5">Detector ambigüedad · Checklist calidad SRS</text>
       <rect x="14" y="306" width="112" height="26" rx="6" fill="#F1EFE8" stroke="#888780" stroke-width="0.5"/>
-      <text x="70" y="319" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="10" fill="#444441">SRS depurado</text>
+      <text x="70" y="319" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="10" fill="#444441">SRS verificado</text>
       <line x1="126" y1="319" x2="161" y2="319" stroke="#C8C7C1" stroke-width="0.8" stroke-dasharray="4,3" marker-end="url(#af3b)"/>
       <line x1="330" y1="348" x2="330" y2="370" stroke="#9A9A94" stroke-width="1" marker-end="url(#af3b)"/>
       <rect x="161" y="372" width="338" height="52" rx="10" fill="#EBF3FD" stroke="#185FA5" stroke-width="1"/>
@@ -4603,12 +4603,12 @@ reg('srs-flujo', () => `
     <div class="card">
       <div class="card-title">Técnicas por actividad</div>
       ${[
-        {a:'B1. Estructura SRS',        c:'var(--c-blue)', ts:['Plantilla IEEE 29148 como base estructural','Definición de alcance: en alcance / fuera de alcance','Glosario técnico con términos del dominio','Convenciones de nomenclatura de IDs']},
-        {a:'B2. Especificación',         c:'var(--c-blue)', ts:['Redacción en lenguaje estructurado (DEBE, DEBERÍA)','Criterios de aceptación por RF','Atributos de calidad ISO 25010 para RNF','Importación desde A1 Estructuración sin retrabajo']},
-        {a:'B3. HU y criterios',         c:'var(--c-blue)', ts:['Formato: Como [rol] quiero [función] para [beneficio]','Escenarios Gherkin: Given / When / Then','Vinculación HU ↔ RF para trazabilidad completa','Criterios INVEST para validar calidad de HU']},
-        {a:'B4. Verificar calidad',      c:'var(--c-blue)', ts:['Detector automático de ambigüedad (45 reglas)','Palabras vagas: rápido, fácil, adecuado','Checklist SMART por requisito','Revisión de unicidad, completitud y consistencia']},
-        {a:'B5. RTM',                    c:'var(--c-blue)', ts:['Trazabilidad bidireccional: origen → componente','Método de verificación por tipo de requisito','Estado de implementación y trazabilidad','Cobertura de pruebas vinculada a cada RF']},
-        {a:'B6. Walkthrough / Baseline', c:'var(--c-green)',ts:['Walkthrough formal con stakeholders clave','Registro de hallazgos con severidad y estado','Checklist de calidad SRS (24 ítems, 5 dimensiones)','Versión baseline firmada: SRS aprobado para Fase 4']}
+        {a:'B1. Editor SRS — Portada y alcance', c:'var(--c-blue)', ts:['Plantilla IEEE 29148 como base estructural','Portada con metadatos: proyecto, versión, autor, estado','Alcance: qué incluye y qué excluye el sistema','Glosario técnico + convenciones de IDs']},
+        {a:'B2. Especificación de requisitos',    c:'var(--c-blue)', ts:['RF: verbo en infinitivo + criterio de aceptación verificable (IEEE 29148)','RNF: atributo ISO 25010 + valor cuantificable + método de verificación','SA: declaración afirmativa + impacto si falla','RC: fuente + valor concreto + impacto en diseño']},
+        {a:'B3. Historias de usuario',            c:'var(--c-blue)', ts:['Formato: Como [rol] quiero [función] para [beneficio]','Escenarios Gherkin: Given / When / Then / Y','Los criterios de aceptación Gherkin viven en la HU, no en el RF','Vinculación HU ↔ RF/RNF/SA/RC para trazabilidad completa']},
+        {a:'B4. Verificar calidad',               c:'var(--c-blue)', ts:['Detector automático de ambigüedad en Editor SRS (pestaña Verificar)','Palabras vagas detectadas: rápido, fácil, adecuado, suficiente','Checklist calidad SRS (sub-sección del Editor) — 24 ítems, 5 dimensiones','Checklist SMART por requisito: Específico, Medible, Alcanzable, Relevante, Verificable']},
+        {a:'B5. RTM',                             c:'var(--c-blue)', ts:['Trazabilidad bidireccional: origen → componente → prueba','RF + RNF + SA + RC cubiertos en la matriz','Responsable, método de verificación y estado de implementación','Cobertura calculada automáticamente']},
+        {a:'B6. Walkthrough · Checklist · Baseline', c:'var(--c-green)', ts:['Walkthrough formal multi-sesión con stakeholders clave','Registro de hallazgos: tipo, severidad, RF afectado, estado','Revisión de cobertura: % de requisitos revisados','Versión baseline firmada: SRS aprobado para Fase 4 — Validación']}
       ].map(t => `
         <div style="margin-bottom:.8rem">
           <div style="font-size:11px;font-weight:600;color:${t.c};margin-bottom:.3rem">${t.a}</div>
@@ -4618,12 +4618,12 @@ reg('srs-flujo', () => `
     <div class="card">
       <div class="card-title">Artefactos de salida</div>
       ${[
-        {a:'SRS v0.1 — Estructura base',  c:'var(--c-blue)', ds:['Portada con metadatos del proyecto','Alcance y glosario técnico inicial','Convenciones de IDs establecidas']},
-        {a:'Requisitos especificados',     c:'var(--c-blue)', ds:['RF con ID, descripción, prioridad y criterios','RNF con atributo ISO 25010, valor y método','SA y RC documentados con impacto']},
-        {a:'Historias de usuario',         c:'var(--c-blue)', ds:['HU vinculadas a RF correspondientes','Escenarios Gherkin por HU crítica','Criterios de aceptación formales']},
-        {a:'SRS depurado (post-detector)', c:'var(--c-blue)', ds:['Ambigüedades corregidas','Checklist 45 reglas completado','Lenguaje preciso y verificable']},
-        {a:'RTM inicial',                  c:'var(--c-blue)', ds:['Trazabilidad de todos los RF/RNF/SA/RC','Responsable y componente asignados','Método de verificación definido']},
-        {a:'SRS Baseline (PC3)',           c:'var(--c-green)',ds:['Versión aprobada con firma BA + PO','Walkthrough documentado y resuelto','Listo para Fase 4 — Validación (UAT)']}
+        {a:'SRS — Portada y estructura',   c:'var(--c-blue)', ds:['Portada con proyecto, versión, autor, estado','Alcance definido: en alcance / fuera de alcance','Glosario técnico y convenciones de IDs']},
+        {a:'Requisitos especificados',      c:'var(--c-blue)', ds:['RF con criterio de aceptación (IEEE 29148)','RNF con atributo ISO 25010, valor y método','SA con impacto si falla · RC con fuente y valor']},
+        {a:'Historias de usuario + Gherkin',c:'var(--c-blue)', ds:['HU vinculadas a RF/RNF/SA/RC','Escenarios Gherkin (Given/When/Then) por HU','Criterios de aceptación ejecutables']},
+        {a:'SRS verificado (B4)',           c:'var(--c-blue)', ds:['Ambigüedades corregidas con detector','Checklist 24 ítems completado','Lenguaje preciso y verificable']},
+        {a:'RTM completa',                  c:'var(--c-blue)', ds:['RF + RNF + SA + RC trazados','Responsable, componente y método asignados','Cobertura calculada automáticamente']},
+        {a:'SRS Baseline (PC3)',            c:'var(--c-green)',ds:['Versión aprobada con firma BA + PO','Walkthrough multi-sesión documentado','Listo para Fase 4 — Validación (UAT)']}
       ].map(t => `
         <div style="margin-bottom:.8rem">
           <div style="font-size:11px;font-weight:600;color:${t.c};margin-bottom:.3rem">${t.a}</div>
@@ -7434,11 +7434,11 @@ function renderSrsEditor(){
       +'<select style="background:var(--surface);border:0.5px solid var(--border2);border-radius:4px;padding:3px 5px;font-size:11px;color:var(--text);outline:none" onchange="SRS.rfs['+i+'].estado=this.value;srsSave()">'+estOpts.map(function(o){return'<option'+(r.estado===o?' selected':'')+'>'+o+'</option>';}).join('')+'</select>'
       +'</div>'
       +'<textarea style="width:100%;background:var(--bg);border:0.5px solid var(--border);border-radius:4px;padding:4px 7px;font-size:12px;color:var(--muted);font-family:var(--font-sans);resize:vertical;outline:none;line-height:1.6;margin-bottom:.4rem" rows="2" placeholder="Descripción del RF usando DEBE/DEBERÍA..." oninput="SRS.rfs['+i+'].desc=this.value;srsSave()">'+escHS(r.desc)+'</textarea>'
-      +'<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px">'
-      +'<div><div style="font-size:10px;color:var(--c-blue);font-weight:500;margin-bottom:2px">Given</div><input value="'+escHS(r.given)+'" placeholder="Contexto..." style="width:100%;background:var(--bg);border:0.5px solid var(--border);border-radius:4px;padding:3px 6px;font-size:11px;font-family:var(--font-mono);color:var(--text);outline:none" oninput="SRS.rfs['+i+'].given=this.value;srsSave()"></div>'
-      +'<div><div style="font-size:10px;color:var(--c-amber);font-weight:500;margin-bottom:2px">When</div><input value="'+escHS(r.when)+'" placeholder="Acción..." style="width:100%;background:var(--bg);border:0.5px solid var(--border);border-radius:4px;padding:3px 6px;font-size:11px;font-family:var(--font-mono);color:var(--text);outline:none" oninput="SRS.rfs['+i+'].when=this.value;srsSave()"></div>'
-      +'<div><div style="font-size:10px;color:var(--c-green);font-weight:500;margin-bottom:2px">Then</div><input value="'+escHS(r.then)+'" placeholder="Resultado..." style="width:100%;background:var(--bg);border:0.5px solid var(--border);border-radius:4px;padding:3px 6px;font-size:11px;font-family:var(--font-mono);color:var(--text);outline:none" oninput="SRS.rfs['+i+'].then=this.value;srsSave()"></div>'
-      +'</div></div>';
+      +'<div style="margin-top:.3rem">'
+      +'<div style="font-size:10px;color:var(--c-blue);font-weight:500;margin-bottom:2px">Criterio de aceptación (IEEE 29148)</div>'
+      +'<textarea rows="2" placeholder="El sistema DEBE... verificado mediante..." style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:4px 8px;font-size:11px;color:var(--text);outline:none;resize:vertical;line-height:1.5" oninput="SRS.rfs['+i+'].criterio=this.value;srsSave()">'+escHS(r.criterio||'')+'</textarea>'
+      +'</div>'
+      +'</div>';
   }).join('');
 
   var tab1='<div class="tab-panel" id="srse-1">'+srsReglasBanner('RF')+''
