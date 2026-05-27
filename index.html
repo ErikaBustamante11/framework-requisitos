@@ -8773,7 +8773,7 @@ function renderCasos(data){
     +'</div>';
   d.casos.forEach(function(cu,i){
     var active=i===cSel;
-    html+='<div onclick="window._ucCaseSel='+i+';renderCasos(loadUC())" style="padding:.4rem .6rem;border-radius:var(--radius);border:0.5px solid '+(active?'var(--c-purple)':'var(--border)')+';background:'+(active?'rgba(83,52,131,.06)':'var(--surface)')+';cursor:pointer;margin-bottom:.2rem">'
+    html+='<div onclick="window._ucCaseSel='+i+';renderCasos(loadUC());setTimeout(function(){ucTabSel(1);},0)" style="padding:.4rem .6rem;border-radius:var(--radius);border:0.5px solid '+(active?'var(--c-purple)':'var(--border)')+';background:'+(active?'rgba(83,52,131,.06)':'var(--surface)')+';cursor:pointer;margin-bottom:.2rem">'
       +'<div style="font-size:10px;font-family:var(--font-mono);color:var(--c-purple)">'+esc(cu.id)+'</div>'
       +'<div style="font-size:11px;color:var(--text);margin-top:1px">'+esc(cu.nombre)+'</div>'
       +'</div>';
