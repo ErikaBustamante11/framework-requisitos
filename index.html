@@ -4923,20 +4923,53 @@ reg('srs-rtm', () => `
           </div>
         </div>
       </div>
+      <div style="display:grid;grid-template-columns:130px 1fr;gap:.6rem;padding:.5rem;background:var(--surface2);border-radius:6px">
+        <div style="font-size:11px;font-weight:600;color:var(--c-purple)">Responsable / Dueño</div>
+        <div style="font-size:11px;color:var(--muted);line-height:1.5">Nombre o rol responsable de que este requisito se implemente y verifique. Puede ser el BA, el líder técnico o el PO. Ej: <code style="background:var(--surface);padding:1px 4px;border-radius:3px;font-size:10px">Líder backend</code></div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:130px 1fr;gap:.6rem;padding:.5rem;background:var(--surface2);border-radius:6px">
+        <div style="font-size:11px;font-weight:600;color:var(--c-purple)">Componente del sistema</div>
+        <div style="font-size:11px;color:var(--muted);line-height:1.5">Módulo, servicio o capa del sistema donde se implementará este requisito. Ej: <code style="background:var(--surface);padding:1px 4px;border-radius:3px;font-size:10px">Módulo de autenticación, API Gateway</code></div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:130px 1fr;gap:.6rem;padding:.5rem;background:var(--surface2);border-radius:6px">
+        <div style="font-size:11px;font-weight:600;color:var(--c-teal)">Método de verificación</div>
+        <div style="font-size:11px;color:var(--muted);line-height:1.5">Cómo se comprobará que el requisito se cumple: <strong>Prueba funcional</strong> (comportamiento), <strong>Prueba de rendimiento</strong> (tiempos), <strong>Prueba de seguridad</strong>, <strong>Inspección de código</strong>, <strong>Revisión documental</strong>, <strong>Demo / UAT</strong> (validación con usuario).</div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:130px 1fr;gap:.6rem;padding:.5rem;background:var(--surface2);border-radius:6px">
+        <div style="font-size:11px;font-weight:600;color:var(--c-teal)">Estado trazabilidad</div>
+        <div style="font-size:11px;color:var(--muted);line-height:1.5"><strong>Pendiente</strong> — aún no se ha establecido la trazabilidad completa. <strong>Trazado</strong> — origen y componente documentados. <strong>Verificado</strong> — trazabilidad confirmada en revisión formal.</div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:130px 1fr;gap:.6rem;padding:.5rem;background:var(--surface2);border-radius:6px">
+        <div style="font-size:11px;font-weight:600;color:var(--c-amber)">Estado implementación</div>
+        <div style="font-size:11px;color:var(--muted);line-height:1.5"><strong>Pendiente</strong> → <strong>En análisis</strong> → <strong>En desarrollo</strong> → <strong>Implementado</strong> → <strong>Verificado</strong>. También puede ser <strong>Rechazado</strong> si el equipo decide no implementarlo. Se actualiza en Fase 4.</div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:130px 1fr;gap:.6rem;padding:.5rem;background:var(--surface2);border-radius:6px">
+        <div style="font-size:11px;font-weight:600;color:var(--muted)">Observaciones</div>
+        <div style="font-size:11px;color:var(--muted);line-height:1.5">Notas libres: acuerdos con el equipo técnico, dependencias entre requisitos, riesgos identificados o condiciones especiales de implementación.</div>
+      </div>
 
     </div>
   </div>
 
   <div class="card">
     <div style="font-size:13px;font-weight:500;font-family:var(--font-serif);margin-bottom:.6rem">Flujo de llenado recomendado</div>
-    <div style="display:flex;align-items:center;gap:.4rem;flex-wrap:wrap">
-      <div style="padding:.4rem .8rem;border-radius:20px;background:rgba(24,95,165,.08);border:0.5px solid rgba(24,95,165,.3);font-size:11px;color:var(--c-blue)">1. Importar RF desde Editor SRS</div>
+    <div style="display:flex;align-items:center;gap:.4rem;flex-wrap:wrap;row-gap:.5rem">
+      <div style="padding:.4rem .8rem;border-radius:20px;background:rgba(24,95,165,.08);border:0.5px solid rgba(24,95,165,.3);font-size:11px;color:var(--c-blue)">1. Importar RF · RNF · SA · RC desde Editor SRS</div>
       <div style="font-size:16px;color:var(--muted)">→</div>
-      <div style="padding:.4rem .8rem;border-radius:20px;background:rgba(83,52,131,.08);border:0.5px solid rgba(83,52,131,.3);font-size:11px;color:var(--c-purple)">2. Llenar origen (GAP/HU)</div>
+      <div style="padding:.4rem .8rem;border-radius:20px;background:rgba(83,52,131,.08);border:0.5px solid rgba(83,52,131,.3);font-size:11px;color:var(--c-purple)">2. Documentar origen (GAP · HU · Sesión)</div>
       <div style="font-size:16px;color:var(--muted)">→</div>
-      <div style="padding:.4rem .8rem;border-radius:20px;background:rgba(29,158,117,.08);border:0.5px solid rgba(29,158,117,.3);font-size:11px;color:var(--c-teal)">3. Asignar caso de prueba</div>
+      <div style="padding:.4rem .8rem;border-radius:20px;background:rgba(83,52,131,.08);border:0.5px solid rgba(83,52,131,.3);font-size:11px;color:var(--c-purple)">3. Asignar responsable y componente</div>
       <div style="font-size:16px;color:var(--muted)">→</div>
-      <div style="padding:.4rem .8rem;border-radius:20px;background:rgba(15,110,86,.08);border:0.5px solid rgba(15,110,86,.3);font-size:11px;color:var(--c-green)">4. Marcar Verificado en Fase 4</div>
+      <div style="padding:.4rem .8rem;border-radius:20px;background:rgba(29,158,117,.08);border:0.5px solid rgba(29,158,117,.3);font-size:11px;color:var(--c-teal)">4. Definir método de verificación</div>
+      <div style="font-size:16px;color:var(--muted)">→</div>
+      <div style="padding:.4rem .8rem;border-radius:20px;background:rgba(29,158,117,.08);border:0.5px solid rgba(29,158,117,.3);font-size:11px;color:var(--c-teal)">5. Marcar Estado trazabilidad → Trazado</div>
+      <div style="font-size:16px;color:var(--muted)">→</div>
+      <div style="padding:.4rem .8rem;border-radius:20px;background:rgba(15,110,86,.08);border:0.5px solid rgba(15,110,86,.3);font-size:11px;color:var(--c-green)">6. Actualizar Estado implementación en Fase 4 → Verificado</div>
     </div>
   </div>
 
@@ -9453,7 +9486,7 @@ const SRS_CK_ITEMS = [
   {dim:'Completitud',id:'ck03',text:'El SRS incluye sección de supuestos y restricciones'},
   {dim:'Completitud',id:'ck04',text:'El SRS incluye portada con versión, fecha, autores y estado'},
   {dim:'Completitud',id:'ck05',text:'Todos los actores del diagrama de contexto tienen al menos un RF asociado'},
-  {dim:'Verificabilidad',id:'ck06',text:'Cada RF tiene al menos un criterio de aceptación en formato Given/When/Then'},
+  {dim:'Verificabilidad',id:'ck06',text:'Cada RF tiene al menos un criterio de aceptación verificable (IEEE 29148)'},
   {dim:'Verificabilidad',id:'ck07',text:'Ningún RF usa términos vagos sin resolver (manejar, rápido, adecuado, etc.)'},
   {dim:'Verificabilidad',id:'ck08',text:'Todos los RNF pueden verificarse con una prueba concreta (carga, seguridad, usabilidad)'},
   {dim:'Verificabilidad',id:'ck09',text:'Las condiciones de éxito y fallo están definidas para cada RF crítico'},
@@ -11243,6 +11276,20 @@ function bpmnSelDiag(di){
 }
 function bpmnRenameDiag(nombre){
   var data=bpmnGetData(); bpmnCurDiag(data).nombre=nombre; bpmnSaveData(data);
+}
+
+function rtmTabSel(i){
+  document.querySelectorAll('#rtm-tab-nav .tab-btn').forEach(function(b,j){b.classList.toggle('on',j===i);});
+  document.getElementById('rtm-panel-0').style.display=i===0?'block':'none';
+  document.getElementById('rtm-panel-1').style.display=i===1?'block':'none';
+  if(i===0){var el=document.getElementById('srs-rtm-mount');if(el&&!el.innerHTML.trim())renderSrsRtm();}
+}
+
+function ckSet(id, val){
+  var data; try{data=JSON.parse(localStorage.getItem(CK_KEY))||{};}catch(e){data={};}
+  data[id] = data[id]===val ? '' : val;
+  localStorage.setItem(CK_KEY, JSON.stringify(data));
+  renderSrsChecklist(data);
 }
 
 buildAll();
