@@ -5678,8 +5678,8 @@ function initValUat(){
 function renderValUat(){
   var el=document.getElementById('val-uat-mount'); if(!el) return;
   if(!window._UAT){
-    try{ window._UAT=JSON.parse(localStorage.getItem('fw_uat_v1'))||UAT_CASES.map(function(u){return Object.assign({tipo:'Funcional',ejecutadoPor:'',fechaEjec:'',obs:'',and:''},u);});
-    }catch(ex){ window._UAT=UAT_CASES.map(function(u){return Object.assign({tipo:'Funcional',ejecutadoPor:'',fechaEjec:'',obs:'',and:''},u);}); }
+    try{ window._UAT=JSON.parse(localStorage.getItem('fw_uat_v1'))||[];
+    }catch(ex){ window._UAT=[]; }
   }
 
   // Normalizar tipo basado en rfid — corrige datos viejos del localStorage
@@ -5761,6 +5761,20 @@ function renderValUat(){
   var tipoColor={Funcional:'var(--c-blue)','No funcional':'var(--c-purple)','Regla negocio':'var(--c-amber)'};
   var prioColor={Crítico:'var(--c-red)',Alto:'var(--c-amber)',Medio:'var(--c-blue)',Bajo:'var(--muted)'};
   var resColor2={Pasó:'var(--c-green)',Falló:'var(--c-amber)',Bloqueado:'var(--c-red)','No ejecutado':'var(--muted)'};
+
+  // Empty state
+  if(cases.length===0){
+    html+='<div style="text-align:center;padding:2.5rem 1rem;border:0.5px dashed var(--border2);border-radius:var(--radius);background:var(--surface)">'
+      +'<div style="font-size:32px;margin-bottom:.6rem">📋</div>'
+      +'<div style="font-size:14px;font-weight:500;color:var(--text);margin-bottom:.4rem">Sin casos de prueba</div>'
+      +'<div style="font-size:12px;color:var(--muted);max-width:380px;margin:0 auto 1rem;line-height:1.6">Importa los casos directamente desde el SRS (RF, RNF, RC) o agrégalos manualmente uno a uno.</div>'
+      +'<div style="display:flex;gap:.5rem;justify-content:center;flex-wrap:wrap">'
+      +'<button class="btn" style="background:var(--c-green);color:#fff;border-color:var(--c-green)" onclick="uatImportSRS()">↓ Importar desde SRS</button>'
+      +'<button class="btn btn-sm" onclick="uatAdd()">+ Agregar caso manual</button>'
+      +'</div></div>';
+    el.innerHTML=html;
+    return;
+  }
 
   // Agrupar por tipo
   var tipos=['Funcional','No funcional','Regla negocio'];
