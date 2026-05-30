@@ -10847,21 +10847,25 @@ function buildCtxDiagram(data){
     // Offset for multiple flows between same pair
     var key=[f.desde,f.hasta].sort().join('|');
     var cnt=pairCount[key]||0; pairCount[key]=cnt+1;
+    var pairTotal=flujos.filter(function(ff){return [ff.desde,ff.hasta].sort().join('|')===key;}).length;
     var dx=e2.x-e1.x, dy=e2.y-e1.y, len=Math.sqrt(dx*dx+dy*dy)||1;
     var perpX=-dy/len, perpY=dx/len;
-    var off=(cnt-(flujos.filter(function(ff){return [ff.desde,ff.hasta].sort().join('|')===key;}).length-1)/2)*18;
-    var cx2=(e1.x+e2.x)/2+perpX*off+perpX*30;
-    var cy2=(e1.y+e2.y)/2+perpY*off+perpY*30;
+    var off=(cnt-(pairTotal-1)/2)*28;
+    var cx2=(e1.x+e2.x)/2+perpX*off+perpX*35;
+    var cy2=(e1.y+e2.y)/2+perpY*off+perpY*35;
 
     flowLines.push('<path d="M'+e1.x.toFixed(1)+','+e1.y.toFixed(1)+' Q'+cx2.toFixed(1)+','+cy2.toFixed(1)+' '+e2.x.toFixed(1)+','+e2.y.toFixed(1)+'" fill="none" stroke="'+col+'" stroke-width="1.4" marker-end="'+mEnd+'" '+(mStart!=='none'?'marker-start="'+mStart+'"':'')+' opacity="0.85"/>');
 
-    // Label positioned along curve at t=0.5
-    var lx=0.25*e1.x+0.5*cx2+0.25*e2.x;
-    var ly=0.25*e1.y+0.5*cy2+0.25*e2.y;
+    // Label: distribute t along curve so parallel labels don't stack
+    // t=0.3 for first, 0.5 for second, 0.7 for third within same pair
+    var tArr=[0.5, 0.35, 0.65, 0.25, 0.75];
+    var t=tArr[cnt%tArr.length];
+    var lx=(1-t)*(1-t)*e1.x + 2*(1-t)*t*cx2 + t*t*e2.x;
+    var ly=(1-t)*(1-t)*e1.y + 2*(1-t)*t*cy2 + t*t*e2.y;
     var label=escSVG(f.etiqueta||'');
     if(label){
-      var lw=Math.min(label.length*6+14, 130);
-      flowLines.push('<rect x="'+(lx-lw/2).toFixed(1)+'" y="'+(ly-9).toFixed(1)+'" width="'+lw+'" height="17" rx="3" fill="var(--bg)" opacity="0.92"/>');
+      var lw=Math.min(label.length*6+14, 140);
+      flowLines.push('<rect x="'+(lx-lw/2).toFixed(1)+'" y="'+(ly-10).toFixed(1)+'" width="'+lw+'" height="19" rx="3" fill="var(--bg)" stroke="'+col+'" stroke-width="0.5" opacity="0.97"/>');
       flowLines.push('<text x="'+lx.toFixed(1)+'" y="'+ly.toFixed(1)+'" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="9" font-weight="500" fill="'+col+'">'+label+'</text>');
     }
   });
