@@ -660,10 +660,15 @@ textarea { field-sizing: content; min-height: 2em; }
     <div class="nav-group">
       <span class="nav-label">Fase 4 · Validación</span>
       <button class="nav-item" onclick="nav('val-flujo')"><div class="nav-pip" style="background:var(--c-green)"></div>Flujo de actividades</button>
-      <button class="nav-item" onclick="nav('val-tecnicas')"><div class="nav-pip" style="background:var(--c-green)"></div>Técnicas de revisión</button>
+      <button class="nav-item" onclick="nav('val-autoreview')"><div class="nav-pip" style="background:var(--c-green)"></div>Auto-revisión BA</button>
+      <button class="nav-item" onclick="nav('val-walkthrough')"><div class="nav-pip" style="background:var(--c-green)"></div>Walkthrough técnico</button>
+      <button class="nav-item" onclick="nav('val-stakeholders')"><div class="nav-pip" style="background:var(--c-green)"></div>Revisión stakeholders</button>
+      <button class="nav-item" onclick="nav('val-inspeccion')"><div class="nav-pip" style="background:var(--c-green)"></div>Inspección formal</button>
       <button class="nav-item" onclick="nav('val-log')"><div class="nav-pip" style="background:var(--c-green)"></div>Log de defectos</button>
+      <button class="nav-item" onclick="nav('val-issues')"><div class="nav-pip" style="background:var(--c-green)"></div>Panel de issues</button>
       <button class="nav-item" onclick="nav('val-uat')"><div class="nav-pip" style="background:var(--c-green)"></div>Simulador UAT</button>
       <button class="nav-item" onclick="nav('val-baseline')"><div class="nav-pip" style="background:var(--c-green)"></div>Aprobación baseline</button>
+      <button class="nav-item" onclick="nav('val-publicacion')"><div class="nav-pip" style="background:var(--c-green)"></div>Publicación SRS</button>
     </div>
     <div class="nav-group">
       <span class="nav-label">Fase 5 · Gestión cambios</span>
@@ -5006,129 +5011,123 @@ reg('srs-versiones', () => `
 /* ════════════════════════════════════════
    PAGE: VALIDACIÓN — FLUJO
 ════════════════════════════════════════ */
-reg('val-flujo', () => `
+reg('val-flujo', () => {
+  var links = [
+    {t:'Auto-revisión BA',       id:'val-autoreview'},
+    {t:'Walkthrough técnico',    id:'val-walkthrough'},
+    {t:'Revisión stakeholders',  id:'val-stakeholders'},
+    {t:'Inspección formal',      id:'val-inspeccion'},
+    {t:'Log de defectos',        id:'val-log'},
+    {t:'Simulador UAT',          id:'val-uat'},
+    {t:'Aprobación baseline',    id:'val-baseline'},
+    {t:'Publicación SRS',        id:'val-publicacion'},
+  ];
+  var linksHtml = links.map(function(a){
+    return '<div style="display:flex;align-items:center;justify-content:space-between;padding:.35rem 0;border-bottom:0.5px solid var(--border)">'
+      + '<div style="font-size:12px">'+a.t+'</div>'
+      + '<button class="btn btn-sm" onclick="nav(\''+a.id+'\')">Ir &rarr;</button>'
+      + '</div>';
+  }).join('');
+  var criterios = ['Auto-revisión BA &ge; 85%, 0 bloqueantes','Acta walkthrough firmada (Dev + QA Lead)','PO firmó acta de conformidad','0 defectos Bloqueantes o Mayores abiertos','100% casos UAT críticos en estado Pasó','Acta firmada Sponsor + PO + Arquitecto','SRS publicado con tag &middot; CCB activo'];
+  var criteriosHtml = criterios.map(function(c){
+    return '<div class="dot-item"><div class="dot" style="background:var(--c-green)"></div>'+c+'</div>';
+  }).join('');
+  return `
 <div class="page-header">
-  <div class="page-eyebrow" style="color:var(--c-green)">● Fase 4 — Validación</div>
+  <div class="page-eyebrow" style="color:var(--c-green)">&#9679; Fase 4 &mdash; Validación</div>
   <h1 class="page-title">Flujo de actividades de validación</h1>
-  <p class="page-desc">Proceso formal para verificar que el SRS cumple los criterios de calidad, obtener la aprobación de los stakeholders y establecer el baseline del proyecto.</p>
+  <p class="page-desc">8 actividades formales desde la auto-revisión del BA hasta la publicación del SRS baseline.</p>
   <div class="std-row"><span class="std-pill">IEEE 1028:2008</span><span class="std-pill">IEEE 29148 §6.3</span><span class="std-pill">BABOK v3</span></div>
 </div>
-
 <div class="tab-nav">
   <button class="tab-btn on" onclick="tabSel('valf',0,this)">Flujo de actividades</button>
   <button class="tab-btn" onclick="tabSel('valf',1,this)">Técnicas y artefactos</button>
 </div>
-
 <div class="tab-panel on" id="valf-0">
   <div class="card" style="margin-bottom:.8rem">
-    <div class="card-title">Secuencia de actividades — Fase 4</div>
-    <svg width="100%" viewBox="0 0 680 590" xmlns="http://www.w3.org/2000/svg">
+    <div class="card-title">Secuencia de actividades</div>
+    <svg width="100%" viewBox="0 0 680 760" xmlns="http://www.w3.org/2000/svg">
       <defs><marker id="avalf" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>
-
-      <!-- Start -->
       <rect x="251" y="14" width="178" height="34" rx="17" fill="#F1EFE8" stroke="#888780" stroke-width="0.5"/>
       <text x="340" y="31" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="12" fill="#444441">SRS v1.0 — PC3 superado</text>
       <line x1="340" y1="48" x2="340" y2="74" stroke="#9A9A94" stroke-width="1" marker-end="url(#avalf)"/>
-
-      <!-- V1 -->
       <rect x="210" y="76" width="260" height="54" rx="10" fill="#EAF3DE" stroke="#3B6D11" stroke-width="1"/>
-      <text x="340" y="96" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="13" font-weight="500" fill="#173404">V1. Walkthrough técnico</text>
-      <text x="340" y="114" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#3B6D11">Autor + equipo técnico · Viabilidad · Dudas</text>
+      <text x="340" y="96" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="13" font-weight="500" fill="#173404">Auto-revisión del BA</text>
+      <text x="340" y="114" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#3B6D11">Checklist ≥ 85% · 0 Bloqueantes</text>
       <rect x="44" y="83" width="128" height="30" rx="7" fill="#EAF3DE" stroke="#3B6D11" stroke-width="0.5"/>
-      <text x="108" y="98" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#173404">Acta walkthrough</text>
+      <text x="108" y="98" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#173404">Checklist BA</text>
       <line x1="172" y1="98" x2="208" y2="98" stroke="#3B6D11" stroke-width="0.5" marker-end="url(#avalf)"/>
       <line x1="340" y1="130" x2="340" y2="156" stroke="#9A9A94" stroke-width="1" marker-end="url(#avalf)"/>
-
-      <!-- V2 -->
       <rect x="210" y="158" width="260" height="54" rx="10" fill="#EAF3DE" stroke="#3B6D11" stroke-width="1"/>
-      <text x="340" y="178" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="13" font-weight="500" fill="#173404">V2. Revisión de stakeholders</text>
-      <text x="340" y="196" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#3B6D11">Negocio valida que refleja sus necesidades reales</text>
+      <text x="340" y="178" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="13" font-weight="500" fill="#173404">Walkthrough técnico</text>
+      <text x="340" y="196" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#3B6D11">Dev Lead + QA Lead · IEEE 1028 §5.3</text>
       <rect x="44" y="165" width="128" height="30" rx="7" fill="#EAF3DE" stroke="#3B6D11" stroke-width="0.5"/>
-      <text x="108" y="180" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#173404">Acta conformidad PO</text>
+      <text x="108" y="180" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#173404">Acta walkthrough</text>
       <line x1="172" y1="180" x2="208" y2="180" stroke="#3B6D11" stroke-width="0.5" marker-end="url(#avalf)"/>
       <line x1="340" y1="212" x2="340" y2="238" stroke="#9A9A94" stroke-width="1" marker-end="url(#avalf)"/>
-
-      <!-- V3 -->
       <rect x="210" y="240" width="260" height="54" rx="10" fill="#EAF3DE" stroke="#3B6D11" stroke-width="1"/>
-      <text x="340" y="260" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="13" font-weight="500" fill="#173404">V3. Inspección formal (Fagan)</text>
-      <text x="340" y="278" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#3B6D11">Inspector independiente · Checklist · Log defectos</text>
+      <text x="340" y="260" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="13" font-weight="500" fill="#173404">Revisión stakeholders negocio</text>
+      <text x="340" y="278" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#3B6D11">Validación reglas · PO firma acta</text>
       <rect x="44" y="247" width="128" height="30" rx="7" fill="#EAF3DE" stroke="#3B6D11" stroke-width="0.5"/>
-      <text x="108" y="262" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#173404">Reporte de inspección</text>
+      <text x="108" y="262" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#173404">Acta conformidad PO</text>
       <line x1="172" y1="262" x2="208" y2="262" stroke="#3B6D11" stroke-width="0.5" marker-end="url(#avalf)"/>
       <line x1="340" y1="294" x2="340" y2="320" stroke="#9A9A94" stroke-width="1" marker-end="url(#avalf)"/>
-
-      <!-- V4 -->
       <rect x="210" y="322" width="260" height="54" rx="10" fill="#EAF3DE" stroke="#3B6D11" stroke-width="1"/>
-      <text x="340" y="342" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="13" font-weight="500" fill="#173404">V4. Resolución de defectos</text>
-      <text x="340" y="360" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#3B6D11">BA resuelve Mayores · Moderador verifica</text>
+      <text x="340" y="342" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="13" font-weight="500" fill="#173404">Inspección formal (Fagan)</text>
+      <text x="340" y="360" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#3B6D11">Inspector independiente · IEEE 1028 §5.4</text>
       <rect x="44" y="329" width="128" height="30" rx="7" fill="#EAF3DE" stroke="#3B6D11" stroke-width="0.5"/>
-      <text x="108" y="344" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#173404">Log defectos cerrado</text>
+      <text x="108" y="344" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#173404">Reporte inspección</text>
       <line x1="172" y1="344" x2="208" y2="344" stroke="#3B6D11" stroke-width="0.5" marker-end="url(#avalf)"/>
       <line x1="340" y1="376" x2="340" y2="402" stroke="#9A9A94" stroke-width="1" marker-end="url(#avalf)"/>
-
-      <!-- V5 -->
       <rect x="210" y="404" width="260" height="54" rx="10" fill="#EAF3DE" stroke="#3B6D11" stroke-width="1"/>
-      <text x="340" y="424" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="13" font-weight="500" fill="#173404">V5. UAT — Prueba de aceptación</text>
-      <text x="340" y="442" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#3B6D11">Usuarios ejecutan casos derivados del SRS</text>
+      <text x="340" y="424" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="13" font-weight="500" fill="#173404">Registro y resolución de defectos</text>
+      <text x="340" y="442" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#3B6D11">Bloq. / Mayor / Menor · 0 abiertos</text>
       <rect x="44" y="411" width="128" height="30" rx="7" fill="#EAF3DE" stroke="#3B6D11" stroke-width="0.5"/>
-      <text x="108" y="426" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#173404">Plan UAT + resultados</text>
+      <text x="108" y="426" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#173404">Log defectos cerrado</text>
       <line x1="172" y1="426" x2="208" y2="426" stroke="#3B6D11" stroke-width="0.5" marker-end="url(#avalf)"/>
+      <path d="M 470 348 L 580 348 L 580 430 L 472 430" fill="none" stroke="#A32D2D" stroke-width="0.5" stroke-dasharray="4 3" marker-end="url(#avalf)"/>
+      <text x="600" y="390" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="10" fill="#A32D2D">Re-insp.</text>
       <line x1="340" y1="458" x2="340" y2="484" stroke="#9A9A94" stroke-width="1" marker-end="url(#avalf)"/>
-
-      <!-- V6 -->
-      <rect x="210" y="486" width="260" height="54" rx="10" fill="#E1F5EE" stroke="#1D9E75" stroke-width="1.5"/>
-      <text x="340" y="506" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="13" font-weight="500" fill="#085041">V6. Aprobación y baseline</text>
-      <text x="340" y="524" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#1D9E75">Sponsor + PO + Arq. firman · SRS publicado</text>
-      <rect x="44" y="493" width="128" height="30" rx="7" fill="#E1F5EE" stroke="#1D9E75" stroke-width="0.5"/>
-      <text x="108" y="508" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#085041">SRS baseline aprobado</text>
-      <line x1="172" y1="508" x2="208" y2="508" stroke="#1D9E75" stroke-width="0.5" marker-end="url(#avalf)"/>
-
-      <!-- Re-inspection loop -->
-      <path d="M 470 266 L 580 266 L 580 348 L 472 348" fill="none" stroke="#A32D2D" stroke-width="0.5" stroke-dasharray="4 3" marker-end="url(#avalf)"/>
-      <text x="592" y="304" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="10" fill="#A32D2D">Re-insp.</text>
-      <text x="592" y="318" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="10" fill="#A32D2D">si umbral</text>
-
+      <rect x="210" y="486" width="260" height="54" rx="10" fill="#EAF3DE" stroke="#3B6D11" stroke-width="1"/>
+      <text x="340" y="506" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="13" font-weight="500" fill="#173404">Casos de prueba UAT</text>
+      <text x="340" y="524" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#3B6D11">Derivados del SRS y Gherkin · GO/NO-GO</text>
+      <rect x="44" y="493" width="128" height="30" rx="7" fill="#EAF3DE" stroke="#3B6D11" stroke-width="0.5"/>
+      <text x="108" y="508" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#173404">Plan UAT + resultados</text>
+      <line x1="172" y1="508" x2="208" y2="508" stroke="#3B6D11" stroke-width="0.5" marker-end="url(#avalf)"/>
       <line x1="340" y1="540" x2="340" y2="566" stroke="#9A9A94" stroke-width="1" marker-end="url(#avalf)"/>
-      <rect x="210" y="568" width="260" height="34" rx="10" fill="#F1EFE8" stroke="#888780" stroke-width="0.5"/>
-      <text x="340" y="585" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="12" fill="#2C2C2A">CCB activo — Gestión de cambios (Fase 5)</text>
-
+      <rect x="210" y="568" width="260" height="54" rx="10" fill="#E1F5EE" stroke="#1D9E75" stroke-width="1.5"/>
+      <text x="340" y="588" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="13" font-weight="500" fill="#085041">Aprobación y firma del baseline</text>
+      <text x="340" y="606" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#1D9E75">Sponsor + PO + Arquitecto firman</text>
+      <rect x="44" y="575" width="128" height="30" rx="7" fill="#E1F5EE" stroke="#1D9E75" stroke-width="0.5"/>
+      <text x="108" y="590" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#085041">Acta aprobación</text>
+      <line x1="172" y1="590" x2="208" y2="590" stroke="#1D9E75" stroke-width="0.5" marker-end="url(#avalf)"/>
+      <line x1="340" y1="622" x2="340" y2="648" stroke="#9A9A94" stroke-width="1" marker-end="url(#avalf)"/>
+      <rect x="210" y="650" width="260" height="54" rx="10" fill="#E1F5EE" stroke="#1D9E75" stroke-width="1.5"/>
+      <text x="340" y="670" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="13" font-weight="500" fill="#085041">Publicación SRS v1.0-baseline</text>
+      <text x="340" y="688" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#1D9E75">Repositorio · Tag versión · CCB activado</text>
+      <rect x="44" y="657" width="128" height="30" rx="7" fill="#E1F5EE" stroke="#1D9E75" stroke-width="0.5"/>
+      <text x="108" y="672" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#085041">SRS baseline publicado</text>
+      <line x1="172" y1="672" x2="208" y2="672" stroke="#1D9E75" stroke-width="0.5" marker-end="url(#avalf)"/>
+      <line x1="340" y1="704" x2="340" y2="726" stroke="#9A9A94" stroke-width="1" marker-end="url(#avalf)"/>
+      <rect x="210" y="728" width="260" height="34" rx="10" fill="#F1EFE8" stroke="#888780" stroke-width="0.5"/>
+      <text x="340" y="745" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="12" fill="#2C2C2A">CCB activo — Gestión de cambios (Fase 5)</text>
       <text x="28" y="62" font-family="DM Sans,sans-serif" font-size="10" fill="#9A9A94">Artefactos</text>
     </svg>
   </div>
+  <div class="g2" style="margin-top:.8rem">
+    <div class="card">
+      <div class="card-title">Acceso rápido</div>
+      \${linksHtml}
+    </div>
+    <div class="card">
+      <div class="card-title" style="color:var(--c-green)">Criterios de salida — PC4</div>
+      <div style="margin-top:.4rem">\${criteriosHtml}</div>
+    </div>
+  </div>
 </div>
+`;
+});
 
-<div class="tab-panel" id="valf-1">
-  <div class="g2" style="margin-bottom:1rem">
-    <div class="card">
-      <div class="card-title">Técnicas de validación</div>
-      ${[
-        {t:'Walkthrough (IEEE 1028 §5.3)',d:'El autor guía la revisión. Rápido, informal, alto ROI en defectos tempranos',color:'var(--c-blue)'},
-        {t:'Inspección Fagan (IEEE 1028 §5.4)',d:'Proceso formal en 6 etapas con moderador independiente y métricas de densidad',color:'var(--c-red)'},
-        {t:'Revisión técnica formal',d:'Pares evalúan viabilidad técnica y consistencia arquitectónica',color:'var(--c-purple)'},
-        {t:'UAT — User Acceptance Testing',d:'Usuarios reales ejecutan casos derivados de los criterios Gherkin del SRS',color:'var(--c-green)'},
-        {t:'Checklist SMART (IEEE 29148)',d:'Verificar que cada requisito cumple los 6 atributos de calidad mínimos',color:'var(--c-teal)'},
-      ].map(t => `<div class="dot-item"><div class="dot" style="background:${t.color}"></div><div><strong style="font-size:12px;font-weight:500">${t.t}</strong><div style="font-size:11px;color:var(--muted)">${t.d}</div></div></div>`).join('')}
-    </div>
-    <div class="card">
-      <div class="card-title">Artefactos producidos</div>
-      ${[
-        {a:'Acta de walkthrough',d:'Observaciones del equipo técnico con fecha de resolución',color:'var(--c-blue)'},
-        {a:'Acta de conformidad PO',d:'Firma de que el SRS refleja las necesidades del negocio',color:'var(--c-green)'},
-        {a:'Reporte de inspección formal',d:'Densidad de defectos, lista clasificada por severidad',color:'var(--c-red)'},
-        {a:'Log de defectos cerrado',d:'0 defectos Mayores abiertos al finalizar la fase',color:'var(--c-amber)'},
-        {a:'Plan UAT y resultados',d:'Casos de prueba ejecutados con resultado Pasó/Falló',color:'var(--c-green)'},
-        {a:'Acta de aprobación del baseline',d:'SRS v1.0 firmado por Sponsor + PO + Arquitecto',color:'var(--c-teal)'},
-      ].map(a => `<div class="dot-item"><div class="dot" style="background:${a.color}"></div><div><strong style="font-size:12px;font-weight:500">${a.a}</strong><div style="font-size:11px;color:var(--muted)">${a.d}</div></div></div>`).join('')}
-    </div>
-  </div>
-  <div class="card" style="background:rgba(15,110,86,.03);border-color:rgba(15,110,86,.2)">
-    <div class="card-title" style="color:var(--c-green)">Criterios de salida — PC4 (Definition of Done)</div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:.5rem">
-      ${['0 defectos Bloqueantes o Mayores abiertos','100% casos UAT críticos en estado Pasó','RTM post-RS completa y verificada','Acta firmada por todos los aprobadores','SRS publicado con número de baseline asignado','CCB activado y equipo notificado'].map(c => `<div class="dot-item"><div class="dot" style="background:var(--c-green)"></div>${c}</div>`).join('')}
-    </div>
-  </div>
-</div>
-`);
 
 /* ════════════════════════════════════════
    PAGE: TÉCNICAS VALIDACIÓN
@@ -5385,144 +5384,395 @@ reg('val-log', () => `
 function initValLog(){
   var el=document.getElementById('val-log-mount');
   if(!el||el.innerHTML.trim()) return;
-  if(!window._DEFS) window._DEFS = DEFECTS.slice();
-  window._selDefIdx = -1;
+  window._logSelIdx = -1;
   renderValLog();
 }
 
 function renderValLog(){
   var el=document.getElementById('val-log-mount'); if(!el) return;
-  if(!window._DEFS) window._DEFS = DEFECTS.slice();
-  var defs = window._DEFS;
-  var sel  = (typeof window._selDefIdx==='number') ? window._selDefIdx : -1;
-
   function e(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+  var TA='width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:4px 8px;font-size:12px;color:var(--text);outline:none;resize:none;line-height:1.5;overflow:hidden';
 
-  // KPIs
-  var bloq = defs.filter(function(d){return d.sev==='Bloqueante';}).length;
-  var may  = defs.filter(function(d){return d.sev==='Mayor';}).length;
-  var ab   = defs.filter(function(d){return d.est==='Abierto';}).length;
-  var _srsPages = (function(){try{var s=JSON.parse(localStorage.getItem('fw_srs_v1'));return (s&&s.rfs)?(s.rfs.length||10):10;}catch(ex){return 10;}})();
-  var dens = _srsPages>0 ? (defs.length/_srsPages).toFixed(2) : '—';
-  var ok   = ab===0;
+  // ── Leer defectos desde las inspecciones ──
+  var inspData; try{ inspData=JSON.parse(localStorage.getItem(INSP_KEY))||defINSP(); }catch(ex){ inspData=defINSP(); }
+  var insList = inspData.inspecciones||[];
 
-  var html = '';
-
-  // Banner
-  html += '<div style="background:rgba(24,95,165,.06);border:0.5px solid rgba(24,95,165,.25);border-radius:var(--radius);padding:.5rem .8rem;font-size:11px;color:var(--c-blue);margin-bottom:.8rem">'
-         +'ⓘ Edita severidad/estado con los selectores. Usa ✎ para impacto/resolución. + para agregar, × para eliminar.</div>';
-
-  // KPI grid
-  html += '<div class="kpi-grid" style="margin-bottom:.8rem">';
-  [{n:defs.length,l:'Total',c:'var(--c-blue)'},{n:bloq,l:'Bloqueantes',c:'var(--c-red)'},
-   {n:may,l:'Mayores',c:'var(--c-amber)'},{n:ab,l:'Abiertos',c:ab?'var(--c-red)':'var(--c-green)'}]
-  .forEach(function(k){ html += '<div class="kpi"><div class="kpi-num" style="color:'+k.c+'">'+k.n+'</div><div class="kpi-label">'+k.l+'</div></div>'; });
-  html += '</div>';
-
-  // Status
-  html += '<div class="card" style="margin-bottom:.8rem;background:rgba('+(ok?'15,110,86':'163,45,45')+',.04);border-color:rgba('+(ok?'15,110,86':'163,45,45')+',.25)">'
-         +'<div style="font-size:13px;font-weight:500;color:var('+(ok?'--c-green':'--c-red')+');">'
-         +(ok?'✓ SRS apto para baseline — 0 defectos abiertos':'⚠ SRS no puede aprobarse — '+ab+' defecto(s) abierto(s) pendiente(s)')+'</div>'
-         +'<div style="font-size:11px;color:var(--muted);margin-top:2px">Densidad: '+dens+' def/pág · Umbral Fagan: &lt; 0.30 · '+ab+' abierto(s)</div></div>';
-
-  // Formulario agregar
-  html += '<div class="card" style="margin-bottom:.8rem"><div class="card-title" style="margin-bottom:.5rem">Agregar defecto</div>'
-         +'<div style="display:grid;grid-template-columns:80px 80px 110px 1fr 80px;gap:5px;margin-bottom:5px">'
-         +'<div><div style="font-size:10px;font-weight:500;color:var(--muted);margin-bottom:2px">ID</div>'
-         +'<input id="nd-id" placeholder="DEF-00X" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:4px 6px;font-size:12px;font-family:var(--font-mono);color:var(--c-blue);outline:none"></div>'
-         +'<div><div style="font-size:10px;font-weight:500;color:var(--muted);margin-bottom:2px">Sección</div>'
-         +'<input id="nd-sec" placeholder="RF-001" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:4px 6px;font-size:12px;font-family:var(--font-mono);color:var(--text);outline:none"></div>'
-         +'<div><div style="font-size:10px;font-weight:500;color:var(--muted);margin-bottom:2px">Severidad</div>'
-         +'<select id="nd-sev" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:4px 5px;font-size:12px;color:var(--text);outline:none">'
-         +'<option>Bloqueante</option><option selected>Mayor</option><option>Menor</option><option>Informativo</option></select></div>'
-         +'<div><div style="font-size:10px;font-weight:500;color:var(--muted);margin-bottom:2px">Descripción</div>'
-         +'<input id="nd-desc" placeholder="Describe el defecto..." style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:4px 6px;font-size:12px;color:var(--text);outline:none"></div>'
-         +'<div><div style="font-size:10px;font-weight:500;color:var(--muted);margin-bottom:2px">Asignado</div>'
-         +'<input id="nd-asig" placeholder="BA" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:4px 6px;font-size:12px;color:var(--text);outline:none"></div>'
-         +'</div><button class="btn btn-sm" style="background:var(--c-green);color:#fff;border-color:var(--c-green)" onclick="defAdd()">+ Agregar defecto</button></div>';
-
-  // Tabla
-  html += '<div class="table-wrap" style="margin-bottom:.8rem"><table class="data-table">'
-         +'<thead><tr><th>ID</th><th>Sección</th><th>Severidad</th><th>Descripción</th><th>Asignado</th><th>Estado</th><th></th></tr></thead><tbody>';
-
-  var sevBadge = {Bloqueante:'b-err',Mayor:'b-warn',Menor:'b-could',Informativo:''};
-  var estBadge = {Abierto:'b-err','En revisión':'b-warn',Resuelto:'b-ok'};
-
-  defs.forEach(function(d,i){
-    html += '<tr>'
-      +'<td style="font-family:var(--font-mono);color:var(--c-blue);font-size:11px">'+e(d.id)+'</td>'
-      +'<td style="font-family:var(--font-mono);font-size:11px">'+e(d.sec)+'</td>'
-      +'<td><select style="font-size:11px;border:0.5px solid var(--border2);border-radius:4px;padding:2px 4px;background:var(--bg);color:var(--text);cursor:pointer;outline:none"'
-      +' onchange="defSetSev('+i+',this.value)">'
-      +'<option'+( d.sev==='Bloqueante'?' selected':'')+'>Bloqueante</option>'
-      +'<option'+(d.sev==='Mayor'?' selected':'')+'>Mayor</option>'
-      +'<option'+(d.sev==='Menor'?' selected':'')+'>Menor</option>'
-      +'<option'+(d.sev==='Informativo'?' selected':'')+'>Informativo</option>'
-      +'</select></td>'
-      +'<td style="font-size:12px">'+e(d.desc)+'</td>'
-      +'<td style="font-size:12px">'+e(d.asig)+'</td>'
-      +'<td><select style="font-size:11px;border:0.5px solid var(--border2);border-radius:4px;padding:2px 4px;background:var(--bg);color:var(--text);cursor:pointer;outline:none"'
-      +' onchange="defSetEst('+i+',this.value)">'
-      +'<option'+(d.est==='Abierto'?' selected':'')+'>Abierto</option>'
-      +'<option'+(d.est==='En revisión'?' selected':'')+'>En revisión</option>'
-      +'<option'+(d.est==='Resuelto'?' selected':'')+'>Resuelto</option>'
-      +'</select></td>'
-      +'<td style="white-space:nowrap">'
-      +'<button class="uat-btn" style="color:var(--c-blue);font-size:13px;margin-right:4px" title="Editar impacto/resolución" onclick="defOpenDetail('+i+')">✎</button>'
-      +'<button class="uat-btn" style="color:var(--muted);font-size:16px" onclick="defDel('+i+')">×</button>'
-      +'</td></tr>';
+  // Consolidar todos los defectos con referencia a su inspección
+  var allDefs = [];
+  insList.forEach(function(insp,ii){
+    (insp.defectosList||[]).forEach(function(d,di){
+      allDefs.push({
+        inspIdx:ii,
+        defIdx:di,
+        inspAlcance: insp.alcance||('Inspección '+(ii+1)),
+        inspFecha: insp.fecha||'',
+        inspTipo: insp.tipo||'Primera inspección',
+        rfid: d.rfid||'',
+        sev:  d.sev||'Mayor',
+        desc: d.desc||'',
+        estado: d.estado||'Abierto',
+        asignado: d.asignado||'',
+        resolucion: d.resolucion||''
+      });
+    });
   });
 
-  html += '</tbody></table></div>';
+  var sel = (typeof window._logSelIdx==='number') ? window._logSelIdx : -1;
+  var bloq   = allDefs.filter(function(d){return d.sev==='Bloqueante';}).length;
+  var mayor  = allDefs.filter(function(d){return d.sev==='Mayor';}).length;
+  var abier  = allDefs.filter(function(d){return d.estado==='Abierto';}).length;
+  var resuel = allDefs.filter(function(d){return d.estado==='Resuelto';}).length;
+  var ok     = allDefs.length>0 && abier===0;
 
-  // Detalle
-  if(sel>=0 && sel<defs.length){
-    var d=defs[sel];
-    html += '<div class="card"><div class="card-title">Detalle — '+e(d.id)+'</div>'
-      +'<div style="margin-bottom:.5rem"><div style="font-size:11px;font-weight:500;color:var(--muted);margin-bottom:2px">Impacto si no se resuelve</div>'
-      +'<input value="'+e(d.impacto||'')+'" placeholder="Describe el impacto..." style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:5px 8px;font-size:12px;color:var(--text);font-family:var(--font-sans);outline:none" oninput="window._DEFS['+sel+'].impacto=this.value;defSave()"></div>'
-      +'<div><div style="font-size:11px;font-weight:500;color:var(--muted);margin-bottom:2px">Resolución aplicada</div>'
-      +'<input value="'+e(d.res||'')+'" placeholder="Describe cómo fue resuelto..." style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:5px 8px;font-size:12px;color:var(--text);font-family:var(--font-sans);outline:none" oninput="window._DEFS['+sel+'].res=this.value;defSave()"></div>'
+  var sevColor={Bloqueante:'var(--c-red)',Mayor:'var(--c-amber)',Menor:'var(--c-blue)',Informativo:'var(--c-teal)'};
+  var estColor={Abierto:'var(--c-red)','En proceso':'var(--c-amber)',Resuelto:'var(--c-green)'};
+
+  var html='';
+
+  // Banner conexión
+  html+='<div style="background:rgba(83,52,131,.06);border:0.5px solid rgba(83,52,131,.2);border-radius:var(--radius);padding:.5rem .8rem;font-size:11px;color:var(--c-purple);margin-bottom:.8rem">'
+    +'ⓘ Vista consolidada de todos los defectos registrados en las inspecciones formales. Los cambios aquí se reflejan directamente en cada inspección.</div>';
+
+  // KPIs
+  html+='<div style="display:grid;grid-template-columns:repeat(5,1fr);gap:.6rem;margin-bottom:1rem">'
+    +'<div class="kpi"><div class="kpi-num" style="color:var(--c-blue)">'+allDefs.length+'</div><div class="kpi-label">Total defectos</div></div>'
+    +'<div class="kpi"><div class="kpi-num" style="color:var(--c-red)">'+bloq+'</div><div class="kpi-label">Bloqueantes</div></div>'
+    +'<div class="kpi"><div class="kpi-num" style="color:var(--c-amber)">'+mayor+'</div><div class="kpi-label">Mayores</div></div>'
+    +'<div class="kpi"><div class="kpi-num" style="color:var(--c-red)">'+abier+'</div><div class="kpi-label">Abiertos</div></div>'
+    +'<div class="kpi"><div class="kpi-num" style="color:var(--c-green)">'+resuel+'</div><div class="kpi-label">Resueltos</div></div>'
+    +'</div>';
+
+  // Banner estado
+  html+='<div class="card" style="margin-bottom:1rem;background:rgba('+(ok?'15,110,86':allDefs.length===0?'95,94,90':'163,45,45')+',.04);border-color:rgba('+(ok?'15,110,86':allDefs.length===0?'95,94,90':'163,45,45')+',.2)">'
+    +'<div style="font-size:13px;font-weight:500;color:var('+(ok?'--c-green':allDefs.length===0?'--c-gray':'--c-red')+');">'
+    +(allDefs.length===0?'Sin defectos registrados — agrega inspecciones en Inspección formal':ok?'✓ 0 defectos abiertos — SRS apto para baseline':'✗ '+abier+' defecto(s) abierto(s) — no puede aprobarse el baseline')+'</div>'
+    +'<div style="font-size:11px;color:var(--muted);margin-top:2px">'+insList.length+' inspección(es) registradas · Umbral Fagan: densidad &lt; 0.3 def/pág</div>'
+    +'</div>';
+
+  if(allDefs.length===0){
+    html+='<div class="card" style="text-align:center;padding:2rem;color:var(--muted)">'
+      +'<div style="font-size:13px;margin-bottom:.5rem">No hay defectos registrados</div>'
+      +'<div style="font-size:12px">Registra inspecciones y sus defectos en <strong>Inspección formal (Fagan)</strong></div>'
+      +'<button class="btn btn-sm" style="margin-top:.8rem" onclick="nav(\'val-inspeccion\')">Ir a Inspección formal →</button>'
       +'</div>';
   } else {
-    html += '<div class="card" style="font-size:12px;color:var(--muted);text-align:center;padding:1rem">Usa ✎ en una fila para editar impacto y resolución.</div>';
+    // Agrupar por inspección
+    insList.forEach(function(insp,ii){
+      var inspDefs=allDefs.filter(function(d){return d.inspIdx===ii;});
+      if(inspDefs.length===0) return;
+      var inspAbier=inspDefs.filter(function(d){return d.estado==='Abierto';}).length;
+      var inspBloq=inspDefs.filter(function(d){return d.sev==='Bloqueante'&&d.estado!=='Resuelto';}).length;
+
+      html+='<div style="margin-bottom:1rem">'
+        +'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.4rem;padding:.4rem .6rem;background:var(--surface2);border-radius:6px">'
+        +'<div><span style="font-size:12px;font-weight:500">'+e(insp.alcance||'Inspección '+(ii+1))+'</span>'
+        +' <span style="font-size:11px;color:var(--muted)">'+e(insp.fecha||'')+' · '+e(insp.tipo||'Primera inspección')+'</span></div>'
+        +'<div style="display:flex;gap:.4rem;align-items:center">'
+        +(inspBloq>0?'<span style="font-size:10px;font-weight:600;padding:2px 7px;border-radius:3px;background:rgba(163,45,45,.1);color:var(--c-red)">'+inspBloq+' bloq. abiertos</span>':'')
+        +'<span style="font-size:11px;color:var(--muted)">'+inspDefs.length+' defectos · '+inspAbier+' abiertos</span>'
+        +'<button class="btn btn-sm" onclick="window._inspTab=1;nav(\'val-inspeccion\')">Ver inspección →</button>'
+        +'</div></div>';
+
+      // Tabla de defectos de esta inspección
+      html+='<div class="table-wrap"><table class="data-table">'
+        +'<thead><tr><th>Ref RF</th><th>Severidad</th><th>Descripción</th><th>Asignado</th><th>Estado</th><th></th></tr></thead><tbody>';
+
+      inspDefs.forEach(function(d){
+        var gi=d.inspIdx, di=d.defIdx;
+        var flatIdx=allDefs.indexOf(d);
+        var sc=sevColor[d.sev]||'var(--muted)';
+        var ec=estColor[d.estado]||'var(--muted)';
+        html+='<tr>'
+          +'<td style="font-family:var(--font-mono);color:var(--c-blue);font-size:11px">'+e(d.rfid||'—')+'</td>'
+          +'<td><select style="font-size:11px;border:0.5px solid var(--border2);border-radius:4px;padding:2px 4px;background:var(--bg);color:'+sc+';font-weight:600;outline:none;cursor:pointer" onchange="logSetSev('+gi+','+di+',this.value)">'
+          +['Bloqueante','Mayor','Menor','Informativo'].map(function(o){return'<option'+(d.sev===o?' selected':'')+'>'+o+'</option>';}).join('')+'</select></td>'
+          +'<td style="font-size:12px">'+e(d.desc)+'</td>'
+          +'<td style="font-size:12px"><input value="'+e(d.asignado)+'" placeholder="BA" style="background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:2px 6px;font-size:11px;color:var(--text);outline:none;width:80px" oninput="logSetField('+gi+','+di+',\'asignado\',this.value)"></td>'
+          +'<td><select style="font-size:11px;border:0.5px solid var(--border2);border-radius:4px;padding:2px 4px;background:var(--bg);color:'+ec+';font-weight:500;outline:none;cursor:pointer" onchange="logSetEst('+gi+','+di+',this.value)">'
+          +['Abierto','En proceso','Resuelto'].map(function(o){return'<option'+(d.estado===o?' selected':'')+'>'+o+'</option>';}).join('')+'</select></td>'
+          +'<td><button class="uat-btn" style="color:var(--c-blue);font-size:13px" title="Resolución" onclick="window._logSelIdx='+(sel===flatIdx?-1:flatIdx)+';renderValLog()">✎</button></td>'
+          +'</tr>';
+
+        // Panel de detalle
+        if(sel===flatIdx){
+          html+='<tr><td colspan="6"><div style="padding:.6rem;background:var(--surface2);border-radius:6px">'
+            +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem">'
+            +'<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">Impacto si no se resuelve</label>'
+            +'<textarea rows="2" style="'+TA+'" oninput="autoH(this);logSetField('+gi+','+di+',\'impacto\',this.value)">'+e(d.impacto||'')+'</textarea></div>'
+            +'<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">Resolución aplicada</label>'
+            +'<textarea rows="2" style="'+TA+'" oninput="autoH(this);logSetField('+gi+','+di+',\'resolucion\',this.value)">'+e(d.resolucion||'')+'</textarea></div>'
+            +'</div></div></td></tr>';
+        }
+      });
+      html+='</tbody></table></div></div>';
+    });
   }
 
-  el.innerHTML = html;
+  el.innerHTML=html;
+  el.querySelectorAll('textarea').forEach(function(ta){ta.style.height='auto';ta.style.height=ta.scrollHeight+'px';});
+
+  // Handlers que escriben de vuelta al storage de inspecciones
+  function inspSaveBack(d2){ localStorage.setItem(INSP_KEY,JSON.stringify(d2)); }
+  function getInspData(){ var d2; try{d2=JSON.parse(localStorage.getItem(INSP_KEY))||defINSP();}catch(ex){d2=defINSP();} return d2; }
+
+  window.logSetSev=function(ii,di,v){
+    var d2=getInspData();
+    if(d2.inspecciones&&d2.inspecciones[ii]&&d2.inspecciones[ii].defectosList&&d2.inspecciones[ii].defectosList[di])
+      d2.inspecciones[ii].defectosList[di].sev=v;
+    inspSaveBack(d2); renderValLog();
+  };
+  window.logSetEst=function(ii,di,v){
+    var d2=getInspData();
+    if(d2.inspecciones&&d2.inspecciones[ii]&&d2.inspecciones[ii].defectosList&&d2.inspecciones[ii].defectosList[di])
+      d2.inspecciones[ii].defectosList[di].estado=v;
+    inspSaveBack(d2); renderValLog();
+  };
+  window.logSetField=function(ii,di,k,v){
+    var d2=getInspData();
+    if(d2.inspecciones&&d2.inspecciones[ii]&&d2.inspecciones[ii].defectosList&&d2.inspecciones[ii].defectosList[di])
+      d2.inspecciones[ii].defectosList[di][k]=v;
+    inspSaveBack(d2);
+  };
 }
 
-function defOpenDetail(i){ window._selDefIdx=parseInt(i); renderValLog(); }
-function defSetSev(i,v){ window._DEFS[parseInt(i)].sev=v; defSave(); renderValLog(); }
-function defSetEst(i,v){ window._DEFS[parseInt(i)].est=v; defSave(); renderValLog(); }
+/* ════════════════════════════════════════
+   PAGE: PANEL CONSOLIDADO DE ISSUES
+════════════════════════════════════════ */
+reg('val-issues', () => `
+<div class="page-header">
+  <div class="page-eyebrow" style="color:var(--c-green)">● Fase 4 — Validación</div>
+  <h1 class="page-title">Panel de issues consolidado</h1>
+  <p class="page-desc">Vista unificada de hallazgos (Walkthrough), observaciones de negocio (Revisión de stakeholders) y defectos formales (Inspección Fagan). El Log de defectos IEEE 1028 permanece independiente.</p>
+  <div class="std-row"><span class="std-pill">BABOK v3 — Issue Log</span><span class="std-pill">IREB CPRE — PC4</span><span class="std-pill">Vista de gestión</span></div>
+</div>
+<div id="val-issues-mount"></div>
+`);
 
+function initValIssues(){
+  var el=document.getElementById('val-issues-mount');
+  if(!el||el.innerHTML.trim()) return;
+  renderValIssues();
+}
 
-function defSave(){
-  try{ localStorage.setItem('fw_defs_v1', JSON.stringify(window._DEFS||DEFECTS)); }catch(e){}
-}
-function defAdd(){
-  if(!window._DEFS) window._DEFS=DEFECTS.slice();
-  var id=document.getElementById('nd-id')?.value?.trim()||'DEF-'+String(window._DEFS.length+1).padStart(3,'0');
-  var sec=document.getElementById('nd-sec')?.value?.trim()||'';
-  var sev=document.getElementById('nd-sev')?.value||'Mayor';
-  var desc=document.getElementById('nd-desc')?.value?.trim()||'';
-  var asig=document.getElementById('nd-asig')?.value?.trim()||'BA';
-  if(!desc){var _e=document.getElementById('def-add-msg');if(_e){_e.textContent='⚠ La descripción es obligatoria';setTimeout(function(){_e.textContent='';},2000);}return;}
-  window._DEFS.push({id:id,sec:sec,sev:sev,desc:desc,asig:asig,est:'Abierto',impacto:'',res:''});
-  defSave(); renderValLog();
-}
-function defDel(i){
-  i=parseInt(i);
-  if(!window._DEFS) window._DEFS=DEFECTS.slice();
-  window._DEFS.splice(i,1); defSave();
-  if(window._selDefIdx===i) window._selDefIdx=-1;
-  renderValLog();
+function renderValIssues(){
+  var el=document.getElementById('val-issues-mount'); if(!el) return;
+  function e(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
+  // ── Leer los tres storages ──
+  var wtData;   try{wtData=JSON.parse(localStorage.getItem(WT2_KEY))||defWT2();}catch(ex){wtData=defWT2();}
+  var skData;   try{skData=JSON.parse(localStorage.getItem(SK2_KEY))||defSK2();}catch(ex){skData=defSK2();}
+  var inspData; try{inspData=JSON.parse(localStorage.getItem(INSP_KEY))||defINSP();}catch(ex){inspData=defINSP();}
+
+  // ── Consolidar issues ──
+  var issues=[];
+
+  // 1. Hallazgos del Walkthrough
+  (wtData.sesiones||[]).forEach(function(ses){
+    (ses.hallazgos||[]).forEach(function(h){
+      issues.push({
+        origen:'Walkthrough',
+        origenColor:'var(--c-blue)',
+        origenDetalle: e(ses.seccion||'Sin sección')+' · '+e(ses.fecha||''),
+        ref:   h.rfid||'—',
+        tipo:  h.tipo||'Ambigüedad',
+        desc:  h.desc||'',
+        estado:h.estado||'Abierto',
+        _ses:ses, _item:h, _store:'wt'
+      });
+    });
+  });
+
+  // 2. Observaciones de la Revisión de stakeholders
+  (skData.revisiones||[]).forEach(function(rev){
+    (rev.observaciones||[]).forEach(function(ob){
+      issues.push({
+        origen:'Stakeholders',
+        origenColor:'var(--c-purple)',
+        origenDetalle: e(rev.stakeholder||'Stakeholder')+' · '+e(rev.fecha||''),
+        ref:   ob.rfid||'—',
+        tipo:  ob.tipo||'Caso no cubierto',
+        desc:  ob.desc||'',
+        estado:ob.estado||'Abierta',
+        _rev:rev, _item:ob, _store:'sk'
+      });
+    });
+  });
+
+  // 3. Defectos de la Inspección formal
+  (inspData.inspecciones||[]).forEach(function(insp){
+    (insp.defectosList||[]).forEach(function(d){
+      issues.push({
+        origen:'Inspección',
+        origenColor:'var(--c-red)',
+        origenDetalle: e(insp.alcance||'Inspección')+' · '+e(insp.fecha||''),
+        ref:   d.rfid||'—',
+        tipo:  d.sev||'Mayor',
+        desc:  d.desc||'',
+        estado:d.estado||'Abierto',
+        _insp:insp, _item:d, _store:'insp'
+      });
+    });
+  });
+
+  // ── Filtro activo ──
+  var FIL=(typeof window._issuesFil==='string')?window._issuesFil:'Todos';
+  var filtered = FIL==='Todos' ? issues : issues.filter(function(x){
+    if(FIL==='Walkthrough') return x.origen==='Walkthrough';
+    if(FIL==='Stakeholders') return x.origen==='Stakeholders';
+    if(FIL==='Inspección') return x.origen==='Inspección';
+    if(FIL==='Abiertos') return x.estado==='Abierto'||x.estado==='Abierta';
+    if(FIL==='Bloqueantes / Inviabilidades') return (x.tipo==='Bloqueante'||x.tipo==='Inviabilidad'||x.tipo==='Regla de negocio incorrecta'||x.tipo==='Mayor')&&(x.estado==='Abierto'||x.estado==='Abierta');
+    return true;
+  });
+
+  // ── KPIs ──
+  var total=issues.length;
+  var abiertos=issues.filter(function(x){return x.estado==='Abierto'||x.estado==='Abierta';}).length;
+  var resueltos=issues.filter(function(x){return x.estado==='Resuelto'||x.estado==='Resuelta';}).length;
+  var criticos=issues.filter(function(x){
+    return (x.tipo==='Bloqueante'||x.tipo==='Inviabilidad'||x.tipo==='Regla de negocio incorrecta'||x.tipo==='Mayor')
+        && (x.estado==='Abierto'||x.estado==='Abierta');
+  }).length;
+  var readyOk=abiertos===0&&criticos===0&&total>0;
+
+  var origenColor={Walkthrough:'var(--c-blue)',Stakeholders:'var(--c-purple)',Inspección:'var(--c-red)'};
+  var estadoColor={Abierto:'var(--c-red)',Abierta:'var(--c-red)','En revisión':'var(--c-amber)','En proceso':'var(--c-amber)',Resuelto:'var(--c-green)',Resuelta:'var(--c-green)',Descartada:'var(--muted)',Descartado:'var(--muted)'};
+
+  var html='';
+
+  // KPIs
+  html+='<div style="display:grid;grid-template-columns:repeat(5,1fr);gap:.6rem;margin-bottom:1rem">'
+    +'<div class="kpi"><div class="kpi-num" style="color:var(--c-blue)">'+total+'</div><div class="kpi-label">Total issues</div></div>'
+    +'<div class="kpi"><div class="kpi-num" style="color:var(--c-red)">'+abiertos+'</div><div class="kpi-label">Abiertos</div></div>'
+    +'<div class="kpi"><div class="kpi-num" style="color:var(--c-green)">'+resueltos+'</div><div class="kpi-label">Resueltos</div></div>'
+    +'<div class="kpi"><div class="kpi-num" style="color:'+(criticos>0?'var(--c-red)':'var(--c-green)')+'">'+criticos+'</div><div class="kpi-label">Bloq. abiertos</div></div>'
+    +'<div class="kpi"><div class="kpi-num" style="font-size:13px;color:'+(readyOk?'var(--c-green)':total===0?'var(--c-gray)':'var(--c-red)')+'">'+( readyOk?'✓ Listo':total===0?'Sin issues':''+abiertos+' pendientes')+'</div><div class="kpi-label">Estado PC4</div></div>'
+    +'</div>';
+
+  // Banner de aclaración normativa
+  html+='<div class="card" style="margin-bottom:1rem;background:rgba(83,52,131,.04);border-color:rgba(83,52,131,.2)">'
+    +'<div style="display:flex;align-items:flex-start;gap:.7rem">'
+    +'<div style="font-size:16px;flex-shrink:0">ⓘ</div>'
+    +'<div>'
+    +'<div style="font-size:12px;font-weight:500;color:var(--c-purple);margin-bottom:.3rem">Vista de gestión — BABOK v3 Issue Log</div>'
+    +'<div style="font-size:11px;color:var(--muted);line-height:1.7">'
+    +'Esta vista consolida los tres tipos de issues para facilitar el seguimiento previo al baseline. '
+    +'El <strong style="color:var(--text)">Log de defectos IEEE 1028</strong> (inspección formal) permanece como artefacto normativo independiente. '
+    +'Los cambios de estado aquí se sincronizan con cada sección de origen.'
+    +'</div></div></div></div>';
+
+  // Filtros
+  var filtros=['Todos','Walkthrough','Stakeholders','Inspección','Abiertos','Bloqueantes / Inviabilidades'];
+  html+='<div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:1rem">'
+    +filtros.map(function(f){
+      var on=FIL===f;
+      var fc=f==='Walkthrough'?'var(--c-blue)':f==='Stakeholders'?'var(--c-purple)':f==='Inspección'?'var(--c-red)':f==='Abiertos'?'var(--c-amber)':f==='Bloqueantes/Inviabilidades'?'var(--c-red)':'var(--c-green)';
+      return'<button style="padding:4px 12px;border-radius:20px;font-size:11px;font-weight:500;cursor:pointer;border:0.5px solid '+(on?fc:'var(--border2)')+';background:transparent;color:'+(on?fc:'var(--muted)')+';transition:all .2s" onclick="window._issuesFil=\''+f+'\';renderValIssues()">'+f+(f==='Todos'?' ('+total+')':'')+'</button>';
+    }).join('')
+    +'</div>';
+
+  if(total===0){
+    html+='<div class="card" style="text-align:center;padding:2.5rem;color:var(--muted)">'
+      +'<div style="font-size:13px;margin-bottom:.6rem">No hay issues registrados</div>'
+      +'<div style="font-size:12px;margin-bottom:1rem">Los issues aparecen automáticamente cuando registras hallazgos, observaciones o defectos en las actividades anteriores.</div>'
+      +'<div style="display:flex;gap:.5rem;justify-content:center;flex-wrap:wrap">'
+      +'<button class="btn btn-sm" onclick="window._wt2Tab=1;nav(\'val-walkthrough\')">Walkthrough →</button>'
+      +'<button class="btn btn-sm" onclick="window._sk2Tab=1;nav(\'val-stakeholders\')">Stakeholders →</button>'
+      +'<button class="btn btn-sm" onclick="window._inspTab=1;nav(\'val-inspeccion\')">Inspección →</button>'
+      +'</div></div>';
+  } else if(filtered.length===0){
+    html+='<div style="text-align:center;padding:2rem;color:var(--muted);font-size:12px">No hay issues con el filtro seleccionado.</div>';
+  } else {
+    // Agrupar por origen
+    var origenOrder=['Walkthrough','Stakeholders','Inspección'];
+    origenOrder.forEach(function(origen){
+      var grupo=filtered.filter(function(x){return x.origen===origen;});
+      if(grupo.length===0) return;
+      var oc=origenColor[origen]||'var(--muted)';
+      var gAbiertos=grupo.filter(function(x){return x.estado==='Abierto'||x.estado==='Abierta';}).length;
+
+      html+='<div style="margin-bottom:1.2rem">'
+        +'<div style="display:flex;align-items:center;gap:.6rem;margin-bottom:.4rem;padding:.4rem .7rem;background:var(--surface2);border-radius:6px;border-left:3px solid '+oc+'">'
+        +'<div style="font-size:12px;font-weight:500;color:'+oc+'">'+origen+'</div>'
+        +'<div style="font-size:11px;color:var(--muted)">'+grupo.length+' issues · '+gAbiertos+' abiertos</div>'
+        +'<button class="btn btn-sm" style="margin-left:auto;color:'+oc+';border-color:'+oc+';opacity:.7" onclick="'
+        +(origen==='Walkthrough'?'window._wt2Tab=1;nav(\'val-walkthrough\')'
+        :origen==='Stakeholders'?'window._sk2Tab=1;nav(\'val-stakeholders\')'
+        :'window._inspTab=1;nav(\'val-inspeccion\')')+'">Ver en origen →</button>'
+        +'</div>'
+        +'<div class="table-wrap"><table class="data-table">'
+        +'<thead><tr><th>Ref RF</th><th>Tipo / Severidad</th><th>Descripción</th><th>Origen detalle</th><th>Estado</th></tr></thead><tbody>';
+
+      grupo.forEach(function(issue){
+        var tc=oc;
+        var ec=estadoColor[issue.estado]||'var(--muted)';
+        var estOpts=origen==='Inspección'
+          ?['Abierto','En proceso','Resuelto']
+          :origen==='Stakeholders'
+          ?['Abierta','En revisión','Resuelta','Descartada']
+          :['Abierto','En proceso','Resuelto'];
+
+        html+='<tr>'
+          +'<td style="font-family:var(--font-mono);color:var(--c-blue);font-size:11px">'+e(issue.ref)+'</td>'
+          +'<td><span style="font-size:10px;font-weight:600;padding:2px 6px;border-radius:3px;background:rgba(0,0,0,.04);color:'+tc+';border:0.5px solid '+tc+'">'+e(issue.tipo)+'</span></td>'
+          +'<td style="font-size:12px;max-width:260px">'+e(issue.desc||'Sin descripción')+'</td>'
+          +'<td style="font-size:11px;color:var(--muted)">'+issue.origenDetalle+'</td>'
+          +'<td><select style="font-size:11px;border:0.5px solid var(--border2);border-radius:4px;padding:2px 4px;background:var(--bg);color:'+ec+';font-weight:500;outline:none;cursor:pointer" onchange="issueSetEst(this,\''+origen+'\')">'+estOpts.map(function(o){return'<option'+(issue.estado===o?' selected':'')+'>'+o+'</option>';}).join('')+'</select></td>'
+          +'</tr>';
+      });
+
+      html+='</tbody></table></div></div>';
+    });
+  }
+
+  el.innerHTML=html;
+
+  // Cambio de estado — escribe de vuelta al storage de origen
+  window.issueSetEst=function(selectEl,origen){
+    var newEst=selectEl.value;
+    var row=selectEl.closest('tr');
+    if(!row) return;
+    var cells=row.querySelectorAll('td');
+    var rfid=cells[0]?cells[0].textContent.trim():'';
+    var desc=cells[2]?cells[2].textContent.trim():'';
+
+    if(origen==='Walkthrough'){
+      var d2; try{d2=JSON.parse(localStorage.getItem(WT2_KEY))||defWT2();}catch(ex){d2=defWT2();}
+      (d2.sesiones||[]).forEach(function(ses){
+        (ses.hallazgos||[]).forEach(function(h){
+          if((h.rfid||'—')===rfid&&h.desc===desc) h.estado=newEst;
+        });
+      });
+      localStorage.setItem(WT2_KEY,JSON.stringify(d2));
+    } else if(origen==='Stakeholders'){
+      var d3; try{d3=JSON.parse(localStorage.getItem(SK2_KEY))||defSK2();}catch(ex){d3=defSK2();}
+      (d3.revisiones||[]).forEach(function(rev){
+        (rev.observaciones||[]).forEach(function(ob){
+          if((ob.rfid||'—')===rfid&&ob.desc===desc) ob.estado=newEst;
+        });
+      });
+      localStorage.setItem(SK2_KEY,JSON.stringify(d3));
+    } else if(origen==='Inspección'){
+      var d4; try{d4=JSON.parse(localStorage.getItem(INSP_KEY))||defINSP();}catch(ex){d4=defINSP();}
+      (d4.inspecciones||[]).forEach(function(insp){
+        (insp.defectosList||[]).forEach(function(d){
+          if((d.rfid||'—')===rfid&&d.desc===desc) d.estado=newEst;
+        });
+      });
+      localStorage.setItem(INSP_KEY,JSON.stringify(d4));
+    }
+    // Re-render para reflejar nuevo color
+    var ec2={Abierto:'var(--c-red)',Abierta:'var(--c-red)','En revisión':'var(--c-amber)','En proceso':'var(--c-amber)',Resuelto:'var(--c-green)',Resuelta:'var(--c-green)',Descartada:'var(--muted)'};
+    selectEl.style.color=ec2[newEst]||'var(--muted)';
+  };
 }
 
 reg('val-uat', () => `
 <div class="page-header">
   <div class="page-eyebrow" style="color:var(--c-green)">● Fase 4 — Validación</div>
   <h1 class="page-title">Simulador UAT</h1>
-  <p class="page-desc">Ejecuta y registra los casos de prueba de aceptación. Agrega, edita o elimina casos. El indicador GO/NO-GO se actualiza en tiempo real.</p>
+  <p class="page-desc">Casos de prueba de aceptación derivados del SRS. Cubre RF (comportamiento funcional), RNF (rendimiento, seguridad, usabilidad verificables en ambiente real) y reglas de negocio críticas.</p>
+  <div class="std-row"><span class="std-pill">IEEE 29148 §6.3.4</span><span class="std-pill">BABOK v3</span><span class="std-pill">Gherkin / BDD</span></div>
 </div>
 <div id="val-uat-mount"></div>
 `);
@@ -5533,137 +5783,402 @@ function initValUat(){
 }
 function renderValUat(){
   var el=document.getElementById('val-uat-mount'); if(!el) return;
-  if(!window._UAT) window._UAT = UAT_CASES.map(function(u){return Object.assign({res:''},u);});
-  var cases = window._UAT;
-  var sel   = (typeof window._uatSelIdx==='number') ? window._uatSelIdx : -1;
+  if(!window._UAT){
+    try{ window._UAT=JSON.parse(localStorage.getItem('fw_uat_v1'))||UAT_CASES.map(function(u){return Object.assign({tipo:'Funcional',ejecutadoPor:'',fechaEjec:'',obs:'',and:''},u);});
+    }catch(ex){ window._UAT=UAT_CASES.map(function(u){return Object.assign({tipo:'Funcional',ejecutadoPor:'',fechaEjec:'',obs:'',and:''},u);}); }
+  }
 
-  function e(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+  // Normalizar tipo basado en rfid — corrige datos viejos del localStorage
+  window._UAT.forEach(function(u){
+    if(!u.rfid) return;
+    var id=u.rfid.trim();
+    if(id.match(/^RNF-/i)) u.tipo='No funcional';
+    else if(id.match(/^RC-/i)) u.tipo='Regla negocio';
+    else if(id.match(/^RF-/i)||id.match(/^SA-/i)) u.tipo='Funcional';
+    // Si no tiene rfid reconocible, respetar lo que tenga
+  });
+  var cases=window._UAT;
+  var sel=(typeof window._uatSelIdx==='number')?window._uatSelIdx:-1;
+  function e(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+  var TA='width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 6px;font-size:11px;font-family:var(--font-mono);color:var(--text);outline:none;resize:none;overflow:hidden;line-height:1.5';
 
-  var pasa  = cases.filter(function(u){return u.res==='Pasó';}).length;
-  var falla = cases.filter(function(u){return u.res==='Falló';}).length;
-  var bloq  = cases.filter(function(u){return u.res==='Bloqueado';}).length;
-  var pend  = cases.filter(function(u){return !u.res;}).length;
-  var crit  = cases.filter(function(u){return u.prio==='Crítico';});
-  var critOk= crit.every(function(u){return u.res==='Pasó';});
-  var goNogo= pasa>0 && bloq===0 && critOk && pend===0;
-  var parcial= bloq===0 && pend>0;
+  // ── Métricas ──
+  var pasa   = cases.filter(function(u){return u.res==='Pasó';}).length;
+  var falla  = cases.filter(function(u){return u.res==='Falló';}).length;
+  var bloq   = cases.filter(function(u){return u.res==='Bloqueado';}).length;
+  var pend   = cases.filter(function(u){return !u.res;}).length;
+  var noExec = cases.filter(function(u){return u.res==='No ejecutado';}).length;
+  var crit   = cases.filter(function(u){return u.prio==='Crítico';});
+  var critOk = crit.length>0 && crit.every(function(u){return u.res==='Pasó';});
+  var goNogo = pasa>0 && bloq===0 && falla===0 && critOk && pend===0 && noExec===0;
+  var parcial= bloq===0 && falla===0 && (pend>0||noExec>0);
 
-  var html = '';
+  // ── Conexión con baseline: guardar estado ──
+  try{ localStorage.setItem('fw_uat_status_v1',JSON.stringify({goNogo:goNogo,pasa:pasa,falla:falla,bloq:bloq,pend:pend,total:cases.length,critOk:critOk})); }catch(ex){}
 
-  html += '<div style="background:rgba(24,95,165,.06);border:0.5px solid rgba(24,95,165,.25);border-radius:var(--radius);padding:.5rem .8rem;font-size:11px;color:var(--c-blue);margin-bottom:.8rem">'
-         +'ⓘ Marca el resultado en el select. Haz clic en el ID para expandir y editar los criterios Gherkin. + para agregar, × para eliminar.</div>';
+  var html='';
 
   // KPIs
-  html += '<div class="g4" style="margin-bottom:.8rem">';
-  [{n:pasa,l:'Pasó',c:'var(--c-green)'},{n:falla,l:'Falló',c:'var(--c-amber)'},
-   {n:bloq,l:'Bloqueado',c:'var(--c-red)'},{n:pend,l:'Pendiente',c:'var(--c-gray)'}]
-  .forEach(function(k){ html += '<div class="kpi"><div class="kpi-num" style="color:'+k.c+'">'+k.n+'</div><div class="kpi-label">'+k.l+'</div></div>'; });
-  html += '</div>';
+  html+='<div style="display:grid;grid-template-columns:repeat(5,1fr);gap:.6rem;margin-bottom:1rem">'
+    +[{n:cases.length,l:'Total',c:'var(--c-blue)'},{n:pasa,l:'Pasó',c:'var(--c-green)'},
+      {n:falla,l:'Falló',c:'var(--c-amber)'},{n:bloq,l:'Bloqueado',c:'var(--c-red)'},{n:pend,l:'Pendiente',c:'var(--c-gray)'}]
+    .map(function(k){return'<div class="kpi"><div class="kpi-num" style="color:'+k.c+'">'+k.n+'</div><div class="kpi-label">'+k.l+'</div></div>';}).join('')
+    +'</div>';
 
   // Banner GO/NO-GO
-  var bannerColor = goNogo ? '15,110,86' : (parcial ? '186,117,23' : '163,45,45');
-  var bannerVar   = goNogo ? '--c-green'  : (parcial ? '--c-amber'   : '--c-red');
-  var bannerText  = goNogo ? '✓ GO — Aprobado para release' : (parcial ? '⏳ EN CURSO — Casos pendientes' : '✗ NO-GO — Defectos bloqueantes o casos fallidos');
-  html += '<div class="card" style="margin-bottom:.8rem;background:rgba('+bannerColor+',.04);border-color:rgba('+bannerColor+',.25)">'
-         +'<div style="font-size:15px;font-weight:600;color:var('+bannerVar+');">'+bannerText+'</div>'
-         +'<div style="font-size:11px;color:var(--muted);margin-top:2px">'+pasa+' pasaron · '+falla+' fallaron · '+bloq+' bloqueados · '+pend+' pendientes</div></div>';
+  var bc=goNogo?'15,110,86':parcial?'186,117,23':'163,45,45';
+  var bv=goNogo?'--c-green':parcial?'--c-amber':'--c-red';
+  var bt=goNogo?'✓ GO — Todos los casos críticos pasaron. SRS apto para aprobación de baseline.'
+    :parcial?'⏳ EN CURSO — '+pend+' caso(s) pendientes de ejecutar.'
+    :'✗ NO-GO — '+(falla+bloq)+' caso(s) fallido(s) o bloqueado(s). Resolver antes del baseline.';
+  html+='<div class="card" style="margin-bottom:1rem;background:rgba('+bc+',.04);border-color:rgba('+bc+',.25)">'
+    +'<div style="font-size:14px;font-weight:600;color:var('+bv+');">'+bt+'</div>'
+    +'<div style="font-size:11px;color:var(--muted);margin-top:3px">'+pasa+' pasaron · '+falla+' fallaron · '+bloq+' bloqueados · '+pend+' pendientes · '+noExec+' no ejecutados</div>'
+    +(falla>0||bloq>0?'<div style="margin-top:.5rem"><button class="btn btn-sm" style="color:var(--c-red);border-color:rgba(163,45,45,.3)" onclick="uatGenerarDefectos()">⚠ Generar defectos en Log de defectos ('+( falla+bloq)+' casos)</button></div>':'')
+    +'</div>';
+
+  // Info banner
+  html+='<div style="background:rgba(24,95,165,.06);border:0.5px solid rgba(24,95,165,.25);border-radius:var(--radius);padding:.5rem .8rem;font-size:11px;color:var(--c-blue);margin-bottom:1rem">'
+    +'ⓘ Clic en el ID para expandir y editar el caso. Casos Fallidos o Bloqueados pueden enviarse al Log de defectos con un clic. Los resultados alimentan el semáforo de Aprobación baseline.</div>';
 
   // Formulario agregar
-  html += '<div class="card" style="margin-bottom:.8rem"><div class="card-title" style="margin-bottom:.5rem">Agregar caso de prueba</div>'
-         +'<div style="display:grid;grid-template-columns:80px 80px 90px 1fr;gap:5px;margin-bottom:5px">'
-         +'<div><div style="font-size:10px;font-weight:500;color:var(--muted);margin-bottom:2px">ID</div>'
-         +'<input id="nu-id" placeholder="UAT-009" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:4px 6px;font-size:12px;font-family:var(--font-mono);color:var(--c-blue);outline:none"></div>'
-         +'<div><div style="font-size:10px;font-weight:500;color:var(--muted);margin-bottom:2px">RF</div>'
-         +'<input id="nu-rfid" placeholder="RF-001" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:4px 6px;font-size:12px;font-family:var(--font-mono);color:var(--text);outline:none"></div>'
-         +'<div><div style="font-size:10px;font-weight:500;color:var(--muted);margin-bottom:2px">Prioridad</div>'
-         +'<select id="nu-prio" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:4px 5px;font-size:12px;color:var(--text);outline:none">'
-         +'<option>Crítico</option><option>Alto</option><option>Medio</option><option>Bajo</option></select></div>'
-         +'<div><div style="font-size:10px;font-weight:500;color:var(--muted);margin-bottom:2px">Título</div>'
-         +'<input id="nu-title" placeholder="Describe el caso..." style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:4px 6px;font-size:12px;color:var(--text);outline:none"></div>'
-         +'</div><button class="btn btn-sm" style="background:var(--c-green);color:#fff;border-color:var(--c-green)" onclick="uatAdd()">+ Agregar caso</button></div>';
+  html+='<div class="card" style="margin-bottom:1rem"><div class="card-title" style="margin-bottom:.6rem">Agregar caso de prueba</div>'
+    +'<div style="display:grid;grid-template-columns:80px 90px 90px 90px 1fr;gap:5px;margin-bottom:.5rem">'
+    +'<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">ID</label>'
+    +'<input id="nu-id" placeholder="UAT-009" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:4px 6px;font-size:12px;font-family:var(--font-mono);color:var(--c-blue);outline:none"></div>'
+    +'<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">Req. ID</label>'
+    +'<input id="nu-rfid" placeholder="RF / RNF / RC" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:4px 6px;font-size:12px;font-family:var(--font-mono);color:var(--text);outline:none"></div>'
+    +'<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">Tipo</label>'
+    +'<select id="nu-tipo" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:4px 5px;font-size:12px;color:var(--text);outline:none">'
+    +'<option>Funcional</option><option>No funcional</option><option>Regla negocio</option></select></div>'
+    +'<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">Prioridad</label>'
+    +'<select id="nu-prio" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:4px 5px;font-size:12px;color:var(--text);outline:none">'
+    +'<option>Crítico</option><option>Alto</option><option>Medio</option><option>Bajo</option></select></div>'
+    +'<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">Título</label>'
+    +'<input id="nu-title" placeholder="Describe el caso..." style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:4px 6px;font-size:12px;color:var(--text);outline:none"></div>'
+    +'</div>'
+    +'<div style="display:flex;gap:.5rem;align-items:center;flex-wrap:wrap">'
+    +'<button class="btn btn-sm" style="background:var(--c-green);color:#fff;border-color:var(--c-green)" onclick="uatAdd()">+ Agregar caso</button>'
+    +'<button class="btn btn-sm" style="color:var(--c-blue);border-color:rgba(24,95,165,.35)" onclick="uatImportSRS()">↓ Importar desde SRS</button>'
+    +'<span id="uat-add-msg" style="font-size:11px;color:var(--c-red)"></span>'
+    +'</div></div>';
 
-  // Casos
-  cases.forEach(function(u,i){
-    var resColor = {Pasó:'var(--c-green)',Falló:'var(--c-amber)',Bloqueado:'var(--c-red)'}[u.res]||'var(--c-gray)';
-    var prioClass= {Crítico:'b-err',Alto:'b-warn',Medio:'b-func',Bajo:''}[u.prio]||'';
-    var isOpen   = sel===i;
+  // Cabecera de columnas
+  var tipoColor={Funcional:'var(--c-blue)','No funcional':'var(--c-purple)','Regla negocio':'var(--c-amber)'};
+  var prioColor={Crítico:'var(--c-red)',Alto:'var(--c-amber)',Medio:'var(--c-blue)',Bajo:'var(--muted)'};
+  var resColor2={Pasó:'var(--c-green)',Falló:'var(--c-amber)',Bloqueado:'var(--c-red)','No ejecutado':'var(--muted)'};
 
-    html += '<div class="card-sm" style="margin-bottom:.4rem;border-left:3px solid '+resColor+'">'
-      +'<div style="display:flex;align-items:center;gap:.5rem;flex-wrap:wrap">'
-      +'<span style="font-family:var(--font-mono);font-size:11px;color:var(--c-blue);cursor:pointer" onclick="uatToggle('+i+')">'+e(u.id)+'</span>'
-      +'<span class="badge b-func" style="font-size:10px">'+e(u.rfid)+'</span>'
-      +'<span class="badge '+prioClass+'" style="font-size:10px">'+e(u.prio)+'</span>'
-      +'<span style="font-size:12px;font-weight:500;flex:1;cursor:pointer" onclick="uatToggle('+i+')">'+e(u.title)+'</span>'
-      +'<select style="font-size:11px;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:2px 5px;color:var(--text);outline:none;cursor:pointer" onchange="uatSetRes('+i+',this.value)">'
-      +'<option'+(!u.res?' selected':'')+'>-- resultado --</option>'
-      +'<option'+(u.res==='Pasó'?' selected':'')+'>Pasó</option>'
-      +'<option'+(u.res==='Falló'?' selected':'')+'>Falló</option>'
-      +'<option'+(u.res==='Bloqueado'?' selected':'')+'>Bloqueado</option>'
-      +'<option'+(u.res==='No ejecutado'?' selected':'')+'>No ejecutado</option>'
-      +'</select>'
-      +'<button class="uat-btn" style="color:var(--muted);font-size:16px;flex-shrink:0" onclick="uatDel('+i+')">×</button>'
+  // Agrupar por tipo
+  var tipos=['Funcional','No funcional','Regla negocio'];
+  tipos.forEach(function(tipo){
+    var grupo=cases.filter(function(u){return (u.tipo||'Funcional')===tipo;});
+    if(grupo.length===0) return;
+    var tc=tipoColor[tipo]||'var(--muted)';
+    var gPasa=grupo.filter(function(u){return u.res==='Pasó';}).length;
+    var gFalla=grupo.filter(function(u){return u.res==='Falló'||u.res==='Bloqueado';}).length;
+
+    html+='<div style="margin-bottom:1rem">'
+      +'<div style="display:flex;align-items:center;gap:.6rem;margin-bottom:.4rem;padding:.35rem .7rem;background:var(--surface2);border-radius:6px;border-left:3px solid '+tc+'">'
+      +'<div style="font-size:12px;font-weight:500;color:'+tc+'">'+tipo+'</div>'
+      +'<div style="font-size:11px;color:var(--muted)">'+grupo.length+' casos · '+gPasa+' pasaron · '+gFalla+' fallaron/bloqueados</div>'
       +'</div>';
 
-    if(isOpen){
-      html += '<div style="margin-top:.6rem;padding-top:.6rem;border-top:0.5px solid var(--border)">'
-        +'<div style="display:grid;grid-template-columns:70px 70px 80px 1fr;gap:5px;margin-bottom:.5rem">'
-        +'<div><div style="font-size:10px;font-weight:500;color:var(--muted);margin-bottom:2px">ID</div>'
-        +'<input value="'+e(u.id)+'" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 6px;font-size:11px;font-family:var(--font-mono);color:var(--c-blue);outline:none" oninput="window._UAT['+i+'].id=this.value;uatSave()"></div>'
-        +'<div><div style="font-size:10px;font-weight:500;color:var(--muted);margin-bottom:2px">RF</div>'
-        +'<input value="'+e(u.rfid)+'" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 6px;font-size:11px;font-family:var(--font-mono);color:var(--text);outline:none" oninput="window._UAT['+i+'].rfid=this.value;uatSave()"></div>'
-        +'<div><div style="font-size:10px;font-weight:500;color:var(--muted);margin-bottom:2px">Prioridad</div>'
-        +'<select style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 5px;font-size:11px;color:var(--text);outline:none" onchange="uatSetPrio('+i+',this.value)">'
-        +'<option'+(u.prio==='Crítico'?' selected':'')+'>Crítico</option>'
-        +'<option'+(u.prio==='Alto'?' selected':'')+'>Alto</option>'
-        +'<option'+(u.prio==='Medio'?' selected':'')+'>Medio</option>'
-        +'<option'+(u.prio==='Bajo'?' selected':'')+'>Bajo</option>'
-        +'</select></div>'
-        +'<div><div style="font-size:10px;font-weight:500;color:var(--muted);margin-bottom:2px">Título</div>'
-        +'<input value="'+e(u.title)+'" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 6px;font-size:12px;color:var(--text);outline:none" oninput="window._UAT['+i+'].title=this.value;uatSave()"></div>'
-        +'</div>'
-        +'<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px">'
-        +'<div><div style="font-size:10px;font-weight:500;color:var(--c-blue);margin-bottom:2px">Given</div>'
-        +'<textarea rows="2" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 6px;font-size:11px;font-family:var(--font-mono);color:var(--text);resize:vertical;outline:none" oninput="window._UAT['+i+'].given=this.value;uatSave()">'+e(u.given||'')+'</textarea></div>'
-        +'<div><div style="font-size:10px;font-weight:500;color:var(--c-amber);margin-bottom:2px">When</div>'
-        +'<textarea rows="2" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 6px;font-size:11px;font-family:var(--font-mono);color:var(--text);resize:vertical;outline:none" oninput="window._UAT['+i+'].when=this.value;uatSave()">'+e(u.when||'')+'</textarea></div>'
-        +'<div><div style="font-size:10px;font-weight:500;color:var(--c-green);margin-bottom:2px">Then</div>'
-        +'<textarea rows="2" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 6px;font-size:11px;font-family:var(--font-mono);color:var(--text);resize:vertical;outline:none" oninput="window._UAT['+i+'].then=this.value;uatSave()">'+e(u.then||'')+'</textarea></div>'
-        +'</div></div>';
-    }
-    html += '</div>';
+    grupo.forEach(function(u){
+      var i=cases.indexOf(u);
+      var rc=resColor2[u.res]||'var(--c-gray)';
+      var isOpen=sel===i;
+
+      html+='<div class="card-sm" style="margin-bottom:.4rem;border-left:3px solid '+rc+'">'
+        +'<div style="display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;cursor:pointer" onclick="uatToggle('+i+')">'
+        +'<span style="font-family:var(--font-mono);font-size:11px;color:var(--c-blue);flex-shrink:0">'+e(u.id)+'</span>'
+        +'<span style="font-size:10px;padding:1px 6px;border-radius:3px;background:rgba(0,0,0,.04);color:'+tc+';border:0.5px solid '+tc+';flex-shrink:0">'+e(u.tipo||'Funcional')+'</span>'
+        +'<span style="font-size:10px;font-weight:600;color:'+prioColor[u.prio]+';flex-shrink:0">'+e(u.prio)+'</span>'
+        +'<span style="font-size:10px;font-family:var(--font-mono);color:var(--muted);flex-shrink:0">'+e(u.rfid)+'</span>'
+        +'<span style="font-size:12px;font-weight:500;flex:1">'+e(u.title)+'</span>'
+        +'<select style="font-size:11px;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:2px 5px;color:'+rc+';font-weight:500;outline:none;cursor:pointer;flex-shrink:0" onclick="event.stopPropagation()" onchange="uatSetRes('+i+',this.value)">'
+        +'<option'+(!u.res?' selected':'')+'>-- pendiente --</option>'
+        +'<option'+(u.res==='Pasó'?' selected':'')+'>Pasó</option>'
+        +'<option'+(u.res==='Falló'?' selected':'')+'>Falló</option>'
+        +'<option'+(u.res==='Bloqueado'?' selected':'')+'>Bloqueado</option>'
+        +'<option'+(u.res==='No ejecutado'?' selected':'')+'>No ejecutado</option>'
+        +'</select>'
+        +'<button class="uat-btn" style="color:var(--muted);font-size:15px;flex-shrink:0" onclick="event.stopPropagation();uatDel('+i+')">×</button>'
+        +'<span style="color:var(--muted);font-size:12px;flex-shrink:0">'+(isOpen?'▲':'▼')+'</span>'
+        +'</div>';
+
+      if(isOpen){
+        html+='<div style="margin-top:.6rem;padding-top:.6rem;border-top:0.5px solid var(--border)">';
+
+        // Metadata editable
+        html+='<div style="display:grid;grid-template-columns:80px 90px 90px 90px 1fr;gap:5px;margin-bottom:.6rem">'
+          +'<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">ID</label>'
+          +'<input value="'+e(u.id)+'" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 6px;font-size:11px;font-family:var(--font-mono);color:var(--c-blue);outline:none" oninput="window._UAT['+i+'].id=this.value;uatSave()"></div>'
+          +'<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">Req. ID</label>'
+          +'<input value="'+e(u.rfid)+'" placeholder="RF / RNF / RC" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 6px;font-size:11px;font-family:var(--font-mono);color:var(--text);outline:none" oninput="window._UAT['+i+'].rfid=this.value;uatSave()"></div>'
+          +'<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">Tipo</label>'
+          +'<select style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 5px;font-size:11px;color:var(--text);outline:none" onchange="window._UAT['+i+'].tipo=this.value;uatSave();renderValUat()">'
+          +['Funcional','No funcional','Regla negocio'].map(function(o){return'<option'+((u.tipo||'Funcional')===o?' selected':'')+'>'+o+'</option>';}).join('')+'</select></div>'
+          +'<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">Prioridad</label>'
+          +'<select style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 5px;font-size:11px;color:var(--text);outline:none" onchange="uatSetPrio('+i+',this.value)">'
+          +['Crítico','Alto','Medio','Bajo'].map(function(o){return'<option'+(u.prio===o?' selected':'')+'>'+o+'</option>';}).join('')+'</select></div>'
+          +'<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">Título</label>'
+          +'<input value="'+e(u.title)+'" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 6px;font-size:12px;color:var(--text);outline:none" oninput="window._UAT['+i+'].title=this.value;uatSave()"></div>'
+          +'</div>';
+
+        // Gherkin Given/When/Then/And
+        html+='<div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:5px;margin-bottom:.6rem">'
+          +'<div><div style="font-size:10px;font-weight:600;color:var(--c-blue);margin-bottom:2px">Given</div>'
+          +'<textarea rows="2" style="'+TA+'" oninput="autoH(this);window._UAT['+i+'].given=this.value;uatSave()">'+e(u.given||'')+'</textarea></div>'
+          +'<div><div style="font-size:10px;font-weight:600;color:var(--c-amber);margin-bottom:2px">When</div>'
+          +'<textarea rows="2" style="'+TA+'" oninput="autoH(this);window._UAT['+i+'].when=this.value;uatSave()">'+e(u.when||'')+'</textarea></div>'
+          +'<div><div style="font-size:10px;font-weight:600;color:var(--c-green);margin-bottom:2px">Then</div>'
+          +'<textarea rows="2" style="'+TA+'" oninput="autoH(this);window._UAT['+i+'].then=this.value;uatSave()">'+e(u.then||'')+'</textarea></div>'
+          +'<div><div style="font-size:10px;font-weight:600;color:var(--muted);margin-bottom:2px">And (opcional)</div>'
+          +'<textarea rows="2" style="'+TA+'" oninput="autoH(this);window._UAT['+i+'].and=this.value;uatSave()">'+e(u.and||'')+'</textarea></div>'
+          +'</div>';
+
+        // Ejecución
+        html+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-bottom:.5rem">'
+          +'<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">Ejecutado por</label>'
+          +'<input value="'+e(u.ejecutadoPor||'')+'" placeholder="Nombre del tester / usuario" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 6px;font-size:12px;color:var(--text);outline:none" oninput="window._UAT['+i+'].ejecutadoPor=this.value;uatSave()"></div>'
+          +'<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">Fecha de ejecución</label>'
+          +'<input type="date" value="'+e(u.fechaEjec||'')+'" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 6px;font-size:12px;color:var(--text);outline:none" oninput="window._UAT['+i+'].fechaEjec=this.value;uatSave()"></div>'
+          +'</div>';
+
+        html+='<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">Observaciones del resultado</label>'
+          +'<textarea rows="2" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 6px;font-size:12px;color:var(--text);outline:none;resize:none;overflow:hidden;line-height:1.5" oninput="autoH(this);window._UAT['+i+'].obs=this.value;uatSave()">'+e(u.obs||'')+'</textarea></div>';
+
+        // Botón generar defecto si falló o bloqueado
+        if(u.res==='Falló'||u.res==='Bloqueado'){
+          html+='<div style="margin-top:.5rem">'
+            +'<button class="btn btn-sm" style="color:var(--c-red);border-color:rgba(163,45,45,.3)" onclick="uatGenerarDefecto('+i+')">⚠ Registrar como defecto en Log de defectos</button>'
+            +'</div>';
+        }
+
+        html+='</div>';
+      }
+      html+='</div>';
+    });
+    html+='</div>';
   });
 
-  html += '<div style="margin-top:.8rem"></div>';
-  el.innerHTML = html;
+  el.innerHTML=html;
+  el.querySelectorAll('textarea').forEach(function(ta){ta.style.height='auto';ta.style.height=ta.scrollHeight+'px';});
 }
 
-function uatToggle(i){ window._uatSelIdx = (window._uatSelIdx===i) ? -1 : parseInt(i); renderValUat(); }
-function uatSetRes(i,v){ if(v==='-- resultado --') v=''; window._UAT[parseInt(i)].res=v; uatSave(); renderValUat(); }
+function uatToggle(i){ window._uatSelIdx=(window._uatSelIdx===i)?-1:parseInt(i); renderValUat(); }
+function uatSetRes(i,v){ if(v==='-- pendiente --') v=''; window._UAT[parseInt(i)].res=v; uatSave(); renderValUat(); }
 function uatSetPrio(i,v){ window._UAT[parseInt(i)].prio=v; uatSave(); renderValUat(); }
 
-
 function uatSave(){
-  try{ localStorage.setItem('fw_uat_v1', JSON.stringify(window._UAT)); }catch(e){}
+  try{ localStorage.setItem('fw_uat_v1',JSON.stringify(window._UAT)); }catch(ex){}
+  // Actualizar estado para baseline
+  var cases=window._UAT||[];
+  var pasa=cases.filter(function(u){return u.res==='Pasó';}).length;
+  var falla=cases.filter(function(u){return u.res==='Falló';}).length;
+  var bloq=cases.filter(function(u){return u.res==='Bloqueado';}).length;
+  var pend=cases.filter(function(u){return !u.res;}).length;
+  var crit=cases.filter(function(u){return u.prio==='Crítico';});
+  var critOk=crit.length>0&&crit.every(function(u){return u.res==='Pasó';});
+  var goNogo=pasa>0&&bloq===0&&falla===0&&critOk&&pend===0;
+  try{ localStorage.setItem('fw_uat_status_v1',JSON.stringify({goNogo:goNogo,pasa:pasa,falla:falla,bloq:bloq,pend:pend,total:cases.length,critOk:critOk})); }catch(ex){}
 }
+
 function uatAdd(){
-  if(!window._UAT) window._UAT=UAT_CASES.map(function(u){return Object.assign({res:''},u);});
+  if(!window._UAT) window._UAT=UAT_CASES.map(function(u){return Object.assign({tipo:'Funcional',ejecutadoPor:'',fechaEjec:'',obs:'',and:''},u);});
   var id=document.getElementById('nu-id')?.value?.trim()||'UAT-'+String(window._UAT.length+1).padStart(3,'0');
   var rfid=document.getElementById('nu-rfid')?.value?.trim()||'';
+  var tipo=document.getElementById('nu-tipo')?.value||'Funcional';
   var prio=document.getElementById('nu-prio')?.value||'Crítico';
   var title=document.getElementById('nu-title')?.value?.trim()||'';
-  if(!title){var _e=document.getElementById('uat-add-msg');if(_e){_e.textContent='⚠ El título es obligatorio';setTimeout(function(){_e.textContent='';},2000);}return;}
-  window._UAT.push({id:id,rfid:rfid,prio:prio,title:title,given:'',when:'',then:'',res:''});
+  if(!title){var _e2=document.getElementById('uat-add-msg');if(_e2){_e2.textContent='⚠ Título obligatorio';setTimeout(function(){_e2.textContent='';},2000);}return;}
+  window._UAT.push({id:id,rfid:rfid,tipo:tipo,prio:prio,title:title,given:'',when:'',then:'',and:'',ejecutadoPor:'',fechaEjec:'',obs:'',res:''});
   uatSave(); renderValUat();
 }
 function uatDel(i){
-  i=parseInt(i);
-  window._UAT.splice(i,1); uatSave();
+  i=parseInt(i); window._UAT.splice(i,1); uatSave();
   if(window._uatSelIdx===i) window._uatSelIdx=-1;
   renderValUat();
 }
 function uatRestore(){
-  window._UAT=UAT_CASES.map(function(u){return Object.assign({res:''},u);});
+  window._UAT=UAT_CASES.map(function(u){return Object.assign({tipo:'Funcional',ejecutadoPor:'',fechaEjec:'',obs:'',and:''},u);});
   uatSave(); renderValUat();
+}
+
+function uatImportSRS(){
+  if(!window._UAT) window._UAT=[];
+
+  // Limpiar casos previamente importados para re-clasificarlos correctamente
+  window._UAT=window._UAT.filter(function(u){ return !u._importado; });
+
+  var srs;    try{ srs=JSON.parse(localStorage.getItem(SRS_KEY))||defaultSRS(); }catch(ex){ srs=defaultSRS(); }
+  var huData; try{ huData=JSON.parse(localStorage.getItem(HU_KEY))||defHU(); }catch(ex){ huData=defHU(); }
+
+  var exampleIds=UAT_CASES.map(function(u){return u.rfid;});
+  // Solo los casos creados manualmente por el usuario (sin _importado)
+  var userCreated=window._UAT.map(function(u){return u._huEscId||u.rfid;});
+
+  var added=0;
+
+  // 1. HU — cada escenario es un caso UAT (fuente principal BABOK v3)
+  (huData.items||[]).forEach(function(h){
+    var escenarios=h.escenarios||[];
+    if(escenarios.length===0&&h.criterios&&h.criterios.trim()){
+      var lines=h.criterios.split('\n');
+      var esc={titulo:'Escenario principal',contexto:'',accion:'',resultado:'',y:''};
+      lines.forEach(function(l){
+        var lt=l.trim().toLowerCase();
+        if(lt.startsWith('dado que')) esc.contexto=l.replace(/dado que/i,'').trim();
+        else if(lt.startsWith('cuando')) esc.accion=l.replace(/cuando/i,'').trim();
+        else if(lt.startsWith('entonces')) esc.resultado=l.replace(/entonces/i,'').trim();
+        else if(lt.startsWith('y ')) esc.y=l.replace(/^y /i,'').trim();
+      });
+      if(esc.contexto||esc.accion||esc.resultado) escenarios=[esc];
+    }
+    if(escenarios.length===0) return;
+
+    var reqId=(h.rfs||h.otros||h.id).split(',')[0].trim();
+
+    // Tipo basado en el requisito principal que se prueba
+    var tipo=reqId.match(/^RNF-/i)?'No funcional':reqId.match(/^RC-/i)?'Regla negocio':'Funcional';
+    var prio=h.prioridad==='Must'?'Crítico':h.prioridad==='Should'?'Alto':'Medio';
+
+    escenarios.forEach(function(esc,ei){
+      var escId=h.id+'-E'+(ei+1);
+      if(userCreated.indexOf(escId)>=0) return;
+      window._UAT.push({
+        id:'UAT-'+String(window._UAT.length+1).padStart(3,'0'),
+        rfid:reqId,
+        tipo:tipo,
+        prio:prio,
+        title:'['+h.id+'] Como '+h.rol+': '+(esc.titulo||'Escenario '+(ei+1)),
+        given:esc.contexto||'',
+        when:esc.accion||'',
+        then:esc.resultado||'',
+        and:esc.y||'',
+        ejecutadoPor:'',fechaEjec:'',obs:'',res:'',
+        _importado:true,_huEscId:escId,_huId:h.id
+      });
+      added++;
+    });
+  });
+
+  // 2. RF sin HU vinculada (cobertura de seguridad)
+  var rfsCubiertos={};
+  (huData.items||[]).forEach(function(h){
+    (h.rfs||'').split(',').forEach(function(r){var t=r.trim();if(t)rfsCubiertos[t]=true;});
+  });
+  (srs.rfs||[]).forEach(function(r){
+    if(rfsCubiertos[r.id]) return;
+    if(userCreated.indexOf(r.id)>=0) return;
+    window._UAT.push({
+      id:'UAT-'+String(window._UAT.length+1).padStart(3,'0'),
+      rfid:r.id, tipo:'Funcional',
+      prio:r.prioridad==='Must'?'Crítico':r.prioridad==='Should'?'Alto':'Medio',
+      title:'[Sin HU] '+(r.titulo||r.id),
+      given:r.given||'',when:r.when||'',then:r.then||r.criterio||'',and:'',
+      ejecutadoPor:'',fechaEjec:'',obs:'',res:'',_importado:true
+    });
+    added++;
+  });
+
+  // 3. RNF (siempre verificables independientemente)
+  (srs.rnfs||[]).forEach(function(r){
+    if(userCreated.indexOf(r.id)>=0) return;
+    var cat=(r.cat||'calidad').toLowerCase();
+    var given,when;
+    if(cat.indexOf('rendimiento')>=0||cat.indexOf('performance')>=0){
+      given='el sistema está bajo carga representativa de producción';
+      when='se ejecuta el test de rendimiento ('+(r.metodo||'herramienta de carga')+')';
+    } else if(cat.indexOf('disponibilidad')>=0){
+      given='el sistema está desplegado en el ambiente de producción';
+      when='se monitorea la disponibilidad durante el período definido';
+    } else if(cat.indexOf('seguridad')>=0){
+      given='el sistema está expuesto al ambiente de producción';
+      when='se ejecuta la prueba de seguridad ('+(r.metodo||'test de penetración')+')';
+    } else if(cat.indexOf('usabilidad')>=0){
+      given='un usuario real ejecuta las tareas principales del sistema';
+      when='se mide la experiencia de uso según los criterios definidos';
+    } else {
+      given='el sistema está en ambiente de producción representativo';
+      when='se verifica el atributo de '+(r.atributo||cat);
+    }
+    window._UAT.push({
+      id:'UAT-'+String(window._UAT.length+1).padStart(3,'0'),
+      rfid:r.id, tipo:'No funcional', prio:'Alto',
+      title:(r.cat?'['+r.cat+'] ':'')+( r.atributo||r.id),
+      given:given,when:when,then:r.valor||'',
+      and:'Verificado con: '+(r.metodo||'método definido en SRS'),
+      ejecutadoPor:'',fechaEjec:'',obs:'',res:'',_importado:true
+    });
+    added++;
+  });
+
+  // 4. RC verificables
+  (srs.rcs||[]).forEach(function(r){
+    if(userCreated.indexOf(r.id)>=0) return;
+    if(!r.v) return;
+    window._UAT.push({
+      id:'UAT-'+String(window._UAT.length+1).padStart(3,'0'),
+      rfid:r.id, tipo:'Regla negocio', prio:'Medio',
+      title:'Verificar restricción: '+(r.t||r.id),
+      given:'el sistema está desplegado en el ambiente acordado',
+      when:'se verifica el cumplimiento de la restricción',
+      then:'se confirma que '+r.v, and:'',
+      ejecutadoPor:'',fechaEjec:'',obs:'',res:'',_importado:true
+    });
+    added++;
+  });
+
+  uatSave(); renderValUat();
+
+  var msg=document.createElement('div');
+  msg.style.cssText='position:fixed;bottom:1.5rem;right:1.5rem;background:var(--c-blue);color:#fff;padding:.7rem 1.1rem;border-radius:8px;font-size:12px;font-weight:500;z-index:9999;box-shadow:0 4px 12px rgba(0,0,0,.2);max-width:320px;line-height:1.5';
+  msg.textContent=added>0?'✓ '+added+' casos importados — escenarios HU + RF sin HU + RNF + RC':'No hay elementos nuevos para importar';
+  document.body.appendChild(msg);
+  setTimeout(function(){msg.remove();},3500);
+}
+
+
+// Generar defecto en la Inspección desde un caso UAT fallido
+function uatGenerarDefecto(i){
+  var u=window._UAT[i]; if(!u) return;
+  var d2; try{d2=JSON.parse(localStorage.getItem(INSP_KEY))||defINSP();}catch(ex){d2=defINSP();}
+  if(!d2.inspecciones) d2.inspecciones=[];
+  // Buscar o crear inspección UAT
+  var uatInsp=d2.inspecciones.filter(function(x){return x.tipo==='Inspección por sección'&&x.alcance==='UAT — Casos fallidos';});
+  var insp;
+  if(uatInsp.length===0){
+    insp={fecha:new Date().toISOString().slice(0,10),moderador:'QA Lead',autor:'BA',lector:'',inspectores:'',alcance:'UAT — Casos fallidos',paginas:'',defectos:'',densidad:'',decision:'En proceso — pendiente resolución',tipo:'Inspección por sección',notas:'Defectos generados automáticamente desde casos UAT fallidos.',checklist:{},defectosList:[]};
+    d2.inspecciones.push(insp);
+  } else {
+    insp=uatInsp[0];
+  }
+  if(!insp.defectosList) insp.defectosList=[];
+  // Evitar duplicados
+  var yaExiste=insp.defectosList.some(function(d){return d.rfid===u.rfid&&d.desc===u.title;});
+  if(!yaExiste){
+    insp.defectosList.push({rfid:u.rfid||'—',sev:u.prio==='Crítico'?'Bloqueante':u.prio==='Alto'?'Mayor':'Menor',desc:'[UAT '+u.id+'] '+u.title+' — Resultado: '+u.res,estado:'Abierto',impacto:'Caso de aceptación fallido. El requisito '+( u.rfid||'referenciado')+' no cumple su criterio en ambiente real.',resolucion:''});
+    insp.defectos=String(insp.defectosList.length);
+    localStorage.setItem(INSP_KEY,JSON.stringify(d2));
+    var msg=document.createElement('div');
+    msg.style.cssText='position:fixed;bottom:1.5rem;right:1.5rem;background:var(--c-red);color:#fff;padding:.6rem 1rem;border-radius:8px;font-size:12px;font-weight:500;z-index:9999;box-shadow:0 4px 12px rgba(0,0,0,.2)';
+    msg.textContent='✓ Defecto registrado en Inspección formal';
+    document.body.appendChild(msg);
+    setTimeout(function(){msg.remove();},2500);
+  } else {
+    alert('Este caso ya fue registrado como defecto.');
+  }
+}
+
+// Generar defectos de todos los casos fallidos/bloqueados
+function uatGenerarDefectos(){
+  var cases=window._UAT||[];
+  var fallidos=cases.filter(function(u,i){return u.res==='Falló'||u.res==='Bloqueado';});
+  fallidos.forEach(function(u){
+    var i=cases.indexOf(u);
+    uatGenerarDefecto(i);
+  });
 }
 
 reg('val-baseline', () => `
@@ -5821,6 +6336,786 @@ function blReset(){
   var m=document.getElementById('baseline-mount'); if(m){m.innerHTML='';initBaseline();}
 }
 
+
+
+/* ════════════════════════════════════════
+   FASE 4 — PÁGINAS NUEVAS
+════════════════════════════════════════ */
+
+// ── Auto-grow helper ──
+function autoH(el){ el.style.height='auto'; el.style.height=el.scrollHeight+'px'; }
+
+reg('val-autoreview', () => `
+<div class="page-header">
+  <div class="page-eyebrow" style="color:var(--c-green)">● Fase 4 — Validación</div>
+  <h1 class="page-title">Auto-revisión del BA</h1>
+  <p class="page-desc">El Business Analyst aplica un checklist formal sobre el SRS antes de enviarlo a revisión externa. Criterio: ≥ 85% de ítems OK y 0 Bloqueantes abiertos.</p>
+  <div class="std-row"><span class="std-pill">IEEE 29148:2018 §6.2</span><span class="std-pill">ISO/IEC 25010</span></div>
+</div>
+<div id="val-ar-mount"></div>
+`);
+
+reg('val-walkthrough', () => `
+<div class="page-header">
+  <div class="page-eyebrow" style="color:var(--c-green)">● Fase 4 — Validación</div>
+  <h1 class="page-title">Walkthrough técnico</h1>
+  <p class="page-desc">Sesión guiada por el autor ante Dev Lead y QA Lead para detectar inviabilidades técnicas y ambigüedades antes de la inspección formal.</p>
+  <div class="std-row"><span class="std-pill">IEEE 1028:2008 §5.3</span><span class="std-pill">BABOK v3</span></div>
+</div>
+<div id="val-wt-mount"></div>
+`);
+
+reg('val-stakeholders', () => `
+<div class="page-header">
+  <div class="page-eyebrow" style="color:var(--c-green)">● Fase 4 — Validación</div>
+  <h1 class="page-title">Revisión de stakeholders de negocio</h1>
+  <p class="page-desc">Los stakeholders validan que el SRS refleja fielmente sus necesidades. El Product Owner firma el acta de conformidad.</p>
+  <div class="std-row"><span class="std-pill">IEEE 29148:2018 §6.3</span><span class="std-pill">BABOK v3 §3.2</span></div>
+</div>
+<div id="val-sk-mount"></div>
+`);
+
+reg('val-inspeccion', () => `
+<div class="page-header">
+  <div class="page-eyebrow" style="color:var(--c-green)">● Fase 4 — Validación</div>
+  <h1 class="page-title">Inspección formal (Fagan)</h1>
+  <p class="page-desc">Inspector independiente aplica checklist en 6 fases (IEEE 1028 §5.4). Los defectos se clasifican y deben resolverse antes del baseline.</p>
+  <div class="std-row"><span class="std-pill">IEEE 1028:2008 §5.4</span><span class="std-pill">Fagan 1976</span></div>
+</div>
+<div id="val-insp-mount"></div>
+`);
+
+reg('val-publicacion', () => `
+<div class="page-header">
+  <div class="page-eyebrow" style="color:var(--c-green)">● Fase 4 — Validación</div>
+  <h1 class="page-title">Publicación del SRS baseline</h1>
+  <p class="page-desc">Publicación formal del SRS v1.0-baseline en el repositorio con tag de versión, notificación al equipo y activación del CCB.</p>
+  <div class="std-row"><span class="std-pill">IEEE 29148:2018 §6.5</span><span class="std-pill">ISO/IEC 12207:2017</span></div>
+</div>
+<div id="val-pub-mount"></div>
+`);
+
+/* ── AUTO-REVISIÓN BA ── */
+var AR_KEY='fw_val_ar_v1';
+function defAR(){ return {}; }
+function initValAR(){ var el=document.getElementById('val-ar-mount'); if(!el||el.innerHTML.trim()) return; renderValAR(); }
+function renderValAR(){
+  var el=document.getElementById('val-ar-mount'); if(!el) return;
+  var itemData; try{ itemData=JSON.parse(localStorage.getItem(AR_KEY+'_items'))||{}; }catch(ex){ itemData={}; }
+  var meta; try{ meta=JSON.parse(localStorage.getItem(AR_KEY+'_meta'))||{fecha:'',autor:'',version:'',obs:''}; }catch(ex){ meta={fecha:'',autor:'',version:'',obs:''}; }
+  function escH(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+  var dims=[
+    {dim:'Estructura e identificación',color:'var(--c-blue)',items:[
+      {id:'ar01',sev:'Bloqueante',text:'Cada requisito tiene un ID único en formato RF-NNN o RNF-NNN'},
+      {id:'ar02',sev:'Bloqueante',text:'El SRS incluye portada con proyecto, versión, autor, fecha y estado'},
+      {id:'ar03',sev:'Mayor',text:'El alcance incluye explícitamente qué está fuera del sistema'},
+      {id:'ar04',sev:'Mayor',text:'El glosario cubre todos los términos de dominio usados en los RF'},
+    ]},
+    {dim:'Calidad de los requisitos funcionales',color:'var(--c-purple)',items:[
+      {id:'ar05',sev:'Bloqueante',text:'Cada RF usa el modal correcto: DEBE (obligatorio) o DEBERÍA (recomendado)'},
+      {id:'ar06',sev:'Bloqueante',text:'Cada RF tiene criterio de aceptación verificable (Gherkin o métrica concreta)'},
+      {id:'ar07',sev:'Mayor',text:'Ningún RF contiene términos ambiguos: rápido, fácil, adecuado, suficiente'},
+      {id:'ar08',sev:'Mayor',text:'Cada RF describe UNA sola capacidad (sin and/or que mezclen requisitos)'},
+      {id:'ar09',sev:'Menor',text:'Los RF están ordenados por módulo o área funcional'},
+    ]},
+    {dim:'Requisitos no funcionales',color:'var(--c-teal)',items:[
+      {id:'ar10',sev:'Bloqueante',text:'Cada RNF tiene valor numérico medible (no adjetivos: "alta disponibilidad" ✗)'},
+      {id:'ar11',sev:'Mayor',text:'Cada RNF especifica el método de verificación (prueba de carga, auditoría, etc.)'},
+      {id:'ar12',sev:'Mayor',text:'Los RNF de rendimiento incluyen la carga de usuarios concurrentes de referencia'},
+    ]},
+    {dim:'Trazabilidad y consistencia',color:'var(--c-amber)',items:[
+      {id:'ar13',sev:'Mayor',text:'Cada RF puede trazarse a una sesión de elicitación o brecha GAP'},
+      {id:'ar14',sev:'Mayor',text:'No existen requisitos duplicados ni contradictorios entre sí'},
+      {id:'ar15',sev:'Menor',text:'Los supuestos (SA) están documentados explícitamente'},
+      {id:'ar16',sev:'Menor',text:'Las restricciones (RC) tienen fuente identificada (legal, técnica, contractual)'},
+    ]},
+    {dim:'Criterios de aceptación',color:'var(--c-green)',items:[
+      {id:'ar17',sev:'Bloqueante',text:'Los criterios de aceptación son verificables por un tester sin ambigüedad'},
+      {id:'ar18',sev:'Mayor',text:'Al menos el 80% de los RF tienen escenario Gherkin (Given/When/Then)'},
+      {id:'ar19',sev:'Menor',text:'Los casos de prueba UAT están derivados de los criterios del SRS'},
+    ]},
+  ];
+  var allItems=dims.reduce(function(a,d){return a.concat(d.items);}, []);
+  var ok=allItems.filter(function(it){return itemData[it.id]==='ok';}).length;
+  var bloqOpen=allItems.filter(function(it){return it.sev==='Bloqueante'&&itemData[it.id]!=='ok'&&itemData[it.id]!=='na';}).length;
+  var pct=Math.round(ok/allItems.length*100);
+  var aprobado=pct>=85&&bloqOpen===0;
+  var sevColor={Bloqueante:'var(--c-red)',Mayor:'var(--c-amber)',Menor:'var(--c-blue)'};
+  var sevBg={Bloqueante:'rgba(163,45,45,.06)',Mayor:'rgba(186,117,23,.05)',Menor:'rgba(24,95,165,.04)'};
+  var html='';
+  var gc=aprobado?'15,110,86':bloqOpen>0?'163,45,45':'24,95,165';
+  var gv=aprobado?'--c-green':bloqOpen>0?'--c-red':'--c-blue';
+  html+='<div class="card" style="margin-bottom:1rem;background:rgba('+gc+',.05);border-color:rgba('+gc+',.25)">'
+    +'<div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem;margin-bottom:.5rem">'
+    +'<div><div style="font-size:13px;font-weight:500;color:var('+gv+');">'
+    +(aprobado?'✓ Auto-revisión aprobada — lista para Walkthrough':bloqOpen>0?'✗ '+bloqOpen+' ítem(s) Bloqueante(s) sin resolver':'⏳ En progreso — '+ok+'/'+allItems.length+' ítems OK')
+    +'</div><div style="font-size:11px;color:var(--muted);margin-top:2px">'+ok+' OK · '+bloqOpen+' bloqueantes abiertos · criterio: ≥ 85% y 0 bloqueantes</div></div>'
+    +'<div style="font-size:28px;font-weight:500;font-family:var(--font-serif);color:var('+gv+')">'+pct+'%</div></div>'
+    +'<div style="height:7px;background:var(--surface2);border-radius:4px;overflow:hidden"><div style="height:100%;width:'+pct+'%;background:var('+gv+');border-radius:4px;transition:width .5s"></div></div>'
+    +'</div>';
+  html+='<div class="card" style="margin-bottom:1rem">'
+    +'<div class="card-title">Datos de la revisión</div>'
+    +'<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.5rem;margin-bottom:.5rem">'
+    +'<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">Fecha</label>'
+    +'<input id="ar-fecha" value="'+escH(meta.fecha)+'" type="date" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:4px 8px;font-size:12px;color:var(--text);outline:none" oninput="arSaveMeta()"></div>'
+    +'<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">Autor (BA)</label>'
+    +'<input id="ar-autor" value="'+escH(meta.autor)+'" placeholder="Nombre del BA" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:4px 8px;font-size:12px;color:var(--text);outline:none" oninput="arSaveMeta()"></div>'
+    +'<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">Versión SRS</label>'
+    +'<input id="ar-version" value="'+escH(meta.version)+'" placeholder="Ej: v1.0-RC1" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:4px 8px;font-size:12px;color:var(--text);outline:none" oninput="arSaveMeta()"></div>'
+    +'</div>'
+    +'<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">Observaciones generales</label>'
+    +'<textarea id="ar-obs" rows="2" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:4px 8px;font-size:12px;color:var(--text);outline:none;resize:none;line-height:1.5;overflow:hidden" oninput="autoH(this);arSaveMeta()">'+escH(meta.obs)+'</textarea></div>'
+    +'</div>';
+  dims.forEach(function(dim){
+    var dimOk=dim.items.filter(function(it){return itemData[it.id]==='ok';}).length;
+    html+='<div class="card" style="margin-bottom:.8rem">'
+      +'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.5rem">'
+      +'<div style="font-size:12px;font-weight:500;color:'+dim.color+'">'+dim.dim+'</div>'
+      +'<div style="font-size:11px;color:var(--muted)">'+dimOk+'/'+dim.items.length+'</div></div>';
+    dim.items.forEach(function(item){
+      var val=itemData[item.id]||'';
+      html+='<div style="display:flex;align-items:flex-start;gap:.6rem;padding:.45rem 0;border-bottom:0.5px solid var(--border)">'
+        +'<div style="display:flex;gap:4px;flex-shrink:0;padding-top:1px">'
+        +'<button style="width:24px;height:24px;border-radius:4px;border:0.5px solid '+(val==='ok'?'var(--c-green)':'var(--border2)')+';background:'+(val==='ok'?'var(--c-green)':'var(--surface)')+';color:'+(val==='ok'?'#fff':'var(--muted)')+';font-size:10px;cursor:pointer" onclick="arSetItem(\''+item.id+'\',\'ok\')">✓</button>'
+        +'<button style="width:24px;height:24px;border-radius:4px;border:0.5px solid '+(val==='na'?'var(--c-amber)':'var(--border2)')+';background:'+(val==='na'?'var(--c-amber)':'var(--surface)')+';color:'+(val==='na'?'#fff':'var(--muted)')+';font-size:10px;cursor:pointer" onclick="arSetItem(\''+item.id+'\',\'na\')">N/A</button>'
+        +'</div>'
+        +'<span style="font-size:10px;font-weight:600;padding:2px 6px;border-radius:3px;background:'+sevBg[item.sev]+';color:'+sevColor[item.sev]+';flex-shrink:0">'+item.sev+'</span>'
+        +'<div style="font-size:12px;color:var(--text);line-height:1.5">'+item.text+'</div></div>';
+    });
+    html+='</div>';
+  });
+  html+='<div style="display:flex;gap:.5rem;margin-top:.5rem;align-items:center">'
+    +'<button class="btn" style="background:var(--c-green);color:#fff;border-color:var(--c-green)" onclick="arGuardar()">Guardar auto-revisión</button>'
+    +'<button class="btn btn-sm" onclick="arReset()">↺ Reiniciar</button>'
+    +'<span id="ar-msg" style="font-size:11px;color:var(--c-green)"></span></div>';
+  el.innerHTML=html;
+  el.querySelectorAll('textarea').forEach(function(ta){ ta.style.height='auto'; ta.style.height=ta.scrollHeight+'px'; });
+  window.arSetItem=function(id,val){ var d; try{d=JSON.parse(localStorage.getItem(AR_KEY+'_items'))||{};}catch(ex){d={};} if(d[id]===val) delete d[id]; else d[id]=val; localStorage.setItem(AR_KEY+'_items',JSON.stringify(d)); renderValAR(); };
+  window.arSaveMeta=function(){ var m={fecha:document.getElementById('ar-fecha')?.value||'',autor:document.getElementById('ar-autor')?.value||'',version:document.getElementById('ar-version')?.value||'',obs:document.getElementById('ar-obs')?.value||''}; localStorage.setItem(AR_KEY+'_meta',JSON.stringify(m)); };
+  window.arGuardar=function(){ arSaveMeta(); var e2=document.getElementById('ar-msg'); if(e2){e2.textContent='✓ Guardado';setTimeout(function(){e2.textContent='';},1800);} };
+  window.arReset=function(){ localStorage.removeItem(AR_KEY+'_items'); localStorage.removeItem(AR_KEY+'_meta'); var m=document.getElementById('val-ar-mount'); if(m){m.innerHTML='';initValAR();} };
+}
+
+/* ── WALKTHROUGH TÉCNICO ── */
+var WT2_KEY='fw_val_wt2_v1';
+function defWT2(){ return {sesiones:[]}; }
+function initValWT(){ var el=document.getElementById('val-wt-mount'); if(!el||el.innerHTML.trim()) return; renderValWT(); }
+function renderValWT(){
+  var el=document.getElementById('val-wt-mount'); if(!el) return;
+  var data; try{data=JSON.parse(localStorage.getItem(WT2_KEY))||defWT2();}catch(ex){data=defWT2();}
+  function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+  function wt2Save(d){ localStorage.setItem(WT2_KEY,JSON.stringify(d)); }
+  var SEL=(typeof window._wt2Sel==='number')?window._wt2Sel:-1;
+  var TAB=(typeof window._wt2Tab==='number')?window._wt2Tab:0;
+  var total=data.sesiones.length;
+  var done=data.sesiones.filter(function(s){return s.estado==='Aprobado';}).length;
+  var conObs=data.sesiones.filter(function(s){return s.estado==='Con observaciones';}).length;
+  var allH=data.sesiones.reduce(function(a,s){return a+(s.hallazgos||[]).length;},0);
+  var allR=data.sesiones.reduce(function(a,s){return a+(s.hallazgos||[]).filter(function(h){return h.estado==='Resuelto';}).length;},0);
+  var sevColor={Inviabilidad:'var(--c-red)',Ambigüedad:'var(--c-amber)',Inconsistencia:'var(--c-purple)',Pregunta:'var(--c-blue)',Mejora:'var(--c-teal)'};
+  var sevBg={Inviabilidad:'rgba(163,45,45,.07)',Ambigüedad:'rgba(186,117,23,.06)',Inconsistencia:'rgba(83,52,131,.07)',Pregunta:'rgba(24,95,165,.06)',Mejora:'rgba(29,158,117,.05)'};
+  var estColor={Pendiente:'var(--muted)','En revisión':'var(--c-blue)',Aprobado:'var(--c-green)','Con observaciones':'var(--c-amber)',Rechazado:'var(--c-red)'};
+  var html='';
+  html+='<div style="display:grid;grid-template-columns:repeat(5,1fr);gap:.6rem;margin-bottom:1rem">'
+    +'<div class="kpi"><div class="kpi-num" style="color:var(--c-blue)">'+total+'</div><div class="kpi-label">Sesiones</div></div>'
+    +'<div class="kpi"><div class="kpi-num" style="color:var(--c-green)">'+done+'</div><div class="kpi-label">Aprobadas</div></div>'
+    +'<div class="kpi"><div class="kpi-num" style="color:var(--c-amber)">'+conObs+'</div><div class="kpi-label">Con observaciones</div></div>'
+    +'<div class="kpi"><div class="kpi-num" style="color:var(--c-purple)">'+allH+'</div><div class="kpi-label">Hallazgos</div></div>'
+    +'<div class="kpi"><div class="kpi-num" style="color:'+(allR===allH&&allH>0?'var(--c-green)':'var(--c-amber)')+'">'+allR+'/'+allH+'</div><div class="kpi-label">Resueltos</div></div>'
+    +'</div>';
+  html+='<div class="tab-nav" style="margin-bottom:1rem">'
+    +'<button class="tab-btn'+(TAB===0?' on':'')+'" onclick="window._wt2Tab=0;renderValWT()">Referencia IEEE 1028</button>'
+    +'<button class="tab-btn'+(TAB!==0?' on':'')+'" onclick="window._wt2Tab=1;renderValWT()">Sesiones</button>'
+    +'</div>';
+  if(TAB===0){
+    html+='<div class="g2">'
+      +'<div class="card">'
+      +'<div class="card-title" style="color:var(--c-blue);margin-bottom:.7rem">3 fases (IEEE 1028 §5.3)</div>'
+      +[{n:1,t:'Preparación',d:'Distribuir SRS con ≥ 48h. Dev Lead y QA Lead leen y anotan preguntas individualmente.'},
+        {n:2,t:'Reunión (60–120 min)',d:'Autor presenta sección a sección. Secretario registra hallazgos. No se toman decisiones de diseño.'},
+        {n:3,t:'Seguimiento',d:'Autor resuelve Inviabilidades. Dev Lead verifica y cierra el acta.'}]
+      .map(function(f,fi,fa){return '<div class="step-row">'+(fi<fa.length-1?'<div class="step-line"></div>':'')+'<div class="step-num" style="background:var(--c-blue);width:28px;height:28px;font-size:11px">'+f.n+'</div><div class="step-body"><div class="step-title">'+f.t+'</div><div class="step-desc">'+f.d+'</div></div></div>';}).join('')
+      +'</div>'
+      +'<div>'
+      +'<div class="card" style="margin-bottom:.8rem"><div class="card-title" style="color:var(--c-purple);margin-bottom:.5rem">Tipos de hallazgo</div>'
+      +[{t:'Inviabilidad',c:'var(--c-red)',d:'No puede implementarse como está. Bloquea.'},
+        {t:'Ambigüedad',c:'var(--c-amber)',d:'Múltiples interpretaciones posibles.'},
+        {t:'Inconsistencia',c:'var(--c-purple)',d:'Contradice otro requisito o la arquitectura.'},
+        {t:'Pregunta',c:'var(--c-blue)',d:'Duda técnica que necesita respuesta.'},
+        {t:'Mejora',c:'var(--c-teal)',d:'Sugerencia de redacción. Opcional.'}]
+      .map(function(h){return '<div style="display:flex;gap:.6rem;padding:.35rem 0;border-bottom:0.5px solid var(--border);align-items:flex-start"><span style="font-size:10px;font-weight:600;padding:2px 6px;border-radius:3px;background:'+sevBg[h.t]+';color:'+h.c+';flex-shrink:0;white-space:nowrap">'+h.t+'</span><div style="font-size:11px;color:var(--muted)">'+h.d+'</div></div>';}).join('')
+      +'</div>'
+      +'<div class="card"><div class="card-title" style="color:var(--c-green);margin-bottom:.5rem">Criterios entrada / salida</div>'
+      +'<div style="background:rgba(163,45,45,.04);border-radius:6px;padding:.5rem .7rem;margin-bottom:.5rem"><div style="font-size:10px;font-weight:600;color:var(--c-red);text-transform:uppercase;margin-bottom:.3rem">Entrada</div>'
+      +['Auto-revisión aprobada (≥ 85%, 0 Bloqueantes)','SRS distribuido con ≥ 48h','Dev Lead y QA Lead confirmados'].map(function(it){return '<div class="dot-item"><div class="dot" style="background:var(--c-red)"></div>'+it+'</div>';}).join('')
+      +'</div><div style="background:rgba(15,110,86,.04);border-radius:6px;padding:.5rem .7rem"><div style="font-size:10px;font-weight:600;color:var(--c-green);text-transform:uppercase;margin-bottom:.3rem">Salida</div>'
+      +['0 Inviabilidades abiertas','Dev Lead firma el acta','SRS listo para Revisión de Stakeholders'].map(function(it){return '<div class="dot-item"><div class="dot" style="background:var(--c-green)"></div>'+it+'</div>';}).join('')
+      +'</div></div>'
+      +'</div></div>';
+  }
+  if(TAB!==0){
+    var TA_STYLE='width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:4px 8px;font-size:12px;color:var(--text);outline:none;resize:none;line-height:1.5;overflow:hidden';
+    html+='<div class="card" style="margin-bottom:1rem"><div class="card-title" style="margin-bottom:.7rem">Nueva sesión</div>'
+      +'<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.5rem;margin-bottom:.5rem">'
+      +'<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">Fecha</label><input id="wt2-nfecha" type="date" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:4px 8px;font-size:12px;color:var(--text);outline:none"></div>'
+      +'<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">Dev Lead</label><input id="wt2-ndevlead" placeholder="Nombre" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:4px 8px;font-size:12px;color:var(--text);outline:none"></div>'
+      +'<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">QA Lead</label><input id="wt2-nqalead" placeholder="Nombre" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:4px 8px;font-size:12px;color:var(--text);outline:none"></div>'
+      +'</div>'
+      +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-bottom:.5rem">'
+      +'<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">Sección revisada</label><input id="wt2-nseccion" placeholder="Ej: SRS §4 — RF-001 a RF-012" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:4px 8px;font-size:12px;color:var(--text);outline:none"></div>'
+      +'<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">Secretario</label><input id="wt2-nsec" placeholder="Nombre" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:4px 8px;font-size:12px;color:var(--text);outline:none"></div>'
+      +'</div>'
+      +'<div style="margin-bottom:.6rem"><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">Observaciones iniciales</label>'
+      +'<textarea id="wt2-nobs" rows="2" placeholder="Contexto y aspectos prioritarios a revisar..." style="'+TA_STYLE+'" oninput="autoH(this)"></textarea></div>'
+      +'<div style="display:flex;gap:.5rem;align-items:center"><button class="btn btn-sm" style="background:var(--c-green);color:#fff;border-color:var(--c-green)" onclick="wt2Add()">+ Agregar sesión</button>'
+      +'<span id="wt2-add-msg" style="font-size:11px;color:var(--c-red)"></span></div></div>';
+    if(data.sesiones.length===0){
+      html+='<div style="text-align:center;padding:2rem;color:var(--muted);font-size:12px">No hay sesiones registradas.</div>';
+    } else {
+      data.sesiones.forEach(function(s,i){
+        var ec=estColor[s.estado]||'var(--muted)';
+        var hTotal=(s.hallazgos||[]).length;
+        var hRes=(s.hallazgos||[]).filter(function(h){return h.estado==='Resuelto';}).length;
+        var hInv=(s.hallazgos||[]).filter(function(h){return h.tipo==='Inviabilidad'&&h.estado!=='Resuelto';}).length;
+        var expanded=(SEL===i);
+        html+='<div class="card" style="margin-bottom:.6rem;border-left:3px solid '+ec+'">';
+        html+='<div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.4rem;cursor:pointer" onclick="window._wt2Sel='+(expanded?-1:i)+';renderValWT()">'
+          +'<div style="display:flex;align-items:center;gap:.7rem"><div><div style="font-size:12px;font-weight:500">'+esc(s.seccion||'Sin sección')+'</div>'
+          +'<div style="font-size:11px;color:var(--muted)">'+esc(s.fecha||'Sin fecha')+' · Dev: '+esc(s.devlead||'—')+' · QA: '+esc(s.qalead||'—')+'</div></div></div>'
+          +'<div style="display:flex;align-items:center;gap:.5rem">'
+          +(hInv>0?'<span style="font-size:10px;font-weight:600;padding:2px 7px;border-radius:3px;background:rgba(163,45,45,.08);color:var(--c-red)">'+hInv+' inviab.</span>':'')
+          +'<span style="font-size:11px;color:var(--muted)">'+hRes+'/'+hTotal+' resueltos</span>'
+          +'<select style="font-size:11px;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:3px 7px;color:'+ec+';font-weight:500;outline:none" onclick="event.stopPropagation()" onchange="wt2SetEst('+i+',this.value)">'
+          +['Pendiente','En revisión','Aprobado','Con observaciones','Rechazado'].map(function(o){return'<option'+(s.estado===o?' selected':'')+'>'+o+'</option>';}).join('')+'</select>'
+          +'<button style="background:none;border:none;cursor:pointer;color:var(--muted);font-size:14px" onclick="event.stopPropagation();wt2Del('+i+')">×</button>'
+          +'<span style="color:var(--muted);font-size:13px">'+(expanded?'▲':'▼')+'</span>'
+          +'</div></div>';
+        if(expanded){
+          html+='<div style="margin-top:.8rem;padding-top:.8rem;border-top:0.5px solid var(--border)">';
+          html+='<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.5rem;margin-bottom:.6rem">'
+            +'<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">Fecha</label><input type="date" value="'+esc(s.fecha||'')+'" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:4px 8px;font-size:12px;color:var(--text);outline:none" oninput="wt2SF('+i+',\'fecha\',this.value)"></div>'
+            +'<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">Dev Lead</label><input value="'+esc(s.devlead||'')+'" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:4px 8px;font-size:12px;color:var(--text);outline:none" oninput="wt2SF('+i+',\'devlead\',this.value)"></div>'
+            +'<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">QA Lead</label><input value="'+esc(s.qalead||'')+'" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:4px 8px;font-size:12px;color:var(--text);outline:none" oninput="wt2SF('+i+',\'qalead\',this.value)"></div>'
+            +'</div>';
+          var chkItems=['Documento distribuido ≥ 48h antes','Dev Lead y QA Lead confirmaron asistencia','Agenda con secciones enviada','Revisores leyeron el doc antes de la reunión','Sala / videollamada preparada'];
+          var ck=s.checklist||{};
+          html+='<div style="margin-bottom:.7rem"><div style="font-size:11px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.3px;margin-bottom:.4rem">Checklist de preparación</div>'
+            +chkItems.map(function(it,ci){var cid='ck'+ci;var chked=ck[cid];return'<div style="display:flex;align-items:center;gap:.5rem;padding:.3rem 0;border-bottom:0.5px solid var(--border);cursor:pointer" onclick="wt2ToggleCk('+i+',\''+cid+'\')">'+'<div style="width:16px;height:16px;border-radius:3px;border:1.5px solid var(--border2);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:9px;'+(chked?'background:var(--c-green);border-color:var(--c-green);color:#fff':'')+'">'+( chked?'✓':'')+'</div><div style="font-size:12px;'+(chked?'text-decoration:line-through;color:var(--muted)':'')+'">'+it+'</div></div>';}).join('')+'</div>';
+          var hall=s.hallazgos||[];
+          html+='<div style="margin-bottom:.5rem"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.4rem"><div style="font-size:11px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.3px">Hallazgos ('+hall.length+')</div><button class="btn btn-sm" onclick="wt2AddH('+i+')">+ Hallazgo</button></div>';
+          if(hall.length===0){html+='<div style="font-size:11px;color:var(--muted)">Sin hallazgos.</div>';}
+          else{
+            html+='<div style="display:grid;grid-template-columns:80px 90px 1fr 90px 24px;gap:4px;font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;border-bottom:0.5px solid var(--border2);padding-bottom:3px;margin-bottom:4px"><span>ID RF</span><span>Tipo</span><span>Descripción</span><span>Estado</span><span></span></div>';
+            hall.forEach(function(h,hi){
+              var tc=sevColor[h.tipo]||'var(--muted)';
+              var tb=sevBg[h.tipo]||'rgba(0,0,0,.03)';
+              var hec=h.estado==='Resuelto'?'var(--c-green)':h.estado==='En proceso'?'var(--c-amber)':'var(--muted)';
+              html+='<div style="display:grid;grid-template-columns:80px 90px 1fr 90px 24px;gap:4px;align-items:center;padding:4px 0;border-bottom:0.5px solid var(--border)">'
+                +'<input value="'+esc(h.rfid||'')+'" placeholder="RF-001" style="background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 5px;font-size:11px;font-family:var(--font-mono);color:var(--c-blue);outline:none" oninput="wt2SH('+i+','+hi+',\'rfid\',this.value)">'
+                +'<select style="background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 4px;font-size:11px;color:'+tc+';font-weight:500;outline:none;background-color:'+tb+'" onchange="wt2SH('+i+','+hi+',\'tipo\',this.value);renderValWT()">'+['Inviabilidad','Ambigüedad','Inconsistencia','Pregunta','Mejora'].map(function(o){return'<option'+(h.tipo===o?' selected':'')+'>'+o+'</option>';}).join('')+'</select>'
+                +'<input value="'+esc(h.desc||'')+'" placeholder="Descripción..." style="background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 5px;font-size:11px;color:var(--text);outline:none" oninput="wt2SH('+i+','+hi+',\'desc\',this.value)">'
+                +'<select style="background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 4px;font-size:11px;color:'+hec+';font-weight:500;outline:none" onchange="wt2SH('+i+','+hi+',\'estado\',this.value);renderValWT()">'+['Abierto','En proceso','Resuelto'].map(function(o){return'<option'+(h.estado===o?' selected':'')+'>'+o+'</option>';}).join('')+'</select>'
+                +'<button style="background:none;border:none;cursor:pointer;color:var(--muted);font-size:13px" onclick="wt2DelH('+i+','+hi+')">×</button></div>';
+            });
+          }
+          html+='</div>';
+          html+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-top:.5rem">'
+            +'<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">Observaciones generales</label>'
+            +'<textarea rows="2" style="'+TA_STYLE+'" oninput="autoH(this);wt2SF('+i+',\'obs\',this.value)">'+esc(s.obs||'')+'</textarea></div>'
+            +'<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">Próximos pasos y plazos</label>'
+            +'<textarea rows="2" style="'+TA_STYLE+'" oninput="autoH(this);wt2SF('+i+',\'pendientes\',this.value)">'+esc(s.pendientes||'')+'</textarea></div>'
+            +'</div>'
+            +'<div style="margin-top:.5rem"><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">Conclusión / Decisión final</label>'
+            +'<textarea rows="1" placeholder="Ej: SRS §4 aprobada con 2 ambigüedades resueltas" style="'+TA_STYLE+'" oninput="autoH(this);wt2SF('+i+',\'conclusion\',this.value)">'+esc(s.conclusion||'')+'</textarea></div>';
+          html+='</div>';
+        }
+        html+='</div>';
+      });
+    }
+  }
+  html+='<div style="display:flex;gap:.5rem;margin-top:1rem;align-items:center"><button class="btn" style="background:var(--c-green);color:#fff;border-color:var(--c-green)" onclick="wt2Guardar()">Guardar</button><span id="wt2-msg" style="font-size:11px;color:var(--c-green)"></span></div>';
+  el.innerHTML=html;
+  el.querySelectorAll('textarea').forEach(function(ta){ta.style.height='auto';ta.style.height=ta.scrollHeight+'px';});
+  window.wt2Add=function(){var sec=document.getElementById('wt2-nseccion')?.value?.trim()||'';if(!sec){var _e=document.getElementById('wt2-add-msg');if(_e){_e.textContent='⚠ Sección obligatoria';setTimeout(function(){_e.textContent='';},2000);}return;}var d2;try{d2=JSON.parse(localStorage.getItem(WT2_KEY))||defWT2();}catch(ex){d2=defWT2();}d2.sesiones.push({fecha:document.getElementById('wt2-nfecha')?.value||'',seccion:sec,devlead:document.getElementById('wt2-ndevlead')?.value||'',qalead:document.getElementById('wt2-nqalead')?.value||'',secretario:document.getElementById('wt2-nsec')?.value||'',obs:document.getElementById('wt2-nobs')?.value||'',pendientes:'',conclusion:'',checklist:{},hallazgos:[],estado:'Pendiente'});wt2Save(d2);window._wt2Tab=1;window._wt2Sel=d2.sesiones.length-1;renderValWT();};
+  window.wt2SetEst=function(i,v){var d2;try{d2=JSON.parse(localStorage.getItem(WT2_KEY))||defWT2();}catch(ex){d2=defWT2();}if(d2.sesiones[i])d2.sesiones[i].estado=v;wt2Save(d2);renderValWT();};
+  window.wt2SF=function(i,k,v){var d2;try{d2=JSON.parse(localStorage.getItem(WT2_KEY))||defWT2();}catch(ex){d2=defWT2();}if(d2.sesiones[i])d2.sesiones[i][k]=v;wt2Save(d2);};
+  window.wt2ToggleCk=function(i,cid){var d2;try{d2=JSON.parse(localStorage.getItem(WT2_KEY))||defWT2();}catch(ex){d2=defWT2();}if(!d2.sesiones[i])return;if(!d2.sesiones[i].checklist)d2.sesiones[i].checklist={};d2.sesiones[i].checklist[cid]=!d2.sesiones[i].checklist[cid];wt2Save(d2);renderValWT();};
+  window.wt2AddH=function(i){var d2;try{d2=JSON.parse(localStorage.getItem(WT2_KEY))||defWT2();}catch(ex){d2=defWT2();}if(!d2.sesiones[i])return;if(!d2.sesiones[i].hallazgos)d2.sesiones[i].hallazgos=[];d2.sesiones[i].hallazgos.push({rfid:'',tipo:'Ambigüedad',desc:'',estado:'Abierto'});wt2Save(d2);renderValWT();};
+  window.wt2SH=function(i,hi,k,v){var d2;try{d2=JSON.parse(localStorage.getItem(WT2_KEY))||defWT2();}catch(ex){d2=defWT2();}if(d2.sesiones[i]&&d2.sesiones[i].hallazgos&&d2.sesiones[i].hallazgos[hi])d2.sesiones[i].hallazgos[hi][k]=v;wt2Save(d2);};
+  window.wt2DelH=function(i,hi){var d2;try{d2=JSON.parse(localStorage.getItem(WT2_KEY))||defWT2();}catch(ex){d2=defWT2();}if(d2.sesiones[i]&&d2.sesiones[i].hallazgos)d2.sesiones[i].hallazgos.splice(hi,1);wt2Save(d2);renderValWT();};
+  window.wt2Del=function(i){var d2;try{d2=JSON.parse(localStorage.getItem(WT2_KEY))||defWT2();}catch(ex){d2=defWT2();}d2.sesiones.splice(i,1);wt2Save(d2);if(window._wt2Sel===i)window._wt2Sel=-1;renderValWT();};
+  window.wt2Guardar=function(){var e2=document.getElementById('wt2-msg');if(e2){e2.textContent='✓ Guardado';setTimeout(function(){e2.textContent='';},1800);}};
+}
+
+/* ── REVISIÓN STAKEHOLDERS ── */
+var SK2_KEY='fw_val_sk2_v1';
+function defSK2(){return{revisiones:[]};}
+function initValSK(){var el=document.getElementById('val-sk-mount');if(!el||el.innerHTML.trim())return;renderValSK();}
+function renderValSK(){
+  var el=document.getElementById('val-sk-mount'); if(!el) return;
+  var data; try{data=JSON.parse(localStorage.getItem(SK2_KEY))||defSK2();}catch(ex){data=defSK2();}
+  function e(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+  function save(d){localStorage.setItem(SK2_KEY,JSON.stringify(d));}
+  var TA='width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:4px 8px;font-size:12px;color:var(--text);outline:none;resize:none;line-height:1.5;overflow:hidden';
+  var TAB=(typeof window._sk2Tab==='number')?window._sk2Tab:0;
+  var SEL=(typeof window._sk2Sel==='number')?window._sk2Sel:-1;
+
+  var total=data.revisiones.length;
+  var firmado=data.revisiones.filter(function(r){return r.firma==='Firmado';}).length;
+  var conObs=data.revisiones.filter(function(r){return r.firma==='Con observaciones';}).length;
+  var criterioOk=total>0 && firmado>0;
+
+  var html='';
+
+  // KPIs
+  html+='<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:.6rem;margin-bottom:1rem">'
+    +'<div class="kpi"><div class="kpi-num" style="color:var(--c-blue)">'+total+'</div><div class="kpi-label">Revisiones</div></div>'
+    +'<div class="kpi"><div class="kpi-num" style="color:var(--c-green)">'+firmado+'</div><div class="kpi-label">Firmadas</div></div>'
+    +'<div class="kpi"><div class="kpi-num" style="color:var(--c-amber)">'+conObs+'</div><div class="kpi-label">Con observaciones</div></div>'
+    +'<div class="kpi"><div class="kpi-num" style="font-size:13px;color:'+(criterioOk?'var(--c-green)':'var(--c-amber)')+'">'+( criterioOk?'✓ PO firmó':'Pendiente PO')+'</div><div class="kpi-label">Criterio salida</div></div>'
+    +'</div>';
+
+  // Criterio banner
+  html+='<div class="card" style="margin-bottom:1rem;background:rgba('+(criterioOk?'15,110,86':'24,95,165')+',.04);border-color:rgba('+(criterioOk?'15,110,86':'24,95,165')+',.2)">'
+    +'<div style="font-size:12px;font-weight:500;color:var('+(criterioOk?'--c-green':'--c-blue')+');margin-bottom:.2rem">'
+    +(criterioOk?'✓ Revisión aprobada — listo para Inspección formal':'⏳ Criterio de salida: Product Owner debe firmar el acta de conformidad')+'</div>'
+    +'<div style="font-size:11px;color:var(--muted)">IEEE 29148 §6.3 · BABOK v3 §3.2 · La firma del PO es obligatoria antes de avanzar a la Inspección Fagan</div>'
+    +'</div>';
+
+  // Tabs
+  html+='<div class="tab-nav" style="margin-bottom:1rem">'
+    +'<button class="tab-btn'+(TAB===0?' on':'')+'" onclick="window._sk2Tab=0;renderValSK()">Referencia</button>'
+    +'<button class="tab-btn'+(TAB!==0?' on':'')+'" onclick="window._sk2Tab=1;renderValSK()">Revisiones</button>'
+    +'</div>';
+
+  // ── TAB 0: REFERENCIA ──
+  if(TAB===0){
+    html+='<div class="g2">'
+      // columna izquierda — proceso
+      +'<div class="card">'
+      +'<div class="card-title" style="color:var(--c-blue);margin-bottom:.7rem">Proceso — 3 etapas</div>'
+      +[{n:1,t:'Distribución (2–3 días antes)',d:'BA envía el SRS completo o la sección a revisar. Incluye glosario, contexto de negocio y criterios de aceptación. Stakeholders deben recibirlo con tiempo suficiente para leerlo con calma.'},
+        {n:2,t:'Sesión de revisión',d:'Cada stakeholder lee el SRS y anota sus observaciones. Se realiza una sesión (presencial o remota) donde el BA explica cada requisito. Los stakeholders validan que el lenguaje de negocio es correcto y que las reglas están bien capturadas.'},
+        {n:3,t:'Conformidad y firma',d:'El BA incorpora los ajustes acordados. El Product Owner lee la versión revisada y firma el acta de conformidad. Sin esta firma el SRS no puede avanzar a la Inspección formal (Fagan).'}]
+      .map(function(f,fi,fa){return'<div class="step-row">'+(fi<fa.length-1?'<div class="step-line"></div>':'')+'<div class="step-num" style="background:var(--c-blue);width:28px;height:28px;font-size:11px">'+f.n+'</div><div class="step-body"><div class="step-title">'+f.t+'</div><div class="step-desc">'+f.d+'</div></div></div>';}).join('')
+      +'</div>'
+      // columna derecha — tipos de observación + criterios
+      +'<div>'
+      +'<div class="card" style="margin-bottom:.8rem">'
+      +'<div class="card-title" style="color:var(--c-purple);margin-bottom:.6rem">Tipos de observación de negocio</div>'
+      +[{t:'Regla de negocio incorrecta',c:'var(--c-red)',d:'El requisito contradice una política, norma o proceso real de la empresa.'},
+        {t:'Terminología errónea',c:'var(--c-amber)',d:'Se usa un término técnico que el negocio no reconoce o usa de forma diferente.'},
+        {t:'Caso no cubierto',c:'var(--c-purple)',d:'Un escenario real del negocio no está representado en los requisitos.'},
+        {t:'Prioridad incorrecta',c:'var(--c-blue)',d:'Un requisito marcado como Must debería ser Could o viceversa, según el valor real.'},
+        {t:'Aclaración requerida',c:'var(--c-teal)',d:'El stakeholder entiende el requisito pero necesita confirmar un detalle con su equipo.'}]
+      .map(function(h){return'<div style="display:flex;gap:.6rem;padding:.35rem 0;border-bottom:0.5px solid var(--border);align-items:flex-start">'
+        +'<span style="font-size:10px;font-weight:600;padding:2px 6px;border-radius:3px;background:rgba(0,0,0,.04);color:'+h.c+';flex-shrink:0;white-space:nowrap;border:0.5px solid currentColor">'+h.t+'</span>'
+        +'<div style="font-size:11px;color:var(--muted)">'+h.d+'</div></div>';}).join('')
+      +'</div>'
+      +'<div class="card">'
+      +'<div class="card-title" style="color:var(--c-green);margin-bottom:.5rem">Criterios entrada / salida</div>'
+      +'<div style="background:rgba(163,45,45,.04);border-radius:6px;padding:.5rem .7rem;margin-bottom:.5rem">'
+      +'<div style="font-size:10px;font-weight:600;color:var(--c-red);text-transform:uppercase;margin-bottom:.3rem">Entrada</div>'
+      +['Walkthrough técnico aprobado (Dev Lead + QA Lead)','SRS sin observaciones técnicas abiertas','Stakeholders clave identificados y disponibles','Glosario y contexto de negocio incluidos en el envío']
+      .map(function(it){return'<div class="dot-item"><div class="dot" style="background:var(--c-red)"></div>'+it+'</div>';}).join('')
+      +'</div>'
+      +'<div style="background:rgba(15,110,86,.04);border-radius:6px;padding:.5rem .7rem">'
+      +'<div style="font-size:10px;font-weight:600;color:var(--c-green);text-transform:uppercase;margin-bottom:.3rem">Salida</div>'
+      +['Product Owner firma acta de conformidad','0 observaciones tipo "Regla de negocio incorrecta" abiertas','Todos los casos no cubiertos incorporados o descartados formalmente','SRS listo para Inspección formal (Fagan)']
+      .map(function(it){return'<div class="dot-item"><div class="dot" style="background:var(--c-green)"></div>'+it+'</div>';}).join('')
+      +'</div></div>'
+      +'</div>'
+      +'</div>';
+  }
+
+  // ── TAB 1: REVISIONES ──
+  if(TAB!==0){
+    // Formulario nueva revisión
+    html+='<div class="card" style="margin-bottom:1rem">'
+      +'<div class="card-title" style="margin-bottom:.7rem">Nueva revisión</div>'
+      +'<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.5rem;margin-bottom:.5rem">'
+      +'<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">Fecha</label><input id="sk2-nfecha" type="date" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:4px 8px;font-size:12px;color:var(--text);outline:none"></div>'
+      +'<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">Stakeholder / Rol</label><input id="sk2-nsk" placeholder="Ej: Juan Pérez — PO" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:4px 8px;font-size:12px;color:var(--text);outline:none"></div>'
+      +'<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">Sección / módulo revisado</label><input id="sk2-nsec" placeholder="Ej: RF-001–RF-012" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:4px 8px;font-size:12px;color:var(--text);outline:none"></div>'
+      +'</div>'
+      +'<div style="margin-bottom:.6rem"><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">Comentarios / cambios solicitados</label>'
+      +'<textarea id="sk2-ncoment" rows="2" placeholder="Describe los comentarios o cambios solicitados..." style="'+TA+'" oninput="autoH(this)"></textarea></div>'
+      +'<div style="display:flex;gap:.5rem;align-items:center">'
+      +'<button class="btn btn-sm" style="background:var(--c-green);color:#fff;border-color:var(--c-green)" onclick="sk2Add()">+ Agregar revisión</button>'
+      +'<span id="sk2-add-msg" style="font-size:11px;color:var(--c-red)"></span>'
+      +'</div></div>';
+
+    // Lista de revisiones
+    if(total===0){
+      html+='<div style="text-align:center;padding:2rem;color:var(--muted);font-size:12px">No hay revisiones registradas. Agrega la primera.</div>';
+    } else {
+      var firmaColors={Pendiente:'var(--muted)',Revisado:'var(--c-blue)',Firmado:'var(--c-green)','Con observaciones':'var(--c-amber)',Rechazado:'var(--c-red)'};
+      data.revisiones.forEach(function(r,i){
+        var fc=firmaColors[r.firma]||'var(--muted)';
+        var expanded=(SEL===i);
+        var obsCount=(r.observaciones||[]).length;
+        var obsResueltas=(r.observaciones||[]).filter(function(o){return o.estado==='Resuelta';}).length;
+
+        html+='<div class="card" style="margin-bottom:.6rem;border-left:3px solid '+fc+'">';
+
+        // Header clicable
+        html+='<div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.4rem;cursor:pointer" onclick="window._sk2Sel='+(expanded?-1:i)+';renderValSK()">'
+          +'<div style="display:flex;align-items:center;gap:.7rem">'
+          +'<div><div style="font-size:12px;font-weight:500">'+e(r.stakeholder||'Stakeholder sin nombre')+'</div>'
+          +'<div style="font-size:11px;color:var(--muted)">'+e(r.fecha||'Sin fecha')+' · '+e(r.seccion||'Sin sección')+'</div></div>'
+          +'</div>'
+          +'<div style="display:flex;align-items:center;gap:.5rem">'
+          +(obsCount>0?'<span style="font-size:10px;font-weight:600;padding:2px 7px;border-radius:3px;background:rgba(186,117,23,.08);color:var(--c-amber)">'+obsResueltas+'/'+obsCount+' obs.</span>':'')
+          +'<select style="font-size:11px;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:3px 7px;color:'+fc+';font-weight:500;outline:none" onclick="event.stopPropagation()" onchange="sk2SF('+i+',\'firma\',this.value);renderValSK()">'
+          +['Pendiente','Revisado','Firmado','Con observaciones','Rechazado'].map(function(o){return'<option'+(r.firma===o?' selected':'')+'>'+o+'</option>';}).join('')+'</select>'
+          +'<button style="background:none;border:none;cursor:pointer;color:var(--muted);font-size:14px" onclick="event.stopPropagation();sk2Del('+i+')">×</button>'
+          +'<span style="color:var(--muted);font-size:13px">'+(expanded?'▲':'▼')+'</span>'
+          +'</div></div>';
+
+        if(expanded){
+          html+='<div style="margin-top:.8rem;padding-top:.8rem;border-top:0.5px solid var(--border)">';
+
+          // Metadata editable
+          html+='<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.5rem;margin-bottom:.6rem">'
+            +'<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">Fecha</label><input type="date" value="'+e(r.fecha||'')+'" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:4px 8px;font-size:12px;color:var(--text);outline:none" oninput="sk2SF('+i+',\'fecha\',this.value)"></div>'
+            +'<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">Stakeholder / Rol</label><input value="'+e(r.stakeholder||'')+'" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:4px 8px;font-size:12px;color:var(--text);outline:none" oninput="sk2SF('+i+',\'stakeholder\',this.value)"></div>'
+            +'<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">Sección revisada</label><input value="'+e(r.seccion||'')+'" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:4px 8px;font-size:12px;color:var(--text);outline:none" oninput="sk2SF('+i+',\'seccion\',this.value)"></div>'
+            +'</div>';
+
+          // Observaciones de negocio
+          var obs=r.observaciones||[];
+          var tiposObs=['Regla de negocio incorrecta','Terminología errónea','Caso no cubierto','Prioridad incorrecta','Aclaración requerida'];
+          var tipoColor={'Regla de negocio incorrecta':'var(--c-red)','Terminología errónea':'var(--c-amber)','Caso no cubierto':'var(--c-purple)','Prioridad incorrecta':'var(--c-blue)','Aclaración requerida':'var(--c-teal)'};
+          html+='<div style="margin-bottom:.5rem">'
+            +'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.4rem">'
+            +'<div style="font-size:11px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.3px">Observaciones de negocio ('+obs.length+')</div>'
+            +'<button class="btn btn-sm" onclick="sk2AddObs('+i+')">+ Observación</button>'
+            +'</div>';
+          if(obs.length===0){
+            html+='<div style="font-size:11px;color:var(--muted);padding:.3rem 0">Sin observaciones registradas.</div>';
+          } else {
+            html+='<div style="display:grid;grid-template-columns:80px 140px 1fr 90px 24px;gap:4px;font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;border-bottom:0.5px solid var(--border2);padding-bottom:3px;margin-bottom:4px">'
+              +'<span>Ref RF</span><span>Tipo</span><span>Descripción</span><span>Estado</span><span></span></div>';
+            obs.forEach(function(ob,oi){
+              var tc=tipoColor[ob.tipo]||'var(--muted)';
+              var oec=ob.estado==='Resuelta'?'var(--c-green)':ob.estado==='En revisión'?'var(--c-amber)':'var(--muted)';
+              html+='<div style="display:grid;grid-template-columns:80px 140px 1fr 90px 24px;gap:4px;align-items:center;padding:4px 0;border-bottom:0.5px solid var(--border)">'
+                +'<input value="'+e(ob.rfid||'')+'" placeholder="RF-001" style="background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 5px;font-size:11px;font-family:var(--font-mono);color:var(--c-blue);outline:none" oninput="sk2SetOb('+i+','+oi+',\'rfid\',this.value)">'
+                +'<select style="background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 4px;font-size:10px;color:'+tc+';font-weight:600;outline:none" onchange="sk2SetOb('+i+','+oi+',\'tipo\',this.value);renderValSK()">'+tiposObs.map(function(o){return'<option'+(ob.tipo===o?' selected':'')+'>'+o+'</option>';}).join('')+'</select>'
+                +'<input value="'+e(ob.desc||'')+'" placeholder="Describe la observación..." style="background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 5px;font-size:11px;color:var(--text);outline:none" oninput="sk2SetOb('+i+','+oi+',\'desc\',this.value)">'
+                +'<select style="background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 4px;font-size:11px;color:'+oec+';font-weight:500;outline:none" onchange="sk2SetOb('+i+','+oi+',\'estado\',this.value);renderValSK()">'+['Abierta','En revisión','Resuelta','Descartada'].map(function(o){return'<option'+(ob.estado===o?' selected':'')+'>'+o+'</option>';}).join('')+'</select>'
+                +'<button style="background:none;border:none;cursor:pointer;color:var(--muted);font-size:13px" onclick="sk2DelOb('+i+','+oi+')">×</button>'
+                +'</div>';
+            });
+          }
+          html+='</div>';
+
+          // Campos de texto
+          html+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-top:.4rem">'
+            +'<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">Comentarios generales</label>'
+            +'<textarea rows="2" style="'+TA+'" oninput="autoH(this);sk2SF('+i+',\'comentarios\',this.value)">'+e(r.comentarios||'')+'</textarea></div>'
+            +'<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">Acuerdos y cambios incorporados</label>'
+            +'<textarea rows="2" style="'+TA+'" oninput="autoH(this);sk2SF('+i+',\'acuerdo\',this.value)">'+e(r.acuerdo||'')+'</textarea></div>'
+            +'</div>'
+            +'<div style="margin-top:.5rem"><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">Decisión / Veredicto del stakeholder</label>'
+            +'<textarea rows="1" placeholder="Ej: SRS aprobado con ajustes menores en RF-003 y RF-007 incorporados" style="'+TA+'" oninput="autoH(this);sk2SF('+i+',\'decision\',this.value)">'+e(r.decision||'')+'</textarea></div>';
+
+          html+='</div>';
+        }
+        html+='</div>';
+      });
+    }
+  }
+
+  html+='<div style="display:flex;gap:.5rem;margin-top:1rem;align-items:center"><button class="btn" style="background:var(--c-green);color:#fff;border-color:var(--c-green)" onclick="sk2Guardar()">Guardar</button><span id="sk2-msg" style="font-size:11px;color:var(--c-green)"></span></div>';
+
+  el.innerHTML=html;
+  el.querySelectorAll('textarea').forEach(function(ta){ta.style.height='auto';ta.style.height=ta.scrollHeight+'px';});
+
+  window.sk2Add=function(){
+    var sk=document.getElementById('sk2-nsk')?.value?.trim()||'';
+    if(!sk){var _e=document.getElementById('sk2-add-msg');if(_e){_e.textContent='⚠ Stakeholder obligatorio';setTimeout(function(){_e.textContent='';},2000);}return;}
+    var d2;try{d2=JSON.parse(localStorage.getItem(SK2_KEY))||defSK2();}catch(ex){d2=defSK2();}
+    d2.revisiones.push({fecha:document.getElementById('sk2-nfecha')?.value||'',stakeholder:sk,seccion:document.getElementById('sk2-nsec')?.value||'',comentarios:document.getElementById('sk2-ncoment')?.value||'',acuerdo:'',decision:'',firma:'Pendiente',observaciones:[]});
+    save(d2); window._sk2Tab=1; window._sk2Sel=d2.revisiones.length-1; renderValSK();
+  };
+  window.sk2SF=function(i,k,v){var d2;try{d2=JSON.parse(localStorage.getItem(SK2_KEY))||defSK2();}catch(ex){d2=defSK2();}if(d2.revisiones[i])d2.revisiones[i][k]=v;save(d2);};
+  window.sk2AddObs=function(i){var d2;try{d2=JSON.parse(localStorage.getItem(SK2_KEY))||defSK2();}catch(ex){d2=defSK2();}if(!d2.revisiones[i])return;if(!d2.revisiones[i].observaciones)d2.revisiones[i].observaciones=[];d2.revisiones[i].observaciones.push({rfid:'',tipo:'Caso no cubierto',desc:'',estado:'Abierta'});save(d2);renderValSK();};
+  window.sk2SetOb=function(i,oi,k,v){var d2;try{d2=JSON.parse(localStorage.getItem(SK2_KEY))||defSK2();}catch(ex){d2=defSK2();}if(d2.revisiones[i]&&d2.revisiones[i].observaciones&&d2.revisiones[i].observaciones[oi])d2.revisiones[i].observaciones[oi][k]=v;save(d2);};
+  window.sk2DelOb=function(i,oi){var d2;try{d2=JSON.parse(localStorage.getItem(SK2_KEY))||defSK2();}catch(ex){d2=defSK2();}if(d2.revisiones[i]&&d2.revisiones[i].observaciones)d2.revisiones[i].observaciones.splice(oi,1);save(d2);renderValSK();};
+  window.sk2Del=function(i){var d2;try{d2=JSON.parse(localStorage.getItem(SK2_KEY))||defSK2();}catch(ex){d2=defSK2();}d2.revisiones.splice(i,1);save(d2);if(window._sk2Sel===i)window._sk2Sel=-1;renderValSK();};
+  window.sk2Guardar=function(){var e2=document.getElementById('sk2-msg');if(e2){e2.textContent='✓ Guardado';setTimeout(function(){e2.textContent='';},1800);}};
+}
+
+/* ── INSPECCIÓN FORMAL FAGAN ── */
+var INSP_KEY='fw_val_insp_v1';
+function defINSP(){return{inspecciones:[]};}
+function initValInsp(){var el=document.getElementById('val-insp-mount');if(!el||el.innerHTML.trim())return;renderValInsp();}
+function renderValInsp(){
+  var el=document.getElementById('val-insp-mount'); if(!el) return;
+  var data; try{data=JSON.parse(localStorage.getItem(INSP_KEY))||defINSP();}catch(ex){data=defINSP();}
+  function e(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+  function save(d){localStorage.setItem(INSP_KEY,JSON.stringify(d));}
+  var TA='width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:4px 8px;font-size:12px;color:var(--text);outline:none;resize:none;line-height:1.5;overflow:hidden';
+  var TAB=(typeof window._inspTab==='number')?window._inspTab:0;
+  var SEL=(typeof window._inspSel==='number')?window._inspSel:-1;
+
+  var insList=data.inspecciones||[];
+  var total=insList.length;
+  var aprobadas=insList.filter(function(x){return x.decision==='Aprobado — sin re-inspección';}).length;
+  var reInsp=insList.filter(function(x){return x.decision==='Re-inspección requerida';}).length;
+  var totalDef=insList.reduce(function(a,x){return a+(parseInt(x.defectos)||0);},0);
+  var criterioOk=total>0&&aprobadas===total;
+
+  var fases=[
+    {n:1,t:'Planificación',d:'Moderador define alcance, selecciona revisores (idealmente externos al equipo autor) y distribuye materiales con mínimo 3 días de anticipación.'},
+    {n:2,t:'Visión general',d:'Autor presenta el contexto del documento al equipo inspector. Máx. 1 hora. No se revisa aún el documento.'},
+    {n:3,t:'Preparación individual',d:'Cada inspector lee de forma independiente y anota defectos usando el checklist. Ritmo recomendado: máx. 2 páginas/hora.'},
+    {n:4,t:'Reunión de inspección',d:'Moderador dirige. Lector parafrasea párrafo a párrafo. Inspectores reportan defectos. Máx. 2 horas por sesión.'},
+    {n:5,t:'Reescritura',d:'Autor corrige todos los defectos Mayores y Bloqueantes registrados en el log.'},
+    {n:6,t:'Seguimiento (Follow-up)',d:'Moderador verifica correcciones. Si densidad > 0.3 def/pág → re-inspección obligatoria de esa sección.'}
+  ];
+  var ckItems=[
+    '¿El documento tiene ID único, versión y fecha?',
+    '¿Cada requisito usa modal correcto (DEBE / DEBERÍA)?',
+    '¿Cada RF tiene criterio de aceptación verificable?',
+    '¿Los RNF tienen valor numérico medible?',
+    '¿No existen términos ambiguos (rápido, fácil, adecuado)?',
+    '¿Cada requisito describe solo UNA capacidad?',
+    '¿Todos los RF están trazados en la RTM?',
+    '¿No existen requisitos duplicados o contradictorios?',
+    '¿El glosario cubre todos los términos del dominio?',
+    '¿Los supuestos (SA) y restricciones (RC) están documentados?'
+  ];
+  var sevDef=['Bloqueante','Mayor','Menor','Informativo'];
+  var sevDefColor={Bloqueante:'var(--c-red)',Mayor:'var(--c-amber)',Menor:'var(--c-blue)',Informativo:'var(--c-teal)'};
+  var decColor={'Pendiente':'var(--muted)','Aprobado — sin re-inspección':'var(--c-green)','Re-inspección requerida':'var(--c-red)','En proceso — pendiente resolución':'var(--c-amber)'};
+
+  var html='';
+
+  // KPIs
+  html+='<div style="display:grid;grid-template-columns:repeat(5,1fr);gap:.6rem;margin-bottom:1rem">'
+    +'<div class="kpi"><div class="kpi-num" style="color:var(--c-blue)">'+total+'</div><div class="kpi-label">Inspecciones</div></div>'
+    +'<div class="kpi"><div class="kpi-num" style="color:var(--c-green)">'+aprobadas+'</div><div class="kpi-label">Aprobadas</div></div>'
+    +'<div class="kpi"><div class="kpi-num" style="color:var(--c-red)">'+reInsp+'</div><div class="kpi-label">Re-inspección</div></div>'
+    +'<div class="kpi"><div class="kpi-num" style="color:var(--c-amber)">'+totalDef+'</div><div class="kpi-label">Defectos total</div></div>'
+    +'<div class="kpi"><div class="kpi-num" style="font-size:13px;color:'+(criterioOk?'var(--c-green)':'var(--c-amber)')+'">'+( criterioOk?'✓ OK':'Pendiente')+'</div><div class="kpi-label">Criterio salida</div></div>'
+    +'</div>';
+
+  // Banner criterio
+  html+='<div class="card" style="margin-bottom:1rem;background:rgba('+(criterioOk?'15,110,86':'163,45,45')+',.04);border-color:rgba('+(criterioOk?'15,110,86':'163,45,45')+',.2)">'
+    +'<div style="font-size:12px;font-weight:500;color:var('+(criterioOk?'--c-green':'--c-red')+');margin-bottom:.2rem">'
+    +(criterioOk?'✓ Todas las inspecciones aprobadas — listo para Resolución de defectos':'⏳ Criterio de salida: todas las inspecciones en Aprobado, densidad ≤ 0.3 def/pág')+'</div>'
+    +'<div style="font-size:11px;color:var(--muted)">IEEE 1028:2008 §5.4 · Fagan 1976 · Se pueden registrar múltiples inspecciones por sección o por vuelta (re-inspección)</div>'
+    +'</div>';
+
+  // Tabs
+  html+='<div class="tab-nav" style="margin-bottom:1rem">'
+    +'<button class="tab-btn'+(TAB===0?' on':'')+'" onclick="window._inspTab=0;renderValInsp()">Referencia IEEE 1028</button>'
+    +'<button class="tab-btn'+(TAB!==0?' on':'')+'" onclick="window._inspTab=1;renderValInsp()">Inspecciones</button>'
+    +'</div>';
+
+  // ── TAB 0: REFERENCIA ──
+  if(TAB===0){
+    html+='<div class="g2">'
+      +'<div class="card"><div class="card-title" style="color:var(--c-red);margin-bottom:.7rem">6 fases — IEEE 1028 §5.4</div>'
+      +fases.map(function(f,fi,fa){return'<div class="step-row">'+(fi<fa.length-1?'<div class="step-line"></div>':'')+'<div class="step-num" style="background:var(--c-red);width:28px;height:28px;font-size:11px">'+f.n+'</div><div class="step-body"><div class="step-title">'+f.t+'</div><div class="step-desc">'+f.d+'</div></div></div>';}).join('')
+      +'</div>'
+      +'<div>'
+      +'<div class="card" style="margin-bottom:.8rem"><div class="card-title" style="color:var(--c-purple);margin-bottom:.5rem">Clasificación de defectos</div>'
+      +[{t:'Bloqueante',c:'var(--c-red)',d:'Impide implementar el requisito. Detiene el baseline.'},
+        {t:'Mayor',c:'var(--c-amber)',d:'Afecta significativamente la comprensión o implementación. Debe resolverse.'},
+        {t:'Menor',c:'var(--c-blue)',d:'Imprecisión de redacción que no afecta la implementación.'},
+        {t:'Informativo',c:'var(--c-teal)',d:'Sugerencia de mejora. No bloquea el avance.'}]
+      .map(function(h){return'<div style="display:flex;gap:.6rem;padding:.35rem 0;border-bottom:0.5px solid var(--border);align-items:flex-start">'
+        +'<span style="font-size:10px;font-weight:600;padding:2px 7px;border-radius:3px;background:rgba(0,0,0,.04);color:'+h.c+';flex-shrink:0;white-space:nowrap;border:0.5px solid currentColor">'+h.t+'</span>'
+        +'<div style="font-size:11px;color:var(--muted)">'+h.d+'</div></div>';}).join('')
+      +'</div>'
+      +'<div class="card"><div class="card-title" style="color:var(--c-green);margin-bottom:.5rem">Criterios entrada / salida</div>'
+      +'<div style="background:rgba(163,45,45,.04);border-radius:6px;padding:.5rem .7rem;margin-bottom:.5rem">'
+      +'<div style="font-size:10px;font-weight:600;color:var(--c-red);text-transform:uppercase;margin-bottom:.3rem">Entrada</div>'
+      +['PO firmó acta de conformidad (Revisión de Stakeholders OK)','SRS sin observaciones de negocio abiertas','Inspector independiente disponible (no miembro del equipo autor)','Checklist de inspección preparado']
+      .map(function(it){return'<div class="dot-item"><div class="dot" style="background:var(--c-red)"></div>'+it+'</div>';}).join('')
+      +'</div>'
+      +'<div style="background:rgba(15,110,86,.04);border-radius:6px;padding:.5rem .7rem">'
+      +'<div style="font-size:10px;font-weight:600;color:var(--c-green);text-transform:uppercase;margin-bottom:.3rem">Salida</div>'
+      +['0 defectos Bloqueantes ni Mayores abiertos','Densidad ≤ 0.3 def/pág en todas las secciones','Moderador firma el reporte de inspección','Log de defectos completo y clasificado']
+      .map(function(it){return'<div class="dot-item"><div class="dot" style="background:var(--c-green)"></div>'+it+'</div>';}).join('')
+      +'</div></div>'
+      +'</div></div>';
+  }
+
+  // ── TAB 1: INSPECCIONES ──
+  if(TAB!==0){
+    // Formulario nueva inspección
+    html+='<div class="card" style="margin-bottom:1rem"><div class="card-title" style="margin-bottom:.7rem">Nueva inspección</div>'
+      +'<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.5rem;margin-bottom:.5rem">'
+      +'<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">Fecha</label><input id="insp-nfecha" type="date" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:4px 8px;font-size:12px;color:var(--text);outline:none"></div>'
+      +'<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">Moderador</label><input id="insp-nmod" placeholder="Nombre del moderador" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:4px 8px;font-size:12px;color:var(--text);outline:none"></div>'
+      +'<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">Alcance</label><input id="insp-nalc" placeholder="Ej: SRS §3 — RF-001 a RF-012" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:4px 8px;font-size:12px;color:var(--text);outline:none"></div>'
+      +'</div>'
+      +'<div style="display:flex;gap:.5rem;align-items:center">'
+      +'<button class="btn btn-sm" style="background:var(--c-red);color:#fff;border-color:var(--c-red)" onclick="inspAdd()">+ Agregar inspección</button>'
+      +'<span id="insp-add-msg" style="font-size:11px;color:var(--c-red)"></span>'
+      +'</div></div>';
+
+    if(total===0){
+      html+='<div style="text-align:center;padding:2rem;color:var(--muted);font-size:12px">No hay inspecciones registradas.</div>';
+    } else {
+      insList.forEach(function(insp,i){
+        var dc=decColor[insp.decision]||'var(--muted)';
+        var expanded=(SEL===i);
+        var dens=parseFloat(insp.densidad)||0;
+        var defTotal=parseInt(insp.defectos)||0;
+        var defList=insp.defectosList||[];
+        var defCerrados=defList.filter(function(d){return d.estado==='Resuelto';}).length;
+        var ck=insp.checklist||{};
+        var ckOk=ckItems.filter(function(_,ci){return ck['ci'+ci]==='ok';}).length;
+
+        html+='<div class="card" style="margin-bottom:.6rem;border-left:3px solid '+dc+'">';
+        // Header
+        html+='<div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.4rem;cursor:pointer" onclick="window._inspSel='+(expanded?-1:i)+';renderValInsp()">'
+          +'<div><div style="font-size:12px;font-weight:500">'+e(insp.alcance||'Sin alcance')+'</div>'
+          +'<div style="font-size:11px;color:var(--muted)">'+e(insp.fecha||'Sin fecha')+' · Moderador: '+e(insp.moderador||'—')+'</div></div>'
+          +'<div style="display:flex;align-items:center;gap:.5rem">'
+          +(dens>0.3?'<span style="font-size:10px;font-weight:600;padding:2px 7px;border-radius:3px;background:rgba(163,45,45,.1);color:var(--c-red)">'+dens+' def/pág ▲</span>':'')
+          +'<span style="font-size:11px;color:var(--muted)">'+ckOk+'/'+ckItems.length+' ck · '+defCerrados+'/'+defList.length+' def.</span>'
+          +'<select style="font-size:11px;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:3px 7px;color:'+dc+';font-weight:500;outline:none" onclick="event.stopPropagation()" onchange="inspSetField('+i+',\'decision\',this.value);renderValInsp()">'
+          +Object.keys(decColor).map(function(o){return'<option'+(insp.decision===o?' selected':'')+'>'+o+'</option>';}).join('')+'</select>'
+          +'<button style="background:none;border:none;cursor:pointer;color:var(--muted);font-size:14px" onclick="event.stopPropagation();inspDel('+i+')">×</button>'
+          +'<span style="color:var(--muted);font-size:13px">'+(expanded?'▲':'▼')+'</span>'
+          +'</div></div>';
+
+        if(expanded){
+          html+='<div style="margin-top:.8rem;padding-top:.8rem;border-top:0.5px solid var(--border)">';
+
+          // Metadata
+          html+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-bottom:.6rem">'
+            +'<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">Autor del SRS</label><input value="'+e(insp.autor||'')+'" placeholder="Nombre del BA" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:4px 8px;font-size:12px;color:var(--text);outline:none" oninput="inspSetField('+i+',\'autor\',this.value)"></div>'
+            +'<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">Lector</label><input value="'+e(insp.lector||'')+'" placeholder="Nombre del lector" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:4px 8px;font-size:12px;color:var(--text);outline:none" oninput="inspSetField('+i+',\'lector\',this.value)"></div>'
+            +'</div>'
+            +'<div style="margin-bottom:.6rem"><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">Inspectores</label><textarea rows="1" placeholder="Nombres separados por coma" style="'+TA+'" oninput="autoH(this);inspSetField('+i+',\'inspectores\',this.value)">'+e(insp.inspectores||'')+'</textarea></div>';
+
+          // Métricas
+          html+='<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.5rem;margin-bottom:.6rem">'
+            +'<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">Páginas revisadas</label><input type="number" value="'+e(String(insp.paginas||''))+'" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:4px 8px;font-size:12px;color:var(--text);outline:none" oninput="inspSetField('+i+',\'paginas\',this.value);inspCalcD('+i+')"></div>'
+            +'<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">Total defectos</label><input type="number" value="'+e(String(insp.defectos||''))+'" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:4px 8px;font-size:12px;color:var(--text);outline:none" oninput="inspSetField('+i+',\'defectos\',this.value);inspCalcD('+i+')"></div>'
+            +'<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">Densidad (def/pág)</label><input id="insp-dens-'+i+'" value="'+e(String(insp.densidad||''))+'" readonly style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:4px 8px;font-size:12px;color:'+(dens>0.3?'var(--c-red)':'var(--c-green)')+';outline:none;font-weight:500"></div>'
+            +'</div>';
+
+          // Checklist
+          html+='<div style="margin-bottom:.6rem"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.4rem">'
+            +'<div style="font-size:11px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.3px">Checklist del inspector ('+ckOk+'/'+ckItems.length+')</div></div>'
+            +ckItems.map(function(it,ci){
+              var val=ck['ci'+ci]||'';
+              return'<div style="display:flex;align-items:flex-start;gap:.6rem;padding:.35rem 0;border-bottom:0.5px solid var(--border)">'
+                +'<div style="display:flex;gap:4px;flex-shrink:0;padding-top:1px">'
+                +'<button style="width:22px;height:22px;border-radius:4px;border:0.5px solid '+(val==='ok'?'var(--c-green)':'var(--border2)')+';background:'+(val==='ok'?'var(--c-green)':'var(--surface)')+';color:'+(val==='ok'?'#fff':'var(--muted)')+';font-size:9px;cursor:pointer" onclick="inspToggleCk('+i+',\'ci'+ci+'\',\'ok\')">✓</button>'
+                +'<button style="width:22px;height:22px;border-radius:4px;border:0.5px solid '+(val==='def'?'var(--c-red)':'var(--border2)')+';background:'+(val==='def'?'var(--c-red)':'var(--surface)')+';color:'+(val==='def'?'#fff':'var(--muted)')+';font-size:9px;cursor:pointer" onclick="inspToggleCk('+i+',\'ci'+ci+'\',\'def\')">✗</button>'
+                +'</div>'
+                +'<div style="font-size:11px;color:var(--text);line-height:1.5">'+it+'</div></div>';
+            }).join('')+'</div>';
+
+          // Log de defectos
+          html+='<div style="margin-bottom:.5rem">'
+            +'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.4rem">'
+            +'<div style="font-size:11px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.3px">Log de defectos ('+defList.length+')</div>'
+            +'<button class="btn btn-sm" onclick="inspAddDef('+i+')">+ Defecto</button>'
+            +'</div>';
+          if(defList.length===0){
+            html+='<div style="font-size:11px;color:var(--muted);padding:.3rem 0">Sin defectos registrados.</div>';
+          } else {
+            html+='<div style="display:grid;grid-template-columns:80px 90px 1fr 90px 24px;gap:4px;font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;border-bottom:0.5px solid var(--border2);padding-bottom:3px;margin-bottom:4px">'
+              +'<span>Ref RF</span><span>Severidad</span><span>Descripción</span><span>Estado</span><span></span></div>';
+            defList.forEach(function(d,di){
+              var sc=sevDefColor[d.sev]||'var(--muted)';
+              var dsc=d.estado==='Resuelto'?'var(--c-green)':d.estado==='En proceso'?'var(--c-amber)':'var(--muted)';
+              html+='<div style="display:grid;grid-template-columns:80px 90px 1fr 90px 24px;gap:4px;align-items:center;padding:4px 0;border-bottom:0.5px solid var(--border)">'
+                +'<input value="'+e(d.rfid||'')+'" placeholder="RF-001" style="background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 5px;font-size:11px;font-family:var(--font-mono);color:var(--c-blue);outline:none" oninput="inspSetDef('+i+','+di+',\'rfid\',this.value)">'
+                +'<select style="background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 4px;font-size:11px;color:'+sc+';font-weight:600;outline:none" onchange="inspSetDef('+i+','+di+',\'sev\',this.value);renderValInsp()">'+sevDef.map(function(o){return'<option'+(d.sev===o?' selected':'')+'>'+o+'</option>';}).join('')+'</select>'
+                +'<textarea rows="1" placeholder="Describe el defecto..." style="background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 5px;font-size:11px;color:var(--text);outline:none;resize:none;overflow:hidden;line-height:1.5;width:100%" oninput="autoH(this);inspSetDef('+i+','+di+',\'desc\',this.value)">'+e(d.desc||'')+'</textarea>'
+                +'<select style="background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 4px;font-size:11px;color:'+dsc+';font-weight:500;outline:none" onchange="inspSetDef('+i+','+di+',\'estado\',this.value);renderValInsp()">'+['Abierto','En proceso','Resuelto'].map(function(o){return'<option'+(d.estado===o?' selected':'')+'>'+o+'</option>';}).join('')+'</select>'
+                +'<button style="background:none;border:none;cursor:pointer;color:var(--muted);font-size:13px" onclick="inspDelDef('+i+','+di+')">×</button>'
+                +'</div>';
+            });
+          }
+          html+='</div>';
+
+          // Notas y tipo
+          html+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-top:.4rem">'
+            +'<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">Tipo de inspección</label>'
+            +'<select style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:5px 8px;font-size:12px;color:var(--text);outline:none" onchange="inspSetField('+i+',\'tipo\',this.value)">'
+            +['Primera inspección','Re-inspección','Inspección por sección'].map(function(o){return'<option'+(insp.tipo===o?' selected':'')+'>'+o+'</option>';}).join('')+'</select></div>'
+            +'<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">Notas del moderador</label>'
+            +'<textarea rows="2" style="'+TA+'" oninput="autoH(this);inspSetField('+i+',\'notas\',this.value)">'+e(insp.notas||'')+'</textarea></div>'
+            +'</div>';
+
+          html+='</div>';
+        }
+        html+='</div>';
+      });
+    }
+  }
+
+  html+='<div style="display:flex;gap:.5rem;margin-top:1rem;align-items:center"><button class="btn" style="background:var(--c-red);color:#fff;border-color:var(--c-red)" onclick="inspGuardar()">Guardar</button><span id="insp-msg" style="font-size:11px;color:var(--c-green)"></span></div>';
+
+  el.innerHTML=html;
+  el.querySelectorAll('textarea').forEach(function(ta){ta.style.height='auto';ta.style.height=ta.scrollHeight+'px';});
+
+  window.inspAdd=function(){
+    var alc=document.getElementById('insp-nalc')?.value?.trim()||'';
+    if(!alc){var _e=document.getElementById('insp-add-msg');if(_e){_e.textContent='⚠ Alcance obligatorio';setTimeout(function(){_e.textContent='';},2000);}return;}
+    var d2;try{d2=JSON.parse(localStorage.getItem(INSP_KEY))||defINSP();}catch(ex){d2=defINSP();}
+    if(!d2.inspecciones)d2.inspecciones=[];
+    d2.inspecciones.push({fecha:document.getElementById('insp-nfecha')?.value||'',moderador:document.getElementById('insp-nmod')?.value||'',alcance:alc,autor:'',lector:'',inspectores:'',paginas:'',defectos:'',densidad:'',decision:'Pendiente',tipo:'Primera inspección',notas:'',checklist:{},defectosList:[]});
+    save(d2); window._inspTab=1; window._inspSel=d2.inspecciones.length-1; renderValInsp();
+  };
+  window.inspSetField=function(i,k,v){var d2;try{d2=JSON.parse(localStorage.getItem(INSP_KEY))||defINSP();}catch(ex){d2=defINSP();}if(d2.inspecciones&&d2.inspecciones[i])d2.inspecciones[i][k]=v;save(d2);};
+  window.inspCalcD=function(i){var d2;try{d2=JSON.parse(localStorage.getItem(INSP_KEY))||defINSP();}catch(ex){d2=defINSP();}if(!d2.inspecciones||!d2.inspecciones[i])return;var pg=parseFloat(d2.inspecciones[i].paginas),df=parseFloat(d2.inspecciones[i].defectos);if(pg>0&&!isNaN(df)){var den=(df/pg).toFixed(2);d2.inspecciones[i].densidad=den;save(d2);var fi=document.getElementById('insp-dens-'+i);if(fi){fi.value=den;fi.style.color=parseFloat(den)>0.3?'var(--c-red)':'var(--c-green)';fi.style.fontWeight='500';}}};
+  window.inspToggleCk=function(i,cid,val){var d2;try{d2=JSON.parse(localStorage.getItem(INSP_KEY))||defINSP();}catch(ex){d2=defINSP();}if(!d2.inspecciones||!d2.inspecciones[i])return;if(!d2.inspecciones[i].checklist)d2.inspecciones[i].checklist={};if(d2.inspecciones[i].checklist[cid]===val)delete d2.inspecciones[i].checklist[cid];else d2.inspecciones[i].checklist[cid]=val;save(d2);renderValInsp();};
+  window.inspAddDef=function(i){var d2;try{d2=JSON.parse(localStorage.getItem(INSP_KEY))||defINSP();}catch(ex){d2=defINSP();}if(!d2.inspecciones||!d2.inspecciones[i])return;if(!d2.inspecciones[i].defectosList)d2.inspecciones[i].defectosList=[];d2.inspecciones[i].defectosList.push({rfid:'',sev:'Mayor',desc:'',estado:'Abierto'});save(d2);renderValInsp();};
+  window.inspSetDef=function(i,di,k,v){var d2;try{d2=JSON.parse(localStorage.getItem(INSP_KEY))||defINSP();}catch(ex){d2=defINSP();}if(d2.inspecciones&&d2.inspecciones[i]&&d2.inspecciones[i].defectosList&&d2.inspecciones[i].defectosList[di])d2.inspecciones[i].defectosList[di][k]=v;save(d2);};
+  window.inspDelDef=function(i,di){var d2;try{d2=JSON.parse(localStorage.getItem(INSP_KEY))||defINSP();}catch(ex){d2=defINSP();}if(d2.inspecciones&&d2.inspecciones[i]&&d2.inspecciones[i].defectosList)d2.inspecciones[i].defectosList.splice(di,1);save(d2);renderValInsp();};
+  window.inspDel=function(i){var d2;try{d2=JSON.parse(localStorage.getItem(INSP_KEY))||defINSP();}catch(ex){d2=defINSP();}if(d2.inspecciones)d2.inspecciones.splice(i,1);save(d2);if(window._inspSel===i)window._inspSel=-1;renderValInsp();};
+  window.inspGuardar=function(){var e2=document.getElementById('insp-msg');if(e2){e2.textContent='✓ Guardado';setTimeout(function(){e2.textContent='';},1800);}};
+}
+/* ── PUBLICACIÓN SRS ── */
+var PUB_KEY='fw_val_pub_v1';
+function defPUB(){return{repositorio:'',tag:'',url:'',fechaPub:'',publicador:'',notif:'',obs:'',checklist:{}};}
+function initValPub(){var el=document.getElementById('val-pub-mount');if(!el||el.innerHTML.trim())return;renderValPub();}
+function renderValPub(){
+  var el=document.getElementById('val-pub-mount');if(!el)return;
+  var data;try{data=JSON.parse(localStorage.getItem(PUB_KEY))||defPUB();}catch(ex){data=defPUB();}
+  function e(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+  var TA='width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:4px 8px;font-size:12px;color:var(--text);outline:none;resize:none;line-height:1.5;overflow:hidden';
+  var pubItems=['El archivo lleva el nombre: SRS-[proyecto]-v1.0-baseline.pdf','El tag en el repositorio sigue el formato v1.0.0','El repositorio es accesible para todos los miembros','El acta de aprobación firmada está adjunta o vinculada','El equipo de desarrollo fue notificado con el enlace','El equipo de QA fue notificado con el enlace','El CCB fue activado con instrucciones de gestión de cambios','La versión anterior fue archivada y marcada como obsoleta','El registro de versiones del SRS fue actualizado con v1.0'];
+  var ok=pubItems.filter(function(_,pi){return data.checklist['p'+pi]==='ok';}).length;
+  var pubOk=ok===pubItems.length;
+  var html='<div class="card" style="margin-bottom:1rem;background:rgba('+(pubOk?'15,110,86':'24,95,165')+',.05);border-color:rgba('+(pubOk?'15,110,86':'24,95,165')+',.25)"><div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem;margin-bottom:.5rem"><div><div style="font-size:13px;font-weight:500;color:var('+(pubOk?'--c-green':'--c-blue')+');">'+(pubOk?'✓ SRS publicado correctamente — CCB activo':'⏳ Checklist de publicación incompleto')+'</div><div style="font-size:11px;color:var(--muted);margin-top:2px">'+ok+' de '+pubItems.length+' ítems verificados</div></div><div style="font-size:28px;font-weight:500;font-family:var(--font-serif);color:var('+(pubOk?'--c-green':'--c-blue')+')">'+ok+'/'+pubItems.length+'</div></div><div style="height:6px;background:var(--surface2);border-radius:3px;overflow:hidden"><div style="height:100%;width:'+Math.round(ok/pubItems.length*100)+'%;background:var('+(pubOk?'--c-green':'--c-blue')+');border-radius:3px;transition:width .5s"></div></div></div>';
+  html+='<div class="card" style="margin-bottom:1rem"><div class="card-title" style="color:var(--c-teal);margin-bottom:.7rem">Datos de publicación</div>'
+    +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-bottom:.5rem">'
+    +'<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">Repositorio</label><input value="'+e(data.repositorio)+'" placeholder="Confluence / SharePoint / GitHub" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:4px 8px;font-size:12px;color:var(--text);outline:none" oninput="pubSF(\'repositorio\',this.value)"></div>'
+    +'<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">Tag de versión</label><input value="'+e(data.tag)+'" placeholder="v1.0.0-baseline" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:4px 8px;font-size:12px;font-family:var(--font-mono);color:var(--c-teal);outline:none" oninput="pubSF(\'tag\',this.value)"></div>'
+    +'</div>'
+    +'<div style="margin-bottom:.5rem"><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">URL / ruta del documento</label><input value="'+e(data.url)+'" placeholder="https://... o ruta de red" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:4px 8px;font-size:12px;color:var(--text);outline:none" oninput="pubSF(\'url\',this.value)"></div>'
+    +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-bottom:.5rem">'
+    +'<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">Fecha de publicación</label><input type="date" value="'+e(data.fechaPub)+'" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:4px 8px;font-size:12px;color:var(--text);outline:none" oninput="pubSF(\'fechaPub\',this.value)"></div>'
+    +'<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">Publicado por</label><input value="'+e(data.publicador)+'" placeholder="Nombre del BA" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:4px 8px;font-size:12px;color:var(--text);outline:none" oninput="pubSF(\'publicador\',this.value)"></div>'
+    +'</div>'
+    +'<div style="margin-bottom:.5rem"><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">Partes notificadas</label><input value="'+e(data.notif)+'" placeholder="Dev Team, QA Team, CCB, PO, Arquitecto" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:4px 8px;font-size:12px;color:var(--text);outline:none" oninput="pubSF(\'notif\',this.value)"></div>'
+    +'<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">Observaciones</label>'
+    +'<textarea rows="2" style="'+TA+'" oninput="autoH(this);pubSF(\'obs\',this.value)">'+e(data.obs)+'</textarea></div></div>';
+  html+='<div class="card" style="margin-bottom:1rem"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.6rem"><div class="card-title">Checklist de publicación</div><div style="font-size:11px;color:var(--muted)">'+ok+'/'+pubItems.length+'</div></div>'
+    +pubItems.map(function(it,pi){var val=data.checklist['p'+pi]||'';return'<div style="display:flex;align-items:flex-start;gap:.6rem;padding:.4rem 0;border-bottom:0.5px solid var(--border)"><button style="width:24px;height:24px;border-radius:4px;border:0.5px solid '+(val==='ok'?'var(--c-green)':'var(--border2)')+';background:'+(val==='ok'?'var(--c-green)':'var(--surface)')+';color:'+(val==='ok'?'#fff':'var(--muted)')+';font-size:10px;cursor:pointer;flex-shrink:0;margin-top:1px" onclick="pubCk(\'p'+pi+'\')">✓</button><div style="font-size:12px">'+it+'</div></div>';}).join('')
+    +'</div>';
+  html+='<div style="display:flex;gap:.5rem;margin-top:.5rem;align-items:center"><button class="btn" style="background:var(--c-teal);color:#fff;border-color:var(--c-teal)" onclick="pubGuardar()">Guardar publicación</button><button class="btn btn-sm" onclick="pubReset()">↺ Limpiar</button><span id="pub-msg" style="font-size:11px;color:var(--c-green)"></span></div>';
+  el.innerHTML=html;
+  el.querySelectorAll('textarea').forEach(function(ta){ta.style.height='auto';ta.style.height=ta.scrollHeight+'px';});
+  window.pubSF=function(k,v){var d2;try{d2=JSON.parse(localStorage.getItem(PUB_KEY))||defPUB();}catch(ex){d2=defPUB();}d2[k]=v;localStorage.setItem(PUB_KEY,JSON.stringify(d2));};
+  window.pubCk=function(id){var d2;try{d2=JSON.parse(localStorage.getItem(PUB_KEY))||defPUB();}catch(ex){d2=defPUB();}if(!d2.checklist)d2.checklist={};if(d2.checklist[id]==='ok')delete d2.checklist[id];else d2.checklist[id]='ok';localStorage.setItem(PUB_KEY,JSON.stringify(d2));renderValPub();};
+  window.pubGuardar=function(){var e2=document.getElementById('pub-msg');if(e2){e2.textContent='✓ Guardado';setTimeout(function(){e2.textContent='';},1800);}};
+  window.pubReset=function(){localStorage.removeItem(PUB_KEY);var m=document.getElementById('val-pub-mount');if(m){m.innerHTML='';initValPub();}};
+}
 
 /* ════════════════════════════════════════
    PAGE: GESTIÓN DE CAMBIOS — FLUJO
@@ -8163,8 +9458,14 @@ function onPageShow(id) {
   if (id==='srs-editor') setTimeout(initSrsEditor, 50);
   if (id==='srs-gherkin') setTimeout(function(){ if(typeof updateGherkin==='function') updateGherkin(); }, 100);
   if (id==='srs-detector') setTimeout(function(){ if(typeof runDetector==='function') runDetector(); }, 100);
+  if (id==='val-autoreview')  setTimeout(initValAR,   50);
+  if (id==='val-walkthrough') setTimeout(initValWT,   50);
+  if (id==='val-stakeholders')setTimeout(initValSK,   50);
+  if (id==='val-inspeccion')  setTimeout(initValInsp, 50);
+  if (id==='val-publicacion') setTimeout(initValPub,  50);
   if (id==='val-tecnicas') setTimeout(initValTecnicas, 50);
   if (id==='val-log') setTimeout(function(){ if(!window._DEFS){window._DEFS=DEFECTS.slice();} window._selDefIdx=-1; initValLog(); }, 50);
+  if (id==='val-issues') setTimeout(initValIssues, 50);
   if (id==='val-uat') setTimeout(function(){ window._uatSelIdx=-1; initValUat(); }, 50);
   if (id==='val-baseline') setTimeout(function(){ initBlRef(); }, 50);
   if (id==='ccb-cr') setTimeout(initCR, 50);
