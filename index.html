@@ -7173,40 +7173,311 @@ function renderValInsp(){
 }
 /* ── PUBLICACIÓN SRS ── */
 var PUB_KEY='fw_val_pub_v1';
-function defPUB(){return{repositorio:'',tag:'',url:'',fechaPub:'',publicador:'',notif:'',obs:'',checklist:{}};}
-function initValPub(){var el=document.getElementById('val-pub-mount');if(!el||el.innerHTML.trim())return;renderValPub();}
+var _pubTab=0;
+
+function defPUB(){
+  return {repositorio:'',tag:'',url:'',fechaPub:'',publicador:'',ccbFecha:'',ccbInstr:'',obs:'',checklist:{},notificaciones:[],historial:[]};
+}
+
+function pubLoad(){
+  var d;try{d=JSON.parse(localStorage.getItem(PUB_KEY))||defPUB();}catch(ex){d=defPUB();}
+  if(!d.checklist) d.checklist={};
+  if(!d.notificaciones) d.notificaciones=[];
+  if(!d.historial) d.historial=[];
+  if(!d.ccbFecha) d.ccbFecha='';
+  if(!d.ccbInstr) d.ccbInstr='';
+  return d;
+}
+function pubSave(d){ localStorage.setItem(PUB_KEY,JSON.stringify(d)); }
+
+function pubSF(k,v){ var d=pubLoad(); d[k]=v; pubSave(d); }
+function pubCk(id){ var d=pubLoad(); if(d.checklist[id]==='ok') delete d.checklist[id]; else d.checklist[id]='ok'; pubSave(d); renderValPub(); }
+function pubGuardar(){ pubSave(pubLoad()); var e2=document.getElementById('pub-msg'); if(e2){e2.textContent='✓ Guardado';setTimeout(function(){e2.textContent='';},1800);} }
+function pubReset(){ localStorage.removeItem(PUB_KEY); var m=document.getElementById('val-pub-mount'); if(m){m.innerHTML='';initValPub();} }
+
+function pubTabSel(t){
+  _pubTab=t;
+  [0,1,2].forEach(function(i){
+    var btn=document.getElementById('pub-tab-'+i);
+    var pan=document.getElementById('pub-panel-'+i);
+    if(btn) btn.classList.toggle('on',i===t);
+    if(pan) pan.style.display=i===t?'block':'none';
+  });
+}
+
+function pubAddNotif(){
+  var d=pubLoad();
+  d.notificaciones.push({nombre:'',rol:'',canal:'Email',fecha:'',confirmado:false});
+  pubSave(d); renderValPub(); setTimeout(function(){pubTabSel(2);},10);
+}
+function pubDelNotif(i){ var d=pubLoad(); d.notificaciones.splice(i,1); pubSave(d); renderValPub(); setTimeout(function(){pubTabSel(2);},10); }
+function pubSetNotif(i,k,v){ var d=pubLoad(); if(!d.notificaciones[i]) return; d.notificaciones[i][k]=v; pubSave(d); }
+function pubToggleConf(i){ var d=pubLoad(); if(!d.notificaciones[i]) return; d.notificaciones[i].confirmado=!d.notificaciones[i].confirmado; pubSave(d); renderValPub(); setTimeout(function(){pubTabSel(2);},10); }
+
+function pubAddHist(){
+  var d=pubLoad();
+  d.historial.push({version:'',desc:'',fecha:'',estado:'Archivada'});
+  pubSave(d); renderValPub(); setTimeout(function(){pubTabSel(1);},10);
+}
+function pubDelHist(i){ var d=pubLoad(); d.historial.splice(i,1); pubSave(d); renderValPub(); setTimeout(function(){pubTabSel(1);},10); }
+function pubSetHist(i,k,v){ var d=pubLoad(); if(!d.historial[i]) return; d.historial[i][k]=v; pubSave(d); }
+
+function initValPub(){
+  var el=document.getElementById('val-pub-mount'); if(!el||el.innerHTML.trim()) return;
+  renderValPub();
+}
+
 function renderValPub(){
-  var el=document.getElementById('val-pub-mount');if(!el)return;
-  var data;try{data=JSON.parse(localStorage.getItem(PUB_KEY))||defPUB();}catch(ex){data=defPUB();}
+  var el=document.getElementById('val-pub-mount'); if(!el) return;
+  var data=pubLoad();
   function e(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
-  var TA='width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:4px 8px;font-size:12px;color:var(--text);outline:none;resize:none;line-height:1.5;overflow:hidden';
-  var pubItems=['El archivo lleva el nombre: SRS-[proyecto]-v1.0-baseline.pdf','El tag en el repositorio sigue el formato v1.0.0','El repositorio es accesible para todos los miembros','El acta de aprobación firmada está adjunta o vinculada','El equipo de desarrollo fue notificado con el enlace','El equipo de QA fue notificado con el enlace','El CCB fue activado con instrucciones de gestión de cambios','La versión anterior fue archivada y marcada como obsoleta','El registro de versiones del SRS fue actualizado con v1.0'];
-  var ok=pubItems.filter(function(_,pi){return data.checklist['p'+pi]==='ok';}).length;
-  var pubOk=ok===pubItems.length;
-  var html='<div class="card" style="margin-bottom:1rem;background:rgba('+(pubOk?'15,110,86':'24,95,165')+',.05);border-color:rgba('+(pubOk?'15,110,86':'24,95,165')+',.25)"><div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem;margin-bottom:.5rem"><div><div style="font-size:13px;font-weight:500;color:var('+(pubOk?'--c-green':'--c-blue')+');">'+(pubOk?'✓ SRS publicado correctamente — CCB activo':'⏳ Checklist de publicación incompleto')+'</div><div style="font-size:11px;color:var(--muted);margin-top:2px">'+ok+' de '+pubItems.length+' ítems verificados</div></div><div style="font-size:28px;font-weight:500;font-family:var(--font-serif);color:var('+(pubOk?'--c-green':'--c-blue')+')">'+ok+'/'+pubItems.length+'</div></div><div style="height:6px;background:var(--surface2);border-radius:3px;overflow:hidden"><div style="height:100%;width:'+Math.round(ok/pubItems.length*100)+'%;background:var('+(pubOk?'--c-green':'--c-blue')+');border-radius:3px;transition:width .5s"></div></div></div>';
-  html+='<div class="card" style="margin-bottom:1rem"><div class="card-title" style="color:var(--c-teal);margin-bottom:.7rem">Datos de publicación</div>'
-    +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-bottom:.5rem">'
-    +'<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">Repositorio</label><input value="'+e(data.repositorio)+'" placeholder="Confluence / SharePoint / GitHub" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:4px 8px;font-size:12px;color:var(--text);outline:none" oninput="pubSF(\'repositorio\',this.value)"></div>'
-    +'<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">Tag de versión</label><input value="'+e(data.tag)+'" placeholder="v1.0.0-baseline" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:4px 8px;font-size:12px;font-family:var(--font-mono);color:var(--c-teal);outline:none" oninput="pubSF(\'tag\',this.value)"></div>'
+  var INP='width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:4px 8px;font-size:12px;color:var(--text);outline:none';
+  var TA=INP+';resize:none;line-height:1.5;overflow:hidden';
+
+  // Pre-llenar tag/version desde baseline si está vacío
+  if(!data.tag||!data.tag.trim()){
+    try{ var bl=JSON.parse(localStorage.getItem('fw_bl_v1'))||{}; if(bl.version) data.tag=bl.version; if(bl.numero&&!data.repositorio) data.repositorio=''; }catch(ex){}
+  }
+
+  // Verificar firmas baseline
+  var firmasOk=false;
+  try{ var bl2=JSON.parse(localStorage.getItem('fw_bl_v1'))||{}; var fir=(bl2.pasos&&bl2.pasos[5]&&bl2.pasos[5].firmas)||[]; firmasOk=fir.filter(function(f){return f.firma&&f.firma.trim();}).length===3; }catch(ex){}
+
+  var pubItems=[
+    'El archivo lleva el nombre: SRS-[proyecto]-v1.0-baseline.pdf',
+    'El tag en el repositorio sigue el formato v1.0.0',
+    'El repositorio es accesible para todos los miembros del equipo',
+    'El acta de aprobación firmada está adjunta o vinculada al documento',
+    'El equipo de desarrollo fue notificado con el enlace permanente',
+    'El equipo de QA fue notificado con el enlace permanente',
+    'El CCB fue activado con instrucciones de gestión de cambios',
+    'La versión anterior fue archivada y marcada como obsoleta',
+    'El registro de versiones del SRS fue actualizado con la entrada v1.0'
+  ];
+  var ckOk=pubItems.filter(function(_,pi){return data.checklist['p'+pi]==='ok';}).length;
+  var pubOk=ckOk===pubItems.length&&firmasOk;
+  var notifConf=(data.notificaciones||[]).filter(function(n){return n.confirmado;}).length;
+  var notifTotal=(data.notificaciones||[]).length;
+
+  var html='';
+
+  // Banner prerequisito firmas
+  if(!firmasOk){
+    html+='<div style="background:rgba(163,45,45,.08);border:0.5px solid rgba(163,45,45,.35);border-radius:var(--radius);padding:.6rem .9rem;margin-bottom:.8rem;display:flex;align-items:center;justify-content:space-between;gap:.5rem">'
+      +'<div><div style="font-size:12px;font-weight:600;color:var(--c-red)">⚠ Prerequisito incompleto</div>'
+      +'<div style="font-size:11px;color:var(--muted);margin-top:2px">Las 3 firmas del baseline (Sponsor + PO + Arquitecto) deben estar completas antes de publicar</div></div>'
+      +'<button class="btn btn-sm" style="color:var(--c-red);border-color:var(--c-red);white-space:nowrap" onclick="nav(\'val-baseline\')">Ir a firmas →</button>'
+      +'</div>';
+  }
+
+  // KPI
+  html+='<div class="card" style="margin-bottom:1rem;background:rgba('+(pubOk?'15,110,86':ckOk>0?'24,95,165':'95,94,90')+',.05);border-color:rgba('+(pubOk?'15,110,86':ckOk>0?'24,95,165':'95,94,90')+',.2)">'
+    +'<div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem;margin-bottom:.5rem">'
+    +'<div><div style="font-size:13px;font-weight:500;color:var('+(pubOk?'--c-green':ckOk>0?'--c-blue':'--c-gray')+');">'
+    +(pubOk?'✓ SRS publicado — CCB activo':ckOk>0?'⏳ Publicación en curso':'○ Publicación no iniciada')+'</div>'
+    +'<div style="font-size:11px;color:var(--muted);margin-top:2px">Checklist: '+ckOk+'/'+pubItems.length+' · Notificaciones confirmadas: '+notifConf+'/'+notifTotal+'</div></div>'
+    +'<div style="font-size:28px;font-weight:500;font-family:var(--font-serif);color:var('+(pubOk?'--c-green':ckOk>0?'--c-blue':'--c-gray')+')">'+Math.round(ckOk/pubItems.length*100)+'%</div>'
     +'</div>'
-    +'<div style="margin-bottom:.5rem"><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">URL / ruta del documento</label><input value="'+e(data.url)+'" placeholder="https://... o ruta de red" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:4px 8px;font-size:12px;color:var(--text);outline:none" oninput="pubSF(\'url\',this.value)"></div>'
-    +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-bottom:.5rem">'
-    +'<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">Fecha de publicación</label><input type="date" value="'+e(data.fechaPub)+'" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:4px 8px;font-size:12px;color:var(--text);outline:none" oninput="pubSF(\'fechaPub\',this.value)"></div>'
-    +'<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">Publicado por</label><input value="'+e(data.publicador)+'" placeholder="Nombre del BA" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:4px 8px;font-size:12px;color:var(--text);outline:none" oninput="pubSF(\'publicador\',this.value)"></div>'
-    +'</div>'
-    +'<div style="margin-bottom:.5rem"><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">Partes notificadas</label><input value="'+e(data.notif)+'" placeholder="Dev Team, QA Team, CCB, PO, Arquitecto" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:4px 8px;font-size:12px;color:var(--text);outline:none" oninput="pubSF(\'notif\',this.value)"></div>'
-    +'<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">Observaciones</label>'
-    +'<textarea rows="2" style="'+TA+'" oninput="autoH(this);pubSF(\'obs\',this.value)">'+e(data.obs)+'</textarea></div></div>';
-  html+='<div class="card" style="margin-bottom:1rem"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.6rem"><div class="card-title">Checklist de publicación</div><div style="font-size:11px;color:var(--muted)">'+ok+'/'+pubItems.length+'</div></div>'
-    +pubItems.map(function(it,pi){var val=data.checklist['p'+pi]||'';return'<div style="display:flex;align-items:flex-start;gap:.6rem;padding:.4rem 0;border-bottom:0.5px solid var(--border)"><button style="width:24px;height:24px;border-radius:4px;border:0.5px solid '+(val==='ok'?'var(--c-green)':'var(--border2)')+';background:'+(val==='ok'?'var(--c-green)':'var(--surface)')+';color:'+(val==='ok'?'#fff':'var(--muted)')+';font-size:10px;cursor:pointer;flex-shrink:0;margin-top:1px" onclick="pubCk(\'p'+pi+'\')">✓</button><div style="font-size:12px">'+it+'</div></div>';}).join('')
+    +'<div style="height:6px;background:var(--surface2);border-radius:3px;overflow:hidden">'
+    +'<div style="height:100%;width:'+Math.round(ckOk/pubItems.length*100)+'%;background:var('+(pubOk?'--c-green':ckOk>0?'--c-blue':'--c-gray')+');border-radius:3px;transition:width .5s"></div>'
+    +'</div></div>';
+
+  // Tabs
+  html+='<div class="tab-nav" id="pub-tab-nav">'
+    +'<button class="tab-btn on" id="pub-tab-0" onclick="pubTabSel(0)">Referencia</button>'
+    +'<button class="tab-btn" id="pub-tab-1" onclick="pubTabSel(1)">Publicación e Historial</button>'
+    +'<button class="tab-btn" id="pub-tab-2" onclick="pubTabSel(2)">Notificaciones'+(notifTotal>0?' ('+notifConf+'/'+notifTotal+')':'')+'</button>'
     +'</div>';
-  html+='<div style="display:flex;gap:.5rem;margin-top:.5rem;align-items:center"><button class="btn" style="background:var(--c-teal);color:#fff;border-color:var(--c-teal)" onclick="pubGuardar()">Guardar publicación</button><button class="btn btn-sm" onclick="pubReset()">↺ Limpiar</button><span id="pub-msg" style="font-size:11px;color:var(--c-green)"></span></div>';
+
+  // ── PANEL 0: Referencia ──
+  html+='<div id="pub-panel-0">';
+  html+='<div style="background:rgba(24,95,165,.06);border:0.5px solid rgba(24,95,165,.2);border-radius:var(--radius);padding:.6rem .9rem;font-size:11px;color:var(--c-blue);margin-bottom:.8rem">'
+    +'ⓘ IEEE 29148:2018 §6.5 · ISO/IEC 12207:2017 §6.3.5 · IEEE 828:2012 §5.3 — La publicación del baseline es el acto formal que activa el control de cambios.</div>';
+
+  // Proceso de 6 pasos
+  var pasosPub=[
+    {n:1,c:'var(--c-teal)',t:'Verificación de prerequisitos',ieee:'IEEE 29148 §6.4',
+     entry:'3 firmas completas (Sponsor + PO + Arquitecto) · 0 defectos Mayores/Bloqueantes abiertos · Checklist de inspección aprobado',
+     desc:'Confirmar que el proceso de aprobación está 100% cerrado antes de publicar. Ningún documento puede ser declarado baseline sin las firmas formales.'},
+    {n:2,c:'var(--c-teal)',t:'Asignación del número de baseline',ieee:'IEEE 828 §5.2',
+     entry:'Aprobación formal completada',
+     desc:'Asignar un identificador único (ej. BL-001) y el tag de versión definitivo (ej. v1.0.0-baseline). Este número se usa en toda la trazabilidad de cambios futuros.'},
+    {n:3,c:'var(--c-blue)',t:'Publicación en repositorio',ieee:'ISO/IEC 12207 §6.3.5.2',
+     entry:'Número de baseline asignado',
+     desc:'Publicar el SRS en el repositorio oficial con el nombre estándar SRS-[proyecto]-v1.0-baseline.pdf. El repositorio debe ser accesible a todos los stakeholders del proyecto.'},
+    {n:4,c:'var(--c-purple)',t:'Activación del CCB',ieee:'IEEE 828 §5.3',
+     entry:'SRS publicado con URL permanente',
+     desc:'Notificar formalmente al Configuration Control Board que el baseline está activo. A partir de este momento, cualquier cambio al SRS requiere una solicitud de cambio (CR) aprobada por el CCB.'},
+    {n:5,c:'var(--c-amber)',t:'Notificación a stakeholders',ieee:'IEEE 29148 §6.5',
+     entry:'CCB activado',
+     desc:'Comunicar a todos los equipos afectados (Dev, QA, Arquitectura, Negocio) que el SRS está en baseline. Registrar canal, fecha y confirmación de recepción para trazabilidad.'},
+    {n:6,c:'var(--c-green)',t:'Archivo de versiones anteriores',ieee:'ISO/IEC 12207 §6.3.5.3',
+     entry:'Notificaciones enviadas',
+     desc:'Marcar las versiones anteriores del SRS como Archivadas u Obsoletas en el repositorio. Documentar el historial de versiones con descripción de cambios entre cada una.'},
+  ];
+
+  html+='<div class="card" style="margin-bottom:.8rem"><div class="card-title" style="margin-bottom:.7rem">Proceso de publicación — 6 pasos</div>';
+  pasosPub.forEach(function(p){
+    html+='<div style="display:flex;gap:.7rem;padding:.6rem 0;border-bottom:0.5px solid var(--border)">'
+      +'<div style="width:28px;height:28px;border-radius:50%;background:'+p.c+';display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:#fff;flex-shrink:0;margin-top:2px">'+p.n+'</div>'
+      +'<div style="flex:1">'
+      +'<div style="display:flex;align-items:center;gap:.5rem;margin-bottom:2px">'
+      +'<div style="font-size:12px;font-weight:500">'+p.t+'</div>'
+      +'<span style="font-size:10px;font-family:var(--font-mono);color:var(--muted)">'+p.ieee+'</span></div>'
+      +'<div style="font-size:11px;color:var(--text);line-height:1.5;margin-bottom:3px">'+p.desc+'</div>'
+      +'<div style="font-size:10px;color:var(--muted)">Entrada: '+p.entry+'</div>'
+      +'</div></div>';
+  });
+  html+='</div>';
+
+  // Normas aplicadas
+  html+='<div class="card" style="margin-bottom:.8rem"><div class="card-title" style="margin-bottom:.6rem">Normas aplicadas</div>'
+    +'<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:.6rem">'
+    +[
+      {n:'IEEE 29148:2018',s:'§6.5',t:'Publicación y distribución del SRS',d:'Define los requisitos de distribución y notificación del SRS aprobado a todas las partes interesadas del proyecto.'},
+      {n:'ISO/IEC 12207:2017',s:'§6.3.5',t:'Gestión de configuración',d:'Establece el proceso de control de configuración, incluyendo la identificación, el control y la auditoría de ítems de configuración.'},
+      {n:'IEEE 828:2012',s:'§5.3',t:'Software Configuration Management',d:'Define el proceso de establecimiento y control de baselines de software, incluyendo la activación y operación del CCB.'},
+    ].map(function(nm){
+      return'<div style="background:var(--surface);border:0.5px solid var(--border);border-radius:8px;padding:.7rem">'
+        +'<div style="font-size:11px;font-weight:700;font-family:var(--font-mono);color:var(--c-blue)">'+nm.n+'</div>'
+        +'<div style="font-size:10px;color:var(--muted);margin-bottom:3px">'+nm.s+' — '+nm.t+'</div>'
+        +'<div style="font-size:11px;color:var(--text);line-height:1.5">'+nm.d+'</div>'
+        +'</div>';
+    }).join('')
+    +'</div></div>';
+
+  // Artefactos producidos
+  html+='<div class="card"><div class="card-title" style="margin-bottom:.6rem">Artefactos producidos</div>'
+    +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:.4rem">'
+    +[
+      ['SRS-[proyecto]-v1.0-baseline.pdf','Documento principal publicado en repositorio'],
+      ['Acta de publicación','Registro formal de fecha, publicador y URL'],
+      ['Notificación al CCB','Email / ticket con instrucciones de gestión de cambios'],
+      ['Registro de notificaciones','Lista de destinatarios con fecha y confirmación'],
+      ['Historial de versiones','Versiones anteriores archivadas con descripción'],
+      ['Tag en repositorio','v1.0.0-baseline con número de baseline asignado'],
+    ].map(function(a){
+      return'<div style="display:flex;gap:.4rem;align-items:flex-start;padding:.3rem 0;border-bottom:0.5px solid var(--border)">'
+        +'<span style="color:var(--c-teal);font-size:12px;flex-shrink:0">▸</span>'
+        +'<div><div style="font-size:11px;font-weight:500;color:var(--text)">'+a[0]+'</div>'
+        +'<div style="font-size:10px;color:var(--muted)">'+a[1]+'</div></div></div>';
+    }).join('')
+    +'</div></div>';
+
+  html+='</div>'; // end panel-0
+
+  // ── PANEL 1: Publicación e Historial ──
+  html+='<div id="pub-panel-1" style="display:none">';
+
+  // Datos de publicación
+  html+='<div class="card" style="margin-bottom:.8rem"><div class="card-title" style="color:var(--c-teal);margin-bottom:.7rem">Datos de publicación</div>'
+    +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-bottom:.5rem">'
+    +'<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">Número de baseline</label>'
+    +'<input value="'+e(data.numero||'')+'" placeholder="BL-001" style="'+INP+';font-family:var(--font-mono);color:var(--c-teal)" oninput="pubSF(\'numero\',this.value)"></div>'
+    +'<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">Tag de versión</label>'
+    +'<input value="'+e(data.tag)+'" placeholder="v1.0.0-baseline" style="'+INP+';font-family:var(--font-mono);color:var(--c-teal)" oninput="pubSF(\'tag\',this.value)"></div>'
+    +'</div>'
+    +'<div style="margin-bottom:.5rem"><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">Repositorio</label>'
+    +'<input value="'+e(data.repositorio)+'" placeholder="Confluence / SharePoint / GitHub" style="'+INP+'" oninput="pubSF(\'repositorio\',this.value)"></div>'
+    +'<div style="margin-bottom:.5rem"><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">URL permanente del documento</label>'
+    +'<input value="'+e(data.url)+'" placeholder="https://... o ruta de red" style="'+INP+'" oninput="pubSF(\'url\',this.value)"></div>'
+    +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-bottom:.5rem">'
+    +'<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">Fecha de publicación</label>'
+    +'<input type="date" value="'+e(data.fechaPub)+'" style="'+INP+'" oninput="pubSF(\'fechaPub\',this.value)"></div>'
+    +'<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">Publicado por</label>'
+    +'<input value="'+e(data.publicador)+'" placeholder="Nombre del BA" style="'+INP+'" oninput="pubSF(\'publicador\',this.value)"></div>'
+    +'</div>'
+    +'<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">Observaciones</label>'
+    +'<textarea rows="2" style="'+TA+'" oninput="autoH(this);pubSF(\'obs\',this.value)">'+e(data.obs)+'</textarea></div>'
+    +'</div>';
+
+  // Activación CCB
+  html+='<div class="card" style="margin-bottom:.8rem"><div class="card-title" style="margin-bottom:.6rem">Activación del CCB</div>'
+    +'<div style="background:rgba(83,52,131,.06);border:0.5px solid rgba(83,52,131,.2);border-radius:6px;padding:.5rem .7rem;font-size:11px;color:var(--c-purple);margin-bottom:.6rem">'
+    +'ⓘ IEEE 828 §5.3 — Una vez publicado el baseline, el CCB es el único órgano autorizado para aprobar cambios al SRS.</div>'
+    +'<div style="display:grid;grid-template-columns:160px 1fr;gap:.5rem;margin-bottom:.5rem">'
+    +'<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">Fecha de activación</label>'
+    +'<input type="date" value="'+e(data.ccbFecha)+'" style="'+INP+'" oninput="pubSF(\'ccbFecha\',this.value)"></div>'
+    +'<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">Instrucciones enviadas al CCB</label>'
+    +'<textarea rows="2" style="'+TA+'" oninput="autoH(this);pubSF(\'ccbInstr\',this.value)">'+e(data.ccbInstr)+'</textarea></div>'
+    +'</div></div>';
+
+  // Checklist
+  html+='<div class="card" style="margin-bottom:.8rem"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.6rem">'
+    +'<div class="card-title">Checklist de publicación</div><div style="font-size:11px;color:var(--muted)">'+ckOk+'/'+pubItems.length+'</div></div>'
+    +pubItems.map(function(it,pi){
+      var val=data.checklist['p'+pi]||'';
+      return'<div style="display:flex;align-items:flex-start;gap:.6rem;padding:.35rem 0;border-bottom:0.5px solid var(--border)">'
+        +'<button style="width:24px;height:24px;border-radius:4px;border:0.5px solid '+(val==='ok'?'var(--c-green)':'var(--border2)')+';background:'+(val==='ok'?'var(--c-green)':'var(--surface)')+';color:'+(val==='ok'?'#fff':'var(--muted)')+';font-size:10px;cursor:pointer;flex-shrink:0;margin-top:1px" onclick="pubCk(\'p'+pi+'\')">✓</button>'
+        +'<div style="font-size:12px;line-height:1.5">'+it+'</div></div>';
+    }).join('')
+    +'</div>';
+
+  // Historial de versiones anteriores
+  var hist=data.historial||[];
+  html+='<div class="card" style="margin-bottom:.8rem">'
+    +'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.6rem">'
+    +'<div><div class="card-title">Historial de versiones archivadas</div>'
+    +'<div style="font-size:11px;color:var(--muted)">Versiones anteriores al baseline vigente</div></div>'
+    +'<button class="btn btn-sm" onclick="pubAddHist()">+ Versión</button></div>'
+    +(hist.length===0?'<div style="text-align:center;color:var(--muted);font-size:12px;padding:.8rem">Sin versiones archivadas.</div>':'')
+    +hist.map(function(h,hi){
+      var estColor={Archivada:'var(--c-amber)',Obsoleta:'var(--muted)',Reemplazada:'var(--c-blue)'};
+      var ec=estColor[h.estado]||'var(--muted)';
+      return'<div style="display:grid;grid-template-columns:90px 1fr 130px 28px;gap:.4rem;align-items:center;padding:.4rem 0;border-bottom:0.5px solid var(--border)">'
+        +'<input value="'+e(h.version)+'" placeholder="v0.9" style="'+INP+';font-family:var(--font-mono);color:var(--c-teal)" oninput="pubSetHist('+hi+',\'version\',this.value)">'
+        +'<input value="'+e(h.desc)+'" placeholder="Descripción del cambio o motivo de archivo" style="'+INP+'" oninput="pubSetHist('+hi+',\'desc\',this.value)">'
+        +'<select style="background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:3px 5px;font-size:11px;color:'+ec+';outline:none" onchange="pubSetHist('+hi+',\'estado\',this.value)">'
+        +['Archivada','Obsoleta','Reemplazada'].map(function(o){return'<option'+(h.estado===o?' selected':'')+'>'+o+'</option>';}).join('')
+        +'</select>'
+        +'<button style="background:none;border:none;cursor:pointer;color:var(--muted);font-size:15px" onclick="pubDelHist('+hi+')">×</button>'
+        +'</div>';
+    }).join('')
+    +'</div>';
+
+  // Guardar
+  html+='<div style="display:flex;gap:.5rem;margin-top:.3rem;align-items:center">'
+    +'<button class="btn" style="background:var(--c-teal);color:#fff;border-color:var(--c-teal)" onclick="pubGuardar()">Guardar</button>'
+    +'<button class="btn btn-sm" onclick="pubReset()">↺ Limpiar</button>'
+    +'<span id="pub-msg" style="font-size:11px;color:var(--c-green)"></span></div>';
+
+  html+='</div>'; // end panel-1
+
+  // ── PANEL 2: Notificaciones ──
+  var notifs=data.notificaciones||[];
+  var canales=['Email','Slack','Teams','WhatsApp','Jira','Otro'];
+  html+='<div id="pub-panel-2" style="display:none">';
+  html+='<div class="card" style="margin-bottom:.8rem">'
+    +'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.6rem">'
+    +'<div><div class="card-title">Destinatarios notificados</div>'
+    +'<div style="font-size:11px;color:var(--muted)">'+notifConf+' de '+notifTotal+' confirmaron recepción</div></div>'
+    +'<button class="btn btn-sm" onclick="pubAddNotif()">+ Destinatario</button></div>'
+    +(notifs.length===0?'<div style="text-align:center;color:var(--muted);font-size:12px;padding:.8rem">Sin destinatarios. Agrega los equipos y personas notificadas.</div>':'')
+    +notifs.map(function(n,ni){
+      return'<div style="display:grid;grid-template-columns:1fr 1fr 100px 120px auto 28px;gap:.4rem;align-items:center;padding:.4rem 0;border-bottom:0.5px solid var(--border)">'
+        +'<input value="'+e(n.nombre)+'" placeholder="Nombre" style="'+INP+'" oninput="pubSetNotif('+ni+',\'nombre\',this.value)">'
+        +'<input value="'+e(n.rol)+'" placeholder="Rol / Equipo" style="'+INP+'" oninput="pubSetNotif('+ni+',\'rol\',this.value)">'
+        +'<select style="background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:3px 5px;font-size:11px;color:var(--text);outline:none" onchange="pubSetNotif('+ni+',\'canal\',this.value)">'
+        +canales.map(function(c){return'<option'+(n.canal===c?' selected':'')+'>'+c+'</option>';}).join('')
+        +'</select>'
+        +'<input type="date" value="'+e(n.fecha)+'" style="'+INP+'" oninput="pubSetNotif('+ni+',\'fecha\',this.value)">'
+        +'<label style="display:flex;align-items:center;gap:4px;font-size:11px;cursor:pointer;white-space:nowrap;color:var('+(n.confirmado?'--c-green':'--muted')+')">'
+        +'<input type="checkbox" '+(n.confirmado?'checked':'')+' onchange="pubToggleConf('+ni+')" style="cursor:pointer"> Confirmado</label>'
+        +'<button style="background:none;border:none;cursor:pointer;color:var(--muted);font-size:15px" onclick="pubDelNotif('+ni+')">×</button>'
+        +'</div>';
+    }).join('')
+    +'</div>';
+
+  html+='<div style="background:rgba(24,95,165,.06);border:0.5px solid rgba(24,95,165,.2);border-radius:var(--radius);padding:.5rem .8rem;font-size:11px;color:var(--c-blue)">'
+    +'ⓘ IEEE 29148 §6.5 — Notificar a todos los stakeholders afectados es obligatorio. Registra fecha y canal para trazabilidad.</div>';
+
+  html+='</div>'; // end panel-2
+
   el.innerHTML=html;
   el.querySelectorAll('textarea').forEach(function(ta){ta.style.height='auto';ta.style.height=ta.scrollHeight+'px';});
-  window.pubSF=function(k,v){var d2;try{d2=JSON.parse(localStorage.getItem(PUB_KEY))||defPUB();}catch(ex){d2=defPUB();}d2[k]=v;localStorage.setItem(PUB_KEY,JSON.stringify(d2));};
-  window.pubCk=function(id){var d2;try{d2=JSON.parse(localStorage.getItem(PUB_KEY))||defPUB();}catch(ex){d2=defPUB();}if(!d2.checklist)d2.checklist={};if(d2.checklist[id]==='ok')delete d2.checklist[id];else d2.checklist[id]='ok';localStorage.setItem(PUB_KEY,JSON.stringify(d2));renderValPub();};
-  window.pubGuardar=function(){var e2=document.getElementById('pub-msg');if(e2){e2.textContent='✓ Guardado';setTimeout(function(){e2.textContent='';},1800);}};
-  window.pubReset=function(){localStorage.removeItem(PUB_KEY);var m=document.getElementById('val-pub-mount');if(m){m.innerHTML='';initValPub();}};
+
+  // Restore active tab
+  if(_pubTab===1||_pubTab===2) pubTabSel(_pubTab); else pubTabSel(0);
 }
 
 /* ════════════════════════════════════════
