@@ -5727,7 +5727,7 @@ function renderValIssues(){
         :'window._inspTab=1;nav(\'val-inspeccion\')')+'">Ver en origen →</button>'
         +'</div>'
         +'<div class="table-wrap"><table class="data-table">'
-        +'<thead><tr><th style="min-width:90px">Ref RF</th><th style="min-width:130px">Tipo / Severidad</th><th>Descripción</th><th>Origen detalle</th><th style="min-width:110px">Estado</th><th></th></tr></thead><tbody>';
+        +'<thead><tr><th style="min-width:90px">Ref RF</th><th style="min-width:130px">Tipo / Severidad</th><th>Descripción</th><th>Origen detalle</th><th style="min-width:110px">Estado</th></tr></thead><tbody>';
 
       grupo.forEach(function(issue){
         var tc=oc;
@@ -5744,10 +5744,6 @@ function renderValIssues(){
           +'<td style="font-size:12px;max-width:260px">'+e(issue.desc||'Sin descripción')+'</td>'
           +'<td style="font-size:11px;color:var(--muted)">'+issue.origenDetalle+'</td>'
           +'<td><select style="font-size:11px;border:0.5px solid var(--border2);border-radius:4px;padding:2px 4px;background:var(--bg);color:'+ec+';font-weight:500;outline:none;cursor:pointer" onchange="issueSetEst(this,\''+origen+'\')">'+estOpts.map(function(o){return'<option'+(issue.estado===o?' selected':'')+'>'+o+'</option>';}).join('')+'</select></td>'
-          +'<td><button style="background:none;border:none;cursor:pointer;color:'+oc+';font-size:11px;white-space:nowrap;padding:2px 4px" title="Ir al origen" onclick="'
-          +(origen==='Walkthrough'?'window._wt2Tab=1;nav(\'val-walkthrough\')'
-          :origen==='Stakeholders'?'window._sk2Tab=1;nav(\'val-stakeholders\')'
-          :'window._inspTab=1;nav(\'val-inspeccion\')')+'">↗</button></td>'
           +'</tr>';
       });
 
@@ -9452,7 +9448,58 @@ function srseTab(i,btn){
   });
   if(i===4){
     var p=document.getElementById('srse-4');
-    if(p){p.innerHTML='';renderDetectorInline(p);}
+    if(p){
+      p.innerHTML='';
+
+      // ── 8 parámetros de calidad IEEE 29148 §5.2 ──
+      var params=[
+        {n:1, t:'Necesario',   c:'var(--c-blue)',   def:'Representa una necesidad real del stakeholder. Sin él el sistema seguiría siendo aceptable.',
+         ok:'Solicitado en sesión de elicitación y documentado con origen', bad:'Funcionalidad "nice to have" sin sesión ni stakeholder de origen'},
+        {n:2, t:'Correcto',    c:'var(--c-blue)',   def:'El contenido es preciso y refleja fielmente la necesidad sin interpretación del analista.',
+         ok:'"El sistema DEBE autenticar usuarios mediante SSO de Azure AD"', bad:'"El sistema DEBE tener un buen sistema de login"'},
+        {n:3, t:'Completo',    c:'var(--c-purple)', def:'Incluye toda la información necesaria para implementarlo: precondición, acción, resultado y criterio.',
+         ok:'Especifica qué pasa en el flujo principal y en los casos de error', bad:'Omite excepciones, casos límite o condiciones previas'},
+        {n:4, t:'Consistente', c:'var(--c-purple)', def:'No contradice ni entra en conflicto con ningún otro requisito del SRS.',
+         ok:'RF-012 y RF-015 usan el mismo tiempo de respuesta como referencia', bad:'RF-008 dice ≤ 2s y RF-014 dice ≤ 5s para la misma operación'},
+        {n:5, t:'Verificable', c:'var(--c-green)',  def:'Puede comprobarse mediante prueba, inspección, demostración o análisis. Si no puede probarse, no es válido.',
+         ok:'"Respuesta ≤ 2 s bajo carga de 500 usuarios simultáneos"', bad:'"El sistema DEBE ser rápido y eficiente"'},
+        {n:6, t:'Trazable',    c:'var(--c-green)',  def:'Puede vincularse a su origen (sesión, stakeholder, HU) y hacia adelante a casos de prueba.',
+         ok:'RF-007 → HU-003 → Sesión 2 (2025-03-15) → CP-007', bad:'Requisito sin historia de usuario ni sesión de origen documentada'},
+        {n:7, t:'Factible',    c:'var(--c-amber)',  def:'Puede implementarse dentro de las restricciones del proyecto: presupuesto, tiempo y tecnología.',
+         ok:'Validado por el Arquitecto dentro de la infraestructura actual', bad:'Requiere IA generativa en un proyecto con 2 meses de plazo y sin expertise'},
+        {n:8, t:'No ambiguo',  c:'var(--c-red)',    def:'Tiene una sola interpretación posible. Cada lector llega a la misma conclusión.',
+         ok:'Usa términos del glosario y condiciones numéricas exactas', bad:'Contiene: rápido, fácil, adecuado, suficiente, apropiado, robusto, amigable'},
+      ];
+
+      var phtml='<div class="card" style="margin-bottom:1rem">'
+        +'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.7rem">'
+        +'<div class="card-title">8 parámetros de calidad de requisitos</div>'
+        +'<span style="font-size:10px;font-family:var(--font-mono);color:var(--muted)">IEEE 29148:2018 §5.2</span>'
+        +'</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:.6rem">';
+
+      params.forEach(function(pa){
+        phtml+='<div style="border:0.5px solid var(--border);border-left:3px solid '+pa.c+';border-radius:var(--radius);padding:.6rem .8rem">'
+          +'<div style="display:flex;align-items:center;gap:.4rem;margin-bottom:.3rem">'
+          +'<div style="width:20px;height:20px;border-radius:50%;background:'+pa.c+';display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff;flex-shrink:0">'+pa.n+'</div>'
+          +'<div style="font-size:12px;font-weight:600;color:'+pa.c+'">'+pa.t+'</div></div>'
+          +'<div style="font-size:11px;color:var(--text);line-height:1.5;margin-bottom:.4rem">'+pa.def+'</div>'
+          +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:4px">'
+          +'<div style="background:rgba(15,110,86,.05);border:0.5px solid rgba(15,110,86,.2);border-radius:4px;padding:.3rem .5rem">'
+          +'<div style="font-size:9px;font-weight:600;color:var(--c-green);text-transform:uppercase;margin-bottom:2px">✓ Bien</div>'
+          +'<div style="font-size:10px;line-height:1.4">'+pa.ok+'</div></div>'
+          +'<div style="background:rgba(163,45,45,.05);border:0.5px solid rgba(163,45,45,.2);border-radius:4px;padding:.3rem .5rem">'
+          +'<div style="font-size:9px;font-weight:600;color:var(--c-red);text-transform:uppercase;margin-bottom:2px">✗ Mal</div>'
+          +'<div style="font-size:10px;line-height:1.4">'+pa.bad+'</div></div>'
+          +'</div></div>';
+      });
+      phtml+='</div></div>';
+
+      // Contenedor separado para el detector — no sobreescribe los parámetros
+      var detectorDiv=document.createElement('div');
+      p.innerHTML=phtml;
+      p.appendChild(detectorDiv);
+      renderDetectorInline(detectorDiv);
+    }
   }
   if(i===5) renderSrsVerInline();
 }
