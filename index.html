@@ -5456,7 +5456,7 @@ function renderValLog(){
         +'</div></div>';
 
       html+='<div class="table-wrap"><table class="data-table">'
-        +'<thead><tr><th style="min-width:90px">Ref RF</th><th>Severidad</th><th>Descripción</th><th>Asignado</th><th>Estado</th><th></th></tr></thead><tbody>';
+        +'<thead><tr><th style="min-width:90px">Ref RF</th><th>Severidad</th><th>Descripción</th><th>Asignado</th><th>Estado</th></tr></thead><tbody>';
 
       inspDefs.forEach(function(d){
         var gi=d.inspIdx, di=d.defIdx;
@@ -5467,25 +5467,21 @@ function renderValLog(){
           +'<td><input value="'+e(d.rfid||'')+'" placeholder="RF-001" style="font-family:var(--font-mono);font-size:11px;color:var(--c-blue);background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:2px 6px;outline:none;width:82px" oninput="logSetField('+gi+','+di+',\'rfid\',this.value)"></td>'
           +'<td><select style="font-size:11px;border:0.5px solid var(--border2);border-radius:4px;padding:2px 4px;background:var(--bg);color:'+sc+';font-weight:600;outline:none;cursor:pointer" onchange="logSetSev('+gi+','+di+',this.value)">'
           +['Bloqueante','Mayor','Menor','Informativo'].map(function(o){return'<option'+(d.sev===o?' selected':'')+'>'+o+'</option>';}).join('')+'</select></td>'
-          +'<td><input value="'+e(d.desc)+'" placeholder="Describe el defecto..." style="width:100%;font-size:11px;color:var(--text);background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:2px 6px;outline:none;" oninput="logSetField('+gi+','+di+',\'desc\',this.value)"></td>'
+          +'<td><textarea rows="2" placeholder="Describe el defecto..." style="width:100%;font-size:11px;color:var(--text);background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 6px;outline:none;resize:none;line-height:1.5;overflow:hidden" oninput="autoH(this);logSetField('+gi+','+di+',\'desc\',this.value)">'+e(d.desc)+'</textarea></td>'
           +'<td><input value="'+e(d.asignado)+'" placeholder="BA" style="background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:2px 6px;font-size:11px;color:var(--text);outline:none;width:80px" oninput="logSetField('+gi+','+di+',\'asignado\',this.value)"></td>'
           +'<td><select style="font-size:11px;border:0.5px solid var(--border2);border-radius:4px;padding:2px 4px;background:var(--bg);color:'+ec+';font-weight:500;outline:none;cursor:pointer" onchange="logSetEst('+gi+','+di+',this.value)">'
           +['Abierto','En proceso','Resuelto'].map(function(o){return'<option'+(d.estado===o?' selected':'')+'>'+o+'</option>';}).join('')+'</select></td>'
-          +'<td><button class="uat-btn" style="color:var(--c-blue);font-size:13px" title="Detalle" onclick="window._logSelIdx='+(sel===flatIdx?-1:flatIdx)+';renderValLog()">✎</button></td>'
-          +'</tr>';
-
-        // Panel de detalle
-        if(sel===flatIdx){
-          html+='<tr><td colspan="6"><div style="padding:.6rem;background:var(--surface2);border-radius:6px">'
-            +'<div style="display:grid;grid-template-columns:1fr 1fr 160px;gap:.5rem">'
-            +'<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">Impacto si no se resuelve</label>'
-            +'<textarea rows="2" style="'+TA+'" oninput="autoH(this);logSetField('+gi+','+di+',\'impacto\',this.value)">'+e(d.impacto||'')+'</textarea></div>'
-            +'<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">Resolución aplicada</label>'
-            +'<textarea rows="2" style="'+TA+'" oninput="autoH(this);logSetField('+gi+','+di+',\'resolucion\',this.value)">'+e(d.resolucion||'')+'</textarea></div>'
-            +'<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">Fecha de resolución</label>'
-            +'<input type="date" value="'+e(d.fechaRes||'')+'" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:4px 8px;font-size:12px;color:var(--text);outline:none" oninput="logSetField('+gi+','+di+',\'fechaRes\',this.value)"></div>'
-            +'</div></div></td></tr>';
-        }
+          +'</tr>'
+          // Detail fields always visible in next row
+          +'<tr><td colspan="5"><div style="padding:.5rem .6rem;background:var(--surface2);border-radius:0 0 6px 6px;margin-bottom:.3rem">'
+          +'<div style="display:grid;grid-template-columns:1fr 1fr 160px;gap:.5rem">'
+          +'<div><label style="font-size:9px;font-weight:600;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">Impacto si no se resuelve</label>'
+          +'<textarea rows="2" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 6px;font-size:11px;color:var(--text);outline:none;resize:none;line-height:1.5;overflow:hidden" placeholder="Qué ocurre si no se corrige..." oninput="autoH(this);logSetField('+gi+','+di+',\'impacto\',this.value)">'+e(d.impacto||'')+'</textarea></div>'
+          +'<div><label style="font-size:9px;font-weight:600;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">Resolución aplicada</label>'
+          +'<textarea rows="2" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 6px;font-size:11px;color:var(--text);outline:none;resize:none;line-height:1.5;overflow:hidden" placeholder="Cómo se corrigió el defecto..." oninput="autoH(this);logSetField('+gi+','+di+',\'resolucion\',this.value)">'+e(d.resolucion||'')+'</textarea></div>'
+          +'<div><label style="font-size:9px;font-weight:600;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">Fecha de resolución</label>'
+          +'<input type="date" value="'+e(d.fechaRes||'')+'" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 6px;font-size:11px;color:var(--text);outline:none" oninput="logSetField('+gi+','+di+',\'fechaRes\',this.value)"></div>'
+          +'</div></div></td></tr>';
       });
       html+='</tbody></table></div></div>';
     });
