@@ -645,7 +645,7 @@ textarea { field-sizing: content; min-height: 2em; }
       <button class="nav-item" onclick="nav('srs-contexto')" style="padding-left:1.8rem"><div class="nav-pip" style="background:var(--c-purple);opacity:.6"></div>↳ Diagrama de contexto</button>
       <button class="nav-item" onclick="nav('srs-casos')" style="padding-left:1.8rem"><div class="nav-pip" style="background:var(--c-purple);opacity:.6"></div>↳ Casos de uso</button>
       <button class="nav-item" onclick="nav('ana-priorizacion')"><div class="nav-pip" style="background:var(--c-purple)"></div>Priorización</button>
-      <button class="nav-item" onclick="nav('ana-verificacion')"><div class="nav-pip" style="background:var(--c-purple)"></div>Verificación del modelo</button>
+      <button class="nav-item" onclick="nav('ana-pc2')"><div class="nav-pip" style="background:var(--c-purple)"></div>Punto de control PC2</button>
     </div>
     <div class="nav-group">
       <span class="nav-label">Fase 3 · Especificación</span>
@@ -656,6 +656,7 @@ textarea { field-sizing: content; min-height: 2em; }
       <button class="nav-item" onclick="nav('srs-glosario')"><div class="nav-pip" style="background:var(--c-blue)"></div>Glosario técnico</button>
       <button class="nav-item" onclick="nav('srs-rtm')"><div class="nav-pip" style="background:var(--c-blue)"></div>Matriz de trazabilidad</button>
       <button class="nav-item" onclick="nav('srs-walkthrough')"><div class="nav-pip" style="background:var(--c-blue)"></div>Walkthrough SRS</button>
+      <button class="nav-item" onclick="nav('srs-pc3')"><div class="nav-pip" style="background:var(--c-blue)"></div>Punto de control PC3</button>
     </div>
     <div class="nav-group">
       <span class="nav-label">Fase 4 · Validación</span>
@@ -670,6 +671,7 @@ textarea { field-sizing: content; min-height: 2em; }
       <button class="nav-item" onclick="nav('val-issues')"><div class="nav-pip" style="background:var(--c-green)"></div>Panel de issues</button>
       <button class="nav-item" onclick="nav('val-baseline')"><div class="nav-pip" style="background:var(--c-green)"></div>Aprobación baseline</button>
       <button class="nav-item" onclick="nav('val-publicacion')"><div class="nav-pip" style="background:var(--c-green)"></div>Publicación SRS</button>
+      <button class="nav-item" onclick="nav('val-pc4')"><div class="nav-pip" style="background:var(--c-green)"></div>Punto de control PC4</button>
     </div>
     <div class="nav-group">
       <span class="nav-label">Fase 5 · Gestión cambios</span>
@@ -1121,8 +1123,8 @@ reg('gobernanza', () => `
   ${[
     {num:'PC1',color:'var(--c-teal)',entre:'Fase 1 → Fase 2',aprueba:'PO + Analista',ready:['Stakeholders mapeados y clasificados por cuadrante','Objetivos de negocio documentados','Supuestos y restricciones registrados','Al menos un acta de sesión firmada'],done:['Mapa de stakeholders aprobado','Objetivos vinculados a estrategia organizacional','Actas firmadas por participantes clave']},
     {num:'PC2',color:'var(--c-purple)',entre:'Fase 2 → Fase 3',aprueba:'PO + Rep. usuario',ready:['Backlog inicial con ≥ 80% de necesidades priorizadas','Análisis GAP completado','Necesidades clasificadas por tipo (F/NF)'],done:['PO/analista aprueba backlog','Usuarios confirman comprensión de necesidades','Modelos BPMN y de contexto revisados']},
-    {num:'PC3',color:'var(--c-blue)',entre:'Fase 3 → Fase 4',aprueba:'PO + QA + Arq./LT',ready:['Checklist de calidad aplicado','RTM inicial completa','HU con AC testables aprobados por QA','RNF con umbrales validados por Arq.'],done:['Umbrales de calidad alcanzados','Artefactos en repositorio digital','Firmas de aprobación formales']},
-    {num:'PC4',color:'var(--c-green)',entre:'Fase 4 → Fase 5',aprueba:'PO + QA + Arq./LT + Rep. usuario',ready:['Defectos críticos resueltos','UAT completado','RTM post-RS completa','Plan de validación cerrado'],done:['Baseline del SRS aprobado y publicado','Log de defectos cerrado','Equipo notificado','Control de cambios activado']},
+    {num:'PC3',color:'var(--c-blue)',entre:'Fase 3 → Fase 4',aprueba:'PO + QA + Arq./LT',ready:['Checklist de calidad aplicado con umbrales alcanzados','RTM inicial completa con trazabilidad HU → RF → RNF','HU con criterios de aceptación Gherkin aprobados por QA','RNF con umbrales numéricos validados por Arquitecto','Verificación del modelo completada (contexto + casos de uso + BPMN consistentes)','SRS editado, versionado y exportado en el framework'],done:['Umbrales de calidad alcanzados en todas las secciones','SRS exportado con número de versión asignado','Artefactos en repositorio digital','Firmas de aprobación formales PO + QA + Arquitecto']},
+    {num:'PC4',color:'var(--c-green)',entre:'Fase 4 → Fase 5',aprueba:'Sponsor + PO + Arquitecto',ready:['Auto-revisión BA ≥ 85% ítems OK y 0 bloqueantes','Walkthrough técnico aprobado con acta firmada','Revisión de stakeholders con firma del Product Owner','Inspección formal Fagan con 0 Mayores/Bloqueantes abiertos','Log de defectos cerrado — 0 defectos críticos sin resolver','UAT completado — 100% casos críticos pasan y 0 Bloqueantes'],done:['Baseline aprobado con 3 firmas: Sponsor + PO + Arquitecto','Número de baseline (BL-XXX) y versión SRS (v1.0-baseline) asignados','SRS publicado en repositorio con tag y URL permanente','CCB activado formalmente con instrucciones enviadas','Notificaciones enviadas y confirmadas por todos los stakeholders','Log de defectos cerrado con trazabilidad completa']},
   ].map(pc => `
   <div style="display:grid;grid-template-columns:100px 1fr;gap:.8rem;margin-bottom:.6rem">
     <div style="background:${pc.color};border-radius:var(--radius-lg);padding:1rem;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center">
@@ -1273,7 +1275,8 @@ reg('eli-flujo', () => `
         {a:'Plan de elicitación',          d:'Objetivos, técnicas, agenda y lista de stakeholders a entrevistar',       c:'var(--c-teal)'},
         {a:'Mapa de stakeholders',         d:'Cuadrante influencia × interés con estrategia por cuadrante',             c:'var(--c-teal)'},
         {a:'Guías de preguntas',           d:'Banco de preguntas por técnica y momento de la sesión',                   c:'var(--c-teal)'},
-        {a:'Registro de elicitación',        d:'RF / RNF / SA / RC capturados, firmados por los participantes',           c:'var(--c-teal)'},
+        {a:'Minuta de elicitación',        d:'Registrada en el framework — participantes, objetivos, hallazgos y acuerdos de la sesión', c:'var(--c-teal)'},
+        {a:'Registro de elicitación',      d:'RF / RNF / SA / RC capturados, firmados por los participantes',           c:'var(--c-teal)'},
         {a:'Notas y grabaciones',          d:'Registro fiel de la sesión para trazabilidad y consulta posterior',       c:'var(--c-teal)'},
         {a:'Lista de supuestos (SA)',       d:'Premisas no verificadas que afectan al diseño del sistema',               c:'var(--c-blue)'},
         {a:'Lista de restricciones (RC)',   d:'Limitaciones técnicas, regulatorias y de negocio no negociables',        c:'var(--c-amber)'},
@@ -1284,7 +1287,7 @@ reg('eli-flujo', () => `
   <div class="card" style="background:rgba(29,158,117,.03);border-color:rgba(29,158,117,.2)">
     <div class="card-title" style="color:var(--c-teal)">Criterios de salida — PC1 (Definition of Done)</div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:.4rem">
-      ${['Stakeholders identificados y clasificados en el cuadrante','Objetivos de negocio documentados y vinculados a estrategia','Al menos una sesión de elicitación ejecutada y confirmada','Acta firmada por los participantes clave de la sesión','Supuestos y restricciones registrados con ID asignado','PO y Analista aprueban el paso a la Fase 2'].map(c => `<div class="dot-item"><div class="dot" style="background:var(--c-teal)"></div>${c}</div>`).join('')}
+      ${['Stakeholders identificados y clasificados en el cuadrante','Objetivos de negocio documentados y vinculados a estrategia','Al menos una sesión de elicitación ejecutada y confirmada','Acta firmada por los participantes clave de la sesión','Supuestos y restricciones registrados con ID asignado','Minuta de elicitación completa registrada en el framework','Checklist PC1 completado con ≥ 80% ítems aprobados','PO y Analista aprueban el paso a la Fase 2'].map(c => `<div class="dot-item"><div class="dot" style="background:var(--c-teal)"></div>${c}</div>`).join('')}
     </div>
   </div>
 </div>
@@ -2703,8 +2706,8 @@ reg('gobernanza', () => `
   ${[
     {num:'PC1',color:'var(--c-teal)',entre:'Fase 1 → Fase 2',aprueba:'PO + Analista',ready:['Stakeholders mapeados y clasificados por cuadrante','Objetivos de negocio documentados','Supuestos y restricciones registrados','Al menos un acta de sesión firmada'],done:['Mapa de stakeholders aprobado','Objetivos vinculados a estrategia organizacional','Actas firmadas por participantes clave']},
     {num:'PC2',color:'var(--c-purple)',entre:'Fase 2 → Fase 3',aprueba:'PO + Rep. usuario',ready:['Backlog inicial con ≥ 80% de necesidades priorizadas','Análisis GAP completado','Necesidades clasificadas por tipo (F/NF)'],done:['PO/analista aprueba backlog','Usuarios confirman comprensión de necesidades','Modelos BPMN y de contexto revisados']},
-    {num:'PC3',color:'var(--c-blue)',entre:'Fase 3 → Fase 4',aprueba:'PO + QA + Arq./LT',ready:['Checklist de calidad aplicado','RTM inicial completa','HU con AC testables aprobados por QA','RNF con umbrales validados por Arq.'],done:['Umbrales de calidad alcanzados','Artefactos en repositorio digital','Firmas de aprobación formales']},
-    {num:'PC4',color:'var(--c-green)',entre:'Fase 4 → Fase 5',aprueba:'PO + QA + Arq./LT + Rep. usuario',ready:['Defectos críticos resueltos','UAT completado','RTM post-RS completa','Plan de validación cerrado'],done:['Baseline del SRS aprobado y publicado','Log de defectos cerrado','Equipo notificado','Control de cambios activado']},
+    {num:'PC3',color:'var(--c-blue)',entre:'Fase 3 → Fase 4',aprueba:'PO + QA + Arq./LT',ready:['Checklist de calidad aplicado con umbrales alcanzados','RTM inicial completa con trazabilidad HU → RF → RNF','HU con criterios de aceptación Gherkin aprobados por QA','RNF con umbrales numéricos validados por Arquitecto','Verificación del modelo completada (contexto + casos de uso + BPMN consistentes)','SRS editado, versionado y exportado en el framework'],done:['Umbrales de calidad alcanzados en todas las secciones','SRS exportado con número de versión asignado','Artefactos en repositorio digital','Firmas de aprobación formales PO + QA + Arquitecto']},
+    {num:'PC4',color:'var(--c-green)',entre:'Fase 4 → Fase 5',aprueba:'Sponsor + PO + Arquitecto',ready:['Auto-revisión BA ≥ 85% ítems OK y 0 bloqueantes','Walkthrough técnico aprobado con acta firmada','Revisión de stakeholders con firma del Product Owner','Inspección formal Fagan con 0 Mayores/Bloqueantes abiertos','Log de defectos cerrado — 0 defectos críticos sin resolver','UAT completado — 100% casos críticos pasan y 0 Bloqueantes'],done:['Baseline aprobado con 3 firmas: Sponsor + PO + Arquitecto','Número de baseline (BL-XXX) y versión SRS (v1.0-baseline) asignados','SRS publicado en repositorio con tag y URL permanente','CCB activado formalmente con instrucciones enviadas','Notificaciones enviadas y confirmadas por todos los stakeholders','Log de defectos cerrado con trazabilidad completa']},
   ].map(pc => `
   <div style="display:grid;grid-template-columns:100px 1fr;gap:.8rem;margin-bottom:.6rem">
     <div style="background:${pc.color};border-radius:var(--radius-lg);padding:1rem;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center">
@@ -2866,7 +2869,7 @@ reg('eli-flujo', () => `
   <div class="card" style="background:rgba(29,158,117,.03);border-color:rgba(29,158,117,.2)">
     <div class="card-title" style="color:var(--c-teal)">Criterios de salida — PC1 (Definition of Done)</div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:.4rem">
-      ${['Stakeholders identificados y clasificados en el cuadrante','Objetivos de negocio documentados y vinculados a estrategia','Al menos una sesión de elicitación ejecutada y confirmada','Acta firmada por los participantes clave de la sesión','Supuestos y restricciones registrados con ID asignado','PO y Analista aprueban el paso a la Fase 2'].map(c => `<div class="dot-item"><div class="dot" style="background:var(--c-teal)"></div>${c}</div>`).join('')}
+      ${['Stakeholders identificados y clasificados en el cuadrante','Objetivos de negocio documentados y vinculados a estrategia','Al menos una sesión de elicitación ejecutada y confirmada','Acta firmada por los participantes clave de la sesión','Supuestos y restricciones registrados con ID asignado','Minuta de elicitación completa registrada en el framework','Checklist PC1 completado con ≥ 80% ítems aprobados','PO y Analista aprueban el paso a la Fase 2'].map(c => `<div class="dot-item"><div class="dot" style="background:var(--c-teal)"></div>${c}</div>`).join('')}
     </div>
   </div>
 </div>
@@ -4544,7 +4547,7 @@ reg('srs-flujo', () => `
 <div class="tab-panel on" id="srsf-0">
   <div class="card" style="padding:1.2rem">
     <div style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:1rem">SECUENCIA DE ACTIVIDADES — FASE 3</div>
-    <svg width="100%" viewBox="0 0 720 760" xmlns="http://www.w3.org/2000/svg">
+    <svg width="100%" viewBox="0 0 720 660" xmlns="http://www.w3.org/2000/svg">
       <defs>
         <marker id="af3b" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
           <path d="M2 1L8 5L2 9" fill="none" stroke="#9A9A94" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -4597,8 +4600,14 @@ reg('srs-flujo', () => `
       <text x="70" y="471" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="10" fill="#444441">SRS baseline</text>
       <line x1="126" y1="471" x2="161" y2="471" stroke="#C8C7C1" stroke-width="0.8" stroke-dasharray="4,3" marker-end="url(#af3b)"/>
       <line x1="330" y1="500" x2="330" y2="522" stroke="#9A9A94" stroke-width="1" marker-end="url(#af3b)"/>
-      <rect x="191" y="524" width="278" height="34" rx="17" fill="#F1EFE8" stroke="#888780" stroke-width="0.5"/>
-      <text x="330" y="541" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="12" fill="#444441">Entrada para Validación (Fase 4)</text>
+      <rect x="191" y="524" width="278" height="44" rx="10" fill="#E6F1FB" stroke="#185FA5" stroke-width="1"/>
+      <text x="330" y="546" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="13" font-weight="500" fill="#042C53">PC3 — Punto de control</text>
+      <rect x="14" y="531" width="112" height="26" rx="6" fill="#E6F1FB" stroke="#185FA5" stroke-width="0.5"/>
+      <text x="70" y="544" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="10" fill="#042C53">Checklist PC3 firmado</text>
+      <line x1="126" y1="544" x2="161" y2="544" stroke="#185FA5" stroke-width="0.5" marker-end="url(#af3b)"/>
+      <line x1="330" y1="568" x2="330" y2="590" stroke="#9A9A94" stroke-width="1" marker-end="url(#af3b)"/>
+      <rect x="191" y="592" width="278" height="34" rx="17" fill="#F1EFE8" stroke="#888780" stroke-width="0.5"/>
+      <text x="330" y="609" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="12" fill="#444441">Entrada para Validación (Fase 4)</text>
       <text x="70" y="62" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="10" fill="#9A9A94">Artefactos</text>
     </svg>
   </div>
@@ -4614,7 +4623,7 @@ reg('srs-flujo', () => `
         {a:'B3. Historias de usuario',            c:'var(--c-blue)', ts:['Formato: Como [rol] quiero [función] para [beneficio]','Escenarios Gherkin: Given / When / Then / Y','Los criterios de aceptación Gherkin viven en la HU, no en el RF','Vinculación HU ↔ RF/RNF/SA/RC para trazabilidad completa']},
         {a:'B4. Verificar calidad',               c:'var(--c-blue)', ts:['Detector automático de ambigüedad en Editor SRS (pestaña Verificar)','Palabras vagas detectadas: rápido, fácil, adecuado, suficiente','Checklist calidad SRS (sub-sección del Editor) — 24 ítems, 5 dimensiones','Checklist SMART por requisito: Específico, Medible, Alcanzable, Relevante, Verificable']},
         {a:'B5. RTM',                             c:'var(--c-blue)', ts:['Trazabilidad bidireccional: origen → componente → prueba','RF + RNF + SA + RC cubiertos en la matriz','Responsable, método de verificación y estado de implementación','Cobertura calculada automáticamente']},
-        {a:'B6. Walkthrough · Checklist · Baseline', c:'var(--c-green)', ts:['Walkthrough formal multi-sesión con stakeholders clave','Registro de hallazgos: tipo, severidad, RF afectado, estado','Revisión de cobertura: % de requisitos revisados','Versión baseline firmada: SRS aprobado para Fase 4 — Validación']}
+        {a:'B6. Walkthrough · Checklist · Baseline', c:'var(--c-green)', ts:['Walkthrough formal multi-sesión con stakeholders clave','Registro de hallazgos: tipo, severidad, RF afectado, estado','Revisión de cobertura: % de requisitos revisados','SRS versionado y exportado — aprobado para PC3','PC3 firmado: PO + QA + Arquitecto — SRS listo para Fase 4']}
       ].map(t => `
         <div style="margin-bottom:.8rem">
           <div style="font-size:11px;font-weight:600;color:${t.c};margin-bottom:.3rem">${t.a}</div>
@@ -4629,12 +4638,18 @@ reg('srs-flujo', () => `
         {a:'Historias de usuario + Gherkin',c:'var(--c-blue)', ds:['HU vinculadas a RF/RNF/SA/RC','Escenarios Gherkin (Given/When/Then) por HU','Criterios de aceptación ejecutables']},
         {a:'SRS verificado (B4)',           c:'var(--c-blue)', ds:['Ambigüedades corregidas con detector','Checklist 24 ítems completado','Lenguaje preciso y verificable']},
         {a:'RTM completa',                  c:'var(--c-blue)', ds:['RF + RNF + SA + RC trazados','Responsable, componente y método asignados','Cobertura calculada automáticamente']},
-        {a:'SRS Baseline (PC3)',            c:'var(--c-green)',ds:['Versión aprobada con firma BA + PO','Walkthrough multi-sesión documentado','Listo para Fase 4 — Validación (UAT)']}
+        {a:'SRS Baseline (PC3)',            c:'var(--c-green)',ds:['Versión aprobada con firmas PO + QA + Arquitecto','Walkthrough multi-sesión documentado','Checklist PC3 completado · Listo para Fase 4']}
       ].map(t => `
         <div style="margin-bottom:.8rem">
           <div style="font-size:11px;font-weight:600;color:${t.c};margin-bottom:.3rem">${t.a}</div>
           ${t.ds.map(x => `<div class="dot-item"><div class="dot" style="background:${t.c}"></div>${x}</div>`).join('')}
         </div>`).join('')}
+    </div>
+  </div>
+  <div class="card" style="background:rgba(24,95,165,.03);border-color:rgba(24,95,165,.2)">
+    <div class="card-title" style="color:var(--c-blue)">Criterios de salida — PC3 (Definition of Done)</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:.4rem">
+      ${['Checklist de calidad SRS completado con ≥ 80% ítems aprobados','RTM completa con trazabilidad HU → RF → RNF → RC','HU con criterios de aceptación Gherkin aprobados por QA','RNF con umbrales numéricos validados por Arquitecto','Verificación del modelo completada — consistencia entre artefactos','SRS exportado con número de versión asignado','Artefactos en repositorio digital con URL registrada','PO + QA + Arquitecto aprueban el paso a la Fase 4'].map(c => `<div class="dot-item"><div class="dot" style="background:var(--c-blue)"></div>${c}</div>`).join('')}
     </div>
   </div>
 </div>
@@ -5048,7 +5063,7 @@ reg('val-flujo', () => {
 <div class="tab-panel on" id="valf-0">
   <div class="card" style="margin-bottom:.8rem">
     <div class="card-title">Secuencia de actividades</div>
-    <svg width="100%" viewBox="0 0 680 760" xmlns="http://www.w3.org/2000/svg">
+    <svg width="100%" viewBox="0 0 680 860" xmlns="http://www.w3.org/2000/svg">
       <defs><marker id="avalf" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>
       <rect x="251" y="14" width="178" height="34" rx="17" fill="#F1EFE8" stroke="#888780" stroke-width="0.5"/>
       <text x="340" y="31" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="12" fill="#444441">SRS v1.0 — PC3 superado</text>
@@ -5111,8 +5126,14 @@ reg('val-flujo', () => {
       <text x="108" y="672" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#085041">SRS baseline publicado</text>
       <line x1="172" y1="672" x2="208" y2="672" stroke="#1D9E75" stroke-width="0.5" marker-end="url(#avalf)"/>
       <line x1="340" y1="704" x2="340" y2="726" stroke="#9A9A94" stroke-width="1" marker-end="url(#avalf)"/>
-      <rect x="210" y="728" width="260" height="34" rx="10" fill="#F1EFE8" stroke="#888780" stroke-width="0.5"/>
-      <text x="340" y="745" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="12" fill="#2C2C2A">CCB activo — Gestión de cambios (Fase 5)</text>
+      <rect x="210" y="728" width="260" height="44" rx="10" fill="#E6F1FB" stroke="#185FA5" stroke-width="1"/>
+      <text x="340" y="750" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="13" font-weight="500" fill="#042C53">PC4 — Punto de control</text>
+      <rect x="44" y="735" width="128" height="30" rx="7" fill="#E6F1FB" stroke="#185FA5" stroke-width="0.5"/>
+      <text x="108" y="750" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#042C53">Checklist PC4 firmado</text>
+      <line x1="172" y1="750" x2="208" y2="750" stroke="#185FA5" stroke-width="0.5" marker-end="url(#avalf)"/>
+      <line x1="340" y1="772" x2="340" y2="794" stroke="#9A9A94" stroke-width="1" marker-end="url(#avalf)"/>
+      <rect x="210" y="796" width="260" height="34" rx="10" fill="#F1EFE8" stroke="#888780" stroke-width="0.5"/>
+      <text x="340" y="813" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="12" fill="#2C2C2A">CCB activo — Gestión de cambios (Fase 5)</text>
       <text x="28" y="62" font-family="DM Sans,sans-serif" font-size="10" fill="#9A9A94">Artefactos</text>
     </svg>
   </div>
@@ -5154,10 +5175,15 @@ reg('val-flujo', () => {
         </div>`).join('')}
     </div>
   </div>
+  <div class="card" style="background:rgba(15,110,86,.03);border-color:rgba(15,110,86,.2)">
+    <div class="card-title" style="color:var(--c-green)">Criterios de salida — PC4 (Definition of Done)</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:.4rem">
+      ${['Auto-revisión BA ≥ 85% ítems OK y 0 bloqueantes','Walkthrough técnico aprobado con acta firmada','Revisión de stakeholders con firma del Product Owner','Inspección formal Fagan con 0 Mayores/Bloqueantes abiertos','Log de defectos cerrado — 0 defectos críticos sin resolver','UAT completado — 100% casos críticos pasan y 0 Bloqueantes','Baseline aprobado con 3 firmas: Sponsor + PO + Arquitecto','SRS publicado · Tag creado · CCB activado · Notificaciones confirmadas'].map(c => `<div class="dot-item"><div class="dot" style="background:var(--c-green)"></div>${c}</div>`).join('')}
+    </div>
+  </div>
 </div>
 `;
 });
-
 
 /* ════════════════════════════════════════
    PAGE: TÉCNICAS VALIDACIÓN
@@ -5700,30 +5726,32 @@ function renderValUat(){
   var pasa   = cases.filter(function(u){return u.res==='Pasó';}).length;
   var falla  = cases.filter(function(u){return u.res==='Falló';}).length;
   var bloq   = cases.filter(function(u){return u.res==='Bloqueado';}).length;
-  var pend   = cases.filter(function(u){return !u.res;}).length;
   var noExec = cases.filter(function(u){return u.res==='No ejecutado';}).length;
+  var pend   = cases.filter(function(u){return !u.res||u.res==='';}).length;
   var crit   = cases.filter(function(u){return u.prio==='Crítico';});
   var critOk = crit.length>0 && crit.every(function(u){return u.res==='Pasó';});
   var goNogo = pasa>0 && bloq===0 && falla===0 && critOk && pend===0 && noExec===0;
   var parcial= bloq===0 && falla===0 && (pend>0||noExec>0);
 
   // ── Conexión con baseline: guardar estado ──
-  try{ localStorage.setItem('fw_uat_status_v1',JSON.stringify({goNogo:goNogo,pasa:pasa,falla:falla,bloq:bloq,pend:pend,total:cases.length,critOk:critOk})); }catch(ex){}
+  try{ localStorage.setItem('fw_uat_status_v1',JSON.stringify({goNogo:goNogo,pasa:pasa,falla:falla,bloq:bloq,pend:pend,noExec:noExec,total:cases.length,critOk:critOk})); }catch(ex){}
 
   var html='';
 
   // KPIs
-  html+='<div style="display:grid;grid-template-columns:repeat(5,1fr);gap:.6rem;margin-bottom:1rem">'
+  html+='<div style="display:grid;grid-template-columns:repeat(6,1fr);gap:.6rem;margin-bottom:1rem">'
     +[{n:cases.length,l:'Total',c:'var(--c-blue)'},{n:pasa,l:'Pasó',c:'var(--c-green)'},
-      {n:falla,l:'Falló',c:'var(--c-amber)'},{n:bloq,l:'Bloqueado',c:'var(--c-red)'},{n:pend,l:'Pendiente',c:'var(--c-gray)'}]
+      {n:falla,l:'Falló',c:'var(--c-amber)'},{n:bloq,l:'Bloqueado',c:'var(--c-red)'},
+      {n:noExec,l:'No ejecutado',c:'var(--c-purple)'},{n:pend,l:'Sin resultado',c:'var(--c-gray)'}]
     .map(function(k){return'<div class="kpi"><div class="kpi-num" style="color:'+k.c+'">'+k.n+'</div><div class="kpi-label">'+k.l+'</div></div>';}).join('')
     +'</div>';
 
   // Banner GO/NO-GO
+  var sinEjecutar=pend+noExec;
   var bc=goNogo?'15,110,86':parcial?'186,117,23':'163,45,45';
   var bv=goNogo?'--c-green':parcial?'--c-amber':'--c-red';
   var bt=goNogo?'✓ GO — Todos los casos críticos pasaron. SRS apto para aprobación de baseline.'
-    :parcial?'⏳ EN CURSO — '+pend+' caso(s) pendientes de ejecutar.'
+    :parcial?'⏳ EN CURSO — '+noExec+' caso(s) no ejecutado(s)'+(pend>0?' y '+pend+' sin resultado':'')+'. Ejecutar todos antes del GO.'
     :'✗ NO-GO — '+(falla+bloq)+' caso(s) fallido(s) o bloqueado(s). Resolver antes del baseline.';
   html+='<div class="card" style="margin-bottom:1rem;background:rgba('+bc+',.04);border-color:rgba('+bc+',.25)">'
     +'<div style="font-size:14px;font-weight:600;color:var('+bv+');">'+bt+'</div>'
@@ -5885,6 +5913,8 @@ function uatSave(){
   var pasa=cases.filter(function(u){return u.res==='Pasó';}).length;
   var falla=cases.filter(function(u){return u.res==='Falló';}).length;
   var bloq=cases.filter(function(u){return u.res==='Bloqueado';}).length;
+  var noExec2=cases.filter(function(u){return u.res==='No ejecutado';}).length;
+  var pend2=cases.filter(function(u){return !u.res||u.res==='';}).length;
   var pend=cases.filter(function(u){return !u.res;}).length;
   var crit=cases.filter(function(u){return u.prio==='Crítico';});
   var critOk=crit.length>0&&crit.every(function(u){return u.res==='Pasó';});
@@ -7377,6 +7407,182 @@ function renderValPub(){
 }
 
 
+
+/* ════════════════════════════════════════
+   PUNTOS DE CONTROL PC2 · PC3 · PC4
+════════════════════════════════════════ */
+reg('ana-pc2', () => `
+<div class="page-header">
+  <div class="page-eyebrow" style="color:var(--c-purple)">● Fase 2 — Análisis</div>
+  <h1 class="page-title">Punto de control PC2</h1>
+  <p class="page-desc">Checklist de salida de la Fase 2. Verifica que todos los entregables del análisis están completos antes de pasar a la Fase 3 — Especificación.</p>
+  <div class="std-row"><span class="std-pill">IEEE 29148 §6.2</span><span class="std-pill">BABOK v3</span></div>
+</div>
+<div style="background:rgba(83,52,131,.06);border:0.5px solid rgba(83,52,131,.2);border-radius:var(--radius);padding:.5rem .9rem;margin-bottom:.8rem;display:flex;align-items:center;justify-content:space-between;gap:.5rem">
+  <div style="font-size:11px;color:var(--c-purple)">ⓘ La verificación de consistencia entre modelos (contexto, casos de uso y BPMN) es un prerequisito de este PC2.</div>
+  <button class="btn btn-sm" style="color:var(--c-purple);border-color:rgba(83,52,131,.3);white-space:nowrap" onclick="nav('ana-verificacion')">Ver verificación →</button>
+</div>
+<div id="ana-pc2-mount"></div>
+`);
+
+reg('srs-pc3', () => `
+<div class="page-header">
+  <div class="page-eyebrow" style="color:var(--c-blue)">● Fase 3 — Especificación</div>
+  <h1 class="page-title">Punto de control PC3</h1>
+  <p class="page-desc">Checklist de salida de la Fase 3. Verifica que el SRS está completo, verificado y listo para entrar al proceso de validación formal de la Fase 4.</p>
+  <div class="std-row"><span class="std-pill">IEEE 29148 §6.4</span><span class="std-pill">ISO/IEC 12207</span></div>
+</div>
+<div id="srs-pc3-mount"></div>
+`);
+
+reg('val-pc4', () => `
+<div class="page-header">
+  <div class="page-eyebrow" style="color:var(--c-green)">● Fase 4 — Validación</div>
+  <h1 class="page-title">Punto de control PC4</h1>
+  <p class="page-desc">Checklist de salida de la Fase 4. Verifica que el baseline está aprobado, publicado y el CCB activado antes de pasar a la Fase 5 — Gestión de cambios.</p>
+  <div class="std-row"><span class="std-pill">IEEE 29148 §6.5</span><span class="std-pill">IEEE 828</span><span class="std-pill">ISO/IEC 12207</span></div>
+</div>
+<div id="val-pc4-mount"></div>
+`);
+
+const PC2_KEY = 'fw_ana_pc2_v1';
+const PC2_ITEMS = [
+  {dim:'Análisis y modelado', items:[
+    {id:'pc2-01', text:'Diagrama de contexto completo con todas las entidades externas y flujos de datos'},
+    {id:'pc2-02', text:'Casos de uso definidos y vinculados a actores del sistema'},
+    {id:'pc2-03', text:'BPMN As-Is documentado con puntos de dolor identificados'},
+    {id:'pc2-04', text:'BPMN To-Be diseñado con mejoras del proceso futuro'},
+    {id:'pc2-05', text:'Verificación del modelo completada — contexto, casos de uso y BPMN son consistentes entre sí'},
+  ]},
+  {dim:'Estructuración y priorización', items:[
+    {id:'pc2-06', text:'Backlog inicial con ≥ 80% de necesidades identificadas y priorizadas'},
+    {id:'pc2-07', text:'GAP Analysis completado — brechas entre As-Is y To-Be documentadas'},
+    {id:'pc2-08', text:'Necesidades clasificadas por tipo (Funcional / No funcional / Restricción)'},
+    {id:'pc2-09', text:'Matriz RACI definida con roles y responsabilidades del proyecto'},
+  ]},
+  {dim:'Confirmación', items:[
+    {id:'pc2-10', text:'PO/Analista aprueba el backlog priorizado'},
+    {id:'pc2-11', text:'Usuarios representativos confirman que los modelos reflejan sus necesidades'},
+    {id:'pc2-12', text:'Checklist PC2 completo con al menos 80% de ítems aprobados'},
+  ]},
+];
+
+const PC3_KEY = 'fw_srs_pc3_v1';
+const PC3_ITEMS = [
+  {dim:'Calidad del SRS', items:[
+    {id:'pc3-01', text:'Checklist de calidad SRS aplicado con umbrales alcanzados (≥ 80%)'},
+    {id:'pc3-02', text:'Sin requisitos ambiguos detectados por el analizador del framework'},
+    {id:'pc3-03', text:'Todos los RF formulados con modal DEBE y criterio de aceptación verificable'},
+    {id:'pc3-04', text:'Todos los RNF con umbrales numéricos medibles (ISO/IEC 25010:2023)'},
+  ]},
+  {dim:'Trazabilidad', items:[
+    {id:'pc3-05', text:'RTM inicial completa con trazabilidad HU → RF → RNF → RC'},
+    {id:'pc3-06', text:'HU con criterios de aceptación en formato Gherkin aprobados por QA'},
+    {id:'pc3-07', text:'Glosario técnico actualizado con todos los términos del dominio'},
+  ]},
+  {dim:'Verificación del modelo', items:[
+    {id:'pc3-08', text:'Diagrama de contexto consistente con los RF especificados'},
+    {id:'pc3-09', text:'Casos de uso alineados con las HU del SRS'},
+    {id:'pc3-10', text:'BPMN To-Be coherente con los requisitos funcionales'},
+  ]},
+  {dim:'Entregables', items:[
+    {id:'pc3-11', text:'SRS editado, versionado y exportado en el framework'},
+    {id:'pc3-12', text:'Artefactos en repositorio digital con URL registrada'},
+    {id:'pc3-13', text:'Firmas de aprobación formales: PO + QA + Arquitecto'},
+  ]},
+];
+
+const PC4_KEY = 'fw_val_pc4_v1';
+const PC4_ITEMS = [
+  {dim:'Actividades de validación', items:[
+    {id:'pc4-01', text:'Auto-revisión BA completada con ≥ 85% ítems OK y 0 bloqueantes'},
+    {id:'pc4-02', text:'Walkthrough técnico aprobado con acta firmada por Dev Lead y QA Lead'},
+    {id:'pc4-03', text:'Revisión de stakeholders completada con firma del Product Owner'},
+    {id:'pc4-04', text:'Inspección formal Fagan con densidad aceptable y decisión de aprobación'},
+    {id:'pc4-05', text:'Log de defectos cerrado — 0 Bloqueantes y 0 Mayores abiertos'},
+    {id:'pc4-06', text:'UAT completado — 100% de casos críticos pasan y 0 Bloqueantes'},
+  ]},
+  {dim:'Aprobación del baseline', items:[
+    {id:'pc4-07', text:'Número de baseline asignado (BL-XXX)'},
+    {id:'pc4-08', text:'Versión SRS asignada (v1.0-baseline)'},
+    {id:'pc4-09', text:'Firma del Sponsor registrada'},
+    {id:'pc4-10', text:'Firma del Product Owner registrada'},
+    {id:'pc4-11', text:'Firma del Arquitecto registrada'},
+  ]},
+  {dim:'Publicación y CCB', items:[
+    {id:'pc4-12', text:'SRS publicado en repositorio con nombre estándar y URL permanente'},
+    {id:'pc4-13', text:'Tag de versión creado en repositorio (v1.0.0-baseline)'},
+    {id:'pc4-14', text:'CCB activado formalmente con fecha e instrucciones enviadas'},
+    {id:'pc4-15', text:'Notificaciones enviadas y confirmadas por Dev, QA, Arquitectura y Negocio'},
+  ]},
+];
+
+function initAnaPC2(){
+  var el=document.getElementById('ana-pc2-mount'); if(!el) return;
+  el.innerHTML=''; var data; try{data=JSON.parse(localStorage.getItem(PC2_KEY))||{};}catch(e){data={};}
+  renderPC(el,'pc2','var(--c-purple)','Fase 2 completa — lista para Especificación',PC2_ITEMS,data,PC2_KEY);
+}
+function initSrsPC3(){
+  var el=document.getElementById('srs-pc3-mount'); if(!el) return;
+  el.innerHTML=''; var data; try{data=JSON.parse(localStorage.getItem(PC3_KEY))||{};}catch(e){data={};}
+  renderPC(el,'pc3','var(--c-blue)','Fase 3 completa — lista para Validación',PC3_ITEMS,data,PC3_KEY);
+}
+function initValPC4(){
+  var el=document.getElementById('val-pc4-mount'); if(!el) return;
+  el.innerHTML=''; var data; try{data=JSON.parse(localStorage.getItem(PC4_KEY))||{};}catch(e){data={};}
+  renderPC(el,'pc4','var(--c-green)','Fase 4 completa — SRS baseline activo',PC4_ITEMS,data,PC4_KEY);
+}
+
+function renderPC(el,prefix,color,doneMsg,items,data,key){
+  var total=0,ok=0;
+  items.forEach(function(d){d.items.forEach(function(i){total++;if(data[i.id]==='ok')ok++;});});
+  var pct=Math.round(ok/total*100);
+  var ready=pct>=80;
+  var col=ready?color:pct>=50?'var(--c-amber)':'var(--c-gray)';
+  var html='<div class="card" style="margin-bottom:1rem">'
+    +'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.5rem">'
+    +'<div style="font-size:13px;font-weight:500;color:'+col+'">'+(ready?'✓ '+doneMsg:pct>=50?'⏳ En progreso — '+ok+'/'+total+' ítems':'○ Checklist por completar')+'</div>'
+    +'<div style="font-size:28px;font-weight:500;font-family:var(--font-serif);color:'+col+'">'+pct+'%</div>'
+    +'</div>'
+    +'<div style="height:7px;background:var(--surface2);border-radius:4px;overflow:hidden">'
+    +'<div style="height:100%;width:'+pct+'%;background:'+col+';border-radius:4px;transition:width .5s"></div>'
+    +'</div></div>';
+  items.forEach(function(dim){
+    var dimOk=dim.items.filter(function(i){return data[i.id]==='ok';}).length;
+    html+='<div class="card" style="margin-bottom:.6rem">'
+      +'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.5rem">'
+      +'<div style="font-size:12px;font-weight:500;color:'+col+'">'+dim.dim+'</div>'
+      +'<div style="font-size:11px;color:var(--muted)">'+dimOk+'/'+dim.items.length+'</div></div>';
+    dim.items.forEach(function(item){
+      var val=data[item.id]||'';
+      html+='<div style="display:flex;align-items:flex-start;gap:.6rem;padding:.4rem 0;border-bottom:0.5px solid var(--border)">'
+        +'<div style="display:flex;gap:4px;flex-shrink:0;padding-top:1px">'
+        +'<button style="width:24px;height:24px;border-radius:4px;border:0.5px solid '+(val==='ok'?col:'var(--border2)')+';background:'+(val==='ok'?col:'var(--surface)')+';color:'+(val==='ok'?'#fff':'var(--muted)')+';font-size:12px;cursor:pointer" onclick="pcSet(\''+prefix+'\',\''+item.id+'\',\'ok\',\''+key+'\')">✓</button>'
+        +'<button style="width:24px;height:24px;border-radius:4px;border:0.5px solid '+(val==='na'?'var(--c-amber)':'var(--border2)')+';background:'+(val==='na'?'var(--c-amber)':'var(--surface)')+';color:'+(val==='na'?'#fff':'var(--muted)')+';font-size:10px;cursor:pointer" onclick="pcSet(\''+prefix+'\',\''+item.id+'\',\'na\',\''+key+'\')">N/A</button>'
+        +'</div>'
+        +'<div style="font-size:12px;color:var(--text);line-height:1.5">'+item.text+'</div></div>';
+    });
+    html+='</div>';
+  });
+  html+='<div style="display:flex;gap:.5rem;margin-top:.5rem">'
+    +'<button class="btn btn-sm" onclick="pcReset(\''+prefix+'\',\''+key+'\')">↺ Reiniciar</button>'
+    +'<span style="font-size:11px;color:var(--muted)">Guardado automáticamente</span></div>';
+  el.innerHTML=html;
+}
+function pcSet(prefix,id,val,key){
+  var data; try{data=JSON.parse(localStorage.getItem(key))||{};}catch(e){data={};}
+  if(data[id]===val) delete data[id]; else data[id]=val;
+  localStorage.setItem(key,JSON.stringify(data));
+  if(prefix==='pc2') initAnaPC2();
+  else if(prefix==='pc3') initSrsPC3();
+  else if(prefix==='pc4') initValPC4();
+}
+function pcReset(prefix,key){
+  localStorage.removeItem(key);
+  if(prefix==='pc2') initAnaPC2();
+  else if(prefix==='pc3') initSrsPC3();
+  else if(prefix==='pc4') initValPC4();
+}
 
 /* ════════════════════════════════════════
    PAGE: GESTIÓN DE CAMBIOS — FLUJO
@@ -9744,6 +9950,9 @@ function onPageShow(id) {
   if (id==='val-issues') setTimeout(initValIssues, 50);
   if (id==='val-uat') setTimeout(function(){ window._uatSelIdx=-1; initValUat(); }, 50);
   if (id==='val-baseline') setTimeout(function(){ initBlRef(); }, 50);
+  if (id==='ana-pc2') setTimeout(initAnaPC2, 50);
+  if (id==='srs-pc3') setTimeout(initSrsPC3, 50);
+  if (id==='val-pc4') setTimeout(initValPC4, 50);
   if (id==='ccb-cr') setTimeout(initCR, 50);
   if (id==='ccb-backlog') setTimeout(initBacklog, 50);
   if (id==='ccb-versiones') setTimeout(initVersiones, 50);
