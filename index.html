@@ -5727,7 +5727,7 @@ function renderValIssues(){
         :'window._inspTab=1;nav(\'val-inspeccion\')')+'">Ver en origen →</button>'
         +'</div>'
         +'<div class="table-wrap"><table class="data-table">'
-        +'<thead><tr><th style="min-width:90px">Ref RF</th><th style="min-width:130px">Tipo / Severidad</th><th>Descripción</th><th>Origen detalle</th><th style="min-width:110px">Estado</th></tr></thead><tbody>';
+        +'<thead><tr><th style="min-width:90px">Ref RF</th><th style="min-width:130px">Tipo / Severidad</th><th>Descripción</th><th>Origen detalle</th><th style="min-width:110px">Estado</th><th></th></tr></thead><tbody>';
 
       grupo.forEach(function(issue){
         var tc=oc;
@@ -5744,6 +5744,10 @@ function renderValIssues(){
           +'<td style="font-size:12px;max-width:260px">'+e(issue.desc||'Sin descripción')+'</td>'
           +'<td style="font-size:11px;color:var(--muted)">'+issue.origenDetalle+'</td>'
           +'<td><select style="font-size:11px;border:0.5px solid var(--border2);border-radius:4px;padding:2px 4px;background:var(--bg);color:'+ec+';font-weight:500;outline:none;cursor:pointer" onchange="issueSetEst(this,\''+origen+'\')">'+estOpts.map(function(o){return'<option'+(issue.estado===o?' selected':'')+'>'+o+'</option>';}).join('')+'</select></td>'
+          +'<td><button style="background:none;border:none;cursor:pointer;color:'+oc+';font-size:11px;white-space:nowrap;padding:2px 4px" title="Ir al origen" onclick="'
+          +(origen==='Walkthrough'?'window._wt2Tab=1;nav(\'val-walkthrough\')'
+          :origen==='Stakeholders'?'window._sk2Tab=1;nav(\'val-stakeholders\')'
+          :'window._inspTab=1;nav(\'val-inspeccion\')')+'">↗</button></td>'
           +'</tr>';
       });
 
