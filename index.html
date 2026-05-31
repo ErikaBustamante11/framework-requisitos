@@ -5636,12 +5636,21 @@ function renderValIssues(){
 
   // ── Filtro activo ──
   var FIL=(typeof window._issuesFil==='string')?window._issuesFil:'Todos';
+
+  // Tipos críticos por origen
+  function esCritico(x){
+    if(x.origen==='Inspección') return (x.tipo==='Bloqueante'||x.tipo==='Mayor')&&(x.estado==='Abierto');
+    if(x.origen==='Walkthrough') return (x.tipo==='Defecto'||x.tipo==='Bloqueante')&&(x.estado==='Abierto');
+    if(x.origen==='Stakeholders') return (x.tipo==='Regla de negocio incorrecta'||x.tipo==='Caso no cubierto')&&(x.estado==='Abierta');
+    return false;
+  }
+
   var filtered = FIL==='Todos' ? issues : issues.filter(function(x){
     if(FIL==='Walkthrough') return x.origen==='Walkthrough';
     if(FIL==='Stakeholders') return x.origen==='Stakeholders';
     if(FIL==='Inspección') return x.origen==='Inspección';
     if(FIL==='Abiertos') return x.estado==='Abierto'||x.estado==='Abierta';
-    if(FIL==='Bloqueantes / Inviabilidades') return (x.tipo==='Bloqueante'||x.tipo==='Inviabilidad'||x.tipo==='Regla de negocio incorrecta'||x.tipo==='Mayor')&&(x.estado==='Abierto'||x.estado==='Abierta');
+    if(FIL==='Críticos') return esCritico(x);
     return true;
   });
 
@@ -5649,11 +5658,8 @@ function renderValIssues(){
   var total=issues.length;
   var abiertos=issues.filter(function(x){return x.estado==='Abierto'||x.estado==='Abierta';}).length;
   var resueltos=issues.filter(function(x){return x.estado==='Resuelto'||x.estado==='Resuelta';}).length;
-  var criticos=issues.filter(function(x){
-    return (x.tipo==='Bloqueante'||x.tipo==='Inviabilidad'||x.tipo==='Regla de negocio incorrecta'||x.tipo==='Mayor')
-        && (x.estado==='Abierto'||x.estado==='Abierta');
-  }).length;
-  var readyOk=abiertos===0&&criticos===0&&total>0;
+  var criticos=issues.filter(esCritico).length;
+  var readyOk=abiertos===0&&total>0;
 
   var origenColor={Walkthrough:'var(--c-blue)',Stakeholders:'var(--c-purple)',Inspección:'var(--c-red)'};
   var estadoColor={Abierto:'var(--c-red)',Abierta:'var(--c-red)','En revisión':'var(--c-amber)','En proceso':'var(--c-amber)',Resuelto:'var(--c-green)',Resuelta:'var(--c-green)',Descartada:'var(--muted)',Descartado:'var(--muted)'};
@@ -5681,13 +5687,13 @@ function renderValIssues(){
     +'Los cambios de estado aquí se sincronizan con cada sección de origen.'
     +'</div></div></div></div>';
 
-  // Filtros
-  var filtros=['Todos','Walkthrough','Stakeholders','Inspección','Abiertos','Bloqueantes / Inviabilidades'];
+  var filtros=['Todos','Walkthrough','Stakeholders','Inspección','Abiertos','Críticos'];
   html+='<div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:1rem">'
     +filtros.map(function(f){
       var on=FIL===f;
-      var fc=f==='Walkthrough'?'var(--c-blue)':f==='Stakeholders'?'var(--c-purple)':f==='Inspección'?'var(--c-red)':f==='Abiertos'?'var(--c-amber)':f==='Bloqueantes/Inviabilidades'?'var(--c-red)':'var(--c-green)';
-      return'<button style="padding:4px 12px;border-radius:20px;font-size:11px;font-weight:500;cursor:pointer;border:0.5px solid '+(on?fc:'var(--border2)')+';background:transparent;color:'+(on?fc:'var(--muted)')+';transition:all .2s" onclick="window._issuesFil=\''+f+'\';renderValIssues()">'+f+(f==='Todos'?' ('+total+')':'')+'</button>';
+      var fc=f==='Walkthrough'?'var(--c-blue)':f==='Stakeholders'?'var(--c-purple)':f==='Inspección'?'var(--c-red)':f==='Abiertos'?'var(--c-amber)':f==='Críticos'?'var(--c-red)':'var(--c-green)';
+      var cnt=f==='Críticos'?criticos:f==='Abiertos'?abiertos:f==='Todos'?total:issues.filter(function(x){return x.origen===f;}).length;
+      return'<button style="padding:4px 12px;border-radius:20px;font-size:11px;font-weight:500;cursor:pointer;border:0.5px solid '+(on?fc:'var(--border2)')+';background:transparent;color:'+(on?fc:'var(--muted)')+';transition:all .2s" onclick="window._issuesFil=\''+f+'\';renderValIssues()">'+f+' ('+cnt+')</button>';
     }).join('')
     +'</div>';
 
@@ -5721,7 +5727,7 @@ function renderValIssues(){
         :'window._inspTab=1;nav(\'val-inspeccion\')')+'">Ver en origen →</button>'
         +'</div>'
         +'<div class="table-wrap"><table class="data-table">'
-        +'<thead><tr><th style="min-width:90px">Ref RF</th><th>Tipo / Severidad</th><th>Descripción</th><th>Origen detalle</th><th>Estado</th></tr></thead><tbody>';
+        +'<thead><tr><th style="min-width:90px">Ref RF</th><th style="min-width:130px">Tipo / Severidad</th><th>Descripción</th><th>Origen detalle</th><th style="min-width:110px">Estado</th></tr></thead><tbody>';
 
       grupo.forEach(function(issue){
         var tc=oc;
@@ -5733,7 +5739,7 @@ function renderValIssues(){
           :['Abierto','En proceso','Resuelto'];
 
         html+='<tr>'
-          +'<td style="font-family:var(--font-mono);color:var(--c-blue);font-size:11px">'+e(issue.ref)+'</td>'
+          +'<td><input value="'+e(issue.ref==='—'?'':issue.ref)+'" placeholder="RF-001" style="font-family:var(--font-mono);font-size:11px;color:var(--c-blue);background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:2px 6px;outline:none;width:82px" oninput="issueSetRfid(this,\''+origen+'\')"></td>'
           +'<td><span style="font-size:10px;font-weight:600;padding:2px 6px;border-radius:3px;background:rgba(0,0,0,.04);color:'+tc+';border:0.5px solid '+tc+'">'+e(issue.tipo)+'</span></td>'
           +'<td style="font-size:12px;max-width:260px">'+e(issue.desc||'Sin descripción')+'</td>'
           +'<td style="font-size:11px;color:var(--muted)">'+issue.origenDetalle+'</td>'
@@ -5746,6 +5752,35 @@ function renderValIssues(){
   }
 
   el.innerHTML=html;
+
+  // Cambio de Ref RF — escribe de vuelta al storage de origen
+  window.issueSetRfid=function(inputEl,origen){
+    var newRfid=inputEl.value.trim();
+    var row=inputEl.closest('tr');
+    if(!row) return;
+    var cells=row.querySelectorAll('td');
+    var desc=cells[2]?cells[2].querySelector('input,td')?.value||cells[2].textContent.trim():'';
+
+    if(origen==='Walkthrough'){
+      var d2; try{d2=JSON.parse(localStorage.getItem(WT2_KEY))||defWT2();}catch(ex){d2=defWT2();}
+      (d2.sesiones||[]).forEach(function(ses){
+        (ses.hallazgos||[]).forEach(function(h){if(h.desc===desc) h.rfid=newRfid;});
+      });
+      localStorage.setItem(WT2_KEY,JSON.stringify(d2));
+    } else if(origen==='Stakeholders'){
+      var d3; try{d3=JSON.parse(localStorage.getItem(SK2_KEY))||defSK2();}catch(ex){d3=defSK2();}
+      (d3.revisiones||[]).forEach(function(rev){
+        (rev.observaciones||[]).forEach(function(ob){if(ob.desc===desc) ob.rfid=newRfid;});
+      });
+      localStorage.setItem(SK2_KEY,JSON.stringify(d3));
+    } else if(origen==='Inspección'){
+      var d4; try{d4=JSON.parse(localStorage.getItem(INSP_KEY))||defINSP();}catch(ex){d4=defINSP();}
+      (d4.inspecciones||[]).forEach(function(insp){
+        (insp.defectosList||[]).forEach(function(d){if(d.desc===desc) d.rfid=newRfid;});
+      });
+      localStorage.setItem(INSP_KEY,JSON.stringify(d4));
+    }
+  };
 
   // Cambio de estado — escribe de vuelta al storage de origen
   window.issueSetEst=function(selectEl,origen){
