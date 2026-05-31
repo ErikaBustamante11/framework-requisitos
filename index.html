@@ -5317,56 +5317,58 @@ function renderValLog(){
   var inspData; try{ inspData=JSON.parse(localStorage.getItem(INSP_KEY))||defINSP(); }catch(ex){ inspData=defINSP(); }
   var insList = inspData.inspecciones||[];
 
-  // Consolidar todos los defectos con referencia a su inspección
+  // Consolidar todos los defectos
   var allDefs = [];
   insList.forEach(function(insp,ii){
     (insp.defectosList||[]).forEach(function(d,di){
       allDefs.push({
-        inspIdx:ii,
-        defIdx:di,
+        inspIdx:ii, defIdx:di,
         inspAlcance: insp.alcance||('Inspección '+(ii+1)),
         inspFecha: insp.fecha||'',
         inspTipo: insp.tipo||'Primera inspección',
-        rfid: d.rfid||'',
-        sev:  d.sev||'Mayor',
-        desc: d.desc||'',
-        estado: d.estado||'Abierto',
-        asignado: d.asignado||'',
-        resolucion: d.resolucion||''
+        rfid: d.rfid||'', sev: d.sev||'Mayor',
+        desc: d.desc||'', estado: d.estado||'Abierto',
+        asignado: d.asignado||'', resolucion: d.resolucion||'',
+        impacto: d.impacto||'', fechaRes: d.fechaRes||''
       });
     });
   });
 
   var sel = (typeof window._logSelIdx==='number') ? window._logSelIdx : -1;
-  var bloq   = allDefs.filter(function(d){return d.sev==='Bloqueante';}).length;
-  var mayor  = allDefs.filter(function(d){return d.sev==='Mayor';}).length;
-  var abier  = allDefs.filter(function(d){return d.estado==='Abierto';}).length;
-  var resuel = allDefs.filter(function(d){return d.estado==='Resuelto';}).length;
-  var ok     = allDefs.length>0 && abier===0;
+  if(!window._logFiltSev) window._logFiltSev='Todos';
+  if(!window._logFiltEst) window._logFiltEst='Todos';
+
+  var bloq    = allDefs.filter(function(d){return d.sev==='Bloqueante';}).length;
+  var mayor   = allDefs.filter(function(d){return d.sev==='Mayor';}).length;
+  var abier   = allDefs.filter(function(d){return d.estado==='Abierto';}).length;
+  var enProc  = allDefs.filter(function(d){return d.estado==='En proceso';}).length;
+  var resuel  = allDefs.filter(function(d){return d.estado==='Resuelto';}).length;
+  var ok      = allDefs.length>0 && abier===0 && enProc===0;
 
   var sevColor={Bloqueante:'var(--c-red)',Mayor:'var(--c-amber)',Menor:'var(--c-blue)',Informativo:'var(--c-teal)'};
   var estColor={Abierto:'var(--c-red)','En proceso':'var(--c-amber)',Resuelto:'var(--c-green)'};
 
   var html='';
 
-  // Banner conexión
+  // Banner
   html+='<div style="background:rgba(83,52,131,.06);border:0.5px solid rgba(83,52,131,.2);border-radius:var(--radius);padding:.5rem .8rem;font-size:11px;color:var(--c-purple);margin-bottom:.8rem">'
     +'ⓘ Vista consolidada de todos los defectos registrados en las inspecciones formales. Los cambios aquí se reflejan directamente en cada inspección.</div>';
 
-  // KPIs
-  html+='<div style="display:grid;grid-template-columns:repeat(5,1fr);gap:.6rem;margin-bottom:1rem">'
-    +'<div class="kpi"><div class="kpi-num" style="color:var(--c-blue)">'+allDefs.length+'</div><div class="kpi-label">Total defectos</div></div>'
+  // KPIs — 6 contadores
+  html+='<div style="display:grid;grid-template-columns:repeat(6,1fr);gap:.6rem;margin-bottom:1rem">'
+    +'<div class="kpi"><div class="kpi-num" style="color:var(--c-blue)">'+allDefs.length+'</div><div class="kpi-label">Total</div></div>'
     +'<div class="kpi"><div class="kpi-num" style="color:var(--c-red)">'+bloq+'</div><div class="kpi-label">Bloqueantes</div></div>'
     +'<div class="kpi"><div class="kpi-num" style="color:var(--c-amber)">'+mayor+'</div><div class="kpi-label">Mayores</div></div>'
     +'<div class="kpi"><div class="kpi-num" style="color:var(--c-red)">'+abier+'</div><div class="kpi-label">Abiertos</div></div>'
+    +'<div class="kpi"><div class="kpi-num" style="color:var(--c-amber)">'+enProc+'</div><div class="kpi-label">En proceso</div></div>'
     +'<div class="kpi"><div class="kpi-num" style="color:var(--c-green)">'+resuel+'</div><div class="kpi-label">Resueltos</div></div>'
     +'</div>';
 
   // Banner estado
-  html+='<div class="card" style="margin-bottom:1rem;background:rgba('+(ok?'15,110,86':allDefs.length===0?'95,94,90':'163,45,45')+',.04);border-color:rgba('+(ok?'15,110,86':allDefs.length===0?'95,94,90':'163,45,45')+',.2)">'
+  html+='<div class="card" style="margin-bottom:.8rem;background:rgba('+(ok?'15,110,86':allDefs.length===0?'95,94,90':'163,45,45')+',.04);border-color:rgba('+(ok?'15,110,86':allDefs.length===0?'95,94,90':'163,45,45')+',.2)">'
     +'<div style="font-size:13px;font-weight:500;color:var('+(ok?'--c-green':allDefs.length===0?'--c-gray':'--c-red')+');">'
-    +(allDefs.length===0?'Sin defectos registrados — agrega inspecciones en Inspección formal':ok?'✓ 0 defectos abiertos — SRS apto para baseline':'✗ '+abier+' defecto(s) abierto(s) — no puede aprobarse el baseline')+'</div>'
-    +'<div style="font-size:11px;color:var(--muted);margin-top:2px">'+insList.length+' inspección(es) registradas · Umbral Fagan: densidad &lt; 0.3 def/pág</div>'
+    +(allDefs.length===0?'Sin defectos registrados — agrega inspecciones en Inspección formal':ok?'✓ 0 defectos abiertos — SRS apto para baseline':'✗ '+(abier+enProc)+' defecto(s) sin resolver — no puede aprobarse el baseline')+'</div>'
+    +'<div style="font-size:11px;color:var(--muted);margin-top:2px">'+insList.length+' inspección(es) · Umbral Fagan: densidad &lt; 0.3 def/pág</div>'
     +'</div>';
 
   if(allDefs.length===0){
@@ -5376,9 +5378,69 @@ function renderValLog(){
       +'<button class="btn btn-sm" style="margin-top:.8rem" onclick="nav(\'val-inspeccion\')">Ir a Inspección formal →</button>'
       +'</div>';
   } else {
+    // Filtros
+    var filtSev=window._logFiltSev||'Todos';
+    var filtEst=window._logFiltEst||'Todos';
+    html+='<div style="display:flex;gap:.5rem;flex-wrap:wrap;align-items:center;justify-content:space-between;margin-bottom:.8rem">'
+      +'<div style="display:flex;gap:.5rem;flex-wrap:wrap;align-items:center">'
+      +'<span style="font-size:11px;font-weight:500;color:var(--muted)">Severidad:</span>'
+      +['Todos','Bloqueante','Mayor','Menor','Informativo'].map(function(o){
+        var active=filtSev===o;
+        var c=o==='Bloqueante'?'var(--c-red)':o==='Mayor'?'var(--c-amber)':o==='Menor'?'var(--c-blue)':o==='Informativo'?'var(--c-teal)':'var(--muted)';
+        return'<button style="padding:3px 10px;border-radius:20px;font-size:11px;font-weight:500;cursor:pointer;border:0.5px solid '+(active?c:'var(--border2)')+';background:transparent;color:'+(active?c:'var(--muted)')+';" onclick="window._logFiltSev=\''+o+'\';renderValLog()">'+o+'</button>';
+      }).join('')
+      +'<span style="font-size:11px;font-weight:500;color:var(--muted);margin-left:.5rem">Estado:</span>'
+      +['Todos','Abierto','En proceso','Resuelto'].map(function(o){
+        var active=filtEst===o;
+        var c=o==='Abierto'?'var(--c-red)':o==='En proceso'?'var(--c-amber)':o==='Resuelto'?'var(--c-green)':'var(--muted)';
+        return'<button style="padding:3px 10px;border-radius:20px;font-size:11px;font-weight:500;cursor:pointer;border:0.5px solid '+(active?c:'var(--border2)')+';background:transparent;color:'+(active?c:'var(--muted)')+';" onclick="window._logFiltEst=\''+o+'\';renderValLog()">'+o+'</button>';
+      }).join('')
+      +'</div>'
+      +'<button class="btn btn-sm" style="background:var(--c-red);color:#fff;border-color:var(--c-red)" onclick="logAddDefecto()">+ Defecto manual</button>'
+      +'</div>';
+
+    // Panel de agregar defecto manual
+    if(window._logAddOpen){
+      html+='<div class="card" style="margin-bottom:.8rem;border:0.5px solid var(--c-red);background:rgba(163,45,45,.03)">'
+        +'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.6rem">'
+        +'<div style="font-size:12px;font-weight:500;color:var(--c-red)">Nuevo defecto manual</div>'
+        +'<button style="background:none;border:none;cursor:pointer;color:var(--muted);font-size:16px" onclick="window._logAddOpen=false;renderValLog()">×</button>'
+        +'</div>'
+        +'<div style="background:rgba(163,45,45,.06);border:0.5px solid rgba(163,45,45,.2);border-radius:5px;padding:.4rem .7rem;font-size:11px;color:var(--c-red);margin-bottom:.6rem">'
+        +'ⓘ IEEE 1028 §5.4.7 — Todo defecto debe asociarse a una inspección para mantener trazabilidad. Si aún no existe, crea la inspección primero.</div>'
+        +'<div style="display:grid;grid-template-columns:1fr 120px 120px;gap:.5rem;margin-bottom:.5rem">'
+        +'<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">Asociar a inspección</label>'
+        +'<select id="log-add-insp" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:4px 8px;font-size:12px;color:var(--text);outline:none">'
+        +insList.map(function(ins,ii){return'<option value="'+ii+'">'+(ins.alcance||'Inspección '+(ii+1))+(ins.fecha?' · '+ins.fecha:'')+'</option>';}).join('')
+        +'</select></div>'
+        +'<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">Severidad</label>'
+        +'<select id="log-add-sev" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:4px 8px;font-size:12px;color:var(--text);outline:none">'
+        +['Bloqueante','Mayor','Menor','Informativo'].map(function(o){return'<option>'+o+'</option>';}).join('')+'</select></div>'
+        +'<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">Ref RF</label>'
+        +'<input id="log-add-rfid" placeholder="RF-001" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:4px 8px;font-size:12px;font-family:var(--font-mono);color:var(--c-blue);outline:none"></div>'
+        +'</div>'
+        +'<div style="margin-bottom:.5rem"><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">Descripción</label>'
+        +'<input id="log-add-desc" placeholder="Describe el defecto encontrado..." style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:4px 8px;font-size:12px;color:var(--text);outline:none"></div>'
+        +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-bottom:.6rem">'
+        +'<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">Asignado a</label>'
+        +'<input id="log-add-asig" placeholder="Nombre del BA" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:4px 8px;font-size:12px;color:var(--text);outline:none"></div>'
+        +'<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">Origen (referencia)</label>'
+        +'<input id="log-add-orig" placeholder="Ej: Revisión informal · Comentario PO" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:4px 8px;font-size:12px;color:var(--text);outline:none"></div>'
+        +'</div>'
+        +'<div style="display:flex;gap:.5rem;align-items:center">'
+        +'<button class="btn" style="background:var(--c-red);color:#fff;border-color:var(--c-red)" onclick="logConfirmAdd()">Agregar defecto</button>'
+        +'<button class="btn btn-sm" onclick="window._logAddOpen=false;renderValLog()">Cancelar</button>'
+        +'<span id="log-add-msg" style="font-size:11px;color:var(--c-red)"></span>'
+        +'</div></div>';
+    }
+
     // Agrupar por inspección
     insList.forEach(function(insp,ii){
-      var inspDefs=allDefs.filter(function(d){return d.inspIdx===ii;});
+      var inspDefs=allDefs.filter(function(d){
+        return d.inspIdx===ii
+          &&(filtSev==='Todos'||d.sev===filtSev)
+          &&(filtEst==='Todos'||d.estado===filtEst);
+      });
       if(inspDefs.length===0) return;
       var inspAbier=inspDefs.filter(function(d){return d.estado==='Abierto';}).length;
       var inspBloq=inspDefs.filter(function(d){return d.sev==='Bloqueante'&&d.estado!=='Resuelto';}).length;
@@ -5393,7 +5455,6 @@ function renderValLog(){
         +'<button class="btn btn-sm" onclick="window._inspTab=1;nav(\'val-inspeccion\')">Ver inspección →</button>'
         +'</div></div>';
 
-      // Tabla de defectos de esta inspección
       html+='<div class="table-wrap"><table class="data-table">'
         +'<thead><tr><th style="min-width:90px">Ref RF</th><th>Severidad</th><th>Descripción</th><th>Asignado</th><th>Estado</th><th></th></tr></thead><tbody>';
 
@@ -5406,21 +5467,23 @@ function renderValLog(){
           +'<td><input value="'+e(d.rfid||'')+'" placeholder="RF-001" style="font-family:var(--font-mono);font-size:11px;color:var(--c-blue);background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:2px 6px;outline:none;width:82px" oninput="logSetField('+gi+','+di+',\'rfid\',this.value)"></td>'
           +'<td><select style="font-size:11px;border:0.5px solid var(--border2);border-radius:4px;padding:2px 4px;background:var(--bg);color:'+sc+';font-weight:600;outline:none;cursor:pointer" onchange="logSetSev('+gi+','+di+',this.value)">'
           +['Bloqueante','Mayor','Menor','Informativo'].map(function(o){return'<option'+(d.sev===o?' selected':'')+'>'+o+'</option>';}).join('')+'</select></td>'
-          +'<td style="font-size:12px">'+e(d.desc)+'</td>'
-          +'<td style="font-size:12px"><input value="'+e(d.asignado)+'" placeholder="BA" style="background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:2px 6px;font-size:11px;color:var(--text);outline:none;width:80px" oninput="logSetField('+gi+','+di+',\'asignado\',this.value)"></td>'
+          +'<td><input value="'+e(d.desc)+'" placeholder="Describe el defecto..." style="width:100%;font-size:11px;color:var(--text);background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:2px 6px;outline:none;" oninput="logSetField('+gi+','+di+',\'desc\',this.value)"></td>'
+          +'<td><input value="'+e(d.asignado)+'" placeholder="BA" style="background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:2px 6px;font-size:11px;color:var(--text);outline:none;width:80px" oninput="logSetField('+gi+','+di+',\'asignado\',this.value)"></td>'
           +'<td><select style="font-size:11px;border:0.5px solid var(--border2);border-radius:4px;padding:2px 4px;background:var(--bg);color:'+ec+';font-weight:500;outline:none;cursor:pointer" onchange="logSetEst('+gi+','+di+',this.value)">'
           +['Abierto','En proceso','Resuelto'].map(function(o){return'<option'+(d.estado===o?' selected':'')+'>'+o+'</option>';}).join('')+'</select></td>'
-          +'<td><button class="uat-btn" style="color:var(--c-blue);font-size:13px" title="Resolución" onclick="window._logSelIdx='+(sel===flatIdx?-1:flatIdx)+';renderValLog()">✎</button></td>'
+          +'<td><button class="uat-btn" style="color:var(--c-blue);font-size:13px" title="Detalle" onclick="window._logSelIdx='+(sel===flatIdx?-1:flatIdx)+';renderValLog()">✎</button></td>'
           +'</tr>';
 
         // Panel de detalle
         if(sel===flatIdx){
           html+='<tr><td colspan="6"><div style="padding:.6rem;background:var(--surface2);border-radius:6px">'
-            +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem">'
+            +'<div style="display:grid;grid-template-columns:1fr 1fr 160px;gap:.5rem">'
             +'<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">Impacto si no se resuelve</label>'
             +'<textarea rows="2" style="'+TA+'" oninput="autoH(this);logSetField('+gi+','+di+',\'impacto\',this.value)">'+e(d.impacto||'')+'</textarea></div>'
             +'<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">Resolución aplicada</label>'
             +'<textarea rows="2" style="'+TA+'" oninput="autoH(this);logSetField('+gi+','+di+',\'resolucion\',this.value)">'+e(d.resolucion||'')+'</textarea></div>'
+            +'<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">Fecha de resolución</label>'
+            +'<input type="date" value="'+e(d.fechaRes||'')+'" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:4px 8px;font-size:12px;color:var(--text);outline:none" oninput="logSetField('+gi+','+di+',\'fechaRes\',this.value)"></div>'
             +'</div></div></td></tr>';
         }
       });
@@ -5431,9 +5494,46 @@ function renderValLog(){
   el.innerHTML=html;
   el.querySelectorAll('textarea').forEach(function(ta){ta.style.height='auto';ta.style.height=ta.scrollHeight+'px';});
 
-  // Handlers que escriben de vuelta al storage de inspecciones
+  // Handlers
   function inspSaveBack(d2){ localStorage.setItem(INSP_KEY,JSON.stringify(d2)); }
   function getInspData(){ var d2; try{d2=JSON.parse(localStorage.getItem(INSP_KEY))||defINSP();}catch(ex){d2=defINSP();} return d2; }
+
+  window.logAddDefecto=function(){
+    var d2=getInspData();
+    if(!d2.inspecciones||d2.inspecciones.length===0){
+      nav('val-inspeccion');
+      return;
+    }
+    window._logAddOpen=!window._logAddOpen;
+    renderValLog();
+  };
+  window.logConfirmAdd=function(){
+    var inspSel=document.getElementById('log-add-insp');
+    var sev=document.getElementById('log-add-sev');
+    var desc=document.getElementById('log-add-desc');
+    var rfid=document.getElementById('log-add-rfid');
+    var asig=document.getElementById('log-add-asig');
+    var orig=document.getElementById('log-add-orig');
+    var msg=document.getElementById('log-add-msg');
+    if(!desc||!desc.value.trim()){if(msg)msg.textContent='⚠ La descripción es obligatoria';return;}
+    var ii=parseInt(inspSel?inspSel.value:0);
+    var d2=getInspData();
+    if(!d2.inspecciones[ii].defectosList) d2.inspecciones[ii].defectosList=[];
+    d2.inspecciones[ii].defectosList.push({
+      rfid:rfid?rfid.value.trim():'',
+      sev:sev?sev.value:'Mayor',
+      desc:desc.value.trim(),
+      estado:'Abierto',
+      asignado:asig?asig.value.trim():'',
+      impacto:'',
+      resolucion:'',
+      fechaRes:'',
+      origenManual:orig?orig.value.trim():'Manual'
+    });
+    inspSaveBack(d2);
+    window._logAddOpen=false;
+    renderValLog();
+  };
 
   window.logSetSev=function(ii,di,v){
     var d2=getInspData();
