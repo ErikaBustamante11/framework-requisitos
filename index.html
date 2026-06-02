@@ -166,11 +166,13 @@ h1,h2,h3,h4,h5 { font-family: var(--font-serif); font-weight: 500; line-height: 
   min-width: 0;
   width: calc(100vw - var(--sidebar-w));
   overflow-x: hidden;
+  display: flex;
+  justify-content: center;
 }
 .page {
   display: none;
   padding: 2.5rem 2.8rem;
-  max-width: 960px;
+  max-width: 1200px;
   width: 100%;
   box-sizing: border-box;
   animation: fadeUp .22s ease;
@@ -536,7 +538,7 @@ textarea { resize: vertical; line-height: 1.6; }
   .app { grid-template-columns: 1fr; }
   .sidebar { left: -280px; transition: left .25s; }
   .sidebar.open { left: 0; box-shadow: var(--shadow); }
-  .main { margin-left: 0; }
+  .main { margin-left: 0; width: 100vw; justify-content: flex-start; }
   .hamburger { display: flex; }
   .page { padding: 1.5rem 1.2rem; padding-top: 4rem; }
   .g2,.g3,.g4,.g5 { grid-template-columns: 1fr; }
