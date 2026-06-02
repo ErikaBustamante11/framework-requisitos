@@ -582,11 +582,15 @@ input:focus, textarea:focus {
 
 
 @media print {
-  #sidebar, .sidebar-nav, button, .btn, .tab-nav, input[type=file], label[for] { display: none !important; }
-  .page { display: block !important; page-break-after: always; }
-  .page:not(.active) { display: block !important; }
-  body { background: white; }
+  #sidebar, .sidebar-nav, button, .btn, .tab-nav, input[type=file],
+  .hamburger, #ham, .top-bar, select, .uat-btn,
+  #kpi-modal-overlay { display: none !important; }
+  .page { display: block !important; box-shadow: none !important; padding: 1rem !important; }
+  .page:not(.active) { display: none !important; }
+  body { background: white !important; }
   .card, .card-sm { break-inside: avoid; }
+  input:not([type=file]), textarea { border: none !important; background: transparent !important; resize: none !important; font-size: inherit !important; padding: 0 !important; }
+  a { color: inherit !important; }
   * { color-adjust: exact; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
 }
 
@@ -612,7 +616,7 @@ textarea { field-sizing: content; min-height: 2em; }
   <div style="padding:.5rem .8rem;border-bottom:0.5px solid var(--border);display:flex;gap:.4rem;flex-wrap:wrap">
     <button onclick="exportJSON()" style="flex:1;padding:5px 8px;border-radius:6px;border:0.5px solid var(--border2);background:var(--surface);font-size:11px;font-weight:500;color:var(--c-blue);cursor:pointer;font-family:var(--font-sans)">⬇ Exportar datos</button>
     <label style="flex:1;padding:5px 8px;border-radius:6px;border:0.5px solid var(--border2);background:var(--surface);font-size:11px;font-weight:500;color:var(--c-teal);cursor:pointer;font-family:var(--font-sans);text-align:center">⬆ Importar datos<input type="file" accept=".json" onchange="importJSON(this)" style="display:none"></label>
-    <button onclick="exportPDF()" style="width:100%;padding:5px 8px;border-radius:6px;border:0.5px solid var(--border2);background:var(--c-blue);font-size:11px;font-weight:500;color:#fff;cursor:pointer;font-family:var(--font-sans)">📄 Exportar PDF / Evidencia</button>
+    <button onclick="exportPDF()" style="width:100%;padding:5px 8px;border-radius:6px;border:0.5px solid var(--border2);background:var(--c-blue);font-size:11px;font-weight:500;color:#fff;cursor:pointer;font-family:var(--font-sans)">🖨 Imprimir página actual</button>
   </div>
 
   <nav class="sidebar-nav">
@@ -11238,24 +11242,37 @@ function pc1Reset(){
 ════════════════════════════════════════ */
 const ALL_KEYS = [
   'fw_ana_v1',
+  'fw_ana_estr_v1',
+  'fw_ana_pc2_v1',
+  'fw_ana_ver_v1',
   'fw_bl_v1',
   'fw_bpmn_v1',
   'fw_cal_v1',
   'fw_campo_v1',
   'fw_ccb_v1',
-  'fw_defs_v1',
+  'fw_ctx_v1',
   'fw_eli_pc1_v1',
   'fw_eli_v7',
+  'fw_eli_sesiones_v1',
+  'fw_glos_v1',
+  'fw_mat_v1',
   'fw_obs_proyecto_v1',
   'fw_plan_v1',
+  'fw_raci_proyecto_v1',
   'fw_srs_ck_v1',
   'fw_srs_hu_v1',
+  'fw_srs_pc3_v1',
   'fw_srs_rtm_v1',
   'fw_srs_v1',
   'fw_srs_ver_v1',
-  'fw_srs_wt_v1',
   'fw_uat_v1',
-  'fw_vt_v1'
+  'fw_uc_v1',
+  'fw_val_ar_v1',
+  'fw_val_insp_v1',
+  'fw_val_pc4_v1',
+  'fw_val_pub_v1',
+  'fw_val_sk2_v1',
+  'fw_val_wt2_v1',
 ];
 
 function exportJSON(){
@@ -11294,23 +11311,7 @@ function importJSON(input){
 }
 
 function exportPDF(){
-  // Clone the document for printing all sections
-  var w = window.open('', '_blank');
-  if(!w){ alert('Por favor permite ventanas emergentes para exportar el PDF.'); return; }
-  var pages = document.querySelectorAll('.page');
-  var html = '<html><head><meta charset="utf-8"><title>Framework Metodológico Digital</title>';
-  // Copy all styles
-  var styles = document.querySelectorAll('style');
-  styles.forEach(function(s){ html += s.outerHTML; });
-  html += '<style>body{background:#fff} .page{display:block!important;page-break-after:always;padding:2rem} nav,button,.btn,.tab-nav,input[type=file]{display:none!important} .tab-panel{}</style>';
-  html += '</head><body>';
-  pages.forEach(function(p){
-    html += '<div class="page active">' + p.innerHTML + '</div>';
-  });
-  html += '</body></html>';
-  w.document.write(html);
-  w.document.close();
-  setTimeout(function(){ w.print(); }, 500);
+  window.print();
 }
 
 /* ── A1 Estructuración ── */
