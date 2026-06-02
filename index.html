@@ -9364,29 +9364,52 @@ function renderVersiones(){
     +'</div>';
 
   // Historial
-  var historial='<div>';
-  vers.forEach(function(v,i){
-    var col=verColors[i%verColors.length];
-    var crsVinc=v.crs||[];
-    historial+='<div class="ver-row" style="margin-bottom:.5rem">'
-      +(i<vers.length-1?'<div class="ver-line"></div>':'')
-      +'<div><div class="ver-dot" style="background:'+col+';margin-left:12px"></div></div>'
-      +'<div class="ver-content" style="flex:1">'
-      +'<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:.3rem">'
-      +'<span class="ver-tag">'+e(v.tag)+'</span>'
-      +(v.actual?'<span style="font-size:10px;padding:2px 7px;border-radius:8px;background:rgba(15,110,86,.1);color:var(--c-green)">● Baseline actual</span>':'')
-      +'<span style="font-size:11px;font-weight:500;font-family:var(--font-serif)">'+e(v.titulo)+'</span>'
-      +'<span style="font-size:11px;color:var(--muted);margin-left:auto">'+e(v.fecha)+'</span>'
-      +'<button class="uat-btn" style="color:var(--muted);font-size:14px" onclick="verDel('+i+')">×</button>'
-      +'</div>'
-      +(crsVinc.length?'<div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:.3rem">'+crsVinc.map(function(cid){return'<span style="font-size:10px;font-family:var(--font-mono);padding:2px 7px;border-radius:4px;background:var(--c-amber-l);color:var(--c-amber-d)">'+e(cid)+'</span>';}).join('')+'</div>':'')
-      +(v.pub?'<div style="font-size:10px;color:var(--muted);margin-bottom:2px">Publicado por: '+e(v.pub)+'</div>':'')
-      +(v.url?'<div style="font-size:10px;margin-bottom:2px"><a href="'+e(v.url)+'" target="_blank" style="color:var(--c-teal)">'+e(v.url)+'</a></div>':'')
-      +(v.hash?'<div style="font-size:10px;font-family:var(--font-mono);color:var(--muted);margin-bottom:2px">'+e(v.hash)+'</div>':'')
-      +'<div style="font-size:11px;color:var(--muted);white-space:pre-wrap">'+e(v.cambios)+'</div>'
-      +'</div></div>';
-  });
-  historial+='</div>';
+  var historial='';
+  if(vers.length===0){
+    historial='<div class="card" style="text-align:center;padding:1.5rem;color:var(--muted)">No hay versiones registradas aún.</div>';
+  } else {
+    historial='<div>';
+    vers.forEach(function(v,i){
+      var col=verColors[i%verColors.length];
+      var crsVinc=v.crs||[];
+      historial+='<div class="ver-row" style="margin-bottom:.6rem">'
+        +(i<vers.length-1?'<div class="ver-line"></div>':'')
+        +'<div><div class="ver-dot" style="background:'+col+';margin-left:12px"></div></div>'
+        +'<div class="ver-content" style="flex:1">'
+        +'<div style="border:0.5px solid var(--border);border-left:3px solid '+col+';border-radius:var(--radius);overflow:hidden">'
+        // Header
+        +'<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:.6rem .8rem;background:var(--surface2)">'
+        +'<span class="ver-tag" style="color:'+col+'">'+e(v.tag)+'</span>'
+        +(v.actual?'<span style="font-size:10px;padding:2px 7px;border-radius:8px;background:rgba(15,110,86,.1);color:var(--c-green)">● Baseline actual</span>':'')
+        +'<span style="font-size:12px;font-weight:500;font-family:var(--font-serif);flex:1">'+e(v.titulo)+'</span>'
+        +'<span style="font-size:11px;color:var(--muted)">'+e(v.fecha)+'</span>'
+        +'<button class="uat-btn" style="color:var(--muted);font-size:14px" onclick="verDel('+i+')">×</button>'
+        +'</div>'
+        // Body
+        +'<div style="padding:.6rem .8rem">'
+        // Fila 1: publicador + URL + hash
+        +'<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.5rem;margin-bottom:.5rem">'
+        +'<div><div style="font-size:9px;font-weight:600;color:var(--muted);text-transform:uppercase;margin-bottom:2px">Publicado por</div>'
+        +'<div style="font-size:11px">'+( v.pub?e(v.pub):'<span style="color:var(--muted)">—</span>')+'</div></div>'
+        +'<div><div style="font-size:9px;font-weight:600;color:var(--muted);text-transform:uppercase;margin-bottom:2px">URL repositorio</div>'
+        +(v.url?'<a href="'+e(v.url)+'" target="_blank" style="font-size:11px;color:var(--c-teal);word-break:break-all">'+e(v.url)+'</a>':'<span style="font-size:11px;color:var(--muted)">—</span>')+'</div>'
+        +'<div><div style="font-size:9px;font-weight:600;color:var(--muted);text-transform:uppercase;margin-bottom:2px">Hash / commit</div>'
+        +'<div style="font-size:11px;font-family:var(--font-mono);color:var(--c-teal)">'+( v.hash?e(v.hash):'<span style="color:var(--muted)">—</span>')+'</div></div>'
+        +'</div>'
+        // CRs vinculados
+        +(crsVinc.length?'<div style="margin-bottom:.5rem"><div style="font-size:9px;font-weight:600;color:var(--muted);text-transform:uppercase;margin-bottom:4px">CRs incluidos en esta versión</div>'
+        +'<div style="display:flex;flex-wrap:wrap;gap:4px">'+crsVinc.map(function(cid){
+          var cr=CCB.crs.find(function(c){return c.id===cid;});
+          return '<span style="font-size:10px;font-family:var(--font-mono);padding:2px 8px;border-radius:4px;background:var(--c-amber-l);color:var(--c-amber-d)" title="'+(cr?e(cr.titulo):'')+'">'+e(cid)+'</span>';
+        }).join('')+'</div></div>':'')
+        // Cambios
+        +(v.cambios?'<div><div style="font-size:9px;font-weight:600;color:var(--muted);text-transform:uppercase;margin-bottom:4px">Cambios incluidos</div>'
+        +'<div style="font-size:11px;color:var(--text);white-space:pre-wrap;background:var(--surface2);border-radius:4px;padding:.4rem .6rem;line-height:1.6">'+e(v.cambios)+'</div></div>':'')
+        +'</div>'
+        +'</div></div></div>';
+    });
+    historial+='</div>';
+  }
 
   el.innerHTML=tip+newVer+historial;
 }
