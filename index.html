@@ -803,24 +803,7 @@ const CR_DATA = [
   {id:'CR-003',titulo:'Extender sesión a 12 horas',origen:'Analistas de crédito',fecha:'2025-04-14',tipo:'Corrección de especificación',prioridad:'Alta',estado:'Aprobado',desc:'Los analistas trabajan turnos de 10 horas. La sesión de 8 horas los desconecta durante el turno, perdiendo formularios en progreso.',just:'Se registraron 47 incidencias de pérdida de datos en 3 semanas de pruebas UAT.',rfAfect:['RF-001'],impactos:[{tipo:'Req.',id:'RF-001',desc:'Cambiar tiempo de sesión de 8h a 12h',sev:'bajo'},{tipo:'RNF',id:'RNF-003',desc:'Validar con equipo de seguridad',sev:'med'}],esfuerzo:'0.5 días',costo:'COP 0.3M',riesgo:'Bajo',urgencia:'Alta',alcance:'Bajo',nivel:'Gerente de proyecto',rec:'Aprobado — PM firmó el 2025-04-15.',dec:'aprobado'},
 ];
 
-const GLOSARIO = [
-  {name:'Baseline',def:'Versión congelada y aprobada de un artefacto. Todo cambio requiere aprobación del CCB.',cat:'Proceso'},
-  {name:'BDD',def:'Behaviour Driven Development — metodología que define comportamiento con escenarios Gherkin ejecutables.',cat:'Metodología'},
-  {name:'CCB',def:'Change Control Board — comité que aprueba o rechaza solicitudes de cambio al baseline.',cat:'Proceso'},
-  {name:'Gherkin',def:'Lenguaje de especificación estructurado en bloques Given-When-Then, legible por humanos y máquinas.',cat:'Metodología'},
-  {name:'MoSCoW',def:'Técnica de priorización: Must / Should / Could / Won\'t have en esta versión.',cat:'Metodología'},
-  {name:'RACI',def:'Matriz de responsabilidades: Responsable, Aprobador, Consultado, Informado.',cat:'Proceso'},
-  {name:'RPO',def:'Recovery Point Objective — máxima pérdida de datos admisible en un fallo, expresada en tiempo.',cat:'Técnico'},
-  {name:'RTO',def:'Recovery Time Objective — tiempo máximo para restaurar el servicio tras una interrupción.',cat:'Técnico'},
-  {name:'RTM',def:'Requirements Traceability Matrix — matriz que vincula cada requisito con su origen, diseño y pruebas.',cat:'Artefacto'},
-  {name:'SLA',def:'Service Level Agreement — acuerdo formal que define métricas de calidad del servicio.',cat:'Control'},
-  {name:'SRS',def:'Software Requirements Specification — documento formal IEEE 29148 que describe el sistema.',cat:'Artefacto'},
-  {name:'Trazabilidad',def:'Capacidad de vincular cada requisito con su origen, derivados (diseño, código) y sus pruebas.',cat:'Proceso'},
-  {name:'UAT',def:'User Acceptance Testing — pruebas de aceptación donde los usuarios validan que el sistema cumple sus necesidades.',cat:'Proceso'},
-  {name:'BPMN',def:'Business Process Model and Notation — estándar ISO 19510 para modelar procesos de negocio gráficamente.',cat:'Metodología'},
-  {name:'Score crediticio',def:'Puntuación 0–999 del historial crediticio calculada por burós con modelos estadísticos.',cat:'Dominio'},
-  {name:'SMART',def:'Criterio de calidad de requisitos: Específico, Medible, Alcanzable, Relevante, Temporal.',cat:'Calidad'},
-];
+const GLOSARIO = [];
 
 const AMBIG_WORDS = [
   // Tiempo sin métrica
@@ -8750,7 +8733,13 @@ function glosSave(){ try{ localStorage.setItem(GLOS_KEY, JSON.stringify(GLOSARIO
 function glosLoad(){
   try{
     var saved = JSON.parse(localStorage.getItem(GLOS_KEY));
-    if(saved && Array.isArray(saved) && saved.length > 0){
+    if(saved && Array.isArray(saved)){
+      // Detectar datos de ejemplo hardcodeados y limpiarlos
+      if(saved.length>0 && saved[0] && saved[0].name==='Baseline' && saved[0].cat==='Proceso'){
+        localStorage.removeItem(GLOS_KEY);
+        GLOSARIO.length=0;
+        return;
+      }
       GLOSARIO.length = 0;
       saved.forEach(function(g){ GLOSARIO.push(g); });
     }
@@ -8905,23 +8894,21 @@ function setCCBDec(k) { ccbDecs[selCR]=ccbDecs[selCR]===k?null:k; buildCRCCB(); 
    CCB STORAGE ENGINE — Fase 5 (todas las páginas conectadas)
 ════════════════════════════════════════ */
 const CCB_KEY = 'fw_ccb_v1';
-function loadCCB(){ try{ return JSON.parse(localStorage.getItem(CCB_KEY))||defCCB(); }catch(e){ return defCCB(); } }
+function loadCCB(){
+  try{
+    var saved=JSON.parse(localStorage.getItem(CCB_KEY));
+    if(!saved) return defCCB();
+    // Detectar si son los datos de ejemplo hardcodeados y limpiarlos
+    if(saved.crs&&saved.crs.length>0&&saved.crs[0]&&saved.crs[0].id==='CR-001'&&saved.crs[0].origen==='Gerencia de Riesgo'){
+      localStorage.removeItem(CCB_KEY);
+      return defCCB();
+    }
+    return saved;
+  }catch(e){ return defCCB(); }
+}
 function saveCCB(){ localStorage.setItem(CCB_KEY, JSON.stringify(CCB)); }
 function defCCB(){
-  return {
-    crs:[
-      {id:'CR-001',titulo:'Modificar umbral score de aprobación',origen:'Gerencia de Riesgo',fecha:'2025-04-10',tipo:'Modificación de regla',prioridad:'Alta',estado:'En análisis',desc:'El área de Riesgo solicita cambiar el umbral mínimo de score crediticio de 650 a 680 puntos, luego de analizar la tasa de morosidad del Q1.',just:'La tasa de morosidad en créditos con score 650–679 fue del 18.5% en Q1. El ajuste reduciría la exposición en ~COP 4.2B anuales.',rfAfect:'RF-004, RF-002',esfuerzo:'2 días',costo:'COP 1.2M',riesgo:'Bajo',urgencia:'Alta',alcance:'Bajo',rec:'Aprobar — cambio de alto valor, bajo riesgo.',dec:''},
-      {id:'CR-002',titulo:'Módulo de firma digital biométrica',origen:'VP Digital',fecha:'2025-04-12',tipo:'Nuevo requisito funcional',prioridad:'Media',estado:'Pendiente CCB',desc:'Se solicita agregar un módulo de firma biométrica para que los clientes aprobados acepten el crédito digitalmente.',just:'Reducir la tasa de abandono post-aprobación (actualmente 23%). Valor estimado: COP 12B adicionales.',rfAfect:'RF-005, RF-009, RF-NUEVO-001',esfuerzo:'6 semanas',costo:'COP 180M',riesgo:'Alto',urgencia:'Media',alcance:'Alto',rec:'Diferir a v2.0 — impacto alto en cronograma y presupuesto del MVP.',dec:''},
-      {id:'CR-003',titulo:'Extender sesión a 12 horas',origen:'Analistas de crédito',fecha:'2025-04-14',tipo:'Corrección de especificación',prioridad:'Alta',estado:'Aprobado',desc:'Los analistas trabajan turnos de 10 horas. La sesión de 8 horas los desconecta durante el turno, perdiendo formularios en progreso.',just:'Se registraron 47 incidencias de pérdida de datos en 3 semanas de UAT.',rfAfect:'RF-001',esfuerzo:'0.5 días',costo:'COP 0.3M',riesgo:'Bajo',urgencia:'Alta',alcance:'Bajo',rec:'Aprobado — PM firmó el 2025-04-15.',dec:'Aprobado'},
-    ],
-    versiones:[
-      {tag:'v1.2',fecha:'2025-04-15',titulo:'Correcciones post-revisión stakeholders',crs:['CR-003'],cambios:'RF-001: sesión extendida a 12h\nGlosario actualizado',actual:true},
-      {tag:'v1.1',fecha:'2025-04-01',titulo:'Resolución defectos inspección formal',crs:[],cambios:'RF-002: tabla de campos obligatorios añadida\nRNF-001: carga 500 VU especificada',actual:false},
-      {tag:'v1.0',fecha:'2025-03-20',titulo:'Baseline aprobado y firmado',crs:[],cambios:'Todas las secciones completas\nRF-001 a RF-012 documentados',actual:false},
-    ],
-    selCR: 0,
-    selTab: 0,
-  };
+  return { crs:[], versiones:[], selCR:-1, selTab:0 };
 }
 let CCB = loadCCB();
 function ccbSave(){ saveCCB(); }
