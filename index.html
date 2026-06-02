@@ -700,7 +700,7 @@ textarea { field-sizing: content; min-height: 2em; }
   </nav>
 
   <div class="sidebar-footer">
-    ISO/IEC/IEEE 29148:2018 · IEEE 1028:2008<br>
+    IEEE 29148:2018 · IEEE 1028:2008 · IEEE 828:2012<br>
     BABOK v3 · ISO/IEC 25010:2023<br>
     ISO/IEC 12207:2017 · ISO/IEC 38500:2024
   </div>
@@ -1227,7 +1227,7 @@ reg('gobernanza', () => `
     {num:'PC1',color:'var(--c-teal)',entre:'Fase 1 → Fase 2',aprueba:'PO + Analista',ready:['Stakeholders mapeados y clasificados por cuadrante','Objetivos de negocio documentados','Supuestos y restricciones registrados','Al menos un acta de sesión firmada'],done:['Mapa de stakeholders aprobado','Objetivos vinculados a estrategia organizacional','Actas firmadas por participantes clave']},
     {num:'PC2',color:'var(--c-purple)',entre:'Fase 2 → Fase 3',aprueba:'PO + Rep. usuario',ready:['Backlog inicial con ≥ 80% de necesidades priorizadas','Análisis GAP completado','Necesidades clasificadas por tipo (F/NF)'],done:['PO/analista aprueba backlog','Usuarios confirman comprensión de necesidades','Modelos BPMN y de contexto revisados']},
     {num:'PC3',color:'var(--c-blue)',entre:'Fase 3 → Fase 4',aprueba:'PO + QA + Arq./LT',ready:['Checklist de calidad aplicado con umbrales alcanzados','RTM inicial completa con trazabilidad HU → RF → RNF','HU con criterios de aceptación Gherkin aprobados por QA','RNF con umbrales numéricos validados por Arquitecto','Verificación del modelo completada (contexto + casos de uso + BPMN consistentes)','SRS editado, versionado y exportado en el framework'],done:['Umbrales de calidad alcanzados en todas las secciones','SRS exportado con número de versión asignado','Artefactos en repositorio digital','Firmas de aprobación formales PO + QA + Arquitecto']},
-    {num:'PC4',color:'var(--c-green)',entre:'Fase 4 → Fase 5',aprueba:'Sponsor + PO + Arquitecto',ready:['Auto-revisión BA ≥ 85% ítems OK y 0 bloqueantes','Walkthrough técnico aprobado con acta firmada','Revisión de stakeholders con firma del Product Owner','Inspección formal Fagan con 0 Mayores/Bloqueantes abiertos','Log de defectos cerrado — 0 defectos críticos sin resolver','UAT completado — 100% casos críticos pasan y 0 Bloqueantes'],done:['Baseline aprobado con 3 firmas: Sponsor + PO + Arquitecto','Número de baseline (BL-XXX) y versión SRS (v1.0-baseline) asignados','SRS publicado en repositorio con tag y URL permanente','CCB activado formalmente con instrucciones enviadas','Notificaciones enviadas y confirmadas por todos los stakeholders','Log de defectos cerrado con trazabilidad completa']},
+    {num:'PC4',color:'var(--c-green)',entre:'Fase 4 → Fase 5',aprueba:'Sponsor + PO + Arquitecto',ready:['Auto-revisión BA ≥ 85% ítems OK y 0 bloqueantes','Walkthrough técnico aprobado con acta firmada','Revisión de stakeholders con firma del Product Owner','Inspección formal Fagan con 0 Mayores/Bloqueantes abiertos','Panel de issues cerrado — 0 defectos críticos sin resolver','UAT completado — 100% casos críticos pasan y 0 Bloqueantes'],done:['Baseline aprobado con 3 firmas: Sponsor + PO + Arquitecto','Número de baseline (BL-XXX) y versión SRS (v1.0-baseline) asignados','SRS publicado en repositorio con tag y URL permanente','CCB activado formalmente con instrucciones enviadas','Notificaciones enviadas y confirmadas por todos los stakeholders','Log de defectos cerrado con trazabilidad completa']},
   ].map(pc => `
   <div style="display:grid;grid-template-columns:100px 1fr;gap:.8rem;margin-bottom:.6rem">
     <div style="background:${pc.color};border-radius:var(--radius-lg);padding:1rem;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center">
@@ -2817,7 +2817,7 @@ reg('gobernanza', () => `
     {num:'PC1',color:'var(--c-teal)',entre:'Fase 1 → Fase 2',aprueba:'PO + Analista',ready:['Stakeholders mapeados y clasificados por cuadrante','Objetivos de negocio documentados','Supuestos y restricciones registrados','Al menos un acta de sesión firmada'],done:['Mapa de stakeholders aprobado','Objetivos vinculados a estrategia organizacional','Actas firmadas por participantes clave']},
     {num:'PC2',color:'var(--c-purple)',entre:'Fase 2 → Fase 3',aprueba:'PO + Rep. usuario',ready:['Backlog inicial con ≥ 80% de necesidades priorizadas','Análisis GAP completado','Necesidades clasificadas por tipo (F/NF)'],done:['PO/analista aprueba backlog','Usuarios confirman comprensión de necesidades','Modelos BPMN y de contexto revisados']},
     {num:'PC3',color:'var(--c-blue)',entre:'Fase 3 → Fase 4',aprueba:'PO + QA + Arq./LT',ready:['Checklist de calidad aplicado con umbrales alcanzados','RTM inicial completa con trazabilidad HU → RF → RNF','HU con criterios de aceptación Gherkin aprobados por QA','RNF con umbrales numéricos validados por Arquitecto','Verificación del modelo completada (contexto + casos de uso + BPMN consistentes)','SRS editado, versionado y exportado en el framework'],done:['Umbrales de calidad alcanzados en todas las secciones','SRS exportado con número de versión asignado','Artefactos en repositorio digital','Firmas de aprobación formales PO + QA + Arquitecto']},
-    {num:'PC4',color:'var(--c-green)',entre:'Fase 4 → Fase 5',aprueba:'Sponsor + PO + Arquitecto',ready:['Auto-revisión BA ≥ 85% ítems OK y 0 bloqueantes','Walkthrough técnico aprobado con acta firmada','Revisión de stakeholders con firma del Product Owner','Inspección formal Fagan con 0 Mayores/Bloqueantes abiertos','Log de defectos cerrado — 0 defectos críticos sin resolver','UAT completado — 100% casos críticos pasan y 0 Bloqueantes'],done:['Baseline aprobado con 3 firmas: Sponsor + PO + Arquitecto','Número de baseline (BL-XXX) y versión SRS (v1.0-baseline) asignados','SRS publicado en repositorio con tag y URL permanente','CCB activado formalmente con instrucciones enviadas','Notificaciones enviadas y confirmadas por todos los stakeholders','Log de defectos cerrado con trazabilidad completa']},
+    {num:'PC4',color:'var(--c-green)',entre:'Fase 4 → Fase 5',aprueba:'Sponsor + PO + Arquitecto',ready:['Auto-revisión BA ≥ 85% ítems OK y 0 bloqueantes','Walkthrough técnico aprobado con acta firmada','Revisión de stakeholders con firma del Product Owner','Inspección formal Fagan con 0 Mayores/Bloqueantes abiertos','Panel de issues cerrado — 0 defectos críticos sin resolver','UAT completado — 100% casos críticos pasan y 0 Bloqueantes'],done:['Baseline aprobado con 3 firmas: Sponsor + PO + Arquitecto','Número de baseline (BL-XXX) y versión SRS (v1.0-baseline) asignados','SRS publicado en repositorio con tag y URL permanente','CCB activado formalmente con instrucciones enviadas','Notificaciones enviadas y confirmadas por todos los stakeholders','Log de defectos cerrado con trazabilidad completa']},
   ].map(pc => `
   <div style="display:grid;grid-template-columns:100px 1fr;gap:.8rem;margin-bottom:.6rem">
     <div style="background:${pc.color};border-radius:var(--radius-lg);padding:1rem;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center">
@@ -5143,7 +5143,7 @@ reg('val-flujo', () => {
     {t:'Walkthrough técnico',    id:'val-walkthrough'},
     {t:'Revisión stakeholders',  id:'val-stakeholders'},
     {t:'Inspección formal',      id:'val-inspeccion'},
-    {t:'Log de defectos',        id:'val-log'},
+    {t:'Panel de issues',        id:'val-issues'},
     {t:'Panel de issues',        id:'val-issues'},
     {t:'Simulador UAT',          id:'val-uat'},
     {t:'Aprobación baseline',    id:'val-baseline'},
@@ -5288,7 +5288,7 @@ reg('val-flujo', () => {
   <div class="card" style="background:rgba(15,110,86,.03);border-color:rgba(15,110,86,.2)">
     <div class="card-title" style="color:var(--c-green)">Criterios de salida — PC4 (Definition of Done)</div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:.4rem">
-      ${['Auto-revisión BA ≥ 85% ítems OK y 0 bloqueantes','Walkthrough técnico aprobado con acta firmada','Revisión de stakeholders con firma del Product Owner','Inspección formal Fagan con 0 Mayores/Bloqueantes abiertos','Log de defectos cerrado — 0 defectos críticos sin resolver','UAT completado — 100% casos críticos pasan y 0 Bloqueantes','Baseline aprobado con 3 firmas: Sponsor + PO + Arquitecto','SRS publicado · Tag creado · CCB activado · Notificaciones confirmadas'].map(c => `<div class="dot-item"><div class="dot" style="background:var(--c-green)"></div>${c}</div>`).join('')}
+      ${['Auto-revisión BA ≥ 85% ítems OK y 0 bloqueantes','Walkthrough técnico aprobado con acta firmada','Revisión de stakeholders con firma del Product Owner','Inspección formal Fagan con 0 Mayores/Bloqueantes abiertos','Panel de issues cerrado — 0 defectos críticos sin resolver','UAT completado — 100% casos críticos pasan y 0 Bloqueantes','Baseline aprobado con 3 firmas: Sponsor + PO + Arquitecto','SRS publicado · Tag creado · CCB activado · Notificaciones confirmadas'].map(c => `<div class="dot-item"><div class="dot" style="background:var(--c-green)"></div>${c}</div>`).join('')}
     </div>
   </div>
 </div>
@@ -5654,7 +5654,7 @@ reg('val-issues', () => `
 <div class="page-header">
   <div class="page-eyebrow" style="color:var(--c-green)">● Fase 4 — Validación</div>
   <h1 class="page-title">Panel de issues consolidado</h1>
-  <p class="page-desc">Vista unificada de hallazgos (Walkthrough), observaciones de negocio (Revisión de stakeholders) y defectos formales (Inspección Fagan). El Log de defectos IEEE 1028 permanece independiente.</p>
+  <p class="page-desc">Vista unificada de hallazgos (Walkthrough), observaciones de negocio (Revisión de stakeholders) y defectos formales (Inspección Fagan). Seguimiento consolidado IEEE 1028 / BABOK v3.</p>
   <div class="std-row"><span class="std-pill">BABOK v3 — Issue Log</span><span class="std-pill">IREB CPRE — PC4</span><span class="std-pill">Vista de gestión</span></div>
 </div>
 <div id="val-issues-mount"></div>
@@ -6059,7 +6059,7 @@ function renderValUat(){
   html+='<div class="card" style="margin-bottom:1rem;background:rgba('+bc+',.04);border-color:rgba('+bc+',.25)">'
     +'<div style="font-size:14px;font-weight:600;color:var('+bv+');">'+bt+'</div>'
     +'<div style="font-size:11px;color:var(--muted);margin-top:3px">'+pasa+' pasaron · '+falla+' fallaron · '+bloq+' bloqueados · '+pend+' pendientes · '+noExec+' no ejecutados</div>'
-    +(falla>0||bloq>0?'<div style="margin-top:.5rem"><button class="btn btn-sm" style="color:var(--c-red);border-color:rgba(163,45,45,.3)" onclick="uatGenerarDefectos()">⚠ Generar defectos en Log de defectos ('+( falla+bloq)+' casos)</button></div>':'')
+    +(falla>0||bloq>0?'<div style="margin-top:.5rem"><button class="btn btn-sm" style="color:var(--c-red);border-color:rgba(163,45,45,.3)" onclick="uatGenerarDefectos()">⚠ Enviar casos fallidos al Panel de issues ('+(falla+bloq)+' casos)</button></div>':'')
     +'</div>';
 
   // Info banner
@@ -6404,11 +6404,11 @@ function uatGenerarDefecto(i){
     localStorage.setItem(INSP_KEY,JSON.stringify(d2));
     var msg=document.createElement('div');
     msg.style.cssText='position:fixed;bottom:1.5rem;right:1.5rem;background:var(--c-red);color:#fff;padding:.6rem 1rem;border-radius:8px;font-size:12px;font-weight:500;z-index:9999;box-shadow:0 4px 12px rgba(0,0,0,.2)';
-    msg.textContent='✓ Defecto registrado en Inspección formal';
+    msg.textContent='✓ Defecto enviado al Panel de issues — pestaña Defectos Fagan';
     document.body.appendChild(msg);
     setTimeout(function(){msg.remove();},2500);
   } else {
-    alert('Este caso ya fue registrado como defecto.');
+    alert('Este caso ya fue registrado en el Panel de issues.');
   }
 }
 
