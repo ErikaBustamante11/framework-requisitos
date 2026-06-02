@@ -676,9 +676,8 @@ textarea { field-sizing: content; min-height: 2em; }
     <div class="nav-group">
       <span class="nav-label">Fase 5 · Gestión cambios</span>
       <button class="nav-item" onclick="nav('ccb-flujo')"><div class="nav-pip" style="background:var(--c-amber)"></div>Flujo de actividades</button>
-      <button class="nav-item" onclick="nav('ccb-cr')"><div class="nav-pip" style="background:var(--c-amber)"></div>Simulador Change Request</button>
-      <button class="nav-item" onclick="nav('ccb-backlog')"><div class="nav-pip" style="background:var(--c-amber)"></div>Backlog de CRs</button>
-      <button class="nav-item" onclick="nav('ccb-versiones')"><div class="nav-pip" style="background:var(--c-amber)"></div>Control de versiones</button>
+      <button class="nav-item" onclick="nav('ccb-cr')"><div class="nav-pip" style="background:var(--c-amber)"></div>Gestión de CRs</button>
+      <button class="nav-item" onclick="nav('ccb-versiones')" style="padding-left:1.8rem"><div class="nav-pip" style="background:var(--c-amber);opacity:.6"></div>↳ Versiones post-baseline</button>
     </div>
     <div class="nav-group">
       <span class="nav-label">Capa de ejecución</span>
@@ -7734,7 +7733,7 @@ reg('ccb-flujo', () => `
 <div class="tab-panel on" id="ccbf-0">
   <div class="card" style="margin-bottom:.8rem">
     <div class="card-title">Ciclo de vida de un Change Request</div>
-    <svg width="100%" viewBox="0 0 680 620" xmlns="http://www.w3.org/2000/svg">
+    <svg width="100%" viewBox="0 0 680 820" xmlns="http://www.w3.org/2000/svg">
       <defs><marker id="accbf" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>
 
       <!-- Start -->
@@ -7744,7 +7743,7 @@ reg('ccb-flujo', () => `
 
       <!-- C1 -->
       <rect x="210" y="76" width="260" height="54" rx="10" fill="#FAEEDA" stroke="#BA7517" stroke-width="1"/>
-      <text x="340" y="96" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="13" font-weight="500" fill="#412402">C1. Recepción del Change Request</text>
+      <text x="340" y="96" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="13" font-weight="500" fill="#412402">C1. Recepción del CR</text>
       <text x="340" y="114" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#BA7517">Formulario CR · ID asignado · Clasificación inicial</text>
       <rect x="44" y="83" width="128" height="30" rx="7" fill="#FAEEDA" stroke="#BA7517" stroke-width="0.5"/>
       <text x="108" y="98" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#412402">Formulario CR registrado</text>
@@ -7760,58 +7759,85 @@ reg('ccb-flujo', () => `
       <line x1="172" y1="180" x2="208" y2="180" stroke="#BA7517" stroke-width="0.5" marker-end="url(#accbf)"/>
       <line x1="340" y1="212" x2="340" y2="238" stroke="#9A9A94" stroke-width="1" marker-end="url(#accbf)"/>
 
+      <!-- C2b -->
+      <rect x="210" y="240" width="260" height="44" rx="10" fill="#FAEEDA" stroke="#BA7517" stroke-width="1"/>
+      <text x="340" y="257" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="13" font-weight="500" fill="#412402">C2b. Clasificación urgencia × impacto</text>
+      <text x="340" y="273" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#BA7517">Matriz 3×3 → nivel de aprobación requerido</text>
+      <rect x="44" y="247" width="128" height="30" rx="7" fill="#FAEEDA" stroke="#BA7517" stroke-width="0.5"/>
+      <text x="108" y="262" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#412402">Nivel CCB determinado</text>
+      <line x1="172" y1="262" x2="208" y2="262" stroke="#BA7517" stroke-width="0.5" marker-end="url(#accbf)"/>
+      <line x1="340" y1="284" x2="340" y2="308" stroke="#9A9A94" stroke-width="1" marker-end="url(#accbf)"/>
+
       <!-- C3 — Decision gateway -->
-      <polygon points="340,240 420,276 340,312 260,276" fill="#FAEEDA" stroke="#BA7517" stroke-width="1"/>
-      <text x="340" y="272" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" font-weight="500" fill="#412402">C3. CCB</text>
-      <text x="340" y="288" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="10" fill="#BA7517">Decisión</text>
-      <line x1="340" y1="312" x2="340" y2="338" stroke="#9A9A94" stroke-width="1" marker-end="url(#accbf)"/>
+      <polygon points="340,310 420,346 340,382 260,346" fill="#FAEEDA" stroke="#BA7517" stroke-width="1"/>
+      <text x="340" y="342" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" font-weight="500" fill="#412402">C3. CCB</text>
+      <text x="340" y="358" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="10" fill="#BA7517">Decisión</text>
+      <line x1="340" y1="382" x2="340" y2="408" stroke="#9A9A94" stroke-width="1" marker-end="url(#accbf)"/>
 
       <!-- Rechazado path left -->
-      <line x1="260" y1="276" x2="120" y2="276" stroke="#A32D2D" stroke-width="0.5" marker-end="url(#accbf)"/>
-      <text x="190" y="265" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="10" fill="#A32D2D">Rechazado</text>
-      <rect x="44" y="258" width="76" height="36" rx="7" fill="#FCEBEB" stroke="#A32D2D" stroke-width="0.5"/>
-      <text x="82" y="272" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="10" fill="#791F1F">Archivar CR</text>
-      <text x="82" y="286" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="10" fill="#A32D2D">Notificar</text>
+      <line x1="260" y1="346" x2="120" y2="346" stroke="#A32D2D" stroke-width="0.5" marker-end="url(#accbf)"/>
+      <text x="190" y="335" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="10" fill="#A32D2D">Rechazado</text>
+      <rect x="44" y="328" width="76" height="36" rx="7" fill="#FCEBEB" stroke="#A32D2D" stroke-width="0.5"/>
+      <text x="82" y="342" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="10" fill="#791F1F">Archivar CR</text>
+      <text x="82" y="356" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="10" fill="#A32D2D">Notificar</text>
 
       <!-- Diferido path right -->
-      <line x1="420" y1="276" x2="560" y2="276" stroke="#888780" stroke-width="0.5" marker-end="url(#accbf)"/>
-      <text x="490" y="265" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="10" fill="#5F5E5A">Diferido</text>
-      <rect x="560" y="258" width="96" height="36" rx="7" fill="#F1EFE8" stroke="#888780" stroke-width="0.5"/>
-      <text x="608" y="272" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="10" fill="#444441">Backlog v.next</text>
-      <text x="608" y="286" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="10" fill="#5F5E5A">Fecha est.</text>
+      <line x1="420" y1="346" x2="560" y2="346" stroke="#888780" stroke-width="0.5" marker-end="url(#accbf)"/>
+      <text x="490" y="335" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="10" fill="#5F5E5A">Diferido</text>
+      <rect x="560" y="328" width="96" height="36" rx="7" fill="#F1EFE8" stroke="#888780" stroke-width="0.5"/>
+      <text x="608" y="342" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="10" fill="#444441">Backlog v.next</text>
+      <text x="608" y="356" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="10" fill="#5F5E5A">Fecha est.</text>
 
       <!-- Aprobado -->
-      <text x="355" y="328" font-family="DM Sans,sans-serif" font-size="10" fill="#0F6E56">Aprobado</text>
+      <text x="355" y="398" font-family="DM Sans,sans-serif" font-size="10" fill="#0F6E56">Aprobado</text>
 
       <!-- C4 -->
-      <rect x="210" y="340" width="260" height="54" rx="10" fill="#FAEEDA" stroke="#BA7517" stroke-width="1"/>
-      <text x="340" y="360" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="13" font-weight="500" fill="#412402">C4. Actualización del SRS</text>
-      <text x="340" y="378" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#BA7517">BA actualiza secciones afectadas · RTM revisada</text>
-      <rect x="44" y="347" width="128" height="30" rx="7" fill="#FAEEDA" stroke="#BA7517" stroke-width="0.5"/>
-      <text x="108" y="362" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#412402">SRS actualizado</text>
-      <line x1="172" y1="362" x2="208" y2="362" stroke="#BA7517" stroke-width="0.5" marker-end="url(#accbf)"/>
-      <line x1="340" y1="394" x2="340" y2="420" stroke="#9A9A94" stroke-width="1" marker-end="url(#accbf)"/>
+      <rect x="210" y="410" width="260" height="54" rx="10" fill="#FAEEDA" stroke="#BA7517" stroke-width="1"/>
+      <text x="340" y="430" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="13" font-weight="500" fill="#412402">C4. Actualización del SRS</text>
+      <text x="340" y="448" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#BA7517">BA actualiza secciones afectadas del SRS</text>
+      <rect x="44" y="417" width="128" height="30" rx="7" fill="#FAEEDA" stroke="#BA7517" stroke-width="0.5"/>
+      <text x="108" y="432" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#412402">SRS actualizado</text>
+      <line x1="172" y1="432" x2="208" y2="432" stroke="#BA7517" stroke-width="0.5" marker-end="url(#accbf)"/>
+      <line x1="340" y1="464" x2="340" y2="488" stroke="#9A9A94" stroke-width="1" marker-end="url(#accbf)"/>
+
+      <!-- C4b -->
+      <rect x="210" y="490" width="260" height="44" rx="10" fill="#FAEEDA" stroke="#BA7517" stroke-width="1"/>
+      <text x="340" y="507" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="13" font-weight="500" fill="#412402">C4b. Actualización de la RTM</text>
+      <text x="340" y="523" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#BA7517">RF/RNF modificados · Trazabilidad re-establecida</text>
+      <rect x="44" y="497" width="128" height="30" rx="7" fill="#FAEEDA" stroke="#BA7517" stroke-width="0.5"/>
+      <text x="108" y="512" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#412402">RTM actualizada</text>
+      <line x1="172" y1="512" x2="208" y2="512" stroke="#BA7517" stroke-width="0.5" marker-end="url(#accbf)"/>
+      <line x1="340" y1="534" x2="340" y2="558" stroke="#9A9A94" stroke-width="1" marker-end="url(#accbf)"/>
 
       <!-- C5 -->
-      <rect x="210" y="422" width="260" height="54" rx="10" fill="#FAEEDA" stroke="#BA7517" stroke-width="1"/>
-      <text x="340" y="442" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="13" font-weight="500" fill="#412402">C5. Re-revisión del cambio</text>
-      <text x="340" y="460" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#BA7517">QA verifica · Pruebas afectadas re-ejecutadas</text>
-      <rect x="44" y="429" width="128" height="30" rx="7" fill="#FAEEDA" stroke="#BA7517" stroke-width="0.5"/>
-      <text x="108" y="444" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#412402">Reporte re-verificación</text>
-      <line x1="172" y1="444" x2="208" y2="444" stroke="#BA7517" stroke-width="0.5" marker-end="url(#accbf)"/>
-      <line x1="340" y1="476" x2="340" y2="502" stroke="#9A9A94" stroke-width="1" marker-end="url(#accbf)"/>
+      <rect x="210" y="560" width="260" height="54" rx="10" fill="#FAEEDA" stroke="#BA7517" stroke-width="1"/>
+      <text x="340" y="580" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="13" font-weight="500" fill="#412402">C5. Verificación del cambio</text>
+      <text x="340" y="598" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#BA7517">QA verifica · Pruebas afectadas re-ejecutadas</text>
+      <rect x="44" y="567" width="128" height="30" rx="7" fill="#FAEEDA" stroke="#BA7517" stroke-width="0.5"/>
+      <text x="108" y="582" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#412402">Reporte re-verificación</text>
+      <line x1="172" y1="582" x2="208" y2="582" stroke="#BA7517" stroke-width="0.5" marker-end="url(#accbf)"/>
+      <line x1="340" y1="614" x2="340" y2="638" stroke="#9A9A94" stroke-width="1" marker-end="url(#accbf)"/>
 
       <!-- C6 -->
-      <rect x="210" y="504" width="260" height="54" rx="10" fill="#EAF3DE" stroke="#3B6D11" stroke-width="1.5"/>
-      <text x="340" y="524" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="13" font-weight="500" fill="#173404">C6. Nuevo baseline y publicación</text>
-      <text x="340" y="542" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#3B6D11">SRS v.nueva · Tag · Equipo notificado · CR cerrado</text>
-      <rect x="44" y="511" width="128" height="30" rx="7" fill="#EAF3DE" stroke="#3B6D11" stroke-width="0.5"/>
-      <text x="108" y="526" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#173404">SRS versionado</text>
-      <line x1="172" y1="526" x2="208" y2="526" stroke="#3B6D11" stroke-width="0.5" marker-end="url(#accbf)"/>
+      <rect x="210" y="640" width="260" height="54" rx="10" fill="#EAF3DE" stroke="#3B6D11" stroke-width="1.5"/>
+      <text x="340" y="660" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="13" font-weight="500" fill="#173404">C6. Nuevo baseline y publicación</text>
+      <text x="340" y="678" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#3B6D11">SRS v.nueva · Tag · URL · Equipo notificado</text>
+      <rect x="44" y="647" width="128" height="30" rx="7" fill="#EAF3DE" stroke="#3B6D11" stroke-width="0.5"/>
+      <text x="108" y="662" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#173404">SRS versionado</text>
+      <line x1="172" y1="662" x2="208" y2="662" stroke="#3B6D11" stroke-width="0.5" marker-end="url(#accbf)"/>
+      <line x1="340" y1="694" x2="340" y2="718" stroke="#9A9A94" stroke-width="1" marker-end="url(#accbf)"/>
 
-      <line x1="340" y1="558" x2="340" y2="584" stroke="#9A9A94" stroke-width="1" marker-end="url(#accbf)"/>
-      <rect x="251" y="586" width="178" height="28" rx="14" fill="#F1EFE8" stroke="#888780" stroke-width="0.5"/>
-      <text x="340" y="600" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="12" fill="#444441">SRS actualizado activo</text>
+      <!-- C7 -->
+      <rect x="210" y="720" width="260" height="44" rx="10" fill="#EAF3DE" stroke="#3B6D11" stroke-width="1.5"/>
+      <text x="340" y="737" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="13" font-weight="500" fill="#173404">C7. Cierre formal del CR</text>
+      <text x="340" y="753" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#3B6D11">Acta de cierre · Notificación al solicitante · RTM ✓</text>
+      <rect x="44" y="727" width="128" height="30" rx="7" fill="#EAF3DE" stroke="#3B6D11" stroke-width="0.5"/>
+      <text x="108" y="742" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" fill="#173404">Acta de cierre CR</text>
+      <line x1="172" y1="742" x2="208" y2="742" stroke="#3B6D11" stroke-width="0.5" marker-end="url(#accbf)"/>
+      <line x1="340" y1="764" x2="340" y2="788" stroke="#9A9A94" stroke-width="1" marker-end="url(#accbf)"/>
+
+      <rect x="251" y="790" width="178" height="28" rx="14" fill="#F1EFE8" stroke="#888780" stroke-width="0.5"/>
+      <text x="340" y="804" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="12" fill="#444441">SRS actualizado activo</text>
 
       <text x="28" y="62" font-family="DM Sans,sans-serif" font-size="10" fill="#9A9A94">Artefactos</text>
     </svg>
@@ -7823,22 +7849,28 @@ reg('ccb-flujo', () => `
     <div class="card">
       <div class="card-title">Técnicas de gestión de cambios</div>
       ${[
-        {t:'Formulario CR estandarizado',d:'Campos: origen, justificación, urgencia, alcance, RF afectados',color:'var(--c-amber)'},
-        {t:'Análisis de impacto',d:'Evalúa costo, esfuerzo, riesgo técnico y artefactos afectados',color:'var(--c-amber)'},
-        {t:'CCB — Change Control Board',d:'Comité con roles definidos, quórum y cadencia establecida',color:'var(--c-amber)'},
-        {t:'Control de versiones del SRS',d:'Versionado semántico: mayor.menor con changelog detallado',color:'var(--c-blue)'},
-        {t:'Gestión de configuración',d:'Repositorio central con acceso controlado y trazabilidad de cambios',color:'var(--c-purple)'},
+        {t:'Formulario CR estandarizado',d:'Campos: origen, justificación, urgencia, alcance, RF afectados, tipo',color:'var(--c-amber)'},
+        {t:'Análisis de impacto',d:'Evalúa costo, esfuerzo, riesgo técnico y artefactos afectados (IEEE 12207)',color:'var(--c-amber)'},
+        {t:'Matriz urgencia × impacto (3×3)',d:'Determina el nivel de aprobación requerido: Gerente / CCB / CCB+Sponsor',color:'var(--c-amber)'},
+        {t:'CCB — Change Control Board',d:'Comité con roles definidos (PO+Arq+PM), quórum y cadencia establecida',color:'var(--c-amber)'},
+        {t:'Re-trazabilidad post-cambio',d:'Actualización de la RTM para reflejar los RF/RNF modificados',color:'var(--c-blue)'},
+        {t:'Re-ejecución de pruebas',d:'QA re-ejecuta los casos de prueba afectados por el cambio aprobado',color:'var(--c-blue)'},
+        {t:'Control de versiones del SRS',d:'Versionado semántico: mayor.menor con tag, URL y hash del repositorio',color:'var(--c-purple)'},
+        {t:'Cierre formal del CR',d:'Acta de cierre con fecha, responsable, versión resultante y notificación al solicitante',color:'var(--c-green)'},
       ].map(t => `<div class="dot-item"><div class="dot" style="background:${t.color}"></div><div><strong style="font-size:12px;font-weight:500">${t.t}</strong><div style="font-size:11px;color:var(--muted)">${t.d}</div></div></div>`).join('')}
     </div>
     <div class="card">
       <div class="card-title">Artefactos producidos</div>
       ${[
-        {a:'Formulario Change Request (CR)',d:'Solicitud formal con ID, tipo, prioridad y justificación',color:'var(--c-amber)'},
-        {a:'Matriz de análisis de impacto',d:'RF/RNF afectados, esfuerzo estimado, riesgo valorado',color:'var(--c-amber)'},
-        {a:'Acta de decisión CCB',d:'Decisión: Aprobado / Rechazado / Diferido con rationale',color:'var(--c-amber)'},
-        {a:'SRS versionado (v.x.y)',d:'Documento actualizado con changelog y nueva firma',color:'var(--c-blue)'},
-        {a:'Log de CRs activo',d:'Registro histórico de todos los cambios al baseline',color:'var(--c-green)'},
-        {a:'Notificación a stakeholders',d:'Comunicación formal del cambio y su impacto en el proyecto',color:'var(--c-teal)'},
+        {a:'Formulario Change Request (CR)',d:'Solicitud formal con ID, tipo, prioridad, urgencia y justificación',color:'var(--c-amber)'},
+        {a:'Matriz de análisis de impacto',d:'RF/RNF afectados, esfuerzo estimado, riesgo y alcance valorados',color:'var(--c-amber)'},
+        {a:'Clasificación urgencia × impacto',d:'Nivel de aprobación determinado (Gerente / CCB / CCB+Sponsor)',color:'var(--c-amber)'},
+        {a:'Acta de decisión CCB',d:'Decisión: Aprobado / Rechazado / Diferido con rationale documentado',color:'var(--c-amber)'},
+        {a:'SRS versionado (v.x.y)',d:'Documento actualizado con changelog, tag, URL permanente y hash',color:'var(--c-blue)'},
+        {a:'RTM actualizada',d:'Trazabilidad re-establecida: RF/RNF modificados vinculados a casos de prueba',color:'var(--c-blue)'},
+        {a:'Reporte de re-verificación',d:'QA confirma que los casos afectados pasan con el cambio implementado',color:'var(--c-purple)'},
+        {a:'Acta de cierre del CR',d:'Fecha de cierre, responsable, versión SRS resultante y confirmación al solicitante',color:'var(--c-green)'},
+        {a:'Log de CRs actualizado',d:'Registro histórico de todos los cambios al baseline con estado de cierre',color:'var(--c-teal)'},
       ].map(a => `<div class="dot-item"><div class="dot" style="background:${a.color}"></div><div><strong style="font-size:12px;font-weight:500">${a.a}</strong><div style="font-size:11px;color:var(--muted)">${a.d}</div></div></div>`).join('')}
     </div>
   </div>
@@ -7861,8 +7893,8 @@ reg('ccb-flujo', () => `
 reg('ccb-cr', () => `
 <div class="page-header">
   <div class="page-eyebrow" style="color:var(--c-amber)">● Fase 5 — Gestión de cambios</div>
-  <h1 class="page-title">Simulador de Change Request</h1>
-  <p class="page-desc">Crea, edita y decide CRs. Las decisiones se reflejan automáticamente en el Backlog y en Control de versiones.</p>
+  <h1 class="page-title">Gestión de Change Requests</h1>
+  <p class="page-desc">Registra, analiza y decide sobre solicitudes de cambio al SRS baseline. Conforme a ISO 12207 §6.3.6 e IEEE 828.</p>
   <div class="std-row"><span class="std-pill">ISO 12207</span><span class="std-pill">IEEE 29148 §6.4</span></div>
 </div>
 <div id="ccb-cr-mount"></div>
@@ -7871,7 +7903,7 @@ reg('ccb-cr', () => `
 reg('ccb-backlog', () => `
 <div class="page-header">
   <div class="page-eyebrow" style="color:var(--c-amber)">● Fase 5 — Gestión de cambios</div>
-  <h1 class="page-title">Backlog de Change Requests</h1>
+  <h1 class="page-title">Log de Change Requests</h1>
   <p class="page-desc">Vista completa de todos los CRs. KPIs y tabla se actualizan en tiempo real desde el Simulador.</p>
 </div>
 <div id="ccb-bl-mount"></div>
@@ -7880,8 +7912,8 @@ reg('ccb-backlog', () => `
 reg('ccb-versiones', () => `
 <div class="page-header">
   <div class="page-eyebrow" style="color:var(--c-amber)">● Fase 5 — Gestión de cambios</div>
-  <h1 class="page-title">Control de versiones del SRS</h1>
-  <p class="page-desc">Historial completo de versiones del SRS baseline con los CRs implementados en cada una.</p>
+  <h1 class="page-title">Versiones post-baseline</h1>
+  <p class="page-desc">Versiones del SRS generadas por CRs aprobados después del baseline. Cada versión agrupa los cambios controlados implementados.</p>
 </div>
 <div id="ccb-ver-mount"></div>
 `);
@@ -8494,7 +8526,7 @@ function buildCRForm() {
   const el=document.getElementById('crt-0'); if(!el)return;
   const c=CR_DATA[selCR];
   const priCss={Alta:'b-err',Media:'b-warn',Baja:'b-could'};
-  const estCss={'En análisis':'b-warn','Pendiente CCB':'b-func','Aprobado':'b-ok','Rechazado':'b-err','Diferido':''};
+  const estCss={'En análisis':'b-warn','Pendiente CCB':'b-func','Aprobado':'b-ok','Rechazado':'b-err','Diferido':'','Cerrado':'b-ok'};
   el.innerHTML=`<div class="card" style="margin-bottom:.8rem"><div class="g3"><div class="field-group"><div class="field-label">ID del CR</div><div class="field-val field-mono">${c.id}</div></div><div class="field-group"><div class="field-label">Fecha</div><div class="field-val">${c.fecha}</div></div><div class="field-group"><div class="field-label">Estado</div><div class="field-val"><span class="badge ${estCss[c.estado]||''}">${c.estado}</span></div></div><div class="field-group"><div class="field-label">Solicitante</div><div class="field-val">${c.origen}</div></div><div class="field-group"><div class="field-label">Tipo</div><div class="field-val">${c.tipo}</div></div><div class="field-group"><div class="field-label">Prioridad</div><div class="field-val"><span class="badge ${priCss[c.prioridad]||''}">${c.prioridad}</span></div></div></div><div class="field-group"><div class="field-label">Descripción</div><div class="field-val">${c.desc}</div></div><div class="field-group"><div class="field-label">Justificación de negocio</div><div class="field-val">${c.just}</div></div><div class="card-title">Artefactos afectados</div><div style="display:flex;flex-wrap:wrap;gap:4px">${c.rfAfect.map(r=>`<span style="font-size:10px;font-family:var(--font-mono);padding:2px 7px;border-radius:4px;background:var(--c-blue-l);color:var(--c-blue-d)">${r}</span>`).join('')}</div></div>`;
 }
 function buildCRImpact() {
@@ -8547,107 +8579,256 @@ function initCR(){
 }
 function renderCR(){
   var el=document.getElementById('ccb-cr-mount'); if(!el) return;
-  var crs=CCB.crs; var sel=CCB.selCR||0;
-  if(sel>=crs.length) sel=0;
+  var crs=CCB.crs; var sel=CCB.selCR; if(typeof sel!=='number') sel=-1;
   var e=ccbEsc;
 
-  // Selector pills
-  var pills='<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1rem;align-items:center">'
-    +crs.map(function(cr,i){
-      return '<button class="btn btn-sm'+(i===sel?' btn-primary':'')+'" onclick="ccbSelCR('+i+')">'+e(cr.id)+'</button>';
+  var estColor={'En análisis':'var(--muted)','Pendiente CCB':'var(--c-blue)','Aprobado':'var(--c-green)','Rechazado':'var(--c-red)','Diferido':'var(--c-amber)','Cerrado':'var(--c-teal)'};
+  var priColor={'Alta':'var(--c-red)','Media':'var(--c-amber)','Baja':'var(--c-green)'};
+
+  if(!window._crFilt) window._crFilt='Todos';
+  var filt=window._crFilt;
+  var filtOpts=['Todos','En análisis','Pendiente CCB','Aprobado','Rechazado','Diferido','Cerrado'];
+
+  var filtBar='<div style="display:flex;gap:.4rem;flex-wrap:wrap;align-items:center;justify-content:space-between;margin-bottom:.8rem">'
+    +'<div style="display:flex;gap:.4rem;flex-wrap:wrap">'
+    +filtOpts.map(function(f){
+      var active=filt===f;
+      var cnt=f==='Todos'?crs.length:crs.filter(function(c){return c.estado===f;}).length;
+      var fc=estColor[f]||'var(--c-green)';
+      return '<button style="padding:3px 10px;border-radius:20px;font-size:11px;font-weight:500;cursor:pointer;border:0.5px solid '+(active?fc:'var(--border2)')+';background:transparent;color:'+(active?fc:'var(--muted)')+';" onclick="window._crFilt=\''+f+'\';renderCR()">'+f+' ('+cnt+')</button>';
     }).join('')
-    +'<button class="btn btn-sm" style="color:var(--c-amber);border-color:rgba(186,117,23,.4)" onclick="ccbAddCR()">+ Nuevo CR</button>'
+    +'</div>'
+    +'<button class="btn btn-sm" style="background:var(--c-amber);color:#fff;border-color:var(--c-amber)" onclick="ccbAddCR()">+ Nuevo CR</button>'
     +'</div>';
 
-  var cr=crs[sel];
-  var estOpts=['En análisis','Pendiente CCB','Aprobado','Rechazado','Diferido'];
-  var priOpts=['Alta','Media','Baja'];
-  var tipoOpts=['Modificación de regla','Nuevo requisito funcional','Corrección de especificación','Eliminación de requisito','Cambio de RNF'];
-  var riesgoOpts=['Bajo','Medio','Alto'];
-  var urgOpts=['Alta','Media','Baja'];
-  var alcOpts=['Bajo','Medio','Alto'];
-  var decOpts=['','Aprobado','Rechazado','Diferido'];
-
-  var estColor={Aprobado:'var(--c-green)','Rechazado':'var(--c-red)','Diferido':'var(--c-amber)','Pendiente CCB':'var(--c-blue)','En análisis':'var(--muted)'};
-
-  var curTab=CCB.selTab||0;
-  var tabs='<div class="tab-nav">'
-    +'<button class="tab-btn'+(curTab===0?' on':'')+'" onclick="ccbTab(0)">Formulario CR</button>'
-    +'<button class="tab-btn'+(curTab===1?' on':'')+'" onclick="ccbTab(1)">Análisis de impacto</button>'
-    +'<button class="tab-btn'+(curTab===2?' on':'')+'" onclick="ccbTab(2)">Decisión CCB</button>'
+  var kpis='<div class="kpi-grid" style="margin-bottom:1rem">'
+    +[{n:crs.length,l:'Total',c:'var(--c-gray)'},
+      {n:crs.filter(function(c){return c.estado==='En análisis'||c.estado==='Pendiente CCB';}).length,l:'En revisión',c:'var(--c-amber)'},
+      {n:crs.filter(function(c){return c.estado==='Aprobado';}).length,l:'Aprobados',c:'var(--c-green)'},
+      {n:crs.filter(function(c){return c.estado==='Rechazado';}).length,l:'Rechazados',c:'var(--c-red)'},
+      {n:crs.filter(function(c){return c.estado==='Diferido';}).length,l:'Diferidos',c:'var(--c-blue)'},
+      {n:crs.filter(function(c){return c.estado==='Cerrado';}).length,l:'Cerrados',c:'var(--c-teal)'}]
+    .map(function(k){return '<div class="kpi"><div class="kpi-num" style="color:'+k.c+'">'+k.n+'</div><div class="kpi-label">'+k.l+'</div></div>';}).join('')
     +'</div>';
 
-  function fi(lbl,key,ph){ return '<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.3px;display:block;margin-bottom:2px">'+lbl+'</label><input value="'+e(cr[key]||'')+'" placeholder="'+ph+'" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:4px 7px;font-size:12px;color:var(--text);font-family:var(--font-sans);outline:none" oninput="CCB.crs['+sel+'].'+key+'=this.value;ccbSave()"></div>'; }
-  function ta(lbl,key,ph,rows){ return '<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.3px;display:block;margin-bottom:2px">'+lbl+'</label><textarea rows="'+(rows||2)+'" placeholder="'+ph+'" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:4px 7px;font-size:12px;color:var(--text);font-family:var(--font-sans);resize:vertical;outline:none;line-height:1.6" oninput="CCB.crs['+sel+'].'+key+'=this.value;ccbSave()">'+e(cr[key]||'')+'</textarea></div>'; }
-  function sel2(lbl,key,opts){ return '<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.3px;display:block;margin-bottom:2px">'+lbl+'</label><select style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:4px 6px;font-size:12px;color:var(--text);outline:none" onchange="CCB.crs['+sel+'].'+key+'=this.value;ccbSave();renderCR();var _v=document.getElementById(\'ccb-ver-mount\');if(_v&&_v.innerHTML.trim()){_v.innerHTML=\'\';renderVersiones();}">'+opts.map(function(o){return'<option'+(cr[key]===o?' selected':'')+'>'+o+'</option>';}).join('')+'</select></div>'; }
+  var filtered=filt==='Todos'?crs:crs.filter(function(c){return c.estado===filt;});
 
-  // TAB 0: Formulario
-  var t0='<div style="display:'+(curTab===0?'block':'none')+'">'
-    +'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.6rem;flex-wrap:wrap;gap:.4rem">'
-    +'<span style="font-size:13px;font-weight:500;font-family:var(--font-serif)">'+e(cr.id)+' — '+e(cr.titulo)+'</span>'
-    +'<button class="btn btn-sm" style="color:var(--c-red);border-color:rgba(163,45,45,.3)" onclick="ccbDelCR('+sel+')">× Eliminar CR</button>'
-    +'</div>'
-    +'<div class="card" style="margin-bottom:.6rem">'
-    +'<div style="display:grid;grid-template-columns:80px 1fr 1fr 1fr;gap:.5rem;margin-bottom:.5rem">'
-    +fi('ID','id','CR-00X')+fi('Título','titulo','Describe brevemente el cambio solicitado...')+fi('Solicitante','origen','Área o persona que solicita')+fi('Fecha','fecha','AAAA-MM-DD')
-    +'</div>'
-    +'<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.5rem;margin-bottom:.5rem">'
-    +sel2('Tipo',  'tipo',  tipoOpts)
-    +sel2('Prioridad','prioridad',priOpts)
-    +sel2('Estado','estado',estOpts)
-    +'</div>'
-    +ta('Descripción','desc','Describe detalladamente el cambio solicitado...',3)
-    +'<div style="margin-top:.4rem">'+ta('Justificación de negocio','just','¿Por qué es necesario este cambio?...',2)+'</div>'
-    +'<div style="margin-top:.4rem">'+fi('Artefactos afectados (separados por coma)','rfAfect','RF-001, RNF-003...')+'</div>'
-    +'</div></div>';
+  if(crs.length===0){
+    el.innerHTML=kpis+filtBar+'<div class="card" style="text-align:center;padding:2rem;color:var(--muted)">No hay CRs registrados. Agrega el primero con el botón de arriba.</div>';
+    return;
+  }
 
-  // TAB 1: Impacto
-  var impactoData=[
-    {l:'Esfuerzo',v:cr.riesgo==='Bajo'?25:cr.riesgo==='Medio'?55:85,txt:cr.esfuerzo,c:cr.riesgo==='Bajo'?'var(--c-green)':cr.riesgo==='Medio'?'var(--c-amber)':'var(--c-red)'},
-    {l:'Riesgo',  v:cr.riesgo==='Bajo'?20:cr.riesgo==='Medio'?50:85,txt:cr.riesgo, c:cr.riesgo==='Bajo'?'var(--c-green)':cr.riesgo==='Medio'?'var(--c-amber)':'var(--c-red)'},
-    {l:'Urgencia',v:cr.urgencia==='Alta'?80:cr.urgencia==='Media'?50:25,txt:cr.urgencia,c:cr.urgencia==='Alta'?'var(--c-red)':cr.urgencia==='Media'?'var(--c-amber)':'var(--c-green)'},
-    {l:'Alcance', v:cr.alcance==='Alto'?85:cr.alcance==='Medio'?50:20,txt:cr.alcance,c:cr.alcance==='Alto'?'var(--c-red)':cr.alcance==='Medio'?'var(--c-amber)':'var(--c-green)'},
-  ];
-  var t1='<div style="display:'+(curTab===1?'block':'none')+'">'
-    +'<div class="card" style="margin-bottom:.6rem"><div class="card-title" style="margin-bottom:.6rem">Medidores de impacto</div>'
-    +impactoData.map(function(m){return '<div class="bar-row"><div class="bar-label">'+m.l+'</div><div class="bar-track"><div class="bar-fill" style="width:'+m.v+'%;background:'+m.c+'"></div></div><div class="bar-val" style="color:'+m.c+'">'+e(m.txt)+'</div></div>';}).join('')
-    +'</div>'
-    +'<div class="card"><div class="card-title" style="margin-bottom:.5rem">Parámetros de impacto editables</div>'
-    +'<div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:.5rem">'
-    +fi('Esfuerzo estimado','esfuerzo','Ej: 2 días')
-    +fi('Costo estimado','costo','Ej: COP 1.2M')
-    +sel2('Riesgo','riesgo',riesgoOpts)
-    +sel2('Urgencia','urgencia',urgOpts)
-    +'</div>'
-    +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-top:.4rem">'
-    +sel2('Impacto en alcance','alcance',alcOpts)
-    +ta('Recomendación del CCB','rec','Análisis y recomendación...',2)
-    +'</div></div></div>';
+  var html2=kpis+filtBar;
+  html2+='<div class="card" style="padding:0;overflow:hidden">'
+    +'<table class="data-table" style="margin:0">'
+    +'<thead><tr>'
+    +'<th style="width:90px">ID</th>'
+    +'<th>Título</th>'
+    +'<th style="width:90px">Tipo</th>'
+    +'<th style="width:70px">Prioridad</th>'
+    +'<th style="width:110px">Estado</th>'
+    +'<th style="width:100px">Fecha</th>'
+    +'<th style="width:30px"></th>'
+    +'</tr></thead><tbody>';
 
-  // TAB 2: Decisión CCB
-  var decActual=cr.dec||'';
-  var decMap={Aprobado:{col:'var(--c-green)',icon:'✓',next:'BA actualiza SRS · Equipo implementa · QA re-ejecuta casos afectados · PM cierra el CR'},Rechazado:{col:'var(--c-red)',icon:'✕',next:'Notificar al solicitante con rationale · Archivar CR · No se modifica el SRS'},Diferido:{col:'var(--c-amber)',icon:'→',next:'Registrar en backlog v.next · Notificar al solicitante con fecha estimada'}};
-  var t2='<div style="display:'+(curTab===2?'block':'none')+'">'
-    +'<div class="card" style="margin-bottom:.6rem">'
-    +'<div style="font-size:12px;color:var(--muted);font-style:italic;margin-bottom:.8rem">'+e(cr.rec)+'</div>'
-    +'<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.8rem;margin-bottom:.8rem">'
-    +Object.keys(decMap).map(function(k){
-      var d=decMap[k]; var active=decActual===k;
-      return '<div style="border-radius:var(--radius-lg);padding:1rem;text-align:center;cursor:pointer;border:1.5px solid '+(active?d.col:'var(--border)')+';background:'+(active?d.col+'18':'var(--surface)')+'" onclick="ccbSetDec('+sel+',\''+k+'\')">'
-        +'<div style="font-size:22px;color:'+d.col+';margin-bottom:.3rem">'+d.icon+'</div>'
-        +'<div style="font-size:13px;font-weight:500;color:'+d.col+';font-family:var(--font-serif)">'+k+'</div>'
+  filtered.forEach(function(cr,fi){
+    var realIdx=crs.indexOf(cr);
+    var expanded=(sel===realIdx);
+    var ec=estColor[cr.estado]||'var(--muted)';
+    var pc=priColor[cr.prioridad]||'var(--muted)';
+    var tipoShort=(cr.tipo||'').replace('Modificación de ','Mod. ').replace('Nuevo requisito funcional','Nuevo RF').replace('Corrección de especificación','Corrección').replace('Eliminación de requisito','Eliminación').replace('Cambio de RNF','Cambio RNF');
+
+    html2+='<tr style="cursor:pointer;'+(expanded?'background:var(--surface2);':'')+'" onclick="CCB.selCR='+(expanded?-1:realIdx)+';CCB.selTab=0;renderCR()">'
+      +'<td style="font-family:var(--font-mono);font-weight:600;color:var(--c-amber);font-size:11px">'+e(cr.id)+'</td>'
+      +'<td style="font-size:12px;font-weight:'+(expanded?600:400)+'">'+e(cr.titulo)+'</td>'
+      +'<td style="font-size:10px;color:var(--muted)">'+e(tipoShort)+'</td>'
+      +'<td><span style="font-size:11px;font-weight:500;color:'+pc+'">'+e(cr.prioridad)+'</span></td>'
+      +'<td><span style="font-size:11px;font-weight:500;color:'+ec+'">'+e(cr.estado)+'</span></td>'
+      +'<td style="font-size:11px;color:var(--muted)">'+e(cr.fecha)+'</td>'
+      +'<td style="text-align:center;color:var(--muted);font-size:13px">'+(expanded?'▲':'▼')+'</td>'
+      +'</tr>';
+
+    if(expanded){
+      var estOpts=['En análisis','Pendiente CCB','Aprobado','Rechazado','Diferido','Cerrado'];
+      var priOpts=['Alta','Media','Baja'];
+      var tipoOpts=['Modificación de regla','Nuevo requisito funcional','Corrección de especificación','Eliminación de requisito','Cambio de RNF'];
+      var riesgoOpts=['Bajo','Medio','Alto'];
+      var urgOpts=['Alta','Media','Baja'];
+      var alcOpts=['Bajo','Medio','Alto'];
+      var curTab=CCB.selTab||0;
+
+      function fi(lbl,key,ph,mono){
+        return '<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">'+lbl+'</label>'
+          +'<input value="'+e(cr[key]||'')+'" placeholder="'+ph+'" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:4px 7px;font-size:12px;color:var(--text);'+(mono?'font-family:var(--font-mono);':'')+'outline:none"'
+          +' oninput="CCB.crs['+realIdx+'].'+key+'=this.value;'+(key==='cierreFecha'?'if(this.value.trim()){CCB.crs['+realIdx+'].estado=\'Cerrado\';}':'')+'ccbSave()"></div>';
+      }
+      function ta(lbl,key,ph,rows){
+        var minH=((rows||2)*1.6*12+16)+'px';
+        return '<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">'+lbl+'</label>'
+          +'<textarea placeholder="'+ph+'" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:4px 7px;font-size:12px;color:var(--text);resize:vertical;outline:none;line-height:1.6;min-height:'+minH+'" oninput="CCB.crs['+realIdx+'].'+key+'=this.value;ccbSave()">'+e(cr[key]||'')+'</textarea></div>';
+      }
+      function sel2(lbl,key,opts){
+        return '<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">'+lbl+'</label>'
+          +'<select style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:4px 6px;font-size:12px;color:var(--text);outline:none" onchange="event.stopPropagation();CCB.crs['+realIdx+'].'+key+'=this.value;ccbSave();renderCR()">'
+          +opts.map(function(o){return '<option'+(cr[key]===o?' selected':'')+'>'+o+'</option>';}).join('')
+          +'</select></div>';
+      }
+
+      html2+='<tr><td colspan="7" style="padding:0;background:var(--surface)">'
+        +'<div style="padding:.8rem 1rem;border-top:0.5px solid var(--border)">'
+        // Tab nav + delete button
+        +'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.7rem">'
+        +'<div class="tab-nav" style="margin-bottom:0">'
+        +'<button class="tab-btn'+(curTab===0?' on':'')+'" onclick="event.stopPropagation();CCB.selTab=0;renderCR()">Formulario</button>'
+        +'<button class="tab-btn'+(curTab===1?' on':'')+'" onclick="event.stopPropagation();CCB.selTab=1;renderCR()">Análisis</button>'
+        +'<button class="tab-btn'+(curTab===2?' on':'')+'" onclick="event.stopPropagation();CCB.selTab=2;renderCR()">Decisión y cierre</button>'
+        +'</div>'
+        +'<button class="btn btn-sm" style="color:var(--c-red);border-color:rgba(163,45,45,.3)" onclick="event.stopPropagation();ccbConfirmDel('+realIdx+')">× Eliminar</button>'
         +'</div>';
-    }).join('')
-    +'</div>'
-    +(decActual&&decMap[decActual]?'<div style="background:rgba(24,95,165,.04);border:0.5px solid rgba(24,95,165,.2);border-radius:var(--radius);padding:.7rem .9rem"><div style="font-size:11px;font-weight:500;color:var(--c-blue);margin-bottom:.3rem">Próximos pasos</div><div style="font-size:11px;color:var(--muted)">'+decMap[decActual].next+'</div></div>':'')
-    +'</div>'
-    +'<div class="card"><div class="card-title" style="margin-bottom:.4rem">Nota de cierre</div>'
-    +ta('','rec','Documenta la decisión final y quién la tomó...',2)
-    +'</div></div>';
 
-  el.innerHTML=pills+tabs+t0+t1+t2;
+      if(curTab===0){
+        html2+='<div style="display:grid;grid-template-columns:90px 1fr 1fr 120px;gap:.5rem;margin-bottom:.5rem">'
+          +fi('ID','id','CR-00X',true)+fi('Título','titulo','Describe el cambio...')+fi('Solicitante','origen','Área o persona')+fi('Fecha','fecha','AAAA-MM-DD')
+          +'</div>'
+          +'<div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:.5rem;margin-bottom:.5rem">'
+          +sel2('Tipo','tipo',tipoOpts)+sel2('Prioridad','prioridad',priOpts)+fi('Versión SRS base','srsBase','v1.0-baseline',true)+sel2('Estado','estado',estOpts)
+          +'</div>'
+          +'<div style="margin-bottom:.5rem">'+ta('Descripción detallada','desc','Estado actual vs estado deseado...',4)+'</div>'
+          +'<div style="margin-bottom:.5rem">'+ta('Justificación de negocio','just','¿Por qué es necesario? ¿Cuál es el impacto de NO hacer el cambio?',3)+'</div>'
+          +(function(){
+            var srsData; try{srsData=JSON.parse(localStorage.getItem('fw_srs_v1'))||{};}catch(ex){srsData={};}
+            var grupos={RF:[],RNF:[],SA:[],RC:[]};
+            (srsData.rfs||[]).forEach(function(r){if(r.id) grupos.RF.push({id:r.id,desc:r.desc||''});});
+            (srsData.rnfs||[]).forEach(function(r){if(r.id) grupos.RNF.push({id:r.id,desc:(r.atributo||r.cat||'')+(r.valor?' — '+r.valor:'')});});
+            (srsData.sas||[]).forEach(function(r){if(r.id) grupos.SA.push({id:r.id,desc:r.desc||''});});
+            (srsData.rcs||[]).forEach(function(r){if(r.id) grupos.RC.push({id:r.id,desc:[r.t,r.v].filter(Boolean).join(' — ')});});
+            var selected=(cr.rfAfectList&&Array.isArray(cr.rfAfectList))?cr.rfAfectList:(cr.rfAfect?cr.rfAfect.split(',').map(function(s){return s.trim();}).filter(Boolean):[]);
+            var tieneItems=Object.values(grupos).some(function(g){return g.length>0;});
+            if(!tieneItems) return '<div style="margin-bottom:.5rem">'+fi('Artefactos afectados (RF, RNF, RC)','rfAfect','RF-001, RNF-003...')+'<div style="font-size:10px;color:var(--muted);margin-top:3px">ⓘ Agrega requisitos en el Editor SRS para verlos aquí como checklist.</div></div>';
+            var h='<div style="margin-bottom:.5rem"><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:4px">Artefactos afectados</label>';
+            h+='<div style="border:0.5px solid var(--border2);border-radius:5px;overflow:hidden">';
+            ['RF','RNF','SA','RC'].forEach(function(tipo){
+              var items=grupos[tipo];
+              if(!items.length) return;
+              var col=tipo==='RF'?'var(--c-blue)':tipo==='RNF'?'var(--c-purple)':tipo==='SA'?'var(--c-amber)':'var(--c-teal)';
+              h+='<div style="background:var(--surface2);padding:4px 8px;font-size:10px;font-weight:600;color:'+col+';border-bottom:0.5px solid var(--border)">'+tipo+'</div>';
+              items.forEach(function(item){
+                var checked=selected.indexOf(item.id)>=0;
+                h+='<label style="display:flex;align-items:flex-start;gap:.5rem;padding:4px 8px;border-bottom:0.5px solid var(--border);cursor:pointer;'+(checked?'background:'+col+'0A':'')+'">'
+                  +'<input type="checkbox" '+(checked?'checked':'')+' style="margin-top:2px;cursor:pointer;accent-color:'+col+'" onclick="event.stopPropagation();crToggleArt('+realIdx+',\''+item.id+'\')">'
+                  +'<span style="font-family:var(--font-mono);font-size:11px;font-weight:600;color:'+col+';flex-shrink:0">'+item.id+'</span>'
+                  +'<span style="font-size:11px;color:var(--muted);line-height:1.4">'+e(item.desc.substring(0,80))+(item.desc.length>80?'...':'')+'</span>'
+                  +'</label>';
+              });
+            });
+            h+='</div></div>';
+            return h;
+          })();
+      }
+
+      if(curTab===1){
+        var impData=[
+          {l:'Esfuerzo',v:cr.riesgo==='Bajo'?25:cr.riesgo==='Medio'?55:85,txt:cr.esfuerzo,c:cr.riesgo==='Bajo'?'var(--c-green)':cr.riesgo==='Medio'?'var(--c-amber)':'var(--c-red)'},
+          {l:'Riesgo',  v:cr.riesgo==='Bajo'?20:cr.riesgo==='Medio'?50:85,txt:cr.riesgo,  c:cr.riesgo==='Bajo'?'var(--c-green)':cr.riesgo==='Medio'?'var(--c-amber)':'var(--c-red)'},
+          {l:'Urgencia',v:cr.urgencia==='Alta'?80:cr.urgencia==='Media'?50:25,txt:cr.urgencia,c:cr.urgencia==='Alta'?'var(--c-red)':cr.urgencia==='Media'?'var(--c-amber)':'var(--c-green)'},
+          {l:'Alcance', v:cr.alcance==='Alto'?85:cr.alcance==='Medio'?50:20,txt:cr.alcance,  c:cr.alcance==='Alto'?'var(--c-red)':cr.alcance==='Medio'?'var(--c-amber)':'var(--c-green)'},
+        ];
+        var urg2=cr.urgencia||'Media'; var alc2=cr.alcance||'Bajo';
+        var urgN2=urg2==='Alta'?2:urg2==='Media'?1:0;
+        var alcN2=alc2==='Alto'?2:alc2==='Medio'?1:0;
+        var mat=[[{auth:'Gerente',c:'var(--c-green)'},{auth:'CCB',c:'var(--c-amber)'},{auth:'CCB+Sponsor',c:'var(--c-red)'}],
+                  [{auth:'Gerente',c:'var(--c-green)'},{auth:'CCB',c:'var(--c-amber)'},{auth:'CCB+Sponsor',c:'var(--c-red)'}],
+                  [{auth:'CCB',c:'var(--c-amber)'},{auth:'CCB',c:'var(--c-amber)'},{auth:'CCB+Sponsor',c:'var(--c-red)'}]];
+        html2+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:.8rem;margin-bottom:.6rem">'
+          +'<div>'+impData.map(function(m){return '<div class="bar-row"><div class="bar-label">'+m.l+'</div><div class="bar-track"><div class="bar-fill" style="width:'+m.v+'%;background:'+m.c+'"></div></div><div class="bar-val" style="color:'+m.c+'">'+e(m.txt)+'</div></div>';}).join('')+'</div>'
+          +'<div>'
+          +'<div style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;margin-bottom:3px">Matriz urgencia × impacto</div>'
+          +'<div style="font-size:10px;color:var(--muted);margin-bottom:5px;line-height:1.4">Cruza urgencia del cambio con impacto en alcance para determinar quién debe aprobarlo. La celda resaltada corresponde a este CR.</div>'
+          +'<div style="display:grid;grid-template-columns:44px repeat(3,1fr);gap:2px;font-size:9px">'
+          +'<div></div><div style="text-align:center;font-weight:600;color:var(--muted)">Bajo</div><div style="text-align:center;font-weight:600;color:var(--muted)">Medio</div><div style="text-align:center;font-weight:600;color:var(--muted)">Alto→</div>';
+        ['Alta','Media','Baja'].forEach(function(ul,ui){
+          var urgIdx=2-ui;
+          html2+='<div style="font-weight:600;color:var(--muted);font-size:9px">'+ul+'</div>';
+          [0,1,2].forEach(function(ai){
+            var cell=mat[urgIdx][ai]; var isA=(urgIdx===urgN2&&ai===alcN2);
+            html2+='<div style="padding:3px;border-radius:4px;border:0.5px solid '+(isA?cell.c:'var(--border)')+';background:'+(isA?cell.c+'18':'var(--surface)')+';text-align:center">'
+              +'<div style="font-size:9px;font-weight:'+(isA?700:400)+';color:'+cell.c+'">'+cell.auth+'</div>'+(isA?'<div style="font-size:8px;color:'+cell.c+'">←</div>':'')+'</div>';
+          });
+        });
+        var actCell=mat[urgN2][alcN2];
+        html2+='</div>'
+          +'<div style="margin-top:.3rem;padding:.3rem .5rem;background:'+actCell.c+'12;border:0.5px solid '+actCell.c+'44;border-radius:4px;font-size:10px"><span style="font-weight:600;color:'+actCell.c+'">Requiere: '+actCell.auth+'</span></div>'
+          +'</div></div>'
+          +'<div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:.5rem;margin-bottom:.4rem">'
+          +fi('Esfuerzo','esfuerzo','2 días')+fi('Costo','costo','COP 1.2M')+sel2('Riesgo','riesgo',riesgoOpts)+sel2('Urgencia','urgencia',urgOpts)
+          +'</div>'
+          +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-bottom:.4rem">'
+          +sel2('Impacto alcance','alcance',alcOpts)+sel2('Riesgo','riesgo',riesgoOpts)
+          +'</div>'
+          +'<div style="margin-bottom:.4rem">'+ta('Recomendación del CCB','rec','Analiza el impacto técnico y de negocio. ¿Qué recomiendas al CCB y por qué?',4)+'</div>'
+          +'<div style="margin-bottom:3px"><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">Detalle de cambios por requisito en la RTM</label>'
+          +'<div style="font-size:10px;color:var(--muted);margin-bottom:4px;line-height:1.4">Describe qué cambia específicamente en cada requisito. Los artefactos afectados ya los seleccionaste en la pestaña Formulario.</div></div>'
+          +ta('','rtmAfect','Ej:\nRF-001 → cambiar umbral de sesión de 8h a 12h\nRNF-003 → actualizar criterio: tiempo de respuesta de 8s a 12s bajo 500 VU\nRC-002 → restricción de compatibilidad con IE11 ya no aplica',5);
+      }
+
+      if(curTab===2){
+        var decActual=cr.dec||'';
+        var decMap={
+          Aprobado:{col:'var(--c-green)',icon:'✓',next:'BA actualiza SRS y RTM · QA re-ejecuta casos · Publicar nuevo baseline · Cerrar CR'},
+          Rechazado:{col:'var(--c-red)',icon:'✕',next:'Notificar solicitante · Archivar CR · SRS sin cambios'},
+          Diferido:{col:'var(--c-amber)',icon:'→',next:'Backlog v.next · Notificar con fecha estimada · SRS sin cambios'}
+        };
+        var urg3=cr.urgencia||'Media'; var alc3=cr.alcance||'Bajo';
+        var urgN3=urg3==='Alta'?2:urg3==='Media'?1:0;
+        var alcN3=alc3==='Alto'?2:alc3==='Medio'?1:0;
+        var ns3=(urgN3>=1&&alcN3===2)||(urgN3===2&&alcN3>=1);
+        var nc3=!ns3&&(urgN3>=1||alcN3>=1);
+        html2+=(ns3?'<div style="background:rgba(163,45,45,.07);border:0.5px solid rgba(163,45,45,.3);border-radius:var(--radius);padding:.4rem .8rem;margin-bottom:.5rem;font-size:11px;color:var(--c-red)">⚠ Requiere CCB + Sponsor ejecutivo</div>'
+          :nc3?'<div style="background:rgba(186,117,23,.07);border:0.5px solid rgba(186,117,23,.3);border-radius:var(--radius);padding:.4rem .8rem;margin-bottom:.5rem;font-size:11px;color:var(--c-amber)">Requiere CCB ordinario (PO + Arq. + PM)</div>'
+          :'<div style="background:rgba(15,110,86,.06);border:0.5px solid rgba(15,110,86,.2);border-radius:var(--radius);padding:.4rem .8rem;margin-bottom:.5rem;font-size:11px;color:var(--c-green)">Puede aprobar el Gerente de proyecto</div>');
+        html2+='<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.6rem;margin-bottom:.5rem">'
+          +Object.keys(decMap).map(function(k){
+            var d=decMap[k]; var active=decActual===k;
+            return '<div style="border-radius:8px;padding:.7rem;text-align:center;cursor:pointer;border:1.5px solid '+(active?d.col:'var(--border)')+';background:'+(active?d.col+'18':'var(--surface)')+'" onclick="event.stopPropagation();ccbSetDec('+realIdx+',\''+k+'\')">'
+              +'<div style="font-size:18px;color:'+d.col+'">'+d.icon+'</div>'
+              +'<div style="font-size:12px;font-weight:500;color:'+d.col+'">'+k+'</div></div>';
+          }).join('')
+          +'</div>'
+          +(decActual&&decMap[decActual]?'<div style="padding:.5rem .7rem;background:rgba(24,95,165,.04);border:0.5px solid rgba(24,95,165,.2);border-radius:var(--radius);margin-bottom:.5rem">'
+            +'<div style="font-size:11px;font-weight:500;color:var(--c-blue);margin-bottom:.4rem">Próximos pasos</div>'
+            +'<div style="font-size:11px;color:var(--muted);margin-bottom:.5rem">'+decMap[decActual].next+'</div>'
+            +(decActual==='Aprobado'?'<div style="display:flex;gap:.4rem;flex-wrap:wrap">'
+              +'<button class="btn btn-sm" style="font-size:10px" onclick="event.stopPropagation();window._srseTab=0;nav(&quot;srs-editor&quot;)">Ir a Editor SRS →</button>'
+              +'<button class="btn btn-sm" style="font-size:10px" onclick="event.stopPropagation();nav(&quot;srs-rtm&quot;)">Ir a RTM →</button>'
+              +'<button class="btn btn-sm" style="font-size:10px" onclick="event.stopPropagation();nav(&quot;val-publicacion&quot;)">Ir a Publicación SRS →</button>'
+              +'<button class="btn btn-sm" style="font-size:10px" onclick="event.stopPropagation();window._srseTab=5;nav(&quot;srs-editor&quot;)">Ir a Versiones pre-baseline →</button>'
+              +'</div>':'')
+            +'</div>':'')
+          +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-bottom:.4rem">'
+          +fi('Fecha reunión CCB','fechaCCB','AAAA-MM-DD')+fi('Participantes','participantesCCB','PO · Arq · PM...')
+          +'</div>'
+          +ta('Nota de decisión','nota','Documenta la decisión, quórum, votación y rationale completo...',4)
+          +'<div style="margin-top:.5rem;padding:.5rem .7rem;border:0.5px solid '+(cr.cierreFecha?'var(--c-green)':'var(--border)')+';border-radius:var(--radius);background:'+(cr.cierreFecha?'rgba(15,110,86,.03)':'var(--bg)')+'"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.4rem">'
+          +'<div style="font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase">Cierre formal</div>'
+          +(cr.cierreFecha?'<span style="font-size:11px;color:var(--c-green)">✓ Cerrado</span>':'<span style="font-size:11px;color:var(--muted)">Pendiente</span>')+'</div>'
+          +'<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.5rem;margin-bottom:.4rem">'
+          +fi('Fecha cierre','cierreFecha','AAAA-MM-DD')+fi('Cerrado por','cierreResponsable','Nombre')+fi('Versión SRS','cierreSRSVersion','v1.1',true)
+          +'</div>'
+          +'<div style="margin-bottom:.4rem">'+ta('Acta de cierre','cierreActa','Describe qué se cambió, quién implementó, cómo se verificó y quién confirmó el cierre...',4)+'</div>'
+          +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem">'
+          +'<label style="display:flex;align-items:center;gap:.4rem;cursor:pointer;font-size:11px"><input type="checkbox" '+(cr.cierreNotif?'checked':'')+' onchange="event.stopPropagation();CCB.crs['+realIdx+'].cierreNotif=this.checked;ccbSave();renderCR()"> '+(cr.cierreNotif?'✓ ':'')+'Solicitante notificado</label>'
+          +'<label style="display:flex;align-items:center;gap:.4rem;cursor:pointer;font-size:11px"><input type="checkbox" '+(cr.cierreRTM?'checked':'')+' onchange="event.stopPropagation();CCB.crs['+realIdx+'].cierreRTM=this.checked;ccbSave();renderCR()"> '+(cr.cierreRTM?'✓ ':'')+'RTM actualizada</label>'
+          +'</div></div>';
+      }
+
+      html2+='</div></td></tr>';
+    }
+  });
+
+  html2+='</tbody></table></div>';
+  el.innerHTML=html2;
+  el.querySelectorAll('textarea').forEach(function(ta){ta.style.height='auto';ta.style.height=ta.scrollHeight+'px';});
 }
-
 function ccbSelCR(i){ CCB.selCR=i; CCB.selTab=0; renderCR(); }
 function ccbTab(i){ CCB.selTab=i; renderCR(); }
 function ccbSetDec(i,v){
@@ -8660,9 +8841,35 @@ function ccbSetDec(i,v){
 }
 function ccbAddCR(){
   var n=CCB.crs.length+1;
-  CCB.crs.push({id:'CR-'+String(n).padStart(3,'0'),titulo:'Nuevo cambio',origen:'',fecha:'',tipo:'Modificación de regla',prioridad:'Media',estado:'En análisis',desc:'',just:'',rfAfect:'',esfuerzo:'',costo:'',riesgo:'Bajo',urgencia:'Media',alcance:'Bajo',rec:'',dec:''});
+  CCB.crs.push({id:'CR-'+String(n).padStart(3,'0'),titulo:'Nuevo cambio',origen:'',fecha:'',tipo:'Modificación de regla',prioridad:'Media',estado:'En análisis',desc:'',just:'',rfAfect:'',srsBase:'',esfuerzo:'',costo:'',riesgo:'Bajo',urgencia:'Media',alcance:'Bajo',rec:'',nota:'',dec:'',fechaCCB:'',participantesCCB:'',rtmAfect:'',cierreFecha:'',cierreResponsable:'',cierreSRSVersion:'',cierreActa:'',cierreNotif:false,cierreRTM:false});
   CCB.selCR=CCB.crs.length-1; CCB.selTab=0;
   ccbSave(); renderCR();
+}
+function crToggleArt(idx,id){
+  var cr=CCB.crs[idx]; if(!cr) return;
+  if(!cr.rfAfectList||!Array.isArray(cr.rfAfectList)){
+    cr.rfAfectList=cr.rfAfect?cr.rfAfect.split(',').map(function(s){return s.trim();}).filter(Boolean):[];
+  }
+  var i=cr.rfAfectList.indexOf(id);
+  if(i>=0) cr.rfAfectList.splice(i,1); else cr.rfAfectList.push(id);
+  cr.rfAfect=cr.rfAfectList.join(', ');
+  ccbSave();
+}
+function ccbConfirmDel(i){
+  var id=CCB.crs[i]?CCB.crs[i].id:'este CR';
+  // confirm() may be blocked in iframes — use inline panel instead
+  var panel=document.getElementById('ccb-del-confirm');
+  if(panel){panel.remove();return;}
+  var div=document.createElement('div');
+  div.id='ccb-del-confirm';
+  div.style.cssText='position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:var(--bg);border:1px solid var(--c-red);border-radius:10px;padding:1.2rem 1.5rem;box-shadow:0 8px 32px rgba(0,0,0,.18);z-index:9999;min-width:280px;text-align:center';
+  div.innerHTML='<div style="font-size:14px;font-weight:500;margin-bottom:.4rem">¿Eliminar '+id+'?</div>'
+    +'<div style="font-size:12px;color:var(--muted);margin-bottom:1rem">Esta acción no se puede deshacer.</div>'
+    +'<div style="display:flex;gap:.5rem;justify-content:center">'
+    +'<button class="btn" style="background:var(--c-red);color:#fff;border-color:var(--c-red)" onclick="document.getElementById(\'ccb-del-confirm\').remove();ccbDelCR('+i+')">Sí, eliminar</button>'
+    +'<button class="btn btn-sm" onclick="document.getElementById(\'ccb-del-confirm\').remove()">Cancelar</button>'
+    +'</div>';
+  document.body.appendChild(div);
 }
 function ccbDelCR(i){
   CCB.crs.splice(i,1);
@@ -8687,13 +8894,15 @@ function renderBacklog(){
   var diferidos  =cnt(function(d){return d.estado==='Diferido';});
   var rechazados =cnt(function(d){return d.estado==='Rechazado';});
 
+  var cerrados   =cnt(function(d){return d.estado==='Cerrado';});
+
   var kpis='<div class="kpi-grid" style="margin-bottom:1rem">'
     +[{n:total,l:'Total CRs',c:'var(--c-gray)'},{n:aprobados,l:'Aprobados',c:'var(--c-green)'},
       {n:enRevision,l:'En revisión',c:'var(--c-amber)'},{n:diferidos,l:'Diferidos',c:'var(--c-blue)'},
-      {n:rechazados,l:'Rechazados',c:'var(--c-red)'}]
+      {n:rechazados,l:'Rechazados',c:'var(--c-red)'},{n:cerrados,l:'Cerrados',c:'var(--c-teal)'}]
     .map(function(k){return '<div class="kpi"><div class="kpi-num" style="color:'+k.c+'">'+k.n+'</div><div class="kpi-label">'+k.l+'</div></div>';}).join('')+'</div>';
 
-  var estBadge={'En análisis':'b-warn','Pendiente CCB':'b-func',Aprobado:'b-ok',Rechazado:'b-err',Diferido:''};
+  var estBadge={'En análisis':'b-warn','Pendiente CCB':'b-func',Aprobado:'b-ok',Rechazado:'b-err',Diferido:'',Cerrado:'b-ok'};
   var priB={Alta:'b-err',Media:'b-warn',Baja:'b-could'};
 
   var rows=crs.map(function(cr,i){
@@ -8714,7 +8923,7 @@ function renderBacklog(){
     +'<tbody>'+rows+'</tbody></table></div>';
 
   var tip='<div style="background:rgba(186,117,23,.06);border:0.5px solid rgba(186,117,23,.25);border-radius:var(--radius);padding:.5rem .8rem;font-size:11px;color:var(--c-amber);margin-bottom:.8rem">'
-    +'ⓘ Haz clic en cualquier fila para ir al Simulador y editar ese CR. Los KPIs se actualizan en tiempo real.</div>';
+    +'ⓘ Registro histórico de todos los CRs con su estado. Haz clic en cualquier fila para ir al Simulador y editarlo.</div>';
 
   el.innerHTML=tip+kpis+table;
 }
@@ -8738,13 +8947,21 @@ function renderVersiones(){
 
   // Nueva versión form
   var newVer='<div class="card" style="margin-bottom:1rem"><div class="card-title" style="margin-bottom:.6rem">Registrar nueva versión del SRS</div>'
-    +'<div style="display:grid;grid-template-columns:80px 1fr 1fr;gap:.5rem;margin-bottom:.5rem">'
+    +'<div style="display:grid;grid-template-columns:80px 1fr 1fr 1fr;gap:.5rem;margin-bottom:.5rem">'
     +'<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.3px;display:block;margin-bottom:2px">Tag</label>'
     +'<input id="ver-tag" placeholder="v1.3" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:4px 7px;font-size:12px;font-family:var(--font-mono);color:var(--c-amber);outline:none"></div>'
     +'<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.3px;display:block;margin-bottom:2px">Título</label>'
     +'<input id="ver-titulo" placeholder="Ej: Aprobación stakeholders..." style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:4px 7px;font-size:12px;color:var(--text);outline:none"></div>'
     +'<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.3px;display:block;margin-bottom:2px">Fecha</label>'
-    +'<input id="ver-fecha" placeholder="AAAA-MM-DD" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:4px 7px;font-size:12px;font-family:var(--font-mono);color:var(--text);outline:none"></div>'
+    +'<input id="ver-fecha" type="date" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:4px 7px;font-size:12px;font-family:var(--font-mono);color:var(--text);outline:none"></div>'
+    +'<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.3px;display:block;margin-bottom:2px">Publicado por</label>'
+    +'<input id="ver-pub" placeholder="Nombre del BA" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:4px 7px;font-size:12px;color:var(--text);outline:none"></div>'
+    +'</div>'
+    +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-bottom:.5rem">'
+    +'<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.3px;display:block;margin-bottom:2px">URL del repositorio (IEEE 828 §5.3)</label>'
+    +'<input id="ver-url" placeholder="https://... o ruta de red" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:4px 7px;font-size:12px;color:var(--text);outline:none"></div>'
+    +'<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.3px;display:block;margin-bottom:2px">Hash / commit del repositorio</label>'
+    +'<input id="ver-hash" placeholder="Ej: abc1234 o commit hash" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:4px 7px;font-size:12px;font-family:var(--font-mono);color:var(--c-teal);outline:none"></div>'
     +'</div>'
     +'<div style="margin-bottom:.5rem"><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.3px;display:block;margin-bottom:2px">Cambios incluidos</label>'
     +'<textarea id="ver-cambios" rows="2" placeholder="Un cambio por línea..." style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:4px 7px;font-size:12px;color:var(--text);resize:vertical;outline:none;line-height:1.6"></textarea></div>'
@@ -8772,6 +8989,9 @@ function renderVersiones(){
       +'<button class="uat-btn" style="color:var(--muted);font-size:14px" onclick="verDel('+i+')">×</button>'
       +'</div>'
       +(crsVinc.length?'<div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:.3rem">'+crsVinc.map(function(cid){return'<span style="font-size:10px;font-family:var(--font-mono);padding:2px 7px;border-radius:4px;background:var(--c-amber-l);color:var(--c-amber-d)">'+e(cid)+'</span>';}).join('')+'</div>':'')
+      +(v.pub?'<div style="font-size:10px;color:var(--muted);margin-bottom:2px">Publicado por: '+e(v.pub)+'</div>':'')
+      +(v.url?'<div style="font-size:10px;margin-bottom:2px"><a href="'+e(v.url)+'" target="_blank" style="color:var(--c-teal)">'+e(v.url)+'</a></div>':'')
+      +(v.hash?'<div style="font-size:10px;font-family:var(--font-mono);color:var(--muted);margin-bottom:2px">'+e(v.hash)+'</div>':'')
       +'<div style="font-size:11px;color:var(--muted);white-space:pre-wrap">'+e(v.cambios)+'</div>'
       +'</div></div>';
   });
@@ -8784,11 +9004,14 @@ function verAdd(){
   var titulo=document.getElementById('ver-titulo')?.value?.trim();
   var fecha=document.getElementById('ver-fecha')?.value?.trim();
   var cambios=document.getElementById('ver-cambios')?.value?.trim();
+  var pub=document.getElementById('ver-pub')?.value?.trim();
+  var url=document.getElementById('ver-url')?.value?.trim();
+  var hash=document.getElementById('ver-hash')?.value?.trim();
   if(!tag){ return; }
   var selCrs=[];
   document.querySelectorAll('#ver-cr-sel input[type=checkbox]:checked').forEach(function(cb){selCrs.push(cb.value);});
   CCB.versiones.forEach(function(v){v.actual=false;});
-  CCB.versiones.unshift({tag:tag,titulo:titulo||'',fecha:fecha||'',crs:selCrs,cambios:cambios||'',actual:true});
+  CCB.versiones.unshift({tag:tag,titulo:titulo||'',fecha:fecha||'',pub:pub||'',url:url||'',hash:hash||'',crs:selCrs,cambios:cambios||'',actual:true});
   ccbSave();
   var m=document.getElementById('ccb-ver-mount');
   if(m){ m.innerHTML=''; renderVersiones(); }
@@ -9333,7 +9556,7 @@ function renderSrsEditor(){
     +'<button class="tab-btn" onclick="srseTab(2,this)">Req. no funcionales (RNF)</button>'
     +'<button class="tab-btn" onclick="srseTab(3,this)">Supuestos y restricciones</button>'
     +'<button class="tab-btn" onclick="srseTab(4,this)">Verificar calidad</button>'
-    +'<button class="tab-btn" onclick="srseTab(5,this)">Versiones</button>'
+    +'<button class="tab-btn" onclick="srseTab(5,this)">Versiones pre-baseline</button>'
     +'</div>';
 
   // Portada
@@ -10136,7 +10359,6 @@ function onPageShow(id) {
   if (id==='srs-pc3') setTimeout(initSrsPC3, 50);
   if (id==='val-pc4') setTimeout(initValPC4, 50);
   if (id==='ccb-cr') setTimeout(initCR, 50);
-  if (id==='ccb-backlog') setTimeout(initBacklog, 50);
   if (id==='ccb-versiones') setTimeout(initVersiones, 50);
   if (id==='calidad') setTimeout(initCalidad, 50);
   if (id==='roadmap') setTimeout(buildRoadmap, 50);
