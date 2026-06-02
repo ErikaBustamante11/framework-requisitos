@@ -667,7 +667,6 @@ textarea { field-sizing: content; min-height: 2em; }
       <button class="nav-item" onclick="nav('val-stakeholders')" style="padding-left:1.8rem"><div class="nav-pip" style="background:var(--c-green);opacity:.6"></div>↳ Revisión stakeholders</button>
       <button class="nav-item" onclick="nav('val-inspeccion')" style="padding-left:1.8rem"><div class="nav-pip" style="background:var(--c-green);opacity:.6"></div>↳ Inspección formal</button>
       <button class="nav-item" onclick="nav('val-uat')" style="padding-left:1.8rem"><div class="nav-pip" style="background:var(--c-green);opacity:.6"></div>↳ Simulador UAT</button>
-      <button class="nav-item" onclick="nav('val-log')"><div class="nav-pip" style="background:var(--c-green)"></div>Log de defectos</button>
       <button class="nav-item" onclick="nav('val-issues')"><div class="nav-pip" style="background:var(--c-green)"></div>Panel de issues</button>
       <button class="nav-item" onclick="nav('val-baseline')"><div class="nav-pip" style="background:var(--c-green)"></div>Aprobación baseline</button>
       <button class="nav-item" onclick="nav('val-publicacion')"><div class="nav-pip" style="background:var(--c-green)"></div>Publicación SRS</button>
@@ -939,6 +938,7 @@ reg('home', () => `
   <div class="std-row">
     <span class="std-pill">IEEE 29148:2018</span>
     <span class="std-pill">IEEE 1028:2008</span>
+    <span class="std-pill">IEEE 828:2012</span>
     <span class="std-pill">BABOK v3</span>
     <span class="std-pill">ISO/IEC 25010:2023</span>
     <span class="std-pill">ISO/IEC 12207:2017</span>
@@ -947,16 +947,16 @@ reg('home', () => `
 </div>
 
 <div class="kpi-grid">
-  <div class="kpi"><div class="kpi-num" style="color:var(--c-teal)">5</div><div class="kpi-label">Fases</div><div class="kpi-sub">del ciclo de vida</div></div>
-  <div class="kpi"><div class="kpi-num" style="color:var(--c-purple)">4</div><div class="kpi-label">Capas</div><div class="kpi-sub">arquitectura del framework</div></div>
-  <div class="kpi"><div class="kpi-num" style="color:var(--c-blue)">7</div><div class="kpi-label">Estándares</div><div class="kpi-sub">internacionales</div></div>
-  <div class="kpi"><div class="kpi-num" style="color:var(--c-amber)">18</div><div class="kpi-label">Técnicas</div><div class="kpi-sub">documentadas</div></div>
-  <div class="kpi"><div class="kpi-num" style="color:var(--c-green)">30</div><div class="kpi-label">Criterios</div><div class="kpi-sub">de madurez</div></div>
-  <div class="kpi"><div class="kpi-num" style="color:var(--c-gray)">24</div><div class="kpi-label">Artefactos</div><div class="kpi-sub">producidos</div></div>
+  <div class="kpi" style="cursor:pointer" onclick="kpiModal('fases')" title="Ver detalle"><div class="kpi-num" style="color:var(--c-teal)">5</div><div class="kpi-label">Fases</div><div class="kpi-sub">del ciclo de vida</div></div>
+  <div class="kpi" style="cursor:pointer" onclick="kpiModal('capas')" title="Ver detalle"><div class="kpi-num" style="color:var(--c-purple)">4</div><div class="kpi-label">Capas</div><div class="kpi-sub">arquitectura del framework</div></div>
+  <div class="kpi" style="cursor:pointer" onclick="kpiModal('estandares')" title="Ver detalle"><div class="kpi-num" style="color:var(--c-blue)">8</div><div class="kpi-label">Estándares</div><div class="kpi-sub">internacionales</div></div>
+  <div class="kpi" style="cursor:pointer" onclick="kpiModal('tecnicas')" title="Ver detalle"><div class="kpi-num" style="color:var(--c-amber)">24</div><div class="kpi-label">Técnicas</div><div class="kpi-sub">documentadas</div></div>
+  <div class="kpi" style="cursor:pointer" onclick="kpiModal('criterios')" title="Ver detalle"><div class="kpi-num" style="color:var(--c-green)">30</div><div class="kpi-label">Criterios</div><div class="kpi-sub">de madurez</div></div>
+  <div class="kpi" style="cursor:pointer" onclick="kpiModal('artefactos')" title="Ver detalle"><div class="kpi-num" style="color:var(--c-gray)">36</div><div class="kpi-label">Artefactos</div><div class="kpi-sub">producidos</div></div>
 </div>
 
 <!-- Las 5 fases -->
-<h3 style="font-family:var(--font-serif);font-size:14px;font-weight:500;margin-bottom:.8rem;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;font-size:11px">Las cinco fases — haz clic para explorar</h3>
+<h3 style="font-family:var(--font-serif);font-size:11px;font-weight:500;margin-bottom:.8rem;color:var(--muted);text-transform:uppercase;letter-spacing:.4px">Las cinco fases — haz clic para explorar</h3>
 <div class="g5" style="margin-bottom:1.5rem">
   <div class="phase-card" style="border-color:rgba(29,158,117,.3);background:var(--c-teal-l)" onclick="nav('eli-overview')">
     <div class="phase-label" style="color:var(--c-teal-d)">Fase 1</div>
@@ -976,12 +976,12 @@ reg('home', () => `
   <div class="phase-card" style="border-color:rgba(15,110,86,.3);background:var(--c-green-l)" onclick="nav('val-flujo')">
     <div class="phase-label" style="color:var(--c-teal-d)">Fase 4</div>
     <div class="phase-name" style="color:var(--c-teal-d)">Validación</div>
-    <div class="phase-items" style="color:var(--c-green)">Walkthrough<br>Fagan · UAT<br>Baseline<br>IEEE 1028</div>
+    <div class="phase-items" style="color:var(--c-green)">Walkthrough · Fagan<br>Stakeholders · UAT<br>Baseline firmado<br>IEEE 1028</div>
   </div>
   <div class="phase-card" style="border-color:rgba(186,117,23,.3);background:var(--c-amber-l)" onclick="nav('ccb-flujo')">
-    <div class="phase-label" style="color:var(--c-amber-d)">Transversal</div>
-    <div class="phase-name" style="color:var(--c-amber-d)">Gestión cambios</div>
-    <div class="phase-items" style="color:var(--c-amber)">Change Request<br>CCB formal<br>SRS versionado<br>ISO 12207</div>
+    <div class="phase-label" style="color:var(--c-amber-d)">Fase 5</div>
+    <div class="phase-name" style="color:var(--c-amber-d)">Gestión de cambios</div>
+    <div class="phase-items" style="color:var(--c-amber)">Change Request<br>CCB formal<br>SRS versionado<br>IEEE 828 · ISO 12207</div>
   </div>
 </div>
 
@@ -1001,8 +1001,14 @@ reg('home', () => `
 <div class="card">
   <div class="card-title">Flujo de artefactos entre fases</div>
   <div style="display:flex;align-items:center;gap:.5rem;overflow-x:auto;padding:.5rem 0">
-    ${[{fase:'Elicitación',color:'var(--c-teal)',a1:'Minuta sesión',a2:'Mapa stakeholders'},{fase:'Análisis',color:'var(--c-purple)',a1:'BPMN To-Be',a2:'Matriz MoSCoW'},{fase:'Especificación',color:'var(--c-blue)',a1:'SRS v1.0',a2:'Gherkin · Glosario'},{fase:'Validación',color:'var(--c-green)',a1:'SRS aprobado',a2:'Log defectos'},{fase:'G. cambios',color:'var(--c-amber)',a1:'SRS versionado',a2:'CR log activo'}].map((f,i,arr) => `
-    <div style="background:var(--bg);border:0.5px solid var(--border);border-radius:var(--radius);padding:.65rem .85rem;text-align:center;min-width:110px;flex-shrink:0">
+    ${[
+      {fase:'Fase 1 · Elicitación',  color:'var(--c-teal)',   a1:'Minuta de sesión',      a2:'Mapa de stakeholders'},
+      {fase:'Fase 2 · Análisis',     color:'var(--c-purple)', a1:'BPMN To-Be · GAP',      a2:'Backlog priorizado'},
+      {fase:'Fase 3 · Especificación',color:'var(--c-blue)',  a1:'SRS IEEE 29148',         a2:'RTM · Glosario'},
+      {fase:'Fase 4 · Validación',   color:'var(--c-green)',  a1:'SRS baseline firmado',  a2:'Panel de issues'},
+      {fase:'Fase 5 · G. cambios',   color:'var(--c-amber)',  a1:'CRs aprobados',         a2:'Versiones post-baseline'},
+    ].map((f,i,arr) => `
+    <div style="background:var(--bg);border:0.5px solid var(--border);border-radius:var(--radius);padding:.65rem .85rem;text-align:center;min-width:130px;flex-shrink:0">
       <div style="font-size:9px;font-weight:500;text-transform:uppercase;letter-spacing:.3px;color:${f.color};margin-bottom:.2rem">${f.fase}</div>
       <div style="font-size:12px;font-weight:500;margin-bottom:.15rem">${f.a1}</div>
       <div style="font-size:10px;color:var(--muted)">${f.a2}</div>
@@ -1011,6 +1017,100 @@ reg('home', () => `
 </div>
 `);
 
+/* ════════════════════════════════════════
+   KPI MODALS — Dashboard ejecutivo
+════════════════════════════════════════ */
+function kpiModal(tipo){
+  var existing=document.getElementById('kpi-modal-overlay');
+  if(existing){existing.remove();return;}
+  var data={
+    fases:{titulo:'Las 5 fases del framework',color:'var(--c-teal)',items:[
+      {n:'Fase 1',t:'Elicitación',d:'Entrevistas, JAD, observación, prototipado. Técnicas BABOK v3.'},
+      {n:'Fase 2',t:'Análisis',d:'BPMN As-Is/To-Be, GAP analysis, casos de uso, priorización MoSCoW.'},
+      {n:'Fase 3',t:'Especificación',d:'SRS IEEE 29148, Gherkin/BDD, RNF con ISO 25010, glosario.'},
+      {n:'Fase 4',t:'Validación',d:'Walkthrough, Inspección Fagan, revisión stakeholders, UAT, baseline.'},
+      {n:'Fase 5',t:'Gestión de cambios',d:'Change Request, CCB formal, SRS versionado. IEEE 828 / ISO 12207.'},
+    ]},
+    capas:{titulo:'Las 4 capas de arquitectura',color:'var(--c-purple)',items:[
+      {n:'C1',t:'Capa de proceso',d:'Las 5 fases secuenciales con actividades, técnicas y artefactos definidos.'},
+      {n:'C2',t:'Capa de gobernanza',d:'4 puntos de control (PC1–PC4) con criterios DoR y DoD formales.'},
+      {n:'C3',t:'Capa de calidad',d:'Criterios de calidad mínimos, evaluador de madurez y métricas de seguimiento.'},
+      {n:'C4',t:'Capa de ejecución',d:'Roles, RACI, hoja de ruta de implementación y plan de adopción.'},
+    ]},
+    estandares:{titulo:'8 estándares internacionales',color:'var(--c-blue)',items:[
+      {n:'',t:'IEEE 29148:2018',d:'Requisitos para ingeniería de requisitos — estructura del SRS y atributos de calidad.'},
+      {n:'',t:'IEEE 1028:2008',d:'Revisiones e inspecciones de software — Walkthrough e Inspección Fagan.'},
+      {n:'',t:'IEEE 828:2012',d:'Gestión de configuración — baseline, CCB y control de cambios.'},
+      {n:'',t:'BABOK v3',d:'Business Analysis Body of Knowledge — técnicas de elicitación y colaboración.'},
+      {n:'',t:'ISO/IEC 25010:2023',d:'Modelo de calidad del producto — atributos medibles para RNF.'},
+      {n:'',t:'ISO/IEC 12207:2017',d:'Procesos del ciclo de vida del software — gestión de cambios y configuración.'},
+      {n:'',t:'ISO/IEC 38500:2024',d:'Gobernanza de TI — principios de decisión y accountability.'},
+      {n:'',t:'ISO 19510 (BPMN 2.0)',d:'Notación y modelo de procesos de negocio — modelado As-Is y To-Be.'},
+    ]},
+    tecnicas:{titulo:'24 técnicas documentadas',color:'var(--c-amber)',items:[
+      {n:'F1',t:'Entrevista estructurada',d:'Elicitación directa con guía de preguntas y minuta.'},
+      {n:'F1',t:'Taller JAD',d:'Sesión colaborativa con múltiples stakeholders.'},
+      {n:'F1',t:'Observación directa',d:'Shadowing del proceso actual para detectar necesidades implícitas.'},
+      {n:'F1',t:'Prototipado',d:'Maqueta visual para validar comprensión con el usuario.'},
+      {n:'F1',t:'Mapa de stakeholders',d:'Cuadrante influencia × interés con estrategia de participación.'},
+      {n:'F2',t:'BPMN As-Is',d:'Modelado del proceso actual para identificar puntos de dolor.'},
+      {n:'F2',t:'BPMN To-Be',d:'Diseño del proceso futuro con mejoras identificadas.'},
+      {n:'F2',t:'GAP Analysis',d:'Análisis de brechas entre estado actual y deseado.'},
+      {n:'F2',t:'Casos de uso UML',d:'Modelado de interacciones actor-sistema.'},
+      {n:'F2',t:'MoSCoW',d:'Priorización: Must / Should / Could / Won\u0027t.'},
+      {n:'F2',t:'Diagrama de contexto',d:'Delimita el sistema y sus entidades externas.'},
+      {n:'F3',t:'SRS IEEE 29148',d:'Plantilla estructurada de especificación de requisitos.'},
+      {n:'F3',t:'Gherkin / BDD',d:'Criterios de aceptación en formato Given/When/Then.'},
+      {n:'F3',t:'RTM',d:'Requirements Traceability Matrix — trazabilidad bidireccional.'},
+      {n:'F3',t:'Checklist de calidad',d:'7 atributos IEEE 29148 con umbrales medibles.'},
+      {n:'F4',t:'Walkthrough técnico',d:'IEEE 1028 §5.3 — revisión guíada por el autor.'},
+      {n:'F4',t:'Revisión de stakeholders',d:'Validación de negocio con firma del Product Owner.'},
+      {n:'F4',t:'Inspección Fagan',d:'IEEE 1028 §5.4 — técnica más rigurosa con 6 fases.'},
+      {n:'F4',t:'UAT',d:'User Acceptance Testing — validación con usuarios finales.'},
+      {n:'F4',t:'Panel de issues',d:'Consolidación de hallazgos de las 3 técnicas de revisión.'},
+      {n:'F5',t:'Formulario CR',d:'Registro estructurado de solicitudes de cambio al baseline.'},
+      {n:'F5',t:'Análisis de impacto',d:'Evaluación de costo, esfuerzo, riesgo y artefactos afectados.'},
+      {n:'F5',t:'Matriz urgencia × impacto',d:'Determinación del nivel de aprobación requerido (3×3).'},
+      {n:'F5',t:'Control de versiones',d:'Versionado semántico del SRS con tag, URL y hash.'},
+    ]},
+    criterios:{titulo:'30 criterios de madurez (CMMI-DEV)',color:'var(--c-green)',items:[
+      {n:'F1 ×5',t:'Fase 1 — Elicitación',d:'Técnicas formales, mapa de stakeholders, minutas estructuradas, plan de elicitación, sesiones de confirmación.'},
+      {n:'F2 ×5',t:'Fase 2 — Análisis',d:'BPMN, análisis GAP, priorización MoSCoW, diagrama de contexto, criterios de aceptación desde el análisis.'},
+      {n:'F3 ×5',t:'Fase 3 — Especificación',d:'Plantilla IEEE 29148, IDs y modales, Gherkin/BDD, glosario técnico, control de versiones.'},
+      {n:'F4 ×5',t:'Fase 4 — Validación',d:'Revisiones formales, log de defectos, aprobación con acta, UAT con usuarios, densidad de defectos.'},
+      {n:'F5 ×5',t:'Fase 5 — Gestión de cambios',d:'Proceso CR formal, análisis de impacto, CCB con roles, re-versionado SRS, CR rechazados documentados.'},
+      {n:'×3',t:'Escala de evaluación',d:'Sí (100%) · Parcial (50%) · No (0%) — con campo de evidencia por criterio.'},
+    ]},
+    artefactos:{titulo:'36 artefactos producidos',color:'var(--c-gray)',items:[
+      {n:'F1',t:'Fase 1 · Elicitación (9)',d:'Plan de elicitación · Mapa de stakeholders · Guías de preguntas · Minuta de sesión · Registro de elicitación · Lista SA · Lista RC · Acta de conformidad PO · Acta PC1'},
+      {n:'F2',t:'Fase 2 · Análisis (8)',d:'BPMN As-Is · BPMN To-Be · GAP Analysis · Diagrama de contexto · Casos de uso · Backlog priorizado · Matriz RACI · Acta PC2'},
+      {n:'F3',t:'Fase 3 · Especificación (10)',d:'SRS IEEE 29148 · HU con Gherkin · RF · RNF · RC · RTM pre-baseline · Glosario técnico · Checklist de calidad · Versiones pre-baseline · Acta PC3'},
+      {n:'F4',t:'Fase 4 · Validación (9)',d:'Acta walkthrough · Acta conformidad PO · Reporte inspección Fagan · Panel de issues · Plan UAT + resultados · Acta aprobación baseline · SRS baseline publicado · Notificaciones · Acta PC4'},
+      {n:'F5',t:'Fase 5 · Gestión de cambios (8)',d:'Formulario CR · Análisis de impacto · Acta decisión CCB · SRS versionado · RTM actualizada · Reporte re-verificación · Acta cierre CR · Versiones post-baseline'},
+    ]},
+  };
+  var d=data[tipo]; if(!d) return;
+  var overlay=document.createElement('div');
+  overlay.id='kpi-modal-overlay';
+  overlay.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:9998;display:flex;align-items:center;justify-content:center;padding:1rem';
+  overlay.onclick=function(ev){if(ev.target===overlay)overlay.remove();};
+  var modal=document.createElement('div');
+  modal.style.cssText='background:var(--bg);border-radius:12px;box-shadow:0 16px 48px rgba(0,0,0,.2);max-width:600px;width:100%;max-height:80vh;overflow:hidden;display:flex;flex-direction:column';
+  var inner='<div style="display:flex;align-items:center;justify-content:space-between;padding:.8rem 1.1rem;border-bottom:0.5px solid var(--border);flex-shrink:0">'
+    +'<div style="font-size:14px;font-weight:600;color:'+d.color+'">'+d.titulo+'</div>'
+    +'<button style="background:none;border:none;cursor:pointer;color:var(--muted);font-size:18px;line-height:1" onclick="document.getElementById(&quot;kpi-modal-overlay&quot;).remove()">&#215;</button>'
+    +'</div>'
+    +'<div style="overflow-y:auto;padding:.8rem 1.1rem;flex:1">'
+    +d.items.map(function(item){
+      return '<div style="display:flex;gap:.7rem;padding:.5rem 0;border-bottom:0.5px solid var(--border);align-items:flex-start">'
+        +(item.n?'<div style="font-size:10px;font-family:var(--font-mono);font-weight:600;color:'+d.color+';background:'+d.color+'18;padding:2px 7px;border-radius:4px;flex-shrink:0;white-space:nowrap;margin-top:1px">'+item.n+'</div>':'')
+        +'<div><div style="font-size:12px;font-weight:500;margin-bottom:2px">'+item.t+'</div>'
+        +'<div style="font-size:11px;color:var(--muted);line-height:1.5">'+item.d+'</div></div></div>';
+    }).join('')+'</div>';
+  modal.innerHTML=inner;
+  overlay.appendChild(modal);
+  document.body.appendChild(overlay);
+}
 /* ════════════════════════════════════════
    PAGE: PRINCIPIOS
 ════════════════════════════════════════ */
@@ -2522,6 +2622,7 @@ reg('home', () => `
   <div class="std-row">
     <span class="std-pill">IEEE 29148:2018</span>
     <span class="std-pill">IEEE 1028:2008</span>
+    <span class="std-pill">IEEE 828:2012</span>
     <span class="std-pill">BABOK v3</span>
     <span class="std-pill">ISO/IEC 25010:2023</span>
     <span class="std-pill">ISO/IEC 12207:2017</span>
@@ -2530,16 +2631,16 @@ reg('home', () => `
 </div>
 
 <div class="kpi-grid">
-  <div class="kpi"><div class="kpi-num" style="color:var(--c-teal)">5</div><div class="kpi-label">Fases</div><div class="kpi-sub">del ciclo de vida</div></div>
-  <div class="kpi"><div class="kpi-num" style="color:var(--c-purple)">4</div><div class="kpi-label">Capas</div><div class="kpi-sub">arquitectura del framework</div></div>
-  <div class="kpi"><div class="kpi-num" style="color:var(--c-blue)">7</div><div class="kpi-label">Estándares</div><div class="kpi-sub">internacionales</div></div>
-  <div class="kpi"><div class="kpi-num" style="color:var(--c-amber)">18</div><div class="kpi-label">Técnicas</div><div class="kpi-sub">documentadas</div></div>
-  <div class="kpi"><div class="kpi-num" style="color:var(--c-green)">30</div><div class="kpi-label">Criterios</div><div class="kpi-sub">de madurez</div></div>
-  <div class="kpi"><div class="kpi-num" style="color:var(--c-gray)">24</div><div class="kpi-label">Artefactos</div><div class="kpi-sub">producidos</div></div>
+  <div class="kpi" style="cursor:pointer" onclick="kpiModal('fases')" title="Ver detalle"><div class="kpi-num" style="color:var(--c-teal)">5</div><div class="kpi-label">Fases</div><div class="kpi-sub">del ciclo de vida</div></div>
+  <div class="kpi" style="cursor:pointer" onclick="kpiModal('capas')" title="Ver detalle"><div class="kpi-num" style="color:var(--c-purple)">4</div><div class="kpi-label">Capas</div><div class="kpi-sub">arquitectura del framework</div></div>
+  <div class="kpi" style="cursor:pointer" onclick="kpiModal('estandares')" title="Ver detalle"><div class="kpi-num" style="color:var(--c-blue)">8</div><div class="kpi-label">Estándares</div><div class="kpi-sub">internacionales</div></div>
+  <div class="kpi" style="cursor:pointer" onclick="kpiModal('tecnicas')" title="Ver detalle"><div class="kpi-num" style="color:var(--c-amber)">24</div><div class="kpi-label">Técnicas</div><div class="kpi-sub">documentadas</div></div>
+  <div class="kpi" style="cursor:pointer" onclick="kpiModal('criterios')" title="Ver detalle"><div class="kpi-num" style="color:var(--c-green)">30</div><div class="kpi-label">Criterios</div><div class="kpi-sub">de madurez</div></div>
+  <div class="kpi" style="cursor:pointer" onclick="kpiModal('artefactos')" title="Ver detalle"><div class="kpi-num" style="color:var(--c-gray)">36</div><div class="kpi-label">Artefactos</div><div class="kpi-sub">producidos</div></div>
 </div>
 
 <!-- Las 5 fases -->
-<h3 style="font-family:var(--font-serif);font-size:14px;font-weight:500;margin-bottom:.8rem;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;font-size:11px">Las cinco fases — haz clic para explorar</h3>
+<h3 style="font-family:var(--font-serif);font-size:11px;font-weight:500;margin-bottom:.8rem;color:var(--muted);text-transform:uppercase;letter-spacing:.4px">Las cinco fases — haz clic para explorar</h3>
 <div class="g5" style="margin-bottom:1.5rem">
   <div class="phase-card" style="border-color:rgba(29,158,117,.3);background:var(--c-teal-l)" onclick="nav('eli-overview')">
     <div class="phase-label" style="color:var(--c-teal-d)">Fase 1</div>
@@ -2559,12 +2660,12 @@ reg('home', () => `
   <div class="phase-card" style="border-color:rgba(15,110,86,.3);background:var(--c-green-l)" onclick="nav('val-flujo')">
     <div class="phase-label" style="color:var(--c-teal-d)">Fase 4</div>
     <div class="phase-name" style="color:var(--c-teal-d)">Validación</div>
-    <div class="phase-items" style="color:var(--c-green)">Walkthrough<br>Fagan · UAT<br>Baseline<br>IEEE 1028</div>
+    <div class="phase-items" style="color:var(--c-green)">Walkthrough · Fagan<br>Stakeholders · UAT<br>Baseline firmado<br>IEEE 1028</div>
   </div>
   <div class="phase-card" style="border-color:rgba(186,117,23,.3);background:var(--c-amber-l)" onclick="nav('ccb-flujo')">
-    <div class="phase-label" style="color:var(--c-amber-d)">Transversal</div>
-    <div class="phase-name" style="color:var(--c-amber-d)">Gestión cambios</div>
-    <div class="phase-items" style="color:var(--c-amber)">Change Request<br>CCB formal<br>SRS versionado<br>ISO 12207</div>
+    <div class="phase-label" style="color:var(--c-amber-d)">Fase 5</div>
+    <div class="phase-name" style="color:var(--c-amber-d)">Gestión de cambios</div>
+    <div class="phase-items" style="color:var(--c-amber)">Change Request<br>CCB formal<br>SRS versionado<br>IEEE 828 · ISO 12207</div>
   </div>
 </div>
 
@@ -2584,8 +2685,14 @@ reg('home', () => `
 <div class="card">
   <div class="card-title">Flujo de artefactos entre fases</div>
   <div style="display:flex;align-items:center;gap:.5rem;overflow-x:auto;padding:.5rem 0">
-    ${[{fase:'Elicitación',color:'var(--c-teal)',a1:'Minuta sesión',a2:'Mapa stakeholders'},{fase:'Análisis',color:'var(--c-purple)',a1:'BPMN To-Be',a2:'Matriz MoSCoW'},{fase:'Especificación',color:'var(--c-blue)',a1:'SRS v1.0',a2:'Gherkin · Glosario'},{fase:'Validación',color:'var(--c-green)',a1:'SRS aprobado',a2:'Log defectos'},{fase:'G. cambios',color:'var(--c-amber)',a1:'SRS versionado',a2:'CR log activo'}].map((f,i,arr) => `
-    <div style="background:var(--bg);border:0.5px solid var(--border);border-radius:var(--radius);padding:.65rem .85rem;text-align:center;min-width:110px;flex-shrink:0">
+    ${[
+      {fase:'Fase 1 · Elicitación',   color:'var(--c-teal)',   a1:'Minuta de sesión',     a2:'Mapa de stakeholders'},
+      {fase:'Fase 2 · Análisis',      color:'var(--c-purple)', a1:'BPMN To-Be · GAP',     a2:'Backlog priorizado'},
+      {fase:'Fase 3 · Especificación', color:'var(--c-blue)',   a1:'SRS IEEE 29148',        a2:'RTM · Glosario'},
+      {fase:'Fase 4 · Validación',    color:'var(--c-green)',  a1:'SRS baseline firmado', a2:'Panel de issues'},
+      {fase:'Fase 5 · G. cambios',    color:'var(--c-amber)',  a1:'CRs aprobados',        a2:'Versiones post-baseline'},
+    ].map((f,i,arr) => `
+    <div style="background:var(--bg);border:0.5px solid var(--border);border-radius:var(--radius);padding:.65rem .85rem;text-align:center;min-width:130px;flex-shrink:0">
       <div style="font-size:9px;font-weight:500;text-transform:uppercase;letter-spacing:.3px;color:${f.color};margin-bottom:.2rem">${f.fase}</div>
       <div style="font-size:12px;font-weight:500;margin-bottom:.15rem">${f.a1}</div>
       <div style="font-size:10px;color:var(--muted)">${f.a2}</div>
@@ -5307,6 +5414,52 @@ function initValLog(){
   renderValLog();
 }
 
+function logSetSev(ii,di,v){
+  var d2; try{d2=JSON.parse(localStorage.getItem(INSP_KEY))||defINSP();}catch(ex){d2=defINSP();}
+  if(d2.inspecciones&&d2.inspecciones[ii]&&d2.inspecciones[ii].defectosList&&d2.inspecciones[ii].defectosList[di])
+    d2.inspecciones[ii].defectosList[di].sev=v;
+  localStorage.setItem(INSP_KEY,JSON.stringify(d2)); window._issuesTab=1; renderValIssues();
+}
+function logSetEst(ii,di,v){
+  var d2; try{d2=JSON.parse(localStorage.getItem(INSP_KEY))||defINSP();}catch(ex){d2=defINSP();}
+  if(d2.inspecciones&&d2.inspecciones[ii]&&d2.inspecciones[ii].defectosList&&d2.inspecciones[ii].defectosList[di])
+    d2.inspecciones[ii].defectosList[di].estado=v;
+  localStorage.setItem(INSP_KEY,JSON.stringify(d2)); window._issuesTab=1; renderValIssues();
+}
+function logSetField(ii,di,k,v){
+  var d2; try{d2=JSON.parse(localStorage.getItem(INSP_KEY))||defINSP();}catch(ex){d2=defINSP();}
+  if(d2.inspecciones&&d2.inspecciones[ii]&&d2.inspecciones[ii].defectosList&&d2.inspecciones[ii].defectosList[di])
+    d2.inspecciones[ii].defectosList[di][k]=v;
+  localStorage.setItem(INSP_KEY,JSON.stringify(d2));
+}
+function logAddDefecto(){
+  var d2; try{d2=JSON.parse(localStorage.getItem(INSP_KEY))||defINSP();}catch(ex){d2=defINSP();}
+  if(!d2.inspecciones||d2.inspecciones.length===0){ nav('val-inspeccion'); return; }
+  window._logAddOpen=!window._logAddOpen;
+  window._issuesTab=1; renderValIssues();
+}
+function logConfirmAdd(){
+  var inspSel=document.getElementById('log-add-insp');
+  var sev=document.getElementById('log-add-sev');
+  var desc=document.getElementById('log-add-desc');
+  var rfid=document.getElementById('log-add-rfid');
+  var asig=document.getElementById('log-add-asig');
+  var orig=document.getElementById('log-add-orig');
+  var msg=document.getElementById('log-add-msg');
+  if(!desc||!desc.value.trim()){if(msg)msg.textContent='⚠ La descripción es obligatoria';return;}
+  var ii=parseInt(inspSel?inspSel.value:0);
+  var d2; try{d2=JSON.parse(localStorage.getItem(INSP_KEY))||defINSP();}catch(ex){d2=defINSP();}
+  if(!d2.inspecciones[ii].defectosList) d2.inspecciones[ii].defectosList=[];
+  d2.inspecciones[ii].defectosList.push({
+    rfid:rfid?rfid.value.trim():'', sev:sev?sev.value:'Mayor',
+    desc:desc.value.trim(), estado:'Abierto', asignado:asig?asig.value.trim():'',
+    impacto:'', resolucion:'', fechaRes:'', origenManual:orig?orig.value.trim():'Manual'
+  });
+  localStorage.setItem(INSP_KEY,JSON.stringify(d2));
+  window._logAddOpen=false;
+  window._issuesTab=1; renderValIssues();
+}
+
 function renderValLog(){
   var el=document.getElementById('val-log-mount'); if(!el) return;
   function e(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
@@ -5488,66 +5641,6 @@ function renderValLog(){
 
   el.innerHTML=html;
   el.querySelectorAll('textarea').forEach(function(ta){ta.style.height='auto';ta.style.height=ta.scrollHeight+'px';});
-
-  // Handlers
-  function inspSaveBack(d2){ localStorage.setItem(INSP_KEY,JSON.stringify(d2)); }
-  function getInspData(){ var d2; try{d2=JSON.parse(localStorage.getItem(INSP_KEY))||defINSP();}catch(ex){d2=defINSP();} return d2; }
-
-  window.logAddDefecto=function(){
-    var d2=getInspData();
-    if(!d2.inspecciones||d2.inspecciones.length===0){
-      nav('val-inspeccion');
-      return;
-    }
-    window._logAddOpen=!window._logAddOpen;
-    renderValLog();
-  };
-  window.logConfirmAdd=function(){
-    var inspSel=document.getElementById('log-add-insp');
-    var sev=document.getElementById('log-add-sev');
-    var desc=document.getElementById('log-add-desc');
-    var rfid=document.getElementById('log-add-rfid');
-    var asig=document.getElementById('log-add-asig');
-    var orig=document.getElementById('log-add-orig');
-    var msg=document.getElementById('log-add-msg');
-    if(!desc||!desc.value.trim()){if(msg)msg.textContent='⚠ La descripción es obligatoria';return;}
-    var ii=parseInt(inspSel?inspSel.value:0);
-    var d2=getInspData();
-    if(!d2.inspecciones[ii].defectosList) d2.inspecciones[ii].defectosList=[];
-    d2.inspecciones[ii].defectosList.push({
-      rfid:rfid?rfid.value.trim():'',
-      sev:sev?sev.value:'Mayor',
-      desc:desc.value.trim(),
-      estado:'Abierto',
-      asignado:asig?asig.value.trim():'',
-      impacto:'',
-      resolucion:'',
-      fechaRes:'',
-      origenManual:orig?orig.value.trim():'Manual'
-    });
-    inspSaveBack(d2);
-    window._logAddOpen=false;
-    renderValLog();
-  };
-
-  window.logSetSev=function(ii,di,v){
-    var d2=getInspData();
-    if(d2.inspecciones&&d2.inspecciones[ii]&&d2.inspecciones[ii].defectosList&&d2.inspecciones[ii].defectosList[di])
-      d2.inspecciones[ii].defectosList[di].sev=v;
-    inspSaveBack(d2); renderValLog();
-  };
-  window.logSetEst=function(ii,di,v){
-    var d2=getInspData();
-    if(d2.inspecciones&&d2.inspecciones[ii]&&d2.inspecciones[ii].defectosList&&d2.inspecciones[ii].defectosList[di])
-      d2.inspecciones[ii].defectosList[di].estado=v;
-    inspSaveBack(d2); renderValLog();
-  };
-  window.logSetField=function(ii,di,k,v){
-    var d2=getInspData();
-    if(d2.inspecciones&&d2.inspecciones[ii]&&d2.inspecciones[ii].defectosList&&d2.inspecciones[ii].defectosList[di])
-      d2.inspecciones[ii].defectosList[di][k]=v;
-    inspSaveBack(d2);
-  };
 }
 
 /* ════════════════════════════════════════
@@ -5565,7 +5658,8 @@ reg('val-issues', () => `
 
 function initValIssues(){
   var el=document.getElementById('val-issues-mount');
-  if(!el||el.innerHTML.trim()) return;
+  if(!el) return;
+  el.innerHTML='';
   renderValIssues();
 }
 
@@ -5652,45 +5746,50 @@ function renderValIssues(){
   // ── KPIs ──
   var total=issues.length;
   var abiertos=issues.filter(function(x){return x.estado==='Abierto'||x.estado==='Abierta';}).length;
+  var enProceso=issues.filter(function(x){return x.estado==='En proceso'||x.estado==='En revisión';}).length;
   var resueltos=issues.filter(function(x){return x.estado==='Resuelto'||x.estado==='Resuelta';}).length;
   var criticos=issues.filter(esCritico).length;
-  var readyOk=abiertos===0&&total>0;
+  var readyOk=abiertos===0&&enProceso===0&&total>0;
 
   var origenColor={Walkthrough:'var(--c-blue)',Stakeholders:'var(--c-purple)',Inspección:'var(--c-red)'};
   var estadoColor={Abierto:'var(--c-red)',Abierta:'var(--c-red)','En revisión':'var(--c-amber)','En proceso':'var(--c-amber)',Resuelto:'var(--c-green)',Resuelta:'var(--c-green)',Descartada:'var(--muted)',Descartado:'var(--muted)'};
 
   var html='';
 
-  // KPIs
-  html+='<div style="display:grid;grid-template-columns:repeat(5,1fr);gap:.6rem;margin-bottom:1rem">'
-    +'<div class="kpi"><div class="kpi-num" style="color:var(--c-blue)">'+total+'</div><div class="kpi-label">Total issues</div></div>'
+  // KPIs — 6 contadores
+  html+='<div style="display:grid;grid-template-columns:repeat(6,1fr);gap:.6rem;margin-bottom:1rem">'
+    +'<div class="kpi"><div class="kpi-num" style="color:var(--c-blue)">'+total+'</div><div class="kpi-label">Total</div></div>'
     +'<div class="kpi"><div class="kpi-num" style="color:var(--c-red)">'+abiertos+'</div><div class="kpi-label">Abiertos</div></div>'
+    +'<div class="kpi"><div class="kpi-num" style="color:var(--c-amber)">'+enProceso+'</div><div class="kpi-label">En proceso</div></div>'
     +'<div class="kpi"><div class="kpi-num" style="color:var(--c-green)">'+resueltos+'</div><div class="kpi-label">Resueltos</div></div>'
-    +'<div class="kpi"><div class="kpi-num" style="color:'+(criticos>0?'var(--c-red)':'var(--c-green)')+'">'+criticos+'</div><div class="kpi-label">Bloq. abiertos</div></div>'
-    +'<div class="kpi"><div class="kpi-num" style="font-size:13px;color:'+(readyOk?'var(--c-green)':total===0?'var(--c-gray)':'var(--c-red)')+'">'+( readyOk?'✓ Listo':total===0?'Sin issues':''+abiertos+' pendientes')+'</div><div class="kpi-label">Estado PC4</div></div>'
+    +'<div class="kpi"><div class="kpi-num" style="color:'+(criticos>0?'var(--c-red)':'var(--c-green)')+'">'+criticos+'</div><div class="kpi-label">Críticos</div></div>'
+    +'<div class="kpi"><div class="kpi-num" style="font-size:13px;color:'+(readyOk?'var(--c-green)':total===0?'var(--c-gray)':'var(--c-red)')+'">'+( readyOk?'✓ Listo':total===0?'Sin issues':''+( abiertos+enProceso)+' pendientes')+'</div><div class="kpi-label">Estado PC4</div></div>'
     +'</div>';
 
-  // Banner de aclaración normativa
-  html+='<div class="card" style="margin-bottom:1rem;background:rgba(83,52,131,.04);border-color:rgba(83,52,131,.2)">'
-    +'<div style="display:flex;align-items:flex-start;gap:.7rem">'
-    +'<div style="font-size:16px;flex-shrink:0">ⓘ</div>'
-    +'<div>'
-    +'<div style="font-size:12px;font-weight:500;color:var(--c-purple);margin-bottom:.3rem">Vista de gestión — BABOK v3 Issue Log</div>'
-    +'<div style="font-size:11px;color:var(--muted);line-height:1.7">'
-    +'Esta vista consolida los tres tipos de issues para facilitar el seguimiento previo al baseline. '
-    +'El <strong style="color:var(--text)">Log de defectos IEEE 1028</strong> (inspección formal) permanece como artefacto normativo independiente. '
-    +'Los cambios de estado aquí se sincronizan con cada sección de origen.'
-    +'</div></div></div></div>';
-
-  var filtros=['Todos','Walkthrough','Stakeholders','Inspección','Abiertos','Críticos'];
-  html+='<div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:1rem">'
-    +filtros.map(function(f){
-      var on=FIL===f;
-      var fc=f==='Walkthrough'?'var(--c-blue)':f==='Stakeholders'?'var(--c-purple)':f==='Inspección'?'var(--c-red)':f==='Abiertos'?'var(--c-amber)':f==='Críticos'?'var(--c-red)':'var(--c-green)';
-      var cnt=f==='Críticos'?criticos:f==='Abiertos'?abiertos:f==='Todos'?total:issues.filter(function(x){return x.origen===f;}).length;
-      return'<button style="padding:4px 12px;border-radius:20px;font-size:11px;font-weight:500;cursor:pointer;border:0.5px solid '+(on?fc:'var(--border2)')+';background:transparent;color:'+(on?fc:'var(--muted)')+';transition:all .2s" onclick="window._issuesFil=\''+f+'\';renderValIssues()">'+f+' ('+cnt+')</button>';
-    }).join('')
+  // Tabs internas
+  if(!window._issuesTab) window._issuesTab=0;
+  var iTab=window._issuesTab;
+  var nFagan=issues.filter(function(x){return x.origen==='Inspección';}).length;
+  html+='<div class="tab-nav">'
+    +'<button class="tab-btn'+(iTab===0?' on':'')+'" onclick="window._issuesTab=0;renderValIssues()">Vista consolidada</button>'
+    +'<button class="tab-btn'+(iTab===1?' on':'')+'" onclick="window._issuesTab=1;window._logFiltSev=\'Todos\';window._logFiltEst=\'Todos\';renderValIssues()">Log de defectos Fagan'+(nFagan>0?' ('+nFagan+')':'')+'</button>'
     +'</div>';
+
+  // Banner normativo — solo en tab 0
+  if(iTab===0){
+    html+='<div style="background:rgba(83,52,131,.04);border:0.5px solid rgba(83,52,131,.2);border-radius:var(--radius);padding:.5rem .8rem;font-size:11px;color:var(--c-purple);margin-bottom:.8rem">'
+      +'ⓘ Vista de gestión consolidada (BABOK v3 Issue Log). Consolida hallazgos del Walkthrough, observaciones de Stakeholders y defectos de Inspección Fagan. Los cambios de estado se sincronizan con cada sección de origen.</div>';
+
+    var filtros=['Todos','Walkthrough','Stakeholders','Inspección'];
+    html+='<div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:1rem">'
+      +filtros.map(function(f){
+        var on=FIL===f;
+        var fc=f==='Walkthrough'?'var(--c-blue)':f==='Stakeholders'?'var(--c-purple)':f==='Inspección'?'var(--c-red)':'var(--c-green)';
+        var cnt=f==='Todos'?total:issues.filter(function(x){return x.origen===f;}).length;
+        return'<button style="padding:4px 12px;border-radius:20px;font-size:11px;font-weight:500;cursor:pointer;border:0.5px solid '+(on?fc:'var(--border2)')+';background:transparent;color:'+(on?fc:'var(--muted)')+';transition:all .2s" onclick="window._issuesFil=\''+f+'\';renderValIssues()">'+f+' ('+cnt+')</button>';
+      }).join('')
+      +'</div>';
+  }
 
   if(total===0){
     html+='<div class="card" style="text-align:center;padding:2.5rem;color:var(--muted)">'
@@ -5701,49 +5800,119 @@ function renderValIssues(){
       +'<button class="btn btn-sm" onclick="window._sk2Tab=1;nav(\'val-stakeholders\')">Stakeholders →</button>'
       +'<button class="btn btn-sm" onclick="window._inspTab=1;nav(\'val-inspeccion\')">Inspección →</button>'
       +'</div></div>';
-  } else if(filtered.length===0){
-    html+='<div style="text-align:center;padding:2rem;color:var(--muted);font-size:12px">No hay issues con el filtro seleccionado.</div>';
-  } else {
-    // Agrupar por origen
-    var origenOrder=['Walkthrough','Stakeholders','Inspección'];
-    origenOrder.forEach(function(origen){
-      var grupo=filtered.filter(function(x){return x.origen===origen;});
-      if(grupo.length===0) return;
-      var oc=origenColor[origen]||'var(--muted)';
-      var gAbiertos=grupo.filter(function(x){return x.estado==='Abierto'||x.estado==='Abierta';}).length;
+  } else if(iTab===0){
+    // ── TAB 0: Todos los issues ──
+    if(filtered.length===0){
+      html+='<div style="text-align:center;padding:2rem;color:var(--muted);font-size:12px">No hay issues con el filtro seleccionado.</div>';
+    } else {
+      var origenOrder=['Walkthrough','Stakeholders','Inspección'];
+      origenOrder.forEach(function(origen){
+        var grupo=filtered.filter(function(x){return x.origen===origen;});
+        if(grupo.length===0) return;
+        var oc=origenColor[origen]||'var(--muted)';
+        var gAbiertos=grupo.filter(function(x){return x.estado==='Abierto'||x.estado==='Abierta';}).length;
 
-      html+='<div style="margin-bottom:1.2rem">'
-        +'<div style="display:flex;align-items:center;gap:.6rem;margin-bottom:.4rem;padding:.4rem .7rem;background:var(--surface2);border-radius:6px;border-left:3px solid '+oc+'">'
-        +'<div style="font-size:12px;font-weight:500;color:'+oc+'">'+origen+'</div>'
-        +'<div style="font-size:11px;color:var(--muted)">'+grupo.length+' issues · '+gAbiertos+' abiertos</div>'
-        +'<button class="btn btn-sm" style="margin-left:auto;color:'+oc+';border-color:'+oc+';opacity:.7" onclick="'
-        +(origen==='Walkthrough'?'window._wt2Tab=1;nav(\'val-walkthrough\')'
-        :origen==='Stakeholders'?'window._sk2Tab=1;nav(\'val-stakeholders\')'
-        :'window._inspTab=1;nav(\'val-inspeccion\')')+'">Ver en origen →</button>'
-        +'</div>'
-        +'<div class="table-wrap"><table class="data-table">'
-        +'<thead><tr><th style="min-width:90px">Ref RF</th><th style="min-width:130px">Tipo / Severidad</th><th>Descripción</th><th>Origen detalle</th><th style="min-width:110px">Estado</th></tr></thead><tbody>';
+        html+='<div style="margin-bottom:1.2rem">'
+          +'<div style="display:flex;align-items:center;gap:.6rem;margin-bottom:.4rem;padding:.4rem .7rem;background:var(--surface2);border-radius:6px;border-left:3px solid '+oc+'">'
+          +'<div style="font-size:12px;font-weight:500;color:'+oc+'">'+origen+'</div>'
+          +'<div style="font-size:11px;color:var(--muted)">'+grupo.length+' issues · '+gAbiertos+' abiertos</div>'
+          +'<button class="btn btn-sm" style="margin-left:auto;color:'+oc+';border-color:'+oc+';opacity:.7" onclick="'
+          +(origen==='Walkthrough'?'window._wt2Tab=1;nav(\'val-walkthrough\')'
+          :origen==='Stakeholders'?'window._sk2Tab=1;nav(\'val-stakeholders\')'
+          :'window._inspTab=1;nav(\'val-inspeccion\')')+'">Ver en origen →</button>'
+          +'</div>'
+          +'<div class="table-wrap"><table class="data-table">'
+          +'<thead><tr><th style="min-width:90px">Ref RF</th><th style="min-width:130px">Tipo / Severidad</th><th>Descripción</th><th>Origen detalle</th><th style="min-width:110px">Estado</th></tr></thead><tbody>';
 
-      grupo.forEach(function(issue){
-        var tc=oc;
-        var ec=estadoColor[issue.estado]||'var(--muted)';
-        var estOpts=origen==='Inspección'
-          ?['Abierto','En proceso','Resuelto']
-          :origen==='Stakeholders'
-          ?['Abierta','En revisión','Resuelta','Descartada']
-          :['Abierto','En proceso','Resuelto'];
+        grupo.forEach(function(issue){
+          var tc=oc;
+          var ec=estadoColor[issue.estado]||'var(--muted)';
+          var estOpts=origen==='Inspección'
+            ?['Abierto','En proceso','Resuelto']
+            :origen==='Stakeholders'
+            ?['Abierta','En revisión','Resuelta','Descartada']
+            :['Abierto','En proceso','Resuelto'];
 
-        html+='<tr>'
-          +'<td><input value="'+e(issue.ref==='—'?'':issue.ref)+'" placeholder="RF-001" style="font-family:var(--font-mono);font-size:11px;color:var(--c-blue);background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:2px 6px;outline:none;width:82px" oninput="issueSetRfid(this,\''+origen+'\')"></td>'
-          +'<td><span style="font-size:10px;font-weight:600;padding:2px 6px;border-radius:3px;background:rgba(0,0,0,.04);color:'+tc+';border:0.5px solid '+tc+'">'+e(issue.tipo)+'</span></td>'
-          +'<td style="font-size:12px;max-width:260px">'+e(issue.desc||'Sin descripción')+'</td>'
-          +'<td style="font-size:11px;color:var(--muted)">'+issue.origenDetalle+'</td>'
-          +'<td><select style="font-size:11px;border:0.5px solid var(--border2);border-radius:4px;padding:2px 4px;background:var(--bg);color:'+ec+';font-weight:500;outline:none;cursor:pointer" onchange="issueSetEst(this,\''+origen+'\')">'+estOpts.map(function(o){return'<option'+(issue.estado===o?' selected':'')+'>'+o+'</option>';}).join('')+'</select></td>'
-          +'</tr>';
+          html+='<tr>'
+            +'<td><input value="'+e(issue.ref==='—'?'':issue.ref)+'" placeholder="RF-001" style="font-family:var(--font-mono);font-size:11px;color:var(--c-blue);background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:2px 6px;outline:none;width:82px" oninput="issueSetRfid(this,\''+origen+'\')"></td>'
+            +'<td><span style="font-size:10px;font-weight:600;padding:2px 6px;border-radius:3px;background:rgba(0,0,0,.04);color:'+tc+';border:0.5px solid '+tc+'">'+e(issue.tipo)+'</span></td>'
+            +'<td style="font-size:12px;max-width:260px">'+e(issue.desc||'Sin descripción')+'</td>'
+            +'<td style="font-size:11px;color:var(--muted)">'+issue.origenDetalle+'</td>'
+            +'<td><select style="font-size:11px;border:0.5px solid var(--border2);border-radius:4px;padding:2px 4px;background:var(--bg);color:'+ec+';font-weight:500;outline:none;cursor:pointer" onchange="issueSetEst(this,\''+origen+'\')">'+estOpts.map(function(o){return'<option'+(issue.estado===o?' selected':'')+'>'+o+'</option>';}).join('')+'</select></td>'
+            +'</tr>';
+        });
+
+        html+='</tbody></table></div></div>';
       });
+    }
+  } else {
+    // ── TAB 1: Defectos Fagan agrupados por inspección ──
+    var sevColor={Bloqueante:'var(--c-red)',Mayor:'var(--c-amber)',Menor:'var(--c-blue)',Informativo:'var(--c-teal)'};
+    var estColorF={Abierto:'var(--c-red)','En proceso':'var(--c-amber)',Resuelto:'var(--c-green)'};
+    var TA2='width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 6px;font-size:11px;color:var(--text);outline:none;resize:none;line-height:1.5;overflow:hidden';
 
-      html+='</tbody></table></div></div>';
-    });
+    html+='<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.6rem">'
+      +'<div style="font-size:11px;color:var(--muted)">Vista consolidada de defectos Fagan. Editables directamente — los cambios se reflejan en Inspección formal.</div>'
+      +'<button class="btn btn-sm" style="color:var(--c-red);border-color:rgba(163,45,45,.3)" onclick="logAddDefecto()">+ Defecto manual</button>'
+      +'</div>';
+
+    var insList2=(inspData.inspecciones||[]);
+    if(insList2.length===0){
+      html+='<div class="card" style="text-align:center;padding:1.5rem;color:var(--muted)">'
+        +'<div style="font-size:12px;margin-bottom:.6rem">No hay inspecciones registradas.</div>'
+        +'<button class="btn btn-sm" onclick="window._inspTab=1;nav(\'val-inspeccion\')">Ir a Inspección formal →</button>'
+        +'</div>';
+    } else {
+      insList2.forEach(function(insp,ii){
+        var defs=insp.defectosList||[];
+        if(defs.length===0) return;
+        var inspAbier=defs.filter(function(d){return d.estado==='Abierto';}).length;
+        var inspBloq=defs.filter(function(d){return d.sev==='Bloqueante'&&d.estado!=='Resuelto';}).length;
+
+        html+='<div style="margin-bottom:1rem">'
+          +'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.4rem;padding:.4rem .6rem;background:var(--surface2);border-radius:6px">'
+          +'<div><span style="font-size:12px;font-weight:500;color:var(--c-red)">'+e(insp.alcance||'Inspección '+(ii+1))+'</span>'
+          +' <span style="font-size:11px;color:var(--muted)">'+e(insp.fecha||'')+' · '+e(insp.tipo||'Primera inspección')+'</span></div>'
+          +'<div style="display:flex;gap:.4rem;align-items:center">'
+          +(inspBloq>0?'<span style="font-size:10px;font-weight:600;padding:2px 7px;border-radius:3px;background:rgba(163,45,45,.1);color:var(--c-red)">'+inspBloq+' bloq. abiertos</span>':'')
+          +'<span style="font-size:11px;color:var(--muted)">'+defs.length+' def. · '+inspAbier+' abiertos</span>'
+          +'<button class="btn btn-sm" onclick="window._inspTab=1;nav(\'val-inspeccion\')">Ver inspección →</button>'
+          +'</div></div>';
+
+        html+='<div class="table-wrap"><table class="data-table">'
+          +'<thead><tr><th style="min-width:90px">Ref RF</th><th>Severidad</th><th>Descripción</th><th style="min-width:90px">Asignado</th><th>Estado</th><th style="width:28px"></th></tr></thead><tbody>';
+
+        if(!window._faganSel) window._faganSel={};
+        defs.forEach(function(d,di){
+          var sc=sevColor[d.sev]||'var(--muted)';
+          var ec=estColorF[d.estado]||'var(--muted)';
+          var expanded=window._faganSel[ii+'-'+di];
+          html+='<tr>'
+            +'<td><input value="'+e(d.rfid||'')+'" placeholder="RF-001" style="font-family:var(--font-mono);font-size:11px;color:var(--c-blue);background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:2px 6px;outline:none;width:82px" oninput="logSetField('+ii+','+di+',\'rfid\',this.value)"></td>'
+            +'<td><select style="font-size:11px;border:0.5px solid var(--border2);border-radius:4px;padding:2px 4px;background:var(--bg);color:'+sc+';font-weight:600;outline:none;cursor:pointer" onchange="logSetSev('+ii+','+di+',this.value)">'
+            +['Bloqueante','Mayor','Menor','Informativo'].map(function(o){return'<option'+(d.sev===o?' selected':'')+'>'+o+'</option>';}).join('')+'</select></td>'
+            +'<td><textarea rows="2" placeholder="Describe el defecto..." style="'+TA2+'" oninput="autoH(this);logSetField('+ii+','+di+',\'desc\',this.value)">'+e(d.desc||'')+'</textarea></td>'
+            +'<td><input value="'+e(d.asignado||'')+'" placeholder="BA" style="background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:2px 6px;font-size:11px;color:var(--text);outline:none;width:80px" oninput="logSetField('+ii+','+di+',\'asignado\',this.value)"></td>'
+            +'<td><select style="font-size:11px;border:0.5px solid var(--border2);border-radius:4px;padding:2px 4px;background:var(--bg);color:'+ec+';font-weight:500;outline:none;cursor:pointer" onchange="logSetEst('+ii+','+di+',this.value)">'
+            +['Abierto','En proceso','Resuelto'].map(function(o){return'<option'+(d.estado===o?' selected':'')+'>'+o+'</option>';}).join('')+'</select></td>'
+            +'<td><button style="background:none;border:none;cursor:pointer;color:'+(expanded?'var(--c-blue)':'var(--muted)')+';font-size:13px" title="Detalle" onclick="if(!window._faganSel)window._faganSel={};window._faganSel[\''+ii+'-'+di+'\']=!window._faganSel[\''+ii+'-'+di+'\'];renderValIssues();window._issuesTab=1">✎</button></td>'
+            +'</tr>';
+
+          if(expanded){
+            html+='<tr><td colspan="6"><div style="padding:.5rem .6rem;background:var(--surface2);border-radius:0 0 6px 6px">'
+              +'<div style="display:grid;grid-template-columns:1fr 1fr 160px;gap:.5rem">'
+              +'<div><label style="font-size:9px;font-weight:600;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">Impacto si no se resuelve</label>'
+              +'<textarea rows="2" style="'+TA2+'" placeholder="Qué ocurre si no se corrige..." oninput="autoH(this);logSetField('+ii+','+di+',\'impacto\',this.value)">'+e(d.impacto||'')+'</textarea></div>'
+              +'<div><label style="font-size:9px;font-weight:600;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">Resolución aplicada</label>'
+              +'<textarea rows="2" style="'+TA2+'" placeholder="Cómo se corrigió..." oninput="autoH(this);logSetField('+ii+','+di+',\'resolucion\',this.value)">'+e(d.resolucion||'')+'</textarea></div>'
+              +'<div><label style="font-size:9px;font-weight:600;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">Fecha de resolución</label>'
+              +'<input type="date" value="'+e(d.fechaRes||'')+'" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 6px;font-size:11px;color:var(--text);outline:none" oninput="logSetField('+ii+','+di+',\'fechaRes\',this.value)"></div>'
+              +'</div></div></td></tr>';
+          }
+        });
+        html+='</tbody></table></div></div>';
+      });
+    }
   }
 
   el.innerHTML=html;
@@ -6467,10 +6636,14 @@ function renderBaseline(){
     html+='</div>';
   });
 
-  html+='<div style="display:flex;gap:.5rem;margin-top:.5rem;align-items:center">'
+  html+='<div style="display:flex;gap:.5rem;margin-top:.5rem;align-items:center;flex-wrap:wrap">'
     +'<button class="btn" style="background:var(--c-green);color:#fff;border-color:var(--c-green)" onclick="blGuardar()">Guardar</button>'
     +'<button class="btn btn-sm" onclick="blReset()">↺ Limpiar</button>'
-    +'<span id="bl-msg" style="font-size:11px;color:var(--c-green)"></span></div>';
+    +'<span id="bl-msg" style="font-size:11px;color:var(--c-green)"></span>'
+    +(firmasOk===3
+      ?'<button class="btn" style="background:var(--c-teal);color:#fff;border-color:var(--c-teal);margin-left:auto" onclick="nav(\'val-publicacion\')">✓ 3 firmas completas — Ir a Publicación SRS →</button>'
+      :'<span style="font-size:11px;color:var(--muted);margin-left:auto">Completa las 3 firmas para habilitar la publicación</span>')
+    +'</div>';
 
   el.innerHTML=html;
   el.querySelectorAll('textarea').forEach(function(ta){ta.style.height='auto';ta.style.height=ta.scrollHeight+'px';});
@@ -7956,8 +8129,8 @@ reg('roles-raci', () => `
 </div>
 
 <div class="tab-nav">
-  <button class="tab-btn on" onclick="tabSel('rol',0,this)">Roles del framework</button>
-  <button class="tab-btn" onclick="tabSel('rol',1,this)">Matriz RACI</button>
+  <button class="tab-btn on" onclick="tabSel('rol',0,this)">Roles y RACI del framework</button>
+  <button class="tab-btn" onclick="tabSel('rol',1,this);setTimeout(initRaciProyecto,50)">RACI del proyecto</button>
 </div>
 
 <div class="tab-panel on" id="rol-0">
@@ -7977,14 +8150,13 @@ reg('roles-raci', () => `
       <span class="badge b-func">${r.fases}</span>
     </div>
   </div>`).join('')}
-</div>
 
-<div class="tab-panel" id="rol-1">
-  <div style="margin-bottom:.6rem;font-size:12px;color:var(--muted)">
-    <span style="background:rgba(24,95,165,.1);color:var(--c-blue);padding:2px 7px;border-radius:3px;font-weight:700;margin-right:6px">R</span>Responsable
-    <span style="background:rgba(163,45,45,.1);color:var(--c-red);padding:2px 7px;border-radius:3px;font-weight:700;margin:0 6px">A</span>Aprobador
-    <span style="background:rgba(186,117,23,.1);color:var(--c-amber);padding:2px 7px;border-radius:3px;font-weight:500;margin-right:6px">C</span>Consultado
-    <span style="background:var(--surface2);color:var(--muted);padding:2px 7px;border-radius:3px;margin-right:6px">I</span>Informado
+  <div class="card-title" style="margin-top:1rem;margin-bottom:.6rem">Matriz RACI del framework</div>
+  <div style="display:flex;gap:.4rem;align-items:center;margin-bottom:.6rem;flex-wrap:wrap">
+    <span style="background:rgba(24,95,165,.1);color:var(--c-blue);padding:2px 7px;border-radius:3px;font-weight:700">R</span><span style="font-size:11px;color:var(--muted);margin-right:.5rem">Responsable</span>
+    <span style="background:rgba(163,45,45,.1);color:var(--c-red);padding:2px 7px;border-radius:3px;font-weight:700">A</span><span style="font-size:11px;color:var(--muted);margin-right:.5rem">Aprobador</span>
+    <span style="background:rgba(186,117,23,.1);color:var(--c-amber);padding:2px 7px;border-radius:3px;font-weight:500">C</span><span style="font-size:11px;color:var(--muted);margin-right:.5rem">Consultado</span>
+    <span style="background:var(--surface2);color:var(--muted);padding:2px 7px;border-radius:3px">I</span><span style="font-size:11px;color:var(--muted)">Informado</span>
   </div>
   <div class="table-wrap">
     <table class="data-table">
@@ -8017,7 +8189,165 @@ reg('roles-raci', () => `
     </table>
   </div>
 </div>
+<div class="tab-panel" id="rol-1">
+  <div id="raci-proyecto-mount"></div>
+</div>
 `);
+
+/* ════════════════════════════════════════
+   RACI DEL PROYECTO
+════════════════════════════════════════ */
+var RACI_KEY='fw_raci_proyecto_v1';
+var RACI_ACTIVIDADES=[
+  'Elicitación — sesiones y minutas',
+  'Mapa de stakeholders',
+  'BPMN As-Is y To-Be',
+  'Diagrama de contexto',
+  'Casos de uso',
+  'GAP Analysis',
+  'Backlog priorizado',
+  'Historias de usuario (HU)',
+  'SRS — Editor IEEE 29148',
+  'Checklist de calidad SRS',
+  'RTM — Trazabilidad',
+  'Walkthrough técnico',
+  'Revisión de stakeholders',
+  'Inspección formal (Fagan)',
+  'UAT — Casos de prueba',
+  'Panel de issues',
+  'Aprobación baseline (PC4)',
+  'Publicación SRS',
+  'Gestión de CRs (Fase 5)',
+  'Versiones post-baseline',
+];
+
+function raciLoad(){
+  var d; try{d=JSON.parse(localStorage.getItem(RACI_KEY))||{};}catch(ex){d={};}
+  if(!d.roles) d.roles=[];
+  if(!d.matriz) d.matriz={};
+  return d;
+}
+function raciSave(d){ localStorage.setItem(RACI_KEY,JSON.stringify(d)); }
+
+function initRaciProyecto(){
+  var el=document.getElementById('raci-proyecto-mount'); if(!el) return;
+  renderRaciProyecto();
+}
+
+function renderRaciProyecto(){
+  var el=document.getElementById('raci-proyecto-mount'); if(!el) return;
+  var data=raciLoad();
+  var roles=data.roles;
+  var matriz=data.matriz;
+  function e(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+  var INP='background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 6px;font-size:11px;color:var(--text);outline:none';
+  var raciOpts=['','R','A','C','I'];
+  var raciCss={R:'raci-r',A:'raci-a',C:'raci-c',I:'raci-i'};
+
+  var html='';
+
+  // Banner
+  html+='<div style="background:rgba(24,95,165,.06);border:0.5px solid rgba(24,95,165,.2);border-radius:var(--radius);padding:.5rem .8rem;font-size:11px;color:var(--c-blue);margin-bottom:.8rem">'
+    +'ⓘ BABOK v3 §2.6 — Define los roles reales de tu proyecto y asigna R/A/C/I por actividad. Esta matriz es un artefacto entregable del framework.</div>';
+
+  // CRUD de roles
+  html+='<div class="card" style="margin-bottom:1rem">'
+    +'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.6rem">'
+    +'<div class="card-title">Roles del proyecto</div>'
+    +'<button class="btn btn-sm" style="background:var(--c-teal);color:#fff;border-color:var(--c-teal)" onclick="raciAddRol()">+ Agregar rol</button>'
+    +'</div>'
+    +(roles.length===0?'<div style="text-align:center;color:var(--muted);font-size:12px;padding:.8rem">Sin roles definidos. Agrega los roles del equipo de tu proyecto.</div>':'')
+    +roles.map(function(r,ri){
+      return '<div style="display:grid;grid-template-columns:1fr 1fr 1fr 28px;gap:.4rem;align-items:center;padding:.3rem 0;border-bottom:0.5px solid var(--border)">'
+        +'<input value="'+e(r.nombre)+'" placeholder="Ej: BA Senior" style="'+INP+';width:100%;font-weight:500;color:var(--c-teal)" oninput="raciSetRol('+ri+',\'nombre\',this.value)">'
+        +'<input value="'+e(r.area)+'" placeholder="Área / equipo" style="'+INP+';width:100%" oninput="raciSetRol('+ri+',\'area\',this.value)">'
+        +'<input value="'+e(r.persona)+'" placeholder="Nombre de la persona" style="'+INP+';width:100%" oninput="raciSetRol('+ri+',\'persona\',this.value)">'
+        +'<button style="background:none;border:none;cursor:pointer;color:var(--muted);font-size:15px" onclick="raciDelRol('+ri+')">×</button>'
+        +'</div>';
+    }).join('')
+    +'</div>';
+
+  if(roles.length===0){
+    el.innerHTML=html;
+    return;
+  }
+
+  // Leyenda RACI
+  html+='<div style="display:flex;gap:.5rem;align-items:center;margin-bottom:.6rem;flex-wrap:wrap">'
+    +['R','A','C','I'].map(function(v){
+      var labels={R:'Responsable',A:'Aprobador',C:'Consultado',I:'Informado'};
+      return '<span class="badge '+raciCss[v]+'" style="min-width:22px;text-align:center">'+v+'</span><span style="font-size:11px;color:var(--muted);margin-right:.5rem">'+labels[v]+'</span>';
+    }).join('')
+    +'</div>';
+
+  // Matriz
+  html+='<div class="table-wrap"><table class="data-table">'
+    +'<thead><tr><th style="min-width:200px">Actividad</th>'
+    +roles.map(function(r){
+      return '<th style="text-align:center;min-width:90px"><div style="font-size:11px;font-weight:600;color:var(--c-teal)">'+e(r.nombre)+'</div>'
+        +(r.persona?'<div style="font-size:10px;color:var(--muted);font-weight:400">'+e(r.persona)+'</div>':'')+'</th>';
+    }).join('')
+    +'</tr></thead><tbody>';
+
+  RACI_ACTIVIDADES.forEach(function(act){
+    html+='<tr><td style="font-size:12px;font-weight:500">'+e(act)+'</td>';
+    roles.forEach(function(r,ri){
+      var key=act+'|'+ri;
+      var val=matriz[key]||'';
+      html+='<td style="text-align:center">'
+        +'<select style="background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:2px 4px;font-size:12px;font-weight:600;text-align:center;outline:none;cursor:pointer;color:'
+        +(val==='R'?'var(--c-blue)':val==='A'?'var(--c-red)':val==='C'?'var(--c-amber)':val==='I'?'var(--muted)':'var(--muted)')
+        +'" onchange="raciSetCell(\''+act.replace(/'/g,"\\'")+'|'+ri+'\',this.value)">'
+        +raciOpts.map(function(o){return'<option'+(val===o?' selected':'')+' value="'+o+'">'+( o||'—')+'</option>';}).join('')
+        +'</select></td>';
+    });
+    html+='</tr>';
+  });
+
+  html+='</tbody></table></div>';
+  html+='<div style="display:flex;gap:.5rem;margin-top:.8rem">'
+    +'<button class="btn btn-sm" onclick="raciReset()">↺ Limpiar matriz</button>'
+    +'<span style="font-size:11px;color:var(--muted)">Guardado automáticamente</span>'
+    +'</div>';
+
+  el.innerHTML=html;
+}
+
+function raciAddRol(){
+  var d=raciLoad();
+  d.roles.push({nombre:'',area:'',persona:''});
+  raciSave(d); renderRaciProyecto();
+}
+function raciDelRol(ri){
+  var d=raciLoad();
+  d.roles.splice(ri,1);
+  // Remap matrix keys
+  var newMat={};
+  Object.keys(d.matriz).forEach(function(k){
+    var parts=k.split('|');
+    var idx=parseInt(parts[parts.length-1]);
+    if(idx<ri){newMat[k]=d.matriz[k];}
+    else if(idx>ri){
+      var newKey=parts.slice(0,-1).join('|')+'|'+(idx-1);
+      newMat[newKey]=d.matriz[k];
+    }
+  });
+  d.matriz=newMat;
+  raciSave(d); renderRaciProyecto();
+}
+function raciSetRol(ri,k,v){
+  var d=raciLoad(); if(!d.roles[ri]) return;
+  d.roles[ri][k]=v; raciSave(d);
+}
+function raciSetCell(key,val){
+  var d=raciLoad();
+  if(val) d.matriz[key]=val; else delete d.matriz[key];
+  raciSave(d);
+}
+function raciReset(){
+  var d=raciLoad(); d.matriz={};
+  raciSave(d); renderRaciProyecto();
+}
 
 /* ════════════════════════════════════════
    PAGE: CRITERIOS DE CALIDAD
@@ -8079,19 +8409,29 @@ function initCalMedicion(){
 }
 
 function defCal(){ return { mediciones:[
-  {criterio:'Claridad',          umbral:90, color:'var(--c-teal)',   valor:'', herramienta:'', obs:''},
-  {criterio:'Completitud',       umbral:95, color:'var(--c-blue)',   valor:'', herramienta:'', obs:''},
-  {criterio:'Verificabilidad',   umbral:85, color:'var(--c-purple)', valor:'', herramienta:'', obs:''},
-  {criterio:'Trazabilidad',      umbral:90, color:'var(--c-green)',  valor:'', herramienta:'', obs:''},
-  {criterio:'Consistencia',      umbral:95, color:'var(--c-amber)',  valor:'', herramienta:'', obs:''},
-  {criterio:'Necesidad',         umbral:90, color:'var(--c-red)',    valor:'', herramienta:'', obs:''},
-  {criterio:'Cuantificación RNF',umbral:80, color:'var(--c-gray)',   valor:'', herramienta:'', obs:''},
+  {criterio:'Claridad',          umbral:90, color:'var(--c-teal)',   valor:'', fecha:'', herramienta:'', obs:''},
+  {criterio:'Completitud',       umbral:95, color:'var(--c-blue)',   valor:'', fecha:'', herramienta:'', obs:''},
+  {criterio:'Verificabilidad',   umbral:85, color:'var(--c-purple)', valor:'', fecha:'', herramienta:'', obs:''},
+  {criterio:'Trazabilidad',      umbral:90, color:'var(--c-green)',  valor:'', fecha:'', herramienta:'', obs:''},
+  {criterio:'Consistencia',      umbral:95, color:'var(--c-amber)',  valor:'', fecha:'', herramienta:'', obs:''},
+  {criterio:'Necesidad',         umbral:90, color:'var(--c-red)',    valor:'', fecha:'', herramienta:'', obs:''},
+  {criterio:'Cuantificación RNF',umbral:80, color:'var(--c-gray)',   valor:'', fecha:'', herramienta:'', obs:''},
 ]}; }
+
+function calReset(){
+  window._CAL=defCal();
+  localStorage.setItem('fw_cal_v1',JSON.stringify(window._CAL));
+  renderCalMedicion();
+}
 
 function renderCalMedicion(){
   var el=document.getElementById('cal-med-mount'); if(!el) return;
   var CAL_KEY='fw_cal_v1';
-  function save(){ localStorage.setItem(CAL_KEY,JSON.stringify(window._CAL)); }
+  function save(){
+    localStorage.setItem(CAL_KEY,JSON.stringify(window._CAL));
+    var msg=document.getElementById('cal-save-msg');
+    if(msg){msg.textContent='✓ Guardado';setTimeout(function(){msg.textContent='';},1500);}
+  }
   function e(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
   var meds=window._CAL.mediciones;
 
@@ -8114,7 +8454,7 @@ function renderCalMedicion(){
     +'</div></div>';
 
   var tip='<div style="background:rgba(24,95,165,.06);border:0.5px solid rgba(24,95,165,.25);border-radius:var(--radius);padding:.5rem .8rem;font-size:11px;color:var(--c-blue);margin-bottom:.8rem">'
-    +'ⓘ Registra el valor real obtenido en tu caso de estudio para cada criterio. El semáforo compara con el umbral IEEE/ISO. Guardado automático.</div>';
+    +'ⓘ Registra el valor real obtenido en tu caso de estudio para cada criterio. El semáforo compara con el umbral IEEE/ISO.</div>';
 
   var cards='';
   meds.forEach(function(m,i){
@@ -8134,7 +8474,8 @@ function renderCalMedicion(){
       +'<span style="font-size:11px;color:var(--muted)">Umbral: <strong style="color:var(--text)">≥ '+m.umbral+'%</strong></span>'
       +'<span style="font-size:11px;font-weight:600;color:'+sc+';padding:2px 10px;border-radius:10px;background:var(--bg);border:0.5px solid '+sb+'">'+slabel+'</span>'
       +'</div>'
-      +'<div style="display:grid;grid-template-columns:120px 1fr 1fr;gap:.5rem;align-items:end">'
+      // Fila 1: valor + fecha + herramienta
+      +'<div style="display:grid;grid-template-columns:120px 150px 1fr;gap:.5rem;align-items:end;margin-bottom:.4rem">'
       +'<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.3px;display:block;margin-bottom:2px">Valor obtenido (%)</label>'
       +'<div style="display:flex;align-items:center;gap:.4rem">'
       +'<input type="number" min="0" max="100" value="'+e(m.valor)+'" placeholder="%" '
@@ -8142,22 +8483,32 @@ function renderCalMedicion(){
       +'oninput="window._CAL.mediciones['+i+'].valor=this.value;save();renderCalMedicion()">'
       +(diff!==null?'<span style="font-size:11px;font-weight:500;color:'+sc+'">'+(parseFloat(diff)>=0?'+':'')+diff+' pp</span>':'')
       +'</div></div>'
+      +'<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.3px;display:block;margin-bottom:2px">Fecha de medición</label>'
+      +'<input type="date" value="'+e(m.fecha||'')+'" '
+      +'style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:5px 8px;font-size:12px;color:var(--text);outline:none" '
+      +'oninput="window._CAL.mediciones['+i+'].fecha=this.value;save()"></div>'
       +'<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.3px;display:block;margin-bottom:2px">Herramienta / método</label>'
       +'<input value="'+e(m.herramienta)+'" placeholder="Ej: RTM, revisión entre pares, SonarQube..." '
       +'style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:5px 8px;font-size:12px;color:var(--text);font-family:var(--font-sans);outline:none" '
       +'oninput="window._CAL.mediciones['+i+'].herramienta=this.value;save()"></div>'
-      +'<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.3px;display:block;margin-bottom:2px">Observaciones</label>'
-      +'<input value="'+e(m.obs)+'" placeholder="Contexto, limitaciones, ajustes..." '
-      +'style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:5px 8px;font-size:12px;color:var(--text);font-family:var(--font-sans);outline:none" '
-      +'oninput="window._CAL.mediciones['+i+'].obs=this.value;save()"></div>'
       +'</div>'
+      // Fila 2: observaciones textarea
+      +'<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.3px;display:block;margin-bottom:2px">Observaciones</label>'
+      +'<textarea rows="2" placeholder="Contexto, limitaciones, ajustes, hallazgos relevantes..." '
+      +'style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:5px 8px;font-size:12px;color:var(--text);resize:none;outline:none;line-height:1.5;min-height:52px" '
+      +'oninput="window._CAL.mediciones['+i+'].obs=this.value;save()">'+e(m.obs||'')+'</textarea></div>'
       +(medido?'<div style="margin-top:.4rem"><div style="height:4px;background:var(--surface2);border-radius:2px;overflow:hidden">'
         +'<div style="height:100%;width:'+Math.min(Math.max(val,0),100)+'%;background:'+sc+';border-radius:2px;transition:width .4s"></div>'
         +'</div></div>':'')
       +'</div>';
   });
 
-  el.innerHTML=global+tip+cards;
+  var footer='<div style="display:flex;gap:.5rem;margin-top:.6rem;align-items:center">'
+    +'<button class="btn btn-sm" onclick="calReset()">↺ Limpiar mediciones</button>'
+    +'<span id="cal-save-msg" style="font-size:11px;color:var(--c-green)"></span>'
+    +'</div>';
+
+  el.innerHTML=global+tip+cards+footer;
 }
 
 
@@ -8182,7 +8533,7 @@ reg('madurez', () => `
     <div style="font-size:12px;color:var(--muted);margin-bottom:.4rem" id="mat-desc">Responde las preguntas de cada fase para obtener tu nivel de madurez actual.</div>
     <div style="height:6px;background:var(--surface2);border-radius:3px;overflow:hidden"><div style="height:100%;border-radius:3px;transition:width .5s,background .4s" id="mat-fill" style="width:0%"></div></div>
   </div>
-  <button class="btn btn-sm" onclick="resetMaturity()">Reiniciar</button>
+  <button class="btn btn-sm" onclick="matConfirmReset()">Reiniciar</button>
 </div>
 <div id="mat-questions"></div>
 `);
@@ -8643,7 +8994,9 @@ function renderCR(){
       +'<td style="font-size:12px;font-weight:'+(expanded?600:400)+'">'+e(cr.titulo)+'</td>'
       +'<td style="font-size:10px;color:var(--muted)">'+e(tipoShort)+'</td>'
       +'<td><span style="font-size:11px;font-weight:500;color:'+pc+'">'+e(cr.prioridad)+'</span></td>'
-      +'<td><span style="font-size:11px;font-weight:500;color:'+ec+'">'+e(cr.estado)+'</span></td>'
+      +'<td><span style="font-size:11px;font-weight:500;color:'+ec+'">'+e(cr.estado)+'</span>'
+        +(cr.estado==='Diferido'&&cr.versionDestino?'<div style="font-size:9px;font-family:var(--font-mono);color:var(--c-amber);margin-top:1px">→ '+e(cr.versionDestino)+(cr.fechaEstimada?' · '+e(cr.fechaEstimada):'')+'</div>':'')
+        +'</td>'
       +'<td style="font-size:11px;color:var(--muted)">'+e(cr.fecha)+'</td>'
       +'<td style="text-align:center;color:var(--muted);font-size:13px">'+(expanded?'▲':'▼')+'</td>'
       +'</tr>';
@@ -8803,13 +9156,51 @@ function renderCR(){
               +'<button class="btn btn-sm" style="font-size:10px" onclick="event.stopPropagation();nav(&quot;val-publicacion&quot;)">Ir a Publicación SRS →</button>'
               +'<button class="btn btn-sm" style="font-size:10px" onclick="event.stopPropagation();window._srseTab=5;nav(&quot;srs-editor&quot;)">Ir a Versiones pre-baseline →</button>'
               +'</div>':'')
+            +(decActual==='Diferido'?'<div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-top:.4rem">'
+              +fi('Versión destino (v.next)','versionDestino','Ej: v1.2, v2.0...',true)
+              +fi('Fecha estimada de inclusión','fechaEstimada','AAAA-MM-DD')
+              +'</div>':'')
             +'</div>':'')
           +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-bottom:.4rem">'
           +fi('Fecha reunión CCB','fechaCCB','AAAA-MM-DD')+fi('Participantes','participantesCCB','PO · Arq · PM...')
           +'</div>'
           +ta('Nota de decisión','nota','Documenta la decisión, quórum, votación y rationale completo...',4)
+          // Verificación post-implementación (solo cuando Aprobado)
+          +(decActual==='Aprobado'?
+            '<div style="margin-top:.5rem;padding:.5rem .7rem;border:0.5px solid '+(cr.verificFecha?'var(--c-blue)':'var(--border)')+';border-radius:var(--radius);background:'+(cr.verificFecha?'rgba(24,95,165,.03)':'var(--bg)')+'"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.4rem">'
+            +'<div style="font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase">Verificación post-implementación (C5)</div>'
+            +(cr.verificFecha?'<span style="font-size:11px;color:var(--c-blue)">✓ Verificado</span>':'<span style="font-size:11px;color:var(--muted)">Pendiente</span>')+'</div>'
+            +'<div style="font-size:10px;color:var(--muted);margin-bottom:.5rem">QA debe re-ejecutar los casos de prueba afectados y confirmar que el cambio no introduce regresiones.</div>'
+            +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-bottom:.4rem">'
+            +fi('Fecha de verificación','verificFecha','AAAA-MM-DD')
+            +fi('Responsable QA','verificQA','Nombre del QA')
+            +'</div>'
+            +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-bottom:.4rem">'
+            +fi('Casos re-ejecutados (IDs)','verificCasos','CP-001, CP-003...',true)
+            +fi('Resultado','verificResultado','Todos pasan / X fallan...')
+            +'</div>'
+            +ta('Observaciones de verificación','verificObs','Qué se verificó, incidencias encontradas y resolución...',2)
+            +'</div>'
+          :'')
+          // Notificación al solicitante (solo cuando Rechazado)
+          +(decActual==='Rechazado'?
+            '<div style="margin-top:.5rem;padding:.5rem .7rem;border:0.5px solid '+(cr.notifFecha?'var(--c-red)':'var(--border)')+';border-radius:var(--radius);background:'+(cr.notifFecha?'rgba(163,45,45,.03)':'var(--bg)')+'"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.4rem">'
+            +'<div style="font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase">Notificación al solicitante</div>'
+            +(cr.notifConfirmado?'<span style="font-size:11px;color:var(--c-green)">✓ Confirmado</span>':cr.notifFecha?'<span style="font-size:11px;color:var(--c-amber)">Enviado · pendiente confirmación</span>':'<span style="font-size:11px;color:var(--muted)">Pendiente</span>')
+            +'</div>'
+            +'<div style="font-size:10px;color:var(--muted);margin-bottom:.5rem">ISO 12207 §6.3.6 — El solicitante debe recibir notificación formal con el rationale del rechazo.</div>'
+            +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-bottom:.4rem">'
+            +fi('Fecha de notificación','notifFecha','AAAA-MM-DD')
+            +fi('Canal','notifCanal','Email · Teams · Reunión...')
+            +'</div>'
+            +ta('Resumen del rationale para el solicitante','notifRationale','Resume brevemente por qué se rechazó y qué alternativas existen...',3)
+            +'<div style="margin-top:.4rem"><label style="display:flex;align-items:center;gap:.5rem;cursor:pointer;font-size:12px">'
+            +'<input type="checkbox" '+(cr.notifConfirmado?'checked':'')+' onchange="event.stopPropagation();CCB.crs['+realIdx+'].notifConfirmado=this.checked;ccbSave();renderCR()"> '
+            +(cr.notifConfirmado?'✓ Solicitante confirmó recepción':'Solicitante confirmó recepción')
+            +'</label></div></div>'
+          :'')
           +'<div style="margin-top:.5rem;padding:.5rem .7rem;border:0.5px solid '+(cr.cierreFecha?'var(--c-green)':'var(--border)')+';border-radius:var(--radius);background:'+(cr.cierreFecha?'rgba(15,110,86,.03)':'var(--bg)')+'"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.4rem">'
-          +'<div style="font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase">Cierre formal</div>'
+          +'<div style="font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase">Cierre formal (C7)</div>'
           +(cr.cierreFecha?'<span style="font-size:11px;color:var(--c-green)">✓ Cerrado</span>':'<span style="font-size:11px;color:var(--muted)">Pendiente</span>')+'</div>'
           +'<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.5rem;margin-bottom:.4rem">'
           +fi('Fecha cierre','cierreFecha','AAAA-MM-DD')+fi('Cerrado por','cierreResponsable','Nombre')+fi('Versión SRS','cierreSRSVersion','v1.1',true)
@@ -8841,7 +9232,7 @@ function ccbSetDec(i,v){
 }
 function ccbAddCR(){
   var n=CCB.crs.length+1;
-  CCB.crs.push({id:'CR-'+String(n).padStart(3,'0'),titulo:'Nuevo cambio',origen:'',fecha:'',tipo:'Modificación de regla',prioridad:'Media',estado:'En análisis',desc:'',just:'',rfAfect:'',srsBase:'',esfuerzo:'',costo:'',riesgo:'Bajo',urgencia:'Media',alcance:'Bajo',rec:'',nota:'',dec:'',fechaCCB:'',participantesCCB:'',rtmAfect:'',cierreFecha:'',cierreResponsable:'',cierreSRSVersion:'',cierreActa:'',cierreNotif:false,cierreRTM:false});
+  CCB.crs.push({id:'CR-'+String(n).padStart(3,'0'),titulo:'Nuevo cambio',origen:'',fecha:'',tipo:'Modificación de regla',prioridad:'Media',estado:'En análisis',desc:'',just:'',rfAfect:'',rfAfectList:[],srsBase:'',esfuerzo:'',costo:'',riesgo:'Bajo',urgencia:'Media',alcance:'Bajo',rec:'',nota:'',dec:'',fechaCCB:'',participantesCCB:'',rtmAfect:'',versionDestino:'',fechaEstimada:'',verificFecha:'',verificQA:'',verificCasos:'',verificResultado:'',verificObs:'',notifFecha:'',notifCanal:'',notifRationale:'',notifConfirmado:false,cierreFecha:'',cierreResponsable:'',cierreSRSVersion:'',cierreActa:'',cierreNotif:false,cierreRTM:false});
   CCB.selCR=CCB.crs.length-1; CCB.selTab=0;
   ccbSave(); renderCR();
 }
@@ -9019,35 +9410,106 @@ function verAdd(){
 function verDel(i){ CCB.versiones.splice(i,1); ccbSave(); renderVersiones(); }
 
 // ── MATURITY ──
+const MAT_KEY='fw_mat_v1';
 const matAnswers = {};
+var matEvidencias = {};
+var matFechaEval = '';
 let matTotalW = 0;
 MATURITY_PHASES.forEach(p => p.qs.forEach(q => matTotalW += q.w));
+
+function matLoad(){
+  try{
+    var d=JSON.parse(localStorage.getItem(MAT_KEY))||{};
+    Object.keys(d.ans||{}).forEach(function(k){ matAnswers[k]=d.ans[k]; });
+    matEvidencias=d.evid||{};
+    matFechaEval=d.fecha||'';
+  }catch(ex){}
+}
+function matSave(){
+  localStorage.setItem(MAT_KEY,JSON.stringify({ans:matAnswers,evid:matEvidencias,fecha:matFechaEval}));
+}
+
 function initMaturity() {
+  matLoad();
   setTimeout(() => {
     const el = document.getElementById('mat-questions'); if(!el)return;
+
+    // Fecha de evaluación
+    var fechaHtml='<div style="display:flex;align-items:center;gap:.6rem;margin-bottom:.8rem">'
+      +'<label style="font-size:11px;font-weight:500;color:var(--muted)">Fecha de evaluación:</label>'
+      +'<input type="date" value="'+matFechaEval+'" style="background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:4px 8px;font-size:12px;color:var(--text);outline:none" oninput="matFechaEval=this.value;matSave()">'
+      +'<span style="font-size:11px;color:var(--muted);margin-left:auto">Escala: <strong>Sí</strong> = 100% · <strong>Parcial</strong> = 50% · <strong>No</strong> = 0%</span>'
+      +'</div>';
+
     let idx=0;
-    el.innerHTML = MATURITY_PHASES.map(p => `
-      <div class="card-sm" style="margin-bottom:.7rem;border-left:3px solid ${p.color}">
-        <div style="font-size:13px;font-weight:500;font-family:var(--font-serif);margin-bottom:.6rem;color:${p.color}">${p.name}</div>
-        ${p.qs.map(q => { const i=idx++; return `<div class="mat-q" id="mq${i}" onclick="toggleMat(${i},${q.w})"><div class="mat-radio" id="mr${i}"></div><div style="flex:1">${q.t}</div><span style="font-size:10px;color:var(--faint);margin-left:.4rem">×${q.w}</span></div>`; }).join('')}
-      </div>`).join('');
+    var phasesHtml = MATURITY_PHASES.map(p => {
+      var phaseScore=0, phaseMax=0;
+      var qsHtml=p.qs.map(q => {
+        const i=idx++;
+        var ans=matAnswers[i]||'no';
+        var evid=matEvidencias[i]||'';
+        phaseMax+=q.w*10;
+        if(ans==='si') phaseScore+=q.w*10;
+        else if(ans==='parcial') phaseScore+=q.w*5;
+        var pct2=Math.round(phaseScore/phaseMax*100);
+        return `<div style="margin-bottom:.6rem;padding:.5rem .6rem;border-radius:6px;background:${ans==='si'?'rgba(15,110,86,.04)':ans==='parcial'?'rgba(186,117,23,.04)':'var(--surface)'};border:0.5px solid ${ans==='si'?'rgba(15,110,86,.2)':ans==='parcial'?'rgba(186,117,23,.2)':'var(--border)'}">
+          <div style="display:flex;align-items:flex-start;gap:.6rem;margin-bottom:.4rem">
+            <div style="flex:1;font-size:12px;line-height:1.5">${q.t}</div>
+            <span style="font-size:10px;color:var(--muted);flex-shrink:0">×${q.w}</span>
+          </div>
+          <div style="display:flex;gap:.4rem;align-items:center;flex-wrap:wrap">
+            <div style="display:flex;gap:.3rem">
+              <button style="padding:3px 10px;border-radius:4px;font-size:11px;font-weight:500;cursor:pointer;border:0.5px solid ${ans==='si'?'var(--c-green)':'var(--border2)'};background:${ans==='si'?'var(--c-green)':'var(--surface)'};color:${ans==='si'?'#fff':'var(--muted)'}" onclick="matSet(${i},'si',${q.w})">✓ Sí</button>
+              <button style="padding:3px 10px;border-radius:4px;font-size:11px;font-weight:500;cursor:pointer;border:0.5px solid ${ans==='parcial'?'var(--c-amber)':'var(--border2)'};background:${ans==='parcial'?'var(--c-amber)':'var(--surface)'};color:${ans==='parcial'?'#fff':'var(--muted)'}" onclick="matSet(${i},'parcial',${q.w})">~ Parcial</button>
+              <button style="padding:3px 10px;border-radius:4px;font-size:11px;font-weight:500;cursor:pointer;border:0.5px solid ${ans==='no'?'var(--c-red)':'var(--border2)'};background:${ans==='no'?'rgba(163,45,45,.08)':'var(--surface)'};color:${ans==='no'?'var(--c-red)':'var(--muted)'}" onclick="matSet(${i},'no',${q.w})">✗ No</button>
+            </div>
+            <input value="${evid.replace(/"/g,'&quot;')}" placeholder="Evidencia o nota (ej: plantilla en Confluence, acta de reunión...)" style="flex:1;min-width:180px;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 7px;font-size:11px;color:var(--text);outline:none" oninput="matEvidencias[${i}]=this.value;matSave()">
+          </div>
+        </div>`;
+      }).join('');
+      var phaseActual=Math.round(phaseScore/phaseMax*100);
+      return `<div class="card-sm" style="margin-bottom:.7rem;border-left:3px solid ${p.color}">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.6rem">
+          <div style="font-size:13px;font-weight:500;font-family:var(--font-serif);color:${p.color}">${p.name}</div>
+          <div style="font-size:12px;font-weight:600;color:${p.color}">${phaseActual}%</div>
+        </div>
+        ${qsHtml}
+      </div>`;
+    }).join('');
+
+    el.innerHTML=fechaHtml+phasesHtml;
     updateMatScore();
   }, 100);
 }
-function toggleMat(i, w) {
-  matAnswers[i] = !matAnswers[i];
-  const r=document.getElementById('mr'+i), q=document.getElementById('mq'+i);
-  if(r){r.style.background=matAnswers[i]?'var(--c-green)':'transparent';r.style.borderColor=matAnswers[i]?'var(--c-green)':'var(--border2)';r.textContent=matAnswers[i]?'✓':'';}
+
+function matSet(i, val, w) {
+  if(matAnswers[i]===val) matAnswers[i]='no'; else matAnswers[i]=val;
+  matSave();
   updateMatScore();
+  // Update button styles without full re-render
+  var container=document.querySelector(`[onclick="matSet(${i},'si',${w})"]`);
+  if(container) initMaturity(); // re-render to update styles
 }
+
 function updateMatScore() {
   let earned=0;
-  MATURITY_PHASES.forEach((p,pi) => {
-    let off=0; MATURITY_PHASES.slice(0,pi).forEach(pp => off+=pp.qs.length);
-    p.qs.forEach((q,qi) => { if(matAnswers[off+qi]) earned+=q.w*10; });
+  let idx=0;
+  MATURITY_PHASES.forEach((p) => {
+    p.qs.forEach((q) => {
+      var ans=matAnswers[idx]||'no';
+      if(ans==='si') earned+=q.w*10;
+      else if(ans==='parcial') earned+=q.w*5;
+      idx++;
+    });
   });
   const total=matTotalW*10, pct=Math.round(earned/total*100);
-  const level=pct>=80?{l:'Nivel 4 — Optimizado',d:'Proceso institucionalizado con mejora continua y métricas activas.',c:'var(--c-green)'}:pct>=60?{l:'Nivel 3 — Definido',d:'Proceso documentado y consistente. Enfócate en las brechas identificadas.',c:'var(--c-blue)'}:pct>=35?{l:'Nivel 2 — Gestionado',d:'El proceso existe pero no es consistente entre proyectos. Prioriza Especificación y Validación.',c:'var(--c-amber)'}:{l:'Nivel 1 — Inicial',d:'El proceso es informal o ad-hoc. Empieza por establecer plantillas básicas.',c:'var(--c-red)'};
+  const levels=[
+    {min:80,l:'Nivel 4 — Optimizado',   d:'Proceso institucionalizado con mejora continua y métricas activas. El equipo tiene capacidad de mejora sistemática.',c:'var(--c-green)'},
+    {min:60,l:'Nivel 3 — Definido',      d:'Proceso documentado y consistente entre proyectos. Enfócate en cerrar las brechas identificadas con Parcial.',c:'var(--c-blue)'},
+    {min:35,l:'Nivel 2 — Gestionado',    d:'El proceso existe pero no es consistente. Prioriza Especificación y Validación para consolidar.',c:'var(--c-amber)'},
+    {min:0, l:'Nivel 1 — Inicial',       d:'El proceso es informal o ad-hoc. Empieza por establecer plantillas básicas de elicitación.',c:'var(--c-red)'},
+  ];
+  const level=levels.find(function(l){return pct>=l.min;})||levels[levels.length-1];
   const sc=document.getElementById('mat-score'),fl=document.getElementById('mat-fill'),lv=document.getElementById('mat-level'),ds=document.getElementById('mat-desc'),ci=document.getElementById('mat-circle');
   if(sc){sc.textContent=pct;sc.style.color=level.c;}
   if(fl){fl.style.width=pct+'%';fl.style.background=level.c;}
@@ -9055,7 +9517,28 @@ function updateMatScore() {
   if(ds) ds.textContent=level.d;
   if(ci) ci.style.borderColor=level.c;
 }
-function resetMaturity() { Object.keys(matAnswers).forEach(k=>delete matAnswers[k]); initMaturity(); }
+
+function matConfirmReset(){
+  var panel=document.getElementById('mat-reset-confirm');
+  if(panel){panel.remove();return;}
+  var div=document.createElement('div');
+  div.id='mat-reset-confirm';
+  div.style.cssText='position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:var(--bg);border:1px solid var(--c-red);border-radius:10px;padding:1.2rem 1.5rem;box-shadow:0 8px 32px rgba(0,0,0,.18);z-index:9999;min-width:280px;text-align:center';
+  div.innerHTML='<div style="font-size:14px;font-weight:500;margin-bottom:.4rem">¿Reiniciar evaluación?</div>'
+    +'<div style="font-size:12px;color:var(--muted);margin-bottom:1rem">Se perderán todas las respuestas y evidencias registradas.</div>'
+    +'<div style="display:flex;gap:.5rem;justify-content:center">'
+    +'<button class="btn" style="background:var(--c-red);color:#fff;border-color:var(--c-red)" onclick="document.getElementById(\'mat-reset-confirm\').remove();resetMaturity()">Sí, reiniciar</button>'
+    +'<button class="btn btn-sm" onclick="document.getElementById(\'mat-reset-confirm\').remove()">Cancelar</button>'
+    +'</div>';
+  document.body.appendChild(div);
+}
+function resetMaturity() {
+  Object.keys(matAnswers).forEach(k=>delete matAnswers[k]);
+  Object.keys(matEvidencias).forEach(k=>delete matEvidencias[k]);
+  matFechaEval='';
+  localStorage.removeItem(MAT_KEY);
+  initMaturity();
+}
 
 // ── ROADMAP ──
 const ROADMAPS = [
@@ -10153,156 +10636,268 @@ function initCampoResultados(){
 function renderCampoResultados(){
   var el=document.getElementById('cr-mount'); if(!el) return;
   function e(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+  function load(key,def){try{return JSON.parse(localStorage.getItem(key))||def;}catch(ex){return def;}}
 
-  // ── Pull data from all storages ───────────────────────────────────────────
-  var srs   = (function(){try{return JSON.parse(localStorage.getItem('fw_srs_v1'))||{};}catch(ex){return {};}}());
-  var cal   = (function(){try{return JSON.parse(localStorage.getItem('fw_cal_v1'))||{mediciones:[]};}catch(ex){return {mediciones:[]};}}());
-  var defs  = window._DEFS || (function(){try{return JSON.parse(localStorage.getItem('fw_defs_v1'))||[];}catch(ex){return [];}}());
-  var uat   = window._UAT  || (function(){try{return JSON.parse(localStorage.getItem('fw_uat_v1'))||[];}catch(ex){return [];}}());
-  var ccb   = (function(){try{return JSON.parse(localStorage.getItem('fw_ccb_v1'))||{crs:[],versiones:[]};}catch(ex){return {crs:[],versiones:[]};}}());
-  var bl    = (function(){try{return JSON.parse(localStorage.getItem('fw_bl_v1'))||{pasos:[]};}catch(ex){return {pasos:[]};}}());
-  var plan  = (function(){try{return JSON.parse(localStorage.getItem('fw_plan_v1'))||{};}catch(ex){return {};}}());
-  var proj  = CAMPO.proyecto||{};
+  // ── Fuentes de datos correctas ────────────────────────────────────────────
+  var srs    = load('fw_srs_v1',{});
+  var hu     = load('fw_srs_hu_v1',{hus:[]});
+  var rtm    = load('fw_srs_rtm_v1',{items:[]});
+  var cal    = load('fw_cal_v1',{mediciones:[]});
+  var insp   = load('fw_val_insp_v1',{inspecciones:[]});
+  var uat    = window._UAT||(function(){try{return JSON.parse(localStorage.getItem('fw_uat_v1'))||[];}catch(ex){return [];}}());
+  var wt2    = load('fw_val_wt2_v1',{sesiones:[]});
+  var sk2    = load('fw_val_sk2_v1',{revisiones:[]});
+  var pub    = load('fw_val_pub_v1',{publicaciones:[]});
+  var bl     = load('fw_bl_v1',{pasos:[]});
+  var ccb    = load('fw_ccb_v1',{crs:[],versiones:[]});
+  var mat    = load('fw_mat_v1',{ans:{},evid:{},fecha:''});
+  var plan   = load('fw_plan_v1',{actividades:[]});
+  var eli    = load('fw_eli_v7',null);
+  var pc1    = load('fw_eli_pc1_v1',{items:[]});
+  var pc2    = load('fw_ana_pc2_v1',{items:[]});
+  var pc3    = load('fw_srs_pc3_v1',{items:[]});
+  var pc4    = load('fw_val_pc4_v1',{items:[]});
+  var proj   = (load('fw_campo_v1',{})).proyecto||{};
+  var obsVal = ''; try{obsVal=localStorage.getItem('fw_obs_proyecto_v1')||'';}catch(ex){}
 
-  var tip='<div style="background:rgba(83,52,131,.06);border:0.5px solid rgba(83,52,131,.25);border-radius:var(--radius);padding:.5rem .8rem;font-size:11px;color:var(--c-purple);margin-bottom:1rem">'
-    +'ⓘ Este dashboard consolida automáticamente los datos registrados en todas las fases del framework.</div>';
+  // ── Cálculos globales ─────────────────────────────────────────────────────
+  // SRS
+  var rfs=srs.rfs||[]; var rnfs=srs.rnfs||[]; var sas=srs.sas||[]; var rcs=srs.rcs||[];
+  var hus=hu.hus||[];
+  var rfCount=rfs.length; var rnfCount=rnfs.length;
+  var rfApro=rfs.filter(function(r){return r.estado==='Aprobado';}).length;
+  var rfAmb =rfs.filter(function(r){return r.estado==='Ambiguo';}).length;
 
-  // ── Proyecto header ───────────────────────────────────────────────────────
-  var header='';
+  // Elicitación
+  var sesiones=[];
+  if(eli&&eli.minuta) sesiones=[eli.minuta];
+  var eliSes=(function(){try{return JSON.parse(localStorage.getItem('fw_eli_sesiones_v1'))||[];}catch(ex){return [];}}());
+  var totalSesiones=eliSes.length||sesiones.length;
+  var totalStk=(function(){try{var s=JSON.parse(localStorage.getItem('fw_eli_v7'));return s&&s.stakeholders?s.stakeholders.length:0;}catch(ex){return 0;}})();
+
+  // Defectos — desde inspecciones
+  var allDefs=[];
+  (insp.inspecciones||[]).forEach(function(ins){(ins.defectosList||[]).forEach(function(d){allDefs.push(d);});});
+  var defTotal=allDefs.length;
+  var defAb=allDefs.filter(function(d){return d.estado==='Abierto';}).length;
+  var defRes=allDefs.filter(function(d){return d.estado==='Resuelto';}).length;
+  var defBloq=allDefs.filter(function(d){return d.sev==='Bloqueante';}).length;
+  var nInsp=(insp.inspecciones||[]).length;
+
+  // Issues consolidados (Walkthrough + Stakeholders)
+  var wtHallazgos=0;(wt2.sesiones||[]).forEach(function(s){wtHallazgos+=(s.hallazgos||[]).length;});
+  var skObs=0;(sk2.revisiones||[]).forEach(function(r){skObs+=(r.observaciones||[]).length;});
+  var totalIssues=wtHallazgos+skObs+defTotal;
+
+  // UAT
+  var uatArr=Array.isArray(uat)?uat:[];
+  var uatTotal=uatArr.length;
+  var uatPasa=uatArr.filter(function(u){return u.res==='Pasó';}).length;
+  var uatFalla=uatArr.filter(function(u){return u.res==='Falló';}).length;
+  var uatBloqueo=uatArr.filter(function(u){return u.res==='Bloqueado';}).length;
+
+  // Criterios de calidad
+  var meds=cal.mediciones||[];
+  var medidos=meds.filter(function(m){return m.valor!=='';}).length;
+  var calApro=meds.filter(function(m){var v=parseFloat(m.valor);return !isNaN(v)&&v>=m.umbral;}).length;
+
+  // Baseline
+  var blPasos=bl.pasos||[];
+  var blComp=blPasos.filter(function(p){return p.estado==='Completado';}).length;
+  var pubList=Array.isArray(pub.publicaciones)?pub.publicaciones:[];
+  var baselinePublicado=pubList.length>0;
+
+  // CRs
+  var crs=ccb.crs||[];
+  var vers=ccb.versiones||[];
+  var crApro=crs.filter(function(cr){return cr.estado==='Aprobado';}).length;
+  var crRech=crs.filter(function(cr){return cr.estado==='Rechazado';}).length;
+  var crDif =crs.filter(function(cr){return cr.estado==='Diferido';}).length;
+  var crCerr=crs.filter(function(cr){return cr.estado==='Cerrado';}).length;
+
+  // Madurez
+  var matScore=0;
+  var MATURITY_PHASES_LOCAL=typeof MATURITY_PHASES!=='undefined'?MATURITY_PHASES:[];
+  var matTotalW2=0;
+  MATURITY_PHASES_LOCAL.forEach(function(p){p.qs.forEach(function(q){matTotalW2+=q.w;});});
+  var matIdx=0;
+  MATURITY_PHASES_LOCAL.forEach(function(p){p.qs.forEach(function(q){
+    var ans=mat.ans[matIdx]||'no';
+    if(ans==='si') matScore+=q.w*10;
+    else if(ans==='parcial') matScore+=q.w*5;
+    matIdx++;
+  });});
+  var matPct=matTotalW2>0?Math.round(matScore/(matTotalW2*10)*100):0;
+  var matNivel=matPct>=80?'Nivel 4 — Optimizado':matPct>=60?'Nivel 3 — Definido':matPct>=35?'Nivel 2 — Gestionado':'Nivel 1 — Inicial';
+  var matColor=matPct>=80?'var(--c-green)':matPct>=60?'var(--c-blue)':matPct>=35?'var(--c-amber)':'var(--c-red)';
+
+  // RTM
+  var rtmItems=rtm.items||[];
+  var rtmTotal=rtmItems.length;
+  var rtmCompletos=rtmItems.filter(function(i){return i.rf&&i.hu&&i.cp;}).length;
+
+  // Plan de implementación
+  var planActs=plan.actividades||[];
+  var planComp=planActs.filter(function(a){return a.estado==='Completado';}).length;
+
+  // PCs completados
+  function pcComp(items){
+    if(!items||!items.length) return null;
+    var ok=items.filter(function(i){return i.v==='ok';}).length;
+    return {ok:ok,total:items.length,pct:Math.round(ok/items.length*100)};
+  }
+  var pc1r=pcComp(pc1.items); var pc2r=pcComp(pc2.items);
+  var pc3r=pcComp(pc3.items); var pc4r=pcComp(pc4.items);
+
+  // ── HTML ──────────────────────────────────────────────────────────────────
+  var html='';
+
+  // Banner
+  html+='<div style="background:rgba(83,52,131,.06);border:0.5px solid rgba(83,52,131,.25);border-radius:var(--radius);padding:.5rem .8rem;font-size:11px;color:var(--c-purple);margin-bottom:1rem">'
+    +'ⓘ Dashboard consolidado generado en tiempo real desde los datos registrados en todas las fases del framework.</div>';
+
+  // Proyecto header
   if(proj.nombre){
-    header='<div class="card" style="margin-bottom:1rem;border-left:3px solid var(--c-teal)">'
+    html+='<div class="card" style="margin-bottom:1rem;border-left:3px solid var(--c-teal)">'
       +'<div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:.5rem">'
       +'<div><div style="font-size:15px;font-weight:500;font-family:var(--font-serif)">'+e(proj.nombre)+'</div>'
-      +'<div style="font-size:12px;color:var(--muted);margin-top:2px">'+e(proj.empresa)+(proj.sector?' · '+e(proj.sector):'')+'</div></div>'
+      +'<div style="font-size:12px;color:var(--muted);margin-top:2px">'+e(proj.empresa||'')+(proj.sector?' · '+e(proj.sector):'')+'</div></div>'
       +'<div style="text-align:right"><div style="font-size:11px;color:var(--muted)">'+e(proj.fecha||'')+'</div>'
-      +'<div style="font-size:11px;color:var(--muted)">'+e(proj.autor||'')+'</div></div>'
-      +'</div>'
+      +'<div style="font-size:11px;color:var(--muted)">'+e(proj.autor||'')+'</div></div></div>'
       +(proj.objetivo?'<div style="font-size:12px;color:var(--muted);margin-top:.5rem;font-style:italic">'+e(proj.objetivo)+'</div>':'')
       +'</div>';
   }
 
-  // ── KPIs globales ─────────────────────────────────────────────────────────
-  var rfs  = srs.rfs||[];
-  var rnfs = srs.rnfs||[];
-  var meds = cal.mediciones||[];
-  var crs  = ccb.crs||[];
-  var vers = ccb.versiones||[];
-  var pasos= bl.pasos||[];
+  // KPIs globales — 8 en grid 4×2
+  html+='<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:.6rem;margin-bottom:1rem">'
+    +[
+      {n:rfCount+rnfCount,l:'Requisitos SRS',sub:rfCount+' RF · '+rnfCount+' RNF · '+sas.length+' SA · '+rcs.length+' RC',c:'var(--c-blue)'},
+      {n:hus.length,       l:'Historias de usuario',sub:hus.filter(function(h){return h.estado==='Aprobada';}).length+' aprobadas',c:'var(--c-purple)'},
+      {n:defTotal,         l:'Defectos Fagan',sub:defAb+' abiertos · '+defRes+' resueltos · '+defBloq+' bloqueantes',c:defAb>0?'var(--c-red)':'var(--c-green)'},
+      {n:uatPasa+'/'+uatTotal, l:'Casos UAT',sub:uatFalla+' fallan · '+uatBloqueo+' bloqueados',c:uatPasa===uatTotal&&uatTotal>0?'var(--c-green)':'var(--c-amber)'},
+      {n:calApro+'/7',     l:'Criterios de calidad',sub:medidos+' medidos · umbral IEEE 29148',c:calApro===7?'var(--c-green)':'var(--c-amber)'},
+      {n:crs.length,       l:'Change Requests',sub:crApro+' aprobados · '+crCerr+' cerrados',c:crApro>0?'var(--c-green)':'var(--c-amber)'},
+      {n:rtmTotal,         l:'RTM — trazabilidad',sub:rtmCompletos+' completos (RF→HU→CP)',c:rtmCompletos===rtmTotal&&rtmTotal>0?'var(--c-green)':'var(--c-amber)'},
+      {n:matPct+'%',       l:'Madurez del proceso',sub:matNivel,c:matColor},
+    ].map(function(k){
+      return '<div class="kpi" style="background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius)">'
+        +'<div class="kpi-num" style="color:'+k.c+';font-size:18px">'+k.n+'</div>'
+        +'<div class="kpi-label">'+k.l+'</div>'
+        +'<div style="font-size:10px;color:var(--muted)">'+k.sub+'</div></div>';
+    }).join('')+'</div>';
 
-  var rfCount  = rfs.length;
-  var rnfCount = rnfs.length;
-  var defCount = Array.isArray(defs)?defs.length:0;
-  var defAb    = Array.isArray(defs)?defs.filter(function(d){return d.est==='Abierto';}).length:0;
-  var uatPasa  = Array.isArray(uat)?uat.filter(function(u){return u.res==='Pasó';}).length:0;
-  var uatTotal = Array.isArray(uat)?uat.length:0;
-  var crApro   = crs.filter(function(cr){return cr.estado==='Aprobado';}).length;
-  var blComp   = pasos.filter(function(p){return p.estado==='Completado';}).length;
-  var calApro  = meds.filter(function(m){var v=parseFloat(m.valor);return !isNaN(v)&&v>=m.umbral;}).length;
+  // Puntos de control — estado
+  var pcsHtml=[{l:'PC1',r:pc1r,c:'var(--c-teal)'},{l:'PC2',r:pc2r,c:'var(--c-purple)'},{l:'PC3',r:pc3r,c:'var(--c-blue)'},{l:'PC4',r:pc4r,c:'var(--c-green)'}];
+  html+='<div class="card" style="margin-bottom:1rem">'
+    +'<div class="card-title" style="margin-bottom:.6rem">Puntos de control — estado del checklist</div>'
+    +'<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:.6rem">'
+    +pcsHtml.map(function(pc){
+      var r=pc.r;
+      if(!r) return '<div style="padding:.6rem;border:0.5px solid var(--border);border-radius:var(--radius);text-align:center"><div style="font-size:12px;font-weight:600;color:var(--muted)">'+pc.l+'</div><div style="font-size:11px;color:var(--muted);margin-top:4px">Sin datos</div></div>';
+      var pct=r.pct; var ok=pct===100;
+      return '<div style="padding:.6rem;border:0.5px solid '+(ok?pc.c:'var(--border)')+';border-radius:var(--radius);text-align:center;background:'+(ok?pc.c+'0D':'var(--surface)')+'">'
+        +'<div style="font-size:12px;font-weight:600;color:'+pc.c+'">'+pc.l+'</div>'
+        +'<div style="font-size:20px;font-weight:500;color:'+pc.c+'">'+pct+'%</div>'
+        +'<div style="font-size:10px;color:var(--muted)">'+r.ok+'/'+r.total+' ítems</div>'
+        +'<div style="height:4px;background:var(--surface2);border-radius:2px;margin-top:4px"><div style="height:100%;width:'+pct+'%;background:'+pc.c+';border-radius:2px"></div></div>'
+        +'</div>';
+    }).join('')
+    +'</div></div>';
 
-  var kpis='<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:.6rem;margin-bottom:1rem">'
-    +[{n:rfCount+rnfCount,l:'Requisitos SRS',sub:rfCount+' RF + '+rnfCount+' RNF',c:'var(--c-blue)'},
-      {n:defCount,l:'Defectos registrados',sub:defAb+' abiertos',c:defAb>0?'var(--c-red)':'var(--c-green)'},
-      {n:uatPasa+'/'+uatTotal,l:'Casos UAT',sub:'pasaron',c:uatPasa===uatTotal&&uatTotal>0?'var(--c-green)':'var(--c-amber)'},
-      {n:calApro+'/7',l:'Criterios calidad',sub:'superan umbral',c:calApro===7?'var(--c-green)':'var(--c-amber)'},
-      {n:crApro,l:'CRs aprobados',sub:'de '+crs.length+' totales',c:'var(--c-amber)'},
-      {n:vers.length,l:'Versiones SRS',sub:vers.length>0?'última: '+e(vers[0].tag||''):'sin versiones',c:'var(--c-purple)'},
-      {n:blComp+'/7',l:'Baseline',sub:'pasos completados',c:blComp===7?'var(--c-green)':'var(--c-blue)'},
-      {n:plan.actividades?plan.actividades.filter(function(a){return a.estado==='Completado';}).length+'/'+plan.actividades.length:'—',l:'Plan impl.',sub:'actividades',c:'var(--c-gray)'},
-     ].map(function(k){
-       return '<div class="kpi" style="background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius)">'
-         +'<div class="kpi-num" style="color:'+k.c+';font-size:18px">'+k.n+'</div>'
-         +'<div class="kpi-label">'+k.l+'</div>'
-         +'<div style="font-size:10px;color:var(--muted)">'+k.sub+'</div></div>';
-     }).join('')+'</div>';
-
-  // ── Criterios de calidad — tabla resumen ──────────────────────────────────
-  var calTable='<div class="card" style="margin-bottom:1rem">'
-    +'<div class="card-title" style="margin-bottom:.6rem">Criterios de calidad — resultados reales vs. umbral</div>'
-    +'<div class="table-wrap"><table class="data-table"><thead><tr><th>Criterio</th><th>Umbral</th><th>Valor real</th><th>Diferencia</th><th>Estado</th><th>Herramienta</th></tr></thead><tbody>'
+  // Criterios de calidad — tabla
+  html+='<div class="card" style="margin-bottom:1rem">'
+    +'<div class="card-title" style="margin-bottom:.6rem">Criterios de calidad — valor real vs. umbral</div>'
+    +'<div class="table-wrap"><table class="data-table"><thead><tr><th>Criterio</th><th>Umbral</th><th>Valor real</th><th>Diferencia</th><th>Fecha</th><th>Estado</th></tr></thead><tbody>'
     +meds.map(function(m){
       var val=parseFloat(m.valor); var medido=m.valor!=='';
       var ok=medido&&!isNaN(val)&&val>=m.umbral;
       var diff=medido&&!isNaN(val)?(val-m.umbral).toFixed(1):null;
       return '<tr>'
         +'<td style="font-weight:500">'+e(m.criterio)+'</td>'
-        +'<td style="font-family:var(--font-mono)">≥ '+m.umbral+'%</td>'
-        +'<td style="font-family:var(--font-mono);font-weight:600;color:'+(medido?ok?'var(--c-green)':'var(--c-red)':'var(--muted)')+'">'+( medido?m.valor+'%':'—')+'</td>'
-        +'<td style="font-family:var(--font-mono);font-size:11px;color:'+(diff!==null?ok?'var(--c-green)':'var(--c-red)':'var(--muted)')+'">'+( diff!==null?(parseFloat(diff)>=0?'+':'')+diff+' pp':'—')+'</td>'
-        +'<td><span class="badge '+(medido?ok?'b-ok':'b-err':'')+'">'+( medido?ok?'✓ Aprobado':'✗ No alcanzado':'Sin medir')+'</span></td>'
-        +'<td style="font-size:11px;color:var(--muted)">'+e(m.herramienta||'—')+'</td>'
+        +'<td style="font-family:var(--font-mono)">\u2265 '+m.umbral+'%</td>'
+        +'<td style="font-family:var(--font-mono);font-weight:600;color:'+(medido?ok?'var(--c-green)':'var(--c-red)':'var(--muted)')+'">'+( medido?m.valor+'%':'\u2014')+'</td>'
+        +'<td style="font-family:var(--font-mono);font-size:11px;color:'+(diff!==null?ok?'var(--c-green)':'var(--c-red)':'var(--muted)')+'">'+( diff!==null?(parseFloat(diff)>=0?'+':'')+diff+' pp':'\u2014')+'</td>'
+        +'<td style="font-size:11px;color:var(--muted)">'+e(m.fecha||'\u2014')+'</td>'
+        +'<td><span class="badge '+(medido?ok?'b-ok':'b-err':'')+'">'+( medido?ok?'\u2713 Aprobado':'\u2717 No alcanzado':'Sin medir')+'</span></td>'
         +'</tr>';
     }).join('')+'</tbody></table></div></div>';
 
-  // ── SRS — resumen RF/RNF ──────────────────────────────────────────────────
-  var srsTable='';
+  // SRS — resumen
   if(rfCount>0||rnfCount>0){
-    var rfApro=rfs.filter(function(r){return r.estado==='Aprobado';}).length;
     var rnfTipo={};
     rnfs.forEach(function(r){rnfTipo[r.cat]=(rnfTipo[r.cat]||0)+1;});
-    srsTable='<div class="card" style="margin-bottom:1rem">'
+    html+='<div class="card" style="margin-bottom:1rem">'
       +'<div class="card-title" style="margin-bottom:.6rem">SRS — Resumen de requisitos</div>'
-      +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:.8rem">'
-      +'<div><div style="font-size:11px;font-weight:500;color:var(--c-blue);margin-bottom:.4rem">Requisitos funcionales ('+rfCount+')</div>'
-      +'<div style="display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:.4rem">'
-      +['Must','Should','Could'].map(function(p){
-        var n=rfs.filter(function(r){return r.prioridad===p;}).length;
-        return n>0?'<span class="badge '+(p==='Must'?'b-err':p==='Should'?'b-warn':'b-could')+'">'+p+': '+n+'</span>':'';
-      }).join('')
-      +'</div>'
-      +'<div style="font-size:11px;color:var(--muted)">Aprobados: '+rfApro+' / '+rfCount+'</div>'
-      +'<div style="font-size:11px;color:var(--muted);margin-top:.2rem">Ambiguos: '+rfs.filter(function(r){return r.estado==='Ambiguo';}).length+'</div>'
-      +'</div>'
-      +'<div><div style="font-size:11px;font-weight:500;color:var(--c-purple);margin-bottom:.4rem">Requisitos no funcionales ('+rnfCount+')</div>'
-      +Object.keys(rnfTipo).map(function(cat){return '<div style="font-size:11px;color:var(--muted)">'+e(cat)+': '+rnfTipo[cat]+'</div>';}).join('')
-      +'</div>'
+      +'<div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:.8rem">'
+      +'<div><div style="font-size:11px;font-weight:600;color:var(--c-blue);margin-bottom:.4rem">RF ('+rfCount+')</div>'
+      +['Must','Should','Could'].map(function(p){var n=rfs.filter(function(r){return r.prioridad===p;}).length;return n>0?'<div style="font-size:11px;color:var(--muted)">'+p+': '+n+'</div>':'';}).join('')
+      +'<div style="font-size:11px;color:var(--muted)">Aprobados: '+rfApro+' · Ambiguos: '+rfAmb+'</div></div>'
+      +'<div><div style="font-size:11px;font-weight:600;color:var(--c-purple);margin-bottom:.4rem">RNF ('+rnfCount+')</div>'
+      +Object.keys(rnfTipo).map(function(cat){return '<div style="font-size:11px;color:var(--muted)">'+e(cat)+': '+rnfTipo[cat]+'</div>';}).join('')+'</div>'
+      +'<div><div style="font-size:11px;font-weight:600;color:var(--c-amber);margin-bottom:.4rem">SA — Supuestos ('+sas.length+')</div>'
+      +'<div style="font-size:11px;color:var(--muted)">Registrados: '+sas.length+'</div></div>'
+      +'<div><div style="font-size:11px;font-weight:600;color:var(--c-teal);margin-bottom:.4rem">RC — Restricciones ('+rcs.length+')</div>'
+      +'<div style="font-size:11px;color:var(--muted)">Registradas: '+rcs.length+'</div></div>'
       +'</div></div>';
   }
 
-  // ── Defectos — resumen ────────────────────────────────────────────────────
-  var defTable='';
-  if(Array.isArray(defs)&&defs.length>0){
-    var bySev={};
-    defs.forEach(function(d){bySev[d.sev]=(bySev[d.sev]||0)+1;});
-    defTable='<div class="card" style="margin-bottom:1rem">'
-      +'<div class="card-title" style="margin-bottom:.6rem">Log de defectos — resumen</div>'
-      +'<div style="display:flex;gap:.8rem;flex-wrap:wrap">'
-      +Object.keys(bySev).map(function(sev){
-        var css={Bloqueante:'b-err',Mayor:'b-warn',Menor:'b-could',Informativo:''}[sev]||'';
-        return '<div style="text-align:center"><div style="font-size:20px;font-weight:500;font-family:var(--font-serif)">'+(bySev[sev])+'</div><span class="badge '+css+'">'+e(sev)+'</span></div>';
-      }).join('')
-      +'<div style="margin-left:auto;text-align:right"><div style="font-size:11px;color:var(--muted)">Abiertos: <strong style="color:var(--c-red)">'+defAb+'</strong></div>'
-      +'<div style="font-size:11px;color:var(--muted)">Resueltos: <strong style="color:var(--c-green)">'+(defs.filter(function(d){return d.est==='Resuelto';}).length)+'</strong></div></div>'
-      +'</div></div>';
-  }
+  // Validación — resumen consolidado
+  html+='<div class="card" style="margin-bottom:1rem">'
+    +'<div class="card-title" style="margin-bottom:.6rem">Validación — resumen de revisiones</div>'
+    +'<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:.8rem">'
+    +'<div style="padding:.6rem;background:rgba(24,95,165,.04);border-radius:var(--radius);border:0.5px solid rgba(24,95,165,.15)">'
+    +'<div style="font-size:11px;font-weight:600;color:var(--c-blue);margin-bottom:.3rem">Walkthrough</div>'
+    +'<div style="font-size:11px;color:var(--muted)">'+(wt2.sesiones||[]).length+' sesiones · '+wtHallazgos+' hallazgos</div></div>'
+    +'<div style="padding:.6rem;background:rgba(83,52,131,.04);border-radius:var(--radius);border:0.5px solid rgba(83,52,131,.15)">'
+    +'<div style="font-size:11px;font-weight:600;color:var(--c-purple);margin-bottom:.3rem">Revisión Stakeholders</div>'
+    +'<div style="font-size:11px;color:var(--muted)">'+(sk2.revisiones||[]).length+' revisiones · '+skObs+' observaciones</div></div>'
+    +'<div style="padding:.6rem;background:rgba(163,45,45,.04);border-radius:var(--radius);border:0.5px solid rgba(163,45,45,.15)">'
+    +'<div style="font-size:11px;font-weight:600;color:var(--c-red);margin-bottom:.3rem">Inspección Fagan</div>'
+    +'<div style="font-size:11px;color:var(--muted)">'+nInsp+' inspecciones · '+defTotal+' defectos · '+defBloq+' bloqueantes · '+defAb+' abiertos</div></div>'
+    +'</div></div>';
 
-  // ── CRs — resumen ─────────────────────────────────────────────────────────
-  var crTable='';
+  // CRs — resumen
   if(crs.length>0){
-    crTable='<div class="card" style="margin-bottom:1rem">'
-      +'<div class="card-title" style="margin-bottom:.6rem">Change Requests — estado</div>'
-      +'<div style="display:flex;gap:.6rem;flex-wrap:wrap">'
-      +['Aprobado','Rechazado','Diferido','Pendiente CCB','En análisis'].map(function(est){
-        var n=crs.filter(function(cr){return cr.estado===est;}).length;
-        if(n===0) return '';
-        var css={Aprobado:'b-ok',Rechazado:'b-err',Diferido:'b-warn','Pendiente CCB':'b-func','En análisis':''}[est]||'';
+    html+='<div class="card" style="margin-bottom:1rem">'
+      +'<div class="card-title" style="margin-bottom:.6rem">Gestión de CRs — estado</div>'
+      +'<div style="display:flex;gap:.6rem;flex-wrap:wrap;margin-bottom:.5rem">'
+      +[
+        {l:'Aprobados',n:crApro,c:'var(--c-green)'},
+        {l:'Cerrados',n:crCerr,c:'var(--c-teal)'},
+        {l:'Diferidos',n:crDif,c:'var(--c-amber)'},
+        {l:'Rechazados',n:crRech,c:'var(--c-red)'},
+        {l:'Versiones post-baseline',n:vers.length,c:'var(--c-blue)'},
+      ].map(function(k){
         return '<div style="text-align:center;padding:.5rem .8rem;background:var(--surface);border-radius:var(--radius);border:0.5px solid var(--border)">'
-          +'<div style="font-size:20px;font-weight:500;font-family:var(--font-serif)">'+n+'</div>'
-          +'<span class="badge '+css+'">'+e(est)+'</span></div>';
-      }).join('')
-      +'</div></div>';
+          +'<div style="font-size:20px;font-weight:500;font-family:var(--font-serif);color:'+k.c+'">'+k.n+'</div>'
+          +'<div style="font-size:11px;color:var(--muted)">'+k.l+'</div></div>';
+      }).join('')+'</div></div>';
   }
 
-  // ── Observaciones del proyecto ──────────────────────────────────────────────
-  var OBS_KEY='fw_obs_proyecto_v1';
-  var obsVal='';
-  try{obsVal=localStorage.getItem(OBS_KEY)||'';}catch(ex){}
-  var obs='<div class="card">'
+  // Plan de implementación
+  if(planActs.length>0){
+    var planProg=planActs.filter(function(a){return a.estado==='En progreso';}).length;
+    var planPend=planActs.length-planComp-planProg;
+    html+='<div class="card" style="margin-bottom:1rem">'
+      +'<div class="card-title" style="margin-bottom:.4rem">Plan de implementación</div>'
+      +'<div style="display:flex;gap:.8rem;align-items:center;flex-wrap:wrap">'
+      +'<div style="font-size:11px;color:var(--c-green)">✓ Completadas: '+planComp+'</div>'
+      +'<div style="font-size:11px;color:var(--c-blue)">⏳ En progreso: '+planProg+'</div>'
+      +'<div style="font-size:11px;color:var(--muted)">○ Pendientes: '+planPend+'</div>'
+      +'<div style="flex:1;height:6px;background:var(--surface2);border-radius:3px;overflow:hidden">'
+      +'<div style="height:100%;width:'+(planActs.length?Math.round(planComp/planActs.length*100):0)+'%;background:var(--c-green);border-radius:3px"></div>'
+      +'</div></div></div>';
+  }
+
+  // Conclusiones
+  var obsVal2='';try{obsVal2=localStorage.getItem('fw_obs_proyecto_v1')||'';}catch(ex){}
+  html+='<div class="card">'
     +'<div class="card-title" style="margin-bottom:.4rem">Conclusiones y observaciones del proyecto</div>'
-    +'<div style="font-size:11px;color:var(--muted);margin-bottom:.5rem">Campo libre para anotar hallazgos, análisis comparativo y conclusiones del proyecto.</div>'
-    +'<textarea rows="6" id="obs-proyecto" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:6px 9px;font-size:12px;color:var(--text);font-family:var(--font-sans);resize:vertical;outline:none;line-height:1.7" placeholder="Redacta aquí tus hallazgos, análisis y conclusiones del proyecto..." oninput="try{localStorage.setItem(\'fw_obs_proyecto_v1\',this.value);}catch(ex){}">'+e(obsVal)+'</textarea>'
+    +'<div style="font-size:11px;color:var(--muted);margin-bottom:.5rem">Campo libre para hallazgos, análisis comparativo y conclusiones del caso de estudio.</div>'
+    +'<textarea rows="6" id="obs-proyecto" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:6px 9px;font-size:12px;color:var(--text);font-family:var(--font-sans);resize:vertical;outline:none;line-height:1.7" placeholder="Redacta aquí tus hallazgos, análisis y conclusiones del proyecto..." oninput="try{localStorage.setItem(\'fw_obs_proyecto_v1\',this.value);}catch(ex){}">'+e(obsVal2)+'</textarea>'
     +'</div>';
 
-  el.innerHTML=tip+header+kpis+calTable+srsTable+defTable+crTable+obs;
+  el.innerHTML=html;
 }
 
 
@@ -10351,7 +10946,6 @@ function onPageShow(id) {
   if (id==='val-inspeccion')  setTimeout(initValInsp, 50);
   if (id==='val-publicacion') setTimeout(initValPub,  50);
   if (id==='val-tecnicas') setTimeout(initValTecnicas, 50);
-  if (id==='val-log') setTimeout(function(){ if(!window._DEFS){window._DEFS=DEFECTS.slice();} window._selDefIdx=-1; initValLog(); }, 50);
   if (id==='val-issues') setTimeout(initValIssues, 50);
   if (id==='val-uat') setTimeout(function(){ window._uatSelIdx=-1; initValUat(); }, 50);
   if (id==='val-baseline') setTimeout(function(){ initBlRef(); }, 50);
