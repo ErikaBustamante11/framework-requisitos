@@ -11323,10 +11323,13 @@ const ALL_KEYS = [
 ];
 
 function exportJSON(){
-  var data = { version: '2.0', fecha: new Date().toISOString(), datos: {} };
+  var data = { version: '2.0', fecha: new Date().toISOString(), proyecto: 'Framework Metodológico Digital', datos: {} };
   ALL_KEYS.forEach(function(k){
     var v = localStorage.getItem(k);
-    if(v) data.datos[k] = JSON.parse(v);
+    if(v){
+      try{ data.datos[k] = JSON.parse(v); }
+      catch(ex){ data.datos[k] = v; } // string values like fw_obs_proyecto_v1
+    }
   });
   var blob = new Blob([JSON.stringify(data, null, 2)], {type:'application/json'});
   var a = document.createElement('a');
@@ -11334,6 +11337,9 @@ function exportJSON(){
   a.download = 'framework-requisitos-' + new Date().toISOString().split('T')[0] + '.json';
   a.click();
   URL.revokeObjectURL(a.href);
+  // Show confirmation
+  var btn = document.querySelector('[onclick="exportJSON()"]');
+  if(btn){ var orig=btn.textContent; btn.textContent='✓ Exportado'; setTimeout(function(){btn.textContent=orig;},2000); }
 }
 
 function importJSON(input){
@@ -11342,15 +11348,25 @@ function importJSON(input){
   reader.onload = function(e){
     try{
       var data = JSON.parse(e.target.result);
-      var datos = data.datos || data; // support both formats
+      var datos = data.datos || data;
       var count = 0;
       Object.keys(datos).forEach(function(k){
-        localStorage.setItem(k, JSON.stringify(datos[k]));
-        count++;
+        var v = datos[k];
+        try{ localStorage.setItem(k, typeof v === 'string' ? v : JSON.stringify(v)); count++; }
+        catch(ex){}
       });
-      alert('✓ ' + count + ' secciones importadas correctamente. Recarga la página para ver los datos.');
+      // Show inline confirmation and reload
+      var div=document.createElement('div');
+      div.style.cssText='position:fixed;top:1rem;right:1rem;background:var(--c-green);color:#fff;padding:.7rem 1.2rem;border-radius:8px;font-size:13px;font-weight:500;z-index:9999;box-shadow:0 4px 16px rgba(0,0,0,.15)';
+      div.textContent='✓ '+count+' secciones importadas — recargando...';
+      document.body.appendChild(div);
+      setTimeout(function(){ location.reload(); }, 1500);
     } catch(err){
-      alert('Error al importar: ' + err.message);
+      var div=document.createElement('div');
+      div.style.cssText='position:fixed;top:1rem;right:1rem;background:var(--c-red);color:#fff;padding:.7rem 1.2rem;border-radius:8px;font-size:13px;font-weight:500;z-index:9999';
+      div.textContent='Error al importar: '+err.message;
+      document.body.appendChild(div);
+      setTimeout(function(){div.remove();},4000);
     }
   };
   reader.readAsText(file);
