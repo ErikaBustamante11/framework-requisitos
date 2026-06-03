@@ -8554,7 +8554,7 @@ function renderCalMedicion(){
 ════════════════════════════════════════ */
 reg('madurez', () => `
 <div class="page-header">
-  <div class="page-eyebrow" style="color:var(--c-gray)">● Cierre — Consolidación</div>
+  <div class="page-eyebrow" style="color:var(--c-gray)">● Evaluación y Cierre</div>
   <h1 class="page-title">Evaluador de madurez</h1>
   <p class="page-desc">30 criterios ponderados en 5 fases. Marca los que tu equipo ya practica para obtener tu nivel de madurez y las brechas específicas.</p>
   <div class="std-row"><span class="std-pill">CMMI-DEV L2-L3</span><span class="std-pill">IEEE 29148</span></div>
@@ -8611,11 +8611,7 @@ function initMiPlan(){
 function defPlan(){ return {
   empresa:'', nivelActual:'Nivel 1 — Inicial', nivelObjetivo:'Nivel 2 — Gestionado',
   fechaInicio:'', fechaObjetivo:'', responsable:'', obs:'',
-  actividades:[
-    {fase:'Semanas 1–2',nombre:'Diagnóstico y plantillas base',estado:'Pendiente',fecha:'',resp:'',nota:''},
-    {fase:'Semanas 3–6',nombre:'Primera elicitación estructurada',estado:'Pendiente',fecha:'',resp:'',nota:''},
-    {fase:'Semanas 7–10',nombre:'Especificación básica',estado:'Pendiente',fecha:'',resp:'',nota:''},
-  ],
+  actividades:[],
 }; }
 
 function renderMiPlan(){
@@ -8687,10 +8683,10 @@ function renderMiPlan(){
       +'</div></div>';
   }).join('');
 
-  var addBtn='<div style="display:flex;gap:.5rem;margin-top:.5rem;align-items:center">'
-    +'<button class="btn btn-sm" style="color:var(--c-gray);border-color:rgba(0,0,0,.2)" onclick="planAddAct()">+ Actividad</button>'
-    +''
-    +'<span style="font-size:11px;color:var(--muted)">Guardado automáticamente</span></div>';
+  var addBtn='<div style="display:flex;gap:.5rem;margin-top:.5rem;align-items:center;flex-wrap:wrap">'
+    +'<button class="btn btn-sm" style="background:var(--c-teal);color:#fff;border-color:var(--c-teal)" onclick="planAddAct()">+ Actividad</button>'
+    +'<button class="btn btn-sm" style="color:var(--c-red);border-color:rgba(163,45,45,.3)" onclick="planConfirmReset()">↺ Limpiar plan</button>'
+    +'<span style="font-size:11px;color:var(--muted);margin-left:auto">Guardado automáticamente</span></div>';
 
   el.innerHTML='<div style="background:rgba(24,95,165,.06);border:0.5px solid rgba(24,95,165,.25);border-radius:var(--radius);padding:.5rem .8rem;font-size:11px;color:var(--c-blue);margin-bottom:.8rem">ⓘ Documenta tu plan real de implementación del framework en la empresa del caso de estudio. Guardado automático.</div>'
     +global+ctx+actCards+addBtn;
@@ -8698,7 +8694,7 @@ function renderMiPlan(){
 
 function planAddAct(){
   window._PLAN.actividades=window._PLAN.actividades||[];
-  window._PLAN.actividades.push({fase:'Nueva fase',nombre:'Nueva actividad',estado:'Pendiente',fecha:'',resp:'',nota:''});
+  window._PLAN.actividades.push({fase:'',nombre:'',estado:'Pendiente',fecha:'',resp:'',nota:''});
   localStorage.setItem(PLAN_KEY,JSON.stringify(window._PLAN));
   renderMiPlan();
 }
@@ -8706,6 +8702,20 @@ function planReset(){
   window._PLAN=defPlan();
   localStorage.setItem(PLAN_KEY,JSON.stringify(window._PLAN));
   var m=document.getElementById('mi-plan-mount'); if(m){m.innerHTML='';initMiPlan();}
+}
+function planConfirmReset(){
+  var existing=document.getElementById('plan-reset-confirm');
+  if(existing){existing.remove();return;}
+  var div=document.createElement('div');
+  div.id='plan-reset-confirm';
+  div.style.cssText='position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:var(--bg);border:1px solid var(--c-red);border-radius:10px;padding:1.2rem 1.5rem;box-shadow:0 8px 32px rgba(0,0,0,.18);z-index:9999;min-width:280px;text-align:center';
+  div.innerHTML='<div style="font-size:14px;font-weight:500;margin-bottom:.4rem">¿Limpiar plan de implementación?</div>'
+    +'<div style="font-size:12px;color:var(--muted);margin-bottom:1rem">Se eliminarán todas las actividades y el contexto del plan.</div>'
+    +'<div style="display:flex;gap:.5rem;justify-content:center">'
+    +'<button class="btn" style="background:var(--c-red);color:#fff;border-color:var(--c-red)" onclick="document.getElementById(&quot;plan-reset-confirm&quot;).remove();planReset()">Sí, limpiar</button>'
+    +'<button class="btn btn-sm" onclick="document.getElementById(&quot;plan-reset-confirm&quot;).remove()">Cancelar</button>'
+    +'</div>';
+  document.body.appendChild(div);
 }
 
 
@@ -9662,27 +9672,8 @@ function defaultELI() {
         {nombre:'', rol:'Usuario clave', area:'Operativo', participacion:'Confirmada'},
         {nombre:'', rol:'Analista BA',   area:'TI / Proyecto', participacion:'Facilitador'},
       ],
-      rfs:[
-        {id:'RF-001',desc:'Login con SSO corporativo (AD/LDAP)',tipo:'RF',prioridad:'Must',estado:'Confirmado'},
-        {id:'RF-002',desc:'Dashboard con KPIs en tiempo real',tipo:'RF',prioridad:'Must',estado:'Ambiguo'},
-        {id:'RF-003',desc:'Exportar reportes en PDF y Excel',tipo:'RF',prioridad:'Should',estado:'Borrador'},
-      ],
-      rnfs:[
-        {id:'RNF-001',desc:'Tiempo de respuesta menor a 3 segundos bajo 500 usuarios concurrentes',tipo:'RNF',prioridad:'Must',estado:'Borrador'},
-        {id:'RNF-002',desc:'Disponibilidad del sistema 99.5% mensual (excluye mantenimiento)',tipo:'RNF',prioridad:'Should',estado:'Borrador'},
-      ],
-      sas:[
-        {id:'SA-001',desc:'El directorio corporativo soporta integración SSO'},
-        {id:'SA-002',desc:'El proveedor de API estará disponible en Sprint 3'},
-        {id:'SA-003',desc:'Los usuarios finales tienen correo corporativo activo'},
-      ],
-      rcs:[
-        {id:'RC-001',desc:'Presupuesto máximo definido por el sponsor'},
-        {id:'RC-002',desc:'Stack tecnológico aprobado por el área de TI'},
-        {id:'RC-003',desc:'Plazo de entrega MVP: 6 meses desde la firma'},
-      ],
-      pendientes:'RF-002: definir qué KPIs específicos deben mostrarse\nRNF-001: confirmar carga concurrente esperada',
-      proximos:'BA envía borrador de minuta en 24 horas\nPO revisa y confirma lista de KPIs (plazo: 3 días)',
+      rfs:[], rnfs:[], sas:[], rcs:[],
+      pendientes:'', proximos:'',
     },
     preguntas: {
       Apertura:      [{q:'¿Cuál es su principal objetivo con este sistema?',r:''},{q:'¿Qué problema estamos resolviendo para usted hoy?',r:''},{q:'¿Cómo describiría el flujo ideal de su trabajo?',r:''}],
