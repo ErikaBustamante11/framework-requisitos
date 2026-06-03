@@ -10656,9 +10656,10 @@ function renderCampoResultados(){
 
   // ── Fuentes de datos correctas ────────────────────────────────────────────
   var srs    = load('fw_srs_v1',{});
-  var hu     = load('fw_srs_hu_v1',{hus:[]});
+  var huRaw  = load('fw_srs_hu_v1',{items:[]});
   var rtm    = load('fw_srs_rtm_v1',{items:[]});
-  var cal    = load('fw_cal_v1',{mediciones:[]});
+  var calStored = load('fw_cal_v1',null);
+  var cal = (calStored&&calStored.mediciones&&calStored.mediciones.length)?calStored:(window._CAL||(typeof defCal==='function'?defCal():{mediciones:[]}));
   var insp   = load('fw_val_insp_v1',{inspecciones:[]});
   var uat    = window._UAT||(function(){try{return JSON.parse(localStorage.getItem('fw_uat_v1'))||[];}catch(ex){return [];}}());
   var wt2    = load('fw_val_wt2_v1',{sesiones:[]});
@@ -10669,17 +10670,17 @@ function renderCampoResultados(){
   var mat    = load('fw_mat_v1',{ans:{},evid:{},fecha:''});
   var plan   = load('fw_plan_v1',{actividades:[]});
   var eli    = load('fw_eli_v7',null);
-  var pc1    = load('fw_eli_pc1_v1',{items:[]});
-  var pc2    = load('fw_ana_pc2_v1',{items:[]});
-  var pc3    = load('fw_srs_pc3_v1',{items:[]});
-  var pc4    = load('fw_val_pc4_v1',{items:[]});
+  var pc1raw = load('fw_eli_pc1_v1',{});
+  var pc2raw = load('fw_ana_pc2_v1',{});
+  var pc3raw = load('fw_srs_pc3_v1',{});
+  var pc4raw = load('fw_val_pc4_v1',{});
   var proj   = (load('fw_campo_v1',{})).proyecto||{};
   var obsVal = ''; try{obsVal=localStorage.getItem('fw_obs_proyecto_v1')||'';}catch(ex){}
 
   // ── Cálculos globales ─────────────────────────────────────────────────────
   // SRS
   var rfs=srs.rfs||[]; var rnfs=srs.rnfs||[]; var sas=srs.sas||[]; var rcs=srs.rcs||[];
-  var hus=hu.hus||[];
+  var hus=huRaw.items||huRaw.hus||[];
   var rfCount=rfs.length; var rnfCount=rnfs.length;
   var rfApro=rfs.filter(function(r){return r.estado==='Aprobado';}).length;
   var rfAmb =rfs.filter(function(r){return r.estado==='Ambiguo';}).length;
@@ -10756,14 +10757,23 @@ function renderCampoResultados(){
   var planActs=plan.actividades||[];
   var planComp=planActs.filter(function(a){return a.estado==='Completado';}).length;
 
-  // PCs completados
-  function pcComp(items){
-    if(!items||!items.length) return null;
-    var ok=items.filter(function(i){return i.v==='ok';}).length;
-    return {ok:ok,total:items.length,pct:Math.round(ok/items.length*100)};
+  // PCs completados — storage es objeto plano {itemId:'ok'}
+  function pcCompRaw(rawObj, constArr){
+    if(!constArr||!constArr.length) return null;
+    var total=0, ok=0;
+    constArr.forEach(function(dim){
+      (dim.items||[]).forEach(function(item){
+        total++;
+        if(rawObj[item.id]==='ok') ok++;
+      });
+    });
+    if(total===0) return null;
+    return {ok:ok,total:total,pct:Math.round(ok/total*100)};
   }
-  var pc1r=pcComp(pc1.items); var pc2r=pcComp(pc2.items);
-  var pc3r=pcComp(pc3.items); var pc4r=pcComp(pc4.items);
+  var pc1r=pcCompRaw(pc1raw, typeof PC1_ITEMS!=='undefined'?PC1_ITEMS:[]);
+  var pc2r=pcCompRaw(pc2raw, typeof PC2_ITEMS!=='undefined'?PC2_ITEMS:[]);
+  var pc3r=pcCompRaw(pc3raw, typeof PC3_ITEMS!=='undefined'?PC3_ITEMS:[]);
+  var pc4r=pcCompRaw(pc4raw, typeof PC4_ITEMS!=='undefined'?PC4_ITEMS:[]);
 
   // ── HTML ──────────────────────────────────────────────────────────────────
   var html='';
