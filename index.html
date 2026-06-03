@@ -112,8 +112,24 @@ h1,h2,h3,h4,h5 { font-family: var(--font-serif); font-weight: 500; line-height: 
   letter-spacing: .6px;
   color: var(--faint);
   padding: .6rem .7rem .2rem;
-  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  user-select: none;
+  border-radius: 4px;
+  transition: color .15s;
 }
+.nav-label:hover { color: var(--muted); }
+.nav-label::after {
+  content: '▾';
+  font-size: 10px;
+  transition: transform .2s;
+  color: var(--faint);
+}
+.nav-group.collapsed .nav-label::after { transform: rotate(-90deg); }
+.nav-group.collapsed .nav-item,
+.nav-group.collapsed .nav-sub { display: none; }
 .nav-item {
   display: flex;
   align-items: center;
@@ -623,17 +639,23 @@ textarea { field-sizing: content; min-height: 2em; }
 
   <nav class="sidebar-nav">
     <div class="nav-group">
-      <span class="nav-label">Inicio</span>
+      <span class="nav-label" onclick="this.closest('.nav-group').classList.toggle('collapsed')">Inicio</span>
       <button class="nav-item active" onclick="nav('home')"><div class="nav-pip" style="background:var(--c-gray)"></div>Dashboard ejecutivo</button>
     </div>
     <div class="nav-group">
-      <span class="nav-label">Capa estratégica</span>
+      <span class="nav-label" onclick="this.closest('.nav-group').classList.toggle('collapsed')">Capa estratégica</span>
       <button class="nav-item" onclick="nav('principios')"><div class="nav-pip" style="background:var(--c-purple)"></div>Principios del framework</button>
       <button class="nav-item" onclick="nav('gobernanza')"><div class="nav-pip" style="background:var(--c-purple)"></div>Gobernanza — puntos de control</button>
-      <button class="nav-item" onclick="nav('roadmap')"><div class="nav-pip" style="background:var(--c-purple)"></div>Hoja de ruta</button>
     </div>
     <div class="nav-group">
-      <span class="nav-label">Fase 1 · Elicitación</span>
+      <span class="nav-label" onclick="this.closest('.nav-group').classList.toggle('collapsed')">Capa de ejecución</span>
+      <button class="nav-item" onclick="nav('roles-raci')"><div class="nav-pip" style="background:var(--c-gray)"></div>Roles y RACI</button>
+    </div>
+    <div class="nav-group">
+      <span class="nav-label" onclick="this.closest('.nav-group').classList.toggle('collapsed')">Capa operativa</span>
+    </div>
+    <div class="nav-group">
+      <span class="nav-label" onclick="this.closest('.nav-group').classList.toggle('collapsed')">Fase 1 · Elicitación</span>
       <button class="nav-item" onclick="nav('eli-flujo')"><div class="nav-pip" style="background:var(--c-teal)"></div>Flujo de actividades</button>
       <button class="nav-item" onclick="nav('campo-proyecto')"><div class="nav-pip" style="background:var(--c-teal)"></div>Contexto del proyecto</button>
       <button class="nav-item" onclick="nav('eli-stakeholders')"><div class="nav-pip" style="background:var(--c-teal)"></div>Mapa de stakeholders</button>
@@ -642,7 +664,7 @@ textarea { field-sizing: content; min-height: 2em; }
       <button class="nav-item" onclick="nav('eli-pc1')"><div class="nav-pip" style="background:var(--c-teal)"></div>Punto de control PC1</button>
     </div>
     <div class="nav-group">
-      <span class="nav-label">Fase 2 · Análisis</span>
+      <span class="nav-label" onclick="this.closest('.nav-group').classList.toggle('collapsed')">Fase 2 · Análisis</span>
       <button class="nav-item" onclick="nav('ana-flujo')"><div class="nav-pip" style="background:var(--c-purple)"></div>Flujo de actividades</button>
       <button class="nav-item" onclick="nav('ana-estructuracion')"><div class="nav-pip" style="background:var(--c-purple)"></div>Estructuración de requisitos</button>
       <button class="nav-item" onclick="nav('ana-gap')"><div class="nav-pip" style="background:var(--c-purple)"></div>GAP Analysis</button>
@@ -654,7 +676,7 @@ textarea { field-sizing: content; min-height: 2em; }
       <button class="nav-item" onclick="nav('ana-pc2')"><div class="nav-pip" style="background:var(--c-purple)"></div>Punto de control PC2</button>
     </div>
     <div class="nav-group">
-      <span class="nav-label">Fase 3 · Especificación</span>
+      <span class="nav-label" onclick="this.closest('.nav-group').classList.toggle('collapsed')">Fase 3 · Especificación</span>
       <button class="nav-item" onclick="nav('srs-flujo')"><div class="nav-pip" style="background:var(--c-blue)"></div>Flujo de actividades</button>
       <button class="nav-item" onclick="nav('srs-editor')"><div class="nav-pip" style="background:var(--c-blue)"></div>Editor SRS <span class="nav-count">12 RF</span></button>
       <button class="nav-item" onclick="nav('srs-checklist')" style="padding-left:1.8rem"><div class="nav-pip" style="background:var(--c-blue);opacity:.6"></div>↳ Checklist calidad SRS</button>
@@ -665,7 +687,7 @@ textarea { field-sizing: content; min-height: 2em; }
       <button class="nav-item" onclick="nav('srs-pc3')"><div class="nav-pip" style="background:var(--c-blue)"></div>Punto de control PC3</button>
     </div>
     <div class="nav-group">
-      <span class="nav-label">Fase 4 · Validación</span>
+      <span class="nav-label" onclick="this.closest('.nav-group').classList.toggle('collapsed')">Fase 4 · Validación</span>
       <button class="nav-item" onclick="nav('val-flujo')"><div class="nav-pip" style="background:var(--c-green)"></div>Flujo de actividades</button>
       <button class="nav-item" onclick="nav('val-autoreview')"><div class="nav-pip" style="background:var(--c-green)"></div>Auto-revisión BA</button>
       <button class="nav-item" onclick="nav('val-tecnicas')"><div class="nav-pip" style="background:var(--c-green)"></div>Técnicas de revisión</button>
@@ -679,23 +701,17 @@ textarea { field-sizing: content; min-height: 2em; }
       <button class="nav-item" onclick="nav('val-pc4')"><div class="nav-pip" style="background:var(--c-green)"></div>Punto de control PC4</button>
     </div>
     <div class="nav-group">
-      <span class="nav-label">Fase 5 · Gestión cambios</span>
+      <span class="nav-label" onclick="this.closest('.nav-group').classList.toggle('collapsed')">Fase 5 · Gestión cambios</span>
       <button class="nav-item" onclick="nav('ccb-flujo')"><div class="nav-pip" style="background:var(--c-amber)"></div>Flujo de actividades</button>
       <button class="nav-item" onclick="nav('ccb-cr')"><div class="nav-pip" style="background:var(--c-amber)"></div>Gestión de CRs</button>
       <button class="nav-item" onclick="nav('ccb-versiones')" style="padding-left:1.8rem"><div class="nav-pip" style="background:var(--c-amber);opacity:.6"></div>↳ Versiones post-baseline</button>
     </div>
     <div class="nav-group">
-      <span class="nav-label">Capa de ejecución</span>
-      <button class="nav-item" onclick="nav('roles-raci')"><div class="nav-pip" style="background:var(--c-gray)"></div>Roles y RACI</button>
-    </div>
-    <div class="nav-group">
-      <span class="nav-label">Capa de evaluación</span>
+      <span class="nav-label" onclick="this.closest('.nav-group').classList.toggle('collapsed')">Evaluación y Cierre</span>
       <button class="nav-item" onclick="nav('calidad')"><div class="nav-pip" style="background:var(--c-gray)"></div>Criterios de calidad</button>
-    </div>
-    <div class="nav-group">
-      <span class="nav-label">Cierre</span>
       <button class="nav-item" onclick="nav('madurez')"><div class="nav-pip" style="background:var(--c-gray)"></div>Evaluador de madurez</button>
-      <button class="nav-item" onclick="nav('campo-resultados')"><div class="nav-pip" style="background:var(--c-gray)"></div>Resultados y análisis</button>
+      <button class="nav-item" onclick="nav('campo-resultados')"><div class="nav-pip" style="background:var(--c-gray)"></div>Resultados consolidados</button>
+      <button class="nav-item" onclick="nav('roadmap')"><div class="nav-pip" style="background:var(--c-gray)"></div>Hoja de ruta</button>
     </div>
 
     
@@ -725,9 +741,41 @@ function nav(id) {
     if (n.getAttribute('onclick') && n.getAttribute('onclick').includes("'" + id + "'"))
       n.classList.add('active');
   });
+  // Auto-expand the group containing the active item
+  document.querySelectorAll('.nav-item.active').forEach(function(n){
+    var grp=n.closest('.nav-group');
+    if(grp) grp.classList.remove('collapsed');
+  });
   document.getElementById('sidebar').classList.remove('open');
   window.scrollTo(0, 0);
 }
+
+// Restore collapsed state from localStorage
+(function(){
+  try{
+    var st=JSON.parse(localStorage.getItem('fw_nav_collapsed')||'[]');
+    st.forEach(function(label){
+      document.querySelectorAll('.nav-label').forEach(function(el){
+        if(el.textContent.trim()===label){
+          var grp=el.closest('.nav-group');
+          if(grp) grp.classList.add('collapsed');
+        }
+      });
+    });
+  }catch(ex){}
+  // Save on toggle
+  document.querySelectorAll('.nav-label').forEach(function(el){
+    el.addEventListener('click',function(){
+      setTimeout(function(){
+        var collapsed=[];
+        document.querySelectorAll('.nav-group.collapsed .nav-label').forEach(function(l){
+          collapsed.push(l.textContent.trim());
+        });
+        try{localStorage.setItem('fw_nav_collapsed',JSON.stringify(collapsed));}catch(ex){}
+      },50);
+    });
+  });
+})();
 
 function tabSel(prefix, idx, btn) {
   const nav = btn.parentElement;
