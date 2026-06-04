@@ -106,11 +106,11 @@ h1,h2,h3,h4,h5 { font-family: var(--font-serif); font-weight: 500; line-height: 
 .sidebar-nav { padding: .5rem .6rem; flex: 1; }
 .nav-group { margin-bottom: .15rem; }
 .nav-label {
-  font-size: 9px;
-  font-weight: 500;
+  font-size: 11px;
+  font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: .6px;
-  color: var(--faint);
+  letter-spacing: .4px;
+  color: var(--muted);
   padding: .6rem .7rem .2rem;
   display: flex;
   align-items: center;
@@ -120,7 +120,12 @@ h1,h2,h3,h4,h5 { font-family: var(--font-serif); font-weight: 500; line-height: 
   border-radius: 4px;
   transition: color .15s;
 }
-.nav-label:hover { color: var(--muted); }
+.nav-label:hover { color: var(--text); }
+.nav-label.is-capa {
+  padding-top: .7rem;
+  margin-top: .3rem;
+  border-top: 0.5px solid var(--border);
+}
 .nav-label::after {
   content: '▾';
   font-size: 10px;
@@ -128,6 +133,7 @@ h1,h2,h3,h4,h5 { font-family: var(--font-serif); font-weight: 500; line-height: 
   color: var(--faint);
 }
 .nav-group.collapsed .nav-label::after { transform: rotate(-90deg); }
+.nav-label[style*="pointer-events:none"]::after { display: none; }
 .nav-group.collapsed .nav-item,
 .nav-group.collapsed .nav-sub { display: none; }
 .nav-item {
@@ -643,16 +649,16 @@ textarea { field-sizing: content; min-height: 2em; }
       <button class="nav-item active" onclick="nav('home')"><div class="nav-pip" style="background:var(--c-gray)"></div>Dashboard ejecutivo</button>
     </div>
     <div class="nav-group collapsed">
-      <span class="nav-label" onclick="this.closest('.nav-group').classList.toggle('collapsed')">Capa estratégica</span>
+      <span class="nav-label is-capa" onclick="this.closest('.nav-group').classList.toggle('collapsed')">Capa estratégica</span>
       <button class="nav-item" onclick="nav('principios')"><div class="nav-pip" style="background:var(--c-purple)"></div>Principios del framework</button>
       <button class="nav-item" onclick="nav('gobernanza')"><div class="nav-pip" style="background:var(--c-purple)"></div>Gobernanza — puntos de control</button>
     </div>
     <div class="nav-group collapsed">
-      <span class="nav-label" onclick="this.closest('.nav-group').classList.toggle('collapsed')">Capa de ejecución</span>
+      <span class="nav-label is-capa" onclick="this.closest('.nav-group').classList.toggle('collapsed')">Capa de ejecución</span>
       <button class="nav-item" onclick="nav('roles-raci')"><div class="nav-pip" style="background:var(--c-gray)"></div>Roles y RACI</button>
     </div>
-    <div class="nav-group collapsed">
-      <span class="nav-label" onclick="this.closest('.nav-group').classList.toggle('collapsed')">Capa operativa</span>
+    <div class="nav-group">
+      <span class="nav-label is-capa" style="cursor:default;pointer-events:none">Capa operativa</span>
     </div>
     <div class="nav-group collapsed">
       <span class="nav-label" onclick="this.closest('.nav-group').classList.toggle('collapsed')">Fase 1 · Elicitación</span>
@@ -707,7 +713,7 @@ textarea { field-sizing: content; min-height: 2em; }
       <button class="nav-item" onclick="nav('ccb-versiones')" style="padding-left:1.8rem"><div class="nav-pip" style="background:var(--c-amber);opacity:.6"></div>↳ Versiones post-baseline</button>
     </div>
     <div class="nav-group collapsed">
-      <span class="nav-label" onclick="this.closest('.nav-group').classList.toggle('collapsed')">Evaluación y Cierre</span>
+      <span class="nav-label is-capa" onclick="this.closest('.nav-group').classList.toggle('collapsed')">Evaluación y Cierre</span>
       <button class="nav-item" onclick="nav('calidad')"><div class="nav-pip" style="background:var(--c-gray)"></div>Criterios de calidad</button>
       <button class="nav-item" onclick="nav('madurez')"><div class="nav-pip" style="background:var(--c-gray)"></div>Evaluador de madurez</button>
       <button class="nav-item" onclick="nav('campo-resultados')"><div class="nav-pip" style="background:var(--c-gray)"></div>Resultados consolidados</button>
@@ -9744,58 +9750,27 @@ function eliSaved(id) {
    SRS STORAGE — plantillas editables Fase 3
 ════════════════════════════════════════ */
 const SRS_KEY = 'fw_srs_v1';
-function loadSRS(){ try{ return JSON.parse(localStorage.getItem(SRS_KEY))||defaultSRS(); }catch(e){ return defaultSRS(); } }
+function loadSRS(){
+  try{
+    var saved=JSON.parse(localStorage.getItem(SRS_KEY));
+    if(!saved) return defaultSRS();
+    // Detect and clear example data (RF-001 SSO / Datacrédito)
+    if(saved.rfs&&saved.rfs.length>0&&saved.rfs[0]&&saved.rfs[0].titulo&&saved.rfs[0].titulo.indexOf('SSO')>=0){
+      localStorage.removeItem(SRS_KEY);
+      return defaultSRS();
+    }
+    return saved;
+  }catch(e){ return defaultSRS(); }
+}
 function saveSRS(){ localStorage.setItem(SRS_KEY,JSON.stringify(SRS)); }
 function escHS(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 function defaultSRS(){
   return {
-    ctx:{ nombre:'', version:'', adjunto:'', actores:[
-      {nombre:'Cliente solicitante', tipo:'Persona',      entrada:'Solicitud de crédito, documentos', salida:'Decisión crediticia, notificación'},
-      {nombre:'API Datacrédito',     tipo:'Sistema ext.', entrada:'Score crediticio, historial',       salida:'Consulta de score'},
-      {nombre:'Core bancario',       tipo:'Sistema ext.', entrada:'Datos financieros del cliente',     salida:'Instrucción de desembolso'},
-      {nombre:'Analista de crédito', tipo:'Persona',      entrada:'Consultas, revisiones manuales',   salida:'Reportes, logs de auditoría'},
-    ], exclusiones:[
-      'Módulo de cobranza — sistema independiente fuera del alcance',
-      'App móvil nativa — versión 2.0 del roadmap',
-    ]},
-    casos:[
-      {id:'UC-01', nombre:'Solicitar crédito',  actor:'Cliente solicitante', actoresS:'API Datacrédito · Core bancario',
-       nivel:'Objetivo de usuario', prioridad:'Must have',
-       pre:'El cliente está autenticado (UC-06). Tiene acceso al módulo de solicitudes.',
-       postOk:'Solicitud registrada con estado PENDIENTE y radicado asignado. Cliente notificado en < 60s.',
-       postFail:'El sistema muestra error descriptivo y ofrece opciones de reintento.',
-       flujo:'1. Cliente accede y selecciona Nueva solicitud\n2. Sistema presenta formulario con validación\n3. Cliente completa campos y adjunta documentación\n4. Sistema valida y envía al motor de procesamiento\n5. Sistema consulta score vía API Datacrédito\n6. Motor emite decisión automática\n7. Cliente recibe notificación multicanal',
-       alt:'4a. Campo inválido: sistema resalta en rojo.\n5a. API no disponible: reintento x3, luego escala a manual.'},
-      {id:'UC-02', nombre:'Autenticar usuario', actor:'Usuario final', actoresS:'Directorio Activo',
-       nivel:'Subfunción', prioridad:'Must have',
-       pre:'Sistema disponible, usuario registrado en AD.',
-       postOk:'Sesión activa con token JWT (TTL 8h).',
-       postFail:'Error registrado. Máx. 3 intentos.',
-       flujo:'1. Usuario ingresa credenciales SSO\n2. Sistema valida contra AD\n3. Si válido: genera token y redirige\n4. Si inválido: muestra error',
-       alt:'Sesión expirada: redirigir a re-autenticación.'},
-    ],
+    ctx:{ nombre:'', version:'', adjunto:'', actores:[], exclusiones:[] },
+    casos:[],
     bpmn:{ adjunto:'' },
     portada:{ nombre:'', docId:'', estado:'Borrador', fecha:'', proposito:'', enAlcance:'', fueraAlcance:'' },
-    rfs:[
-      {id:'RF-001',titulo:'Autenticación SSO corporativo',prioridad:'Must',estado:'Aprobado',desc:'El sistema DEBE permitir login mediante AD/LDAP usando OAuth 2.0 / SAML 2.0. Sesiones expiran tras 8h de inactividad.',given:'el usuario tiene cuenta activa en el directorio',when:'ingresa sus credenciales SSO correctas',then:'el sistema autentica y redirige al dashboard en < 3 segundos'},
-      {id:'RF-002',titulo:'Formulario de solicitud digital',prioridad:'Must',estado:'Aprobado',desc:'El sistema DEBE proveer formulario con validación en tiempo real y guardado automático cada 60 segundos.',given:'el cliente accede al portal de solicitudes',when:'completa los campos del formulario',then:'cada campo es validado en < 500ms con mensaje de error descriptivo'},
-      {id:'RF-003',titulo:'Consulta score crediticio',prioridad:'Must',estado:'En revisión',desc:'El sistema DEBE consultar el score vía API Datacrédito al recibir la solicitud, en menos de 5 segundos.',given:'la solicitud fue recibida correctamente',when:'el sistema inicia el procesamiento',then:'el score es consultado y almacenado en el expediente en < 5 segundos'},
-    ],
-    rnfs:[
-      {id:'RNF-001',cat:'Rendimiento',atributo:'Tiempo de respuesta web',valor:'P95 < 3s bajo 500 usuarios concurrentes',metodo:'Gatling load test'},
-      {id:'RNF-002',cat:'Disponibilidad',atributo:'Disponibilidad operativa',valor:'99.5% Lun-Sáb 6:00-22:00',metodo:'Uptime Robot'},
-      {id:'RNF-003',cat:'Seguridad',atributo:'Autenticación fuerte',valor:'MFA obligatorio para roles Gerente y Auditor',metodo:'Test de penetración'},
-    ],
-    sas:[
-      {id:'SA-001',desc:'La API de Datacrédito estará disponible antes del Sprint 3'},
-      {id:'SA-002',desc:'El directorio corporativo soporta integración SAML 2.0'},
-      {id:'SA-003',desc:'Los usuarios finales tienen correo corporativo activo'},
-    ],
-    rcs:[
-      {id:'RC-001',t:'Presupuesto',v:'COP 850M en 12 meses'},
-      {id:'RC-002',t:'Plazo MVP',v:'6 meses desde la firma del contrato'},
-      {id:'RC-003',t:'Tecnología',v:'Stack aprobado por el área de TI'},
-    ],
+    rfs:[], rnfs:[], sas:[], rcs:[],
   };
 }
 let SRS = loadSRS();
@@ -10300,60 +10275,34 @@ function srsAddRC(){ SRS.rcs=SRS.rcs||[]; var n=SRS.rcs.length+1; SRS.rcs.push({
 const ANA_KEY = 'fw_ana_v1';
 function defaultANA() {
   return {
-    gap: {
-      asIs: ['Cliente llena formulario en papel o Excel','Analista transcribe datos manualmente','Consulta manual al buró de crédito (1-2 días)','Reunión semanal del comité de aprobación','Notificación por carta física o llamada'],
-      toBe: ['Formulario digital integrado al sistema','Captura automática de datos del cliente','Consulta automática al buró en tiempo real','Motor de decisión automática con reglas','Notificación digital inmediata por email/SMS'],
-      brechas: [
-        {proceso:'Captura de datos',asIs:'Manual en papel/Excel',toBe:'Formulario digital integrado',rf:'RF-001, RF-002',impacto:'Alto'},
-        {proceso:'Score crediticio',asIs:'Consulta manual 1-2 días',toBe:'API automática en tiempo real',rf:'RF-003',impacto:'Alto'},
-        {proceso:'Decisión de aprobación',asIs:'Comité semanal',toBe:'Motor automático con reglas',rf:'RF-004',impacto:'Alto'},
-      ]
-    },
-    moscow: {
-      must:   [{id:'RF-001',desc:'Login con SSO corporativo (AD/LDAP)'},{id:'RF-002',desc:'Dashboard con KPIs en tiempo real'},{id:'RF-003',desc:'Consulta automática score crediticio vía API'},{id:'RF-004',desc:'Motor de decisión automática con reglas configurables'},{id:'RNF-001',desc:'Rendimiento: P95 < 3s bajo 500 usuarios concurrentes'}],
-      should: [{id:'RF-010',desc:'Notificaciones push multicanal al cliente'},{id:'RF-011',desc:'Filtros avanzados en reportes y dashboard'},{id:'RF-012',desc:'Historial de auditoría completo de decisiones'},{id:'RF-013',desc:'Integración con sistema CRM existente'}],
-      could:  [{id:'RF-020',desc:'Modo oscuro / claro configurable por usuario'},{id:'RF-021',desc:'Análisis predictivo básico de cartera'},{id:'RF-022',desc:'App móvil nativa iOS y Android'}],
-      wont:   [{id:'RF-030',desc:'Integración con redes sociales'},{id:'RF-031',desc:'Motor de IA generativa para decisiones'},{id:'RF-032',desc:'Marketplace de integraciones externas'}],
-    },
+    gap: { asIs:[], toBe:[], brechas:[] },
+    moscow: { must:[], should:[], could:[], wont:[] },
     kano: [
       {cat:'Básicos (Must-be)', color:'var(--c-red)', bc:'rgba(163,45,45,.2)', bg:'rgba(163,45,45,.06)',
-       desc:'Su ausencia genera insatisfacción. Su presencia no sorprende — simplemente se espera.',
-       items:[
-        {id:'RF-001',nota:'Autenticación segura',func:'',disfunc:'',respF:'',respD:'',pregF:'¿Cómo te sentirías si el sistema tuviera autenticación segura?',pregD:'¿Cómo te sentirías si NO la tuviera?'},
-        {id:'RF-002',nota:'Dashboard principal',func:'',disfunc:'',respF:'',respD:'',pregF:'¿Cómo te sentirías si el sistema tuviera dashboard?',pregD:'¿Cómo te sentirías si NO lo tuviera?'}
-      ]},
+       desc:'Su ausencia genera insatisfacción. Su presencia no sorprende — simplemente se espera.', items:[]},
       {cat:'Desempeño (One-dimensional)', color:'var(--c-blue)', bc:'rgba(24,95,165,.2)', bg:'rgba(24,95,165,.06)',
-       desc:'Más es mejor. Relación lineal con satisfacción — los usuarios lo piden explícitamente.',
-       items:[
-        {id:'RF-003',nota:'Velocidad de carga del dashboard',func:'',disfunc:'',respF:'',respD:'',pregF:'¿Cómo te sentirías si el sistema fuera más rápido?',pregD:'¿Cómo te sentirías si fuera más lento?'},
-        {id:'RF-004',nota:'Cantidad de filtros en reportes',func:'',disfunc:'',respF:'',respD:'',pregF:'¿Cómo te sentirías si hubiera más filtros?',pregD:'¿Cómo te sentirías si hubiera menos?'}
-      ]},
+       desc:'Más es mejor. Relación lineal con satisfacción — los usuarios lo piden explícitamente.', items:[]},
       {cat:'Atractivos (Delighters)', color:'var(--c-green)', bc:'rgba(15,110,86,.2)', bg:'rgba(15,110,86,.06)',
-       desc:'No esperados. Su presencia deleita al usuario. Su ausencia no genera insatisfacción.',
-       items:[
-        {id:'RF-005',nota:'Sugerencias inteligentes de decisión',func:'',disfunc:'',respF:'',respD:'',pregF:'¿Cómo te sentirías si el sistema sugiriera acciones proactivas?',pregD:'¿Cómo te sentirías si no lo hiciera?'}
-      ]},
+       desc:'No esperados. Su presencia deleita al usuario. Su ausencia no genera insatisfacción.', items:[]},
       {cat:'Indiferente', color:'var(--muted)', bc:'rgba(120,120,120,.2)', bg:'rgba(120,120,120,.04)',
-       desc:'Su presencia o ausencia no afecta la satisfacción del usuario.',
-       items:[]}
+       desc:'Su presencia o ausencia no afecta la satisfacción del usuario.', items:[]}
     ],
-    vxe: [
-      {req:'Login SSO',valor:90,esfuerzo:20},{req:'Dashboard KPIs',valor:85,esfuerzo:35},
-      {req:'Score API',valor:95,esfuerzo:40},{req:'Motor decisión',valor:90,esfuerzo:70},
-      {req:'Notificaciones',valor:70,esfuerzo:30},{req:'Filtros avanzados',valor:60,esfuerzo:25},
-      {req:'Historial auditoría',valor:75,esfuerzo:45},{req:'CRM integración',valor:65,esfuerzo:80},
-      {req:'Modo oscuro',valor:30,esfuerzo:15},{req:'App móvil',valor:50,esfuerzo:90},
-      {req:'Motor IA generativa',valor:45,esfuerzo:90},
-    ],
-    uc: [
-      {name:'Autenticar usuario',actor:'Usuario final',pre:'Sistema disponible, usuario registrado',trigger:'Usuario accede a la URL del sistema',flujo:'1. Usuario ingresa credenciales SSO\n2. Sistema valida contra directorio activo\n3. Si válido: genera token de sesión y redirige\n4. Si inválido: muestra error y permite 3 reintentos',alt:'Sesión expirada: redirigir a re-autenticación',post:'Usuario autenticado con sesión activa (TTL: 8h)'},
-      {name:'Consultar dashboard',actor:'Usuario final',pre:'Usuario autenticado',trigger:'Usuario navega a la pantalla principal',flujo:'1. Sistema carga KPIs del período seleccionado\n2. Aplica filtros de perfil del usuario\n3. Renderiza gráficos en < 3s',alt:'Sin datos: mostrar mensaje y sugerir rango alternativo',post:'Dashboard visible con datos actualizados'},
-      {name:'Generar reporte',actor:'Analista',pre:'Usuario autenticado con permiso de reportes',trigger:'Usuario selecciona Nuevo reporte',flujo:'1. Usuario selecciona tipo y parámetros\n2. Sistema valida permisos\n3. Sistema genera el reporte\n4. Usuario puede descargar o compartir',alt:'Reporte > 10MB: generar asíncronamente y notificar por email',post:'Reporte generado y disponible en historial 30 días'},
-      {name:'Gestionar usuarios',actor:'Administrador',pre:'Usuario con rol ADMIN autenticado',trigger:'Admin accede a módulo de Usuarios',flujo:'1. Admin busca usuario existente o crea uno nuevo\n2. Asigna roles y permisos\n3. Sistema aplica cambios y registra en auditoría',alt:'Usuario ya existe: mostrar duplicado',post:'Cambios activos de inmediato, log de auditoría actualizado'},
-    ],
+    vxe: [],
+    uc: [],
   };
 }
-function loadANA(){ try{ return JSON.parse(localStorage.getItem(ANA_KEY))||defaultANA(); }catch(e){ return defaultANA(); } }
+function loadANA(){
+  try{
+    var saved=JSON.parse(localStorage.getItem(ANA_KEY));
+    if(!saved) return defaultANA();
+    // Detect and clear example data (gap asIs with crédito)
+    if(saved.gap&&saved.gap.asIs&&saved.gap.asIs.length>0&&saved.gap.asIs[0]&&saved.gap.asIs[0].indexOf('papel')>=0){
+      localStorage.removeItem(ANA_KEY);
+      return defaultANA();
+    }
+    return saved;
+  }catch(e){ return defaultANA(); }
+}
 function saveANA(){ localStorage.setItem(ANA_KEY, JSON.stringify(ANA)); }
 function anaSave(){ saveANA(); }
 function anaSaved(id){ var e=document.getElementById(id); if(e){e.textContent='✓ Guardado';setTimeout(function(){e.textContent='';},1800);} }
@@ -12763,14 +12712,14 @@ function initSrsChecklist(){
 
 
 const HU_KEY = 'fw_srs_hu_v1';
-function defHU(){ return { items:[
-  {id:'HU-001',otros:'RNF-001',rol:'Analista de crédito',quiero:'consultar el score crediticio del cliente de forma automática',para:'reducir el tiempo de evaluación de 2 días a menos de 1 hora',prioridad:'Must',estado:'Aprobada',rfs:'RF-003',criterios:'Dado que el analista abre la solicitud\nCuando el sistema consulta el score\nEntonces el resultado aparece en menos de 3 segundos'},
-  {id:'HU-002',otros:'',rol:'Cliente',quiero:'completar mi solicitud de crédito en línea desde cualquier dispositivo',para:'no tener que ir a una sucursal física',prioridad:'Must',estado:'Aprobada',rfs:'RF-001, RF-002',criterios:'Dado que el cliente accede al portal\nCuando completa todos los campos obligatorios\nEntonces puede enviar la solicitud sin errores'},
-  {id:'HU-003',otros:'',rol:'Administrador',quiero:'configurar las reglas del motor de decisión sin programar',para:'ajustar los criterios de aprobación según la política vigente',prioridad:'Should',estado:'En revisión',rfs:'RF-004',criterios:'Dado que el admin accede al módulo de reglas\nCuando modifica un umbral\nEntonces el cambio aplica en la próxima evaluación sin reiniciar el sistema'},
-]}; }
+function defHU(){ return { items:[] }; }
 function initSrsHU(){
   var el=document.getElementById('srs-hu-mount'); if(!el||el.innerHTML.trim()) return;
   var data; try{data=JSON.parse(localStorage.getItem(HU_KEY))||defHU();}catch(e){data=defHU();}
+  // Detect and clear example data
+  if(data.items&&data.items.length>0&&data.items[0]&&data.items[0].rol&&data.items[0].rol.indexOf('crédito')>=0){
+    data=defHU(); localStorage.removeItem(HU_KEY);
+  }
   // Migrate: ensure all items have escenarios array
   var migrated=false;
   (data.items||[]).forEach(function(h){
@@ -12798,7 +12747,7 @@ function initSrsHU(){
 }
 
 var SRS_VER_KEY='fw_srs_ver_v1';
-function defSrsVer(){ return {versiones:[{version:'v0.1',fecha:'',autor:'',cambios:'Versión inicial — estructura base del SRS',estado:'Borrador'}]}; }
+function defSrsVer(){ return {versiones:[]}; }
 function initSrsVersiones(){
   var el=document.getElementById('srs-ver-mount'); if(!el) return;
   el.innerHTML='';
