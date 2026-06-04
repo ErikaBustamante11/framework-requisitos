@@ -1116,7 +1116,7 @@ function kpiModal(tipo){
       {n:'F3 ×5',t:'Fase 3 — Especificación',d:'Plantilla IEEE 29148, IDs y modales, Gherkin/BDD, glosario técnico, control de versiones.'},
       {n:'F4 ×5',t:'Fase 4 — Validación',d:'Revisiones formales, log de defectos, aprobación con acta, UAT con usuarios, densidad de defectos.'},
       {n:'F5 ×5',t:'Fase 5 — Gestión de cambios',d:'Proceso CR formal, análisis de impacto, CCB con roles, re-versionado SRS, CR rechazados documentados.'},
-      {n:'×3',t:'Escala de evaluación',d:'Sí (100%) · Parcial (50%) · No (0%) — con campo de evidencia por criterio.'},
+      {n:'CMMI',t:'Escala CMMI-DEV (5 niveles)',d:'Nivel 1 Inicial → Nivel 2 Gestionado → Nivel 3 Definido → Nivel 4 Cuantitativamente Gestionado → Nivel 5 Optimizado. Escala: Sí=100% · Parcial=50% · No=0%.'},
     ]},
     artefactos:{titulo:'36 artefactos producidos',color:'var(--c-gray)',items:[
       {n:'F1',t:'Fase 1 · Elicitación (9)',d:'Plan de elicitación · Mapa de stakeholders · Guías de preguntas · Minuta de sesión · Registro de elicitación · Lista SA · Lista RC · Acta de conformidad PO · Acta PC1'},
@@ -8556,8 +8556,22 @@ reg('madurez', () => `
 <div class="page-header">
   <div class="page-eyebrow" style="color:var(--c-gray)">● Evaluación y Cierre</div>
   <h1 class="page-title">Evaluador de madurez</h1>
-  <p class="page-desc">30 criterios ponderados en 5 fases. Marca los que tu equipo ya practica para obtener tu nivel de madurez y las brechas específicas.</p>
-  <div class="std-row"><span class="std-pill">CMMI-DEV L2-L3</span><span class="std-pill">IEEE 29148</span></div>
+  <p class="page-desc">30 criterios ponderados en 5 fases. Marca los que tu equipo ya practica para obtener tu nivel de madurez y las brechas específicas a trabajar.</p>
+  <div class="std-row">
+    <span class="std-pill">CMMI-DEV v2.0</span>
+    <span class="std-pill">IEEE 29148:2018</span>
+    <span class="std-pill">ISO/IEC 33001</span>
+  </div>
+</div>
+
+<div style="background:rgba(24,95,165,.05);border:0.5px solid rgba(24,95,165,.2);border-radius:var(--radius);padding:.6rem 1rem;margin-bottom:1rem;font-size:11px;color:var(--muted);line-height:1.7">
+  <strong style="color:var(--c-blue)">Modelo CMMI-DEV v2.0 — 5 niveles de madurez:</strong>
+  <span style="color:var(--c-red)">L1 Inicial</span> →
+  <span style="color:var(--c-amber)">L2 Gestionado</span> →
+  <span style="color:var(--c-blue)">L3 Definido</span> →
+  <span style="color:var(--c-teal)">L4 Cuantitativamente Gestionado</span> →
+  <span style="color:var(--c-green)">L5 Optimizado</span>
+  &nbsp;·&nbsp; Escala: <strong>Sí</strong> = 100% · <strong>Parcial</strong> = 50% · <strong>No</strong> = 0%
 </div>
 
 <div style="display:flex;align-items:center;gap:1rem;padding:1rem;background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius-lg);margin-bottom:1.2rem">
@@ -8609,7 +8623,7 @@ function initMiPlan(){
 }
 
 function defPlan(){ return {
-  empresa:'', nivelActual:'Nivel 1 — Inicial', nivelObjetivo:'Nivel 2 — Gestionado',
+  empresa:'', nivelActual:'Nivel 1 — Inicial', nivelObjetivo:'Nivel 3 — Definido',
   fechaInicio:'', fechaObjetivo:'', responsable:'', obs:'',
   actividades:[],
 }; }
@@ -8641,7 +8655,7 @@ function renderMiPlan(){
     +'</div></div>';
 
   // Contexto del plan
-  var nivelOpts=['Nivel 1 — Inicial','Nivel 2 — Gestionado','Nivel 3 — Definido','Nivel 4 — Optimizado'];
+  var nivelOpts=['Nivel 1 — Inicial','Nivel 2 — Gestionado','Nivel 3 — Definido','Nivel 4 — Cuantitativamente Gestionado','Nivel 5 — Optimizado'];
   function fi(lbl,key,ph){ return '<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.3px;display:block;margin-bottom:2px">'+lbl+'</label><input value="'+e(p[key]||'')+'" placeholder="'+ph+'" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:5px 8px;font-size:12px;color:var(--text);font-family:var(--font-sans);outline:none" oninput="window._PLAN.'+key+'=this.value;savePlan()"></div>'; }
   function sel(lbl,key){ return '<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.3px;display:block;margin-bottom:2px">'+lbl+'</label><select style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:5px 8px;font-size:12px;color:var(--text);outline:none" onchange="window._PLAN.'+key+'=this.value;savePlan()">'+nivelOpts.map(function(o){return'<option'+(p[key]===o?' selected':'')+'>'+o+'</option>';}).join('')+'</select></div>'; }
 
@@ -9578,10 +9592,11 @@ function updateMatScore() {
   });
   const total=matTotalW*10, pct=Math.round(earned/total*100);
   const levels=[
-    {min:80,l:'Nivel 4 — Optimizado',   d:'Proceso institucionalizado con mejora continua y métricas activas. El equipo tiene capacidad de mejora sistemática.',c:'var(--c-green)'},
-    {min:60,l:'Nivel 3 — Definido',      d:'Proceso documentado y consistente entre proyectos. Enfócate en cerrar las brechas identificadas con Parcial.',c:'var(--c-blue)'},
-    {min:35,l:'Nivel 2 — Gestionado',    d:'El proceso existe pero no es consistente. Prioriza Especificación y Validación para consolidar.',c:'var(--c-amber)'},
-    {min:0, l:'Nivel 1 — Inicial',       d:'El proceso es informal o ad-hoc. Empieza por establecer plantillas básicas de elicitación.',c:'var(--c-red)'},
+    {min:81,l:'Nivel 5 — Optimizado',                    d:'Mejora continua activa y cuantificada. El equipo detecta y corrige desviaciones sistemáticamente.',c:'var(--c-green)'},
+    {min:61,l:'Nivel 4 — Cuantitativamente Gestionado',  d:'Proceso medido con métricas estadísticas. Los umbrales de calidad se controlan numéricamente.',c:'var(--c-teal)'},
+    {min:41,l:'Nivel 3 — Definido',                      d:'Proceso documentado y estandarizado entre proyectos. Enfócate en cerrar las brechas identificadas.',c:'var(--c-blue)'},
+    {min:21,l:'Nivel 2 — Gestionado',                    d:'El proceso existe pero no es consistente entre proyectos. Prioriza Especificación y Validación.',c:'var(--c-amber)'},
+    {min:0, l:'Nivel 1 — Inicial',                       d:'El proceso es ad-hoc e impredecible. Comienza estableciendo plantillas básicas de elicitación.',c:'var(--c-red)'},
   ];
   const level=levels.find(function(l){return pct>=l.min;})||levels[levels.length-1];
   const sc=document.getElementById('mat-score'),fl=document.getElementById('mat-fill'),lv=document.getElementById('mat-level'),ds=document.getElementById('mat-desc'),ci=document.getElementById('mat-circle');
@@ -10796,8 +10811,8 @@ function renderCampoResultados(){
     matIdx++;
   });});
   var matPct=matTotalW2>0?Math.round(matScore/(matTotalW2*10)*100):0;
-  var matNivel=matPct>=80?'Nivel 4 — Optimizado':matPct>=60?'Nivel 3 — Definido':matPct>=35?'Nivel 2 — Gestionado':'Nivel 1 — Inicial';
-  var matColor=matPct>=80?'var(--c-green)':matPct>=60?'var(--c-blue)':matPct>=35?'var(--c-amber)':'var(--c-red)';
+  var matNivel=matPct>=81?'Nivel 5 — Optimizado':matPct>=61?'Nivel 4 — Cuantitativamente Gestionado':matPct>=41?'Nivel 3 — Definido':matPct>=21?'Nivel 2 — Gestionado':'Nivel 1 — Inicial';
+  var matColor=matPct>=81?'var(--c-green)':matPct>=61?'var(--c-teal)':matPct>=41?'var(--c-blue)':matPct>=21?'var(--c-amber)':'var(--c-red)';
 
   // RTM
   var rtmItems=rtm.items||[];
