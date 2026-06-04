@@ -642,19 +642,19 @@ textarea { field-sizing: content; min-height: 2em; }
       <span class="nav-label" onclick="this.closest('.nav-group').classList.toggle('collapsed')">Inicio</span>
       <button class="nav-item active" onclick="nav('home')"><div class="nav-pip" style="background:var(--c-gray)"></div>Dashboard ejecutivo</button>
     </div>
-    <div class="nav-group">
+    <div class="nav-group collapsed">
       <span class="nav-label" onclick="this.closest('.nav-group').classList.toggle('collapsed')">Capa estratégica</span>
       <button class="nav-item" onclick="nav('principios')"><div class="nav-pip" style="background:var(--c-purple)"></div>Principios del framework</button>
       <button class="nav-item" onclick="nav('gobernanza')"><div class="nav-pip" style="background:var(--c-purple)"></div>Gobernanza — puntos de control</button>
     </div>
-    <div class="nav-group">
+    <div class="nav-group collapsed">
       <span class="nav-label" onclick="this.closest('.nav-group').classList.toggle('collapsed')">Capa de ejecución</span>
       <button class="nav-item" onclick="nav('roles-raci')"><div class="nav-pip" style="background:var(--c-gray)"></div>Roles y RACI</button>
     </div>
-    <div class="nav-group">
+    <div class="nav-group collapsed">
       <span class="nav-label" onclick="this.closest('.nav-group').classList.toggle('collapsed')">Capa operativa</span>
     </div>
-    <div class="nav-group">
+    <div class="nav-group collapsed">
       <span class="nav-label" onclick="this.closest('.nav-group').classList.toggle('collapsed')">Fase 1 · Elicitación</span>
       <button class="nav-item" onclick="nav('eli-flujo')"><div class="nav-pip" style="background:var(--c-teal)"></div>Flujo de actividades</button>
       <button class="nav-item" onclick="nav('campo-proyecto')"><div class="nav-pip" style="background:var(--c-teal)"></div>Contexto del proyecto</button>
@@ -663,7 +663,7 @@ textarea { field-sizing: content; min-height: 2em; }
       <button class="nav-item" onclick="nav('eli-sesiones')"><div class="nav-pip" style="background:var(--c-teal)"></div>Sesiones de elicitación</button>
       <button class="nav-item" onclick="nav('eli-pc1')"><div class="nav-pip" style="background:var(--c-teal)"></div>Punto de control PC1</button>
     </div>
-    <div class="nav-group">
+    <div class="nav-group collapsed">
       <span class="nav-label" onclick="this.closest('.nav-group').classList.toggle('collapsed')">Fase 2 · Análisis</span>
       <button class="nav-item" onclick="nav('ana-flujo')"><div class="nav-pip" style="background:var(--c-purple)"></div>Flujo de actividades</button>
       <button class="nav-item" onclick="nav('ana-estructuracion')"><div class="nav-pip" style="background:var(--c-purple)"></div>Estructuración de requisitos</button>
@@ -675,7 +675,7 @@ textarea { field-sizing: content; min-height: 2em; }
       <button class="nav-item" onclick="nav('ana-priorizacion')"><div class="nav-pip" style="background:var(--c-purple)"></div>Priorización</button>
       <button class="nav-item" onclick="nav('ana-pc2')"><div class="nav-pip" style="background:var(--c-purple)"></div>Punto de control PC2</button>
     </div>
-    <div class="nav-group">
+    <div class="nav-group collapsed">
       <span class="nav-label" onclick="this.closest('.nav-group').classList.toggle('collapsed')">Fase 3 · Especificación</span>
       <button class="nav-item" onclick="nav('srs-flujo')"><div class="nav-pip" style="background:var(--c-blue)"></div>Flujo de actividades</button>
       <button class="nav-item" onclick="nav('srs-editor')"><div class="nav-pip" style="background:var(--c-blue)"></div>Editor SRS <span class="nav-count">12 RF</span></button>
@@ -686,7 +686,7 @@ textarea { field-sizing: content; min-height: 2em; }
       <button class="nav-item" onclick="nav('srs-walkthrough')"><div class="nav-pip" style="background:var(--c-blue)"></div>Walkthrough SRS</button>
       <button class="nav-item" onclick="nav('srs-pc3')"><div class="nav-pip" style="background:var(--c-blue)"></div>Punto de control PC3</button>
     </div>
-    <div class="nav-group">
+    <div class="nav-group collapsed">
       <span class="nav-label" onclick="this.closest('.nav-group').classList.toggle('collapsed')">Fase 4 · Validación</span>
       <button class="nav-item" onclick="nav('val-flujo')"><div class="nav-pip" style="background:var(--c-green)"></div>Flujo de actividades</button>
       <button class="nav-item" onclick="nav('val-autoreview')"><div class="nav-pip" style="background:var(--c-green)"></div>Auto-revisión BA</button>
@@ -700,13 +700,13 @@ textarea { field-sizing: content; min-height: 2em; }
       <button class="nav-item" onclick="nav('val-publicacion')"><div class="nav-pip" style="background:var(--c-green)"></div>Publicación SRS</button>
       <button class="nav-item" onclick="nav('val-pc4')"><div class="nav-pip" style="background:var(--c-green)"></div>Punto de control PC4</button>
     </div>
-    <div class="nav-group">
+    <div class="nav-group collapsed">
       <span class="nav-label" onclick="this.closest('.nav-group').classList.toggle('collapsed')">Fase 5 · Gestión cambios</span>
       <button class="nav-item" onclick="nav('ccb-flujo')"><div class="nav-pip" style="background:var(--c-amber)"></div>Flujo de actividades</button>
       <button class="nav-item" onclick="nav('ccb-cr')"><div class="nav-pip" style="background:var(--c-amber)"></div>Gestión de CRs</button>
       <button class="nav-item" onclick="nav('ccb-versiones')" style="padding-left:1.8rem"><div class="nav-pip" style="background:var(--c-amber);opacity:.6"></div>↳ Versiones post-baseline</button>
     </div>
-    <div class="nav-group">
+    <div class="nav-group collapsed">
       <span class="nav-label" onclick="this.closest('.nav-group').classList.toggle('collapsed')">Evaluación y Cierre</span>
       <button class="nav-item" onclick="nav('calidad')"><div class="nav-pip" style="background:var(--c-gray)"></div>Criterios de calidad</button>
       <button class="nav-item" onclick="nav('madurez')"><div class="nav-pip" style="background:var(--c-gray)"></div>Evaluador de madurez</button>
