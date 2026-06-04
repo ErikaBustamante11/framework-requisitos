@@ -7105,7 +7105,7 @@ function renderValSK(){
       +'<div class="card-title" style="margin-bottom:.7rem">Nueva revisión</div>'
       +'<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.5rem;margin-bottom:.5rem">'
       +'<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">Fecha</label><input id="sk2-nfecha" type="date" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:4px 8px;font-size:12px;color:var(--text);outline:none"></div>'
-      +'<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">Stakeholder / Rol</label><input id="sk2-nsk" placeholder="Ej: Juan Pérez — PO" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:4px 8px;font-size:12px;color:var(--text);outline:none"></div>'
+      +'<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">Stakeholder / Rol</label><textarea id="sk2-nsk" placeholder="Ej: Juan Pérez — PO" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:4px 8px;font-size:12px;color:var(--text);outline:none;resize:none;line-height:1.5;min-height:36px;overflow:hidden"></textarea></div>'
       +'<div><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">Sección / módulo revisado</label><input id="sk2-nsec" placeholder="Ej: RF-001–RF-012" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:4px 8px;font-size:12px;color:var(--text);outline:none"></div>'
       +'</div>'
       +'<div style="margin-bottom:.6rem"><label style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">Comentarios / cambios solicitados</label>'
@@ -7169,10 +7169,10 @@ function renderValSK(){
             obs.forEach(function(ob,oi){
               var tc=tipoColor[ob.tipo]||'var(--muted)';
               var oec=ob.estado==='Resuelta'?'var(--c-green)':ob.estado==='En revisión'?'var(--c-amber)':'var(--muted)';
-              html+='<div style="display:grid;grid-template-columns:80px 140px 1fr 90px 24px;gap:4px;align-items:center;padding:4px 0;border-bottom:0.5px solid var(--border)">'
+              html+='<div style="display:grid;grid-template-columns:80px 140px 1fr 90px 24px;gap:4px;align-items:start;padding:4px 0;border-bottom:0.5px solid var(--border)">'
                 +'<input value="'+e(ob.rfid||'')+'" placeholder="RF-001" style="background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 5px;font-size:11px;font-family:var(--font-mono);color:var(--c-blue);outline:none" oninput="sk2SetOb('+i+','+oi+',\'rfid\',this.value)">'
                 +'<select style="background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 4px;font-size:10px;color:'+tc+';font-weight:600;outline:none" onchange="sk2SetOb('+i+','+oi+',\'tipo\',this.value);renderValSK()">'+tiposObs.map(function(o){return'<option'+(ob.tipo===o?' selected':'')+'>'+o+'</option>';}).join('')+'</select>'
-                +'<input value="'+e(ob.desc||'')+'" placeholder="Describe la observación..." style="background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 5px;font-size:11px;color:var(--text);outline:none" oninput="sk2SetOb('+i+','+oi+',\'desc\',this.value)">'
+                +'<textarea placeholder="Describe la observación..." style="background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 5px;font-size:11px;color:var(--text);outline:none;resize:none;line-height:1.5;min-height:34px;overflow:hidden;width:100%" oninput="autoH(this);sk2SetOb('+i+','+oi+',\'desc\',this.value)">'+e(ob.desc||'')+'</textarea>'
                 +'<select style="background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 4px;font-size:11px;color:'+oec+';font-weight:500;outline:none" onchange="sk2SetOb('+i+','+oi+',\'estado\',this.value);renderValSK()">'+['Abierta','En revisión','Resuelta','Descartada'].map(function(o){return'<option'+(ob.estado===o?' selected':'')+'>'+o+'</option>';}).join('')+'</select>'
                 +'<button style="background:none;border:none;cursor:pointer;color:var(--muted);font-size:13px" onclick="sk2DelOb('+i+','+oi+')">×</button>'
                 +'</div>';
@@ -8821,7 +8821,7 @@ function filterGlos() {
     const realIdx=GLOSARIO.indexOf(g);
     return `<div style="display:grid;grid-template-columns:120px 1fr 80px 60px;gap:.6rem;padding:.5rem .7rem;background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius);margin-bottom:.3rem;align-items:center">
       <input value="${g.name.replace(/"/g,'&quot;')}" style="font-family:var(--font-mono);color:var(--c-blue);font-size:12px;font-weight:500;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 6px;outline:none;width:100%" oninput="GLOSARIO[${realIdx}].name=this.value;glosSave();filterGlos()">
-      <input value="${g.def.replace(/"/g,'&quot;')}" style="font-size:12px;color:var(--muted);background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 6px;outline:none;width:100%" oninput="GLOSARIO[${realIdx}].def=this.value;glosSave();filterGlos()">
+      <textarea style="font-size:12px;color:var(--muted);background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 6px;outline:none;width:100%;resize:none;line-height:1.5;min-height:34px;overflow:hidden" oninput="autoH(this);GLOSARIO[${realIdx}].def=this.value;glosSave();filterGlos()">${g.def.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</textarea>
       <input value="${g.cat.replace(/"/g,'&quot;')}" style="font-size:11px;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 6px;outline:none;width:100%" oninput="GLOSARIO[${realIdx}].cat=this.value;glosSave();initGlosario()">
       <button style="background:none;border:none;cursor:pointer;color:var(--muted);font-size:15px" onclick="GLOSARIO.splice(${realIdx},1);glosSave();initGlosario()">×</button>
     </div>`;
@@ -8834,7 +8834,7 @@ function filterGlos() {
     addDiv.id='glos-add-row';
     addDiv.style.cssText='display:flex;gap:.5rem;margin-top:.5rem;align-items:center';
     addDiv.innerHTML='<input id="glos-new-name" placeholder="Término..." style="width:120px;background:var(--surface);border:0.5px solid var(--border2);border-radius:5px;padding:5px 8px;font-size:12px;color:var(--text);font-family:var(--font-mono);outline:none">'
-      +'<input id="glos-new-def" placeholder="Definición..." style="flex:1;background:var(--surface);border:0.5px solid var(--border2);border-radius:5px;padding:5px 8px;font-size:12px;color:var(--text);font-family:var(--font-sans);outline:none">'
+      +'<textarea id="glos-new-def" placeholder="Definición..." style="flex:1;background:var(--surface);border:0.5px solid var(--border2);border-radius:5px;padding:5px 8px;font-size:12px;color:var(--text);font-family:var(--font-sans);outline:none;resize:none;line-height:1.5;min-height:36px;overflow:hidden"></textarea>'
       +'<input id="glos-new-cat" placeholder="Categoría..." style="width:100px;background:var(--surface);border:0.5px solid var(--border2);border-radius:5px;padding:5px 8px;font-size:12px;color:var(--text);font-family:var(--font-sans);outline:none">'
       +'<button class="btn btn-sm" style="background:var(--c-blue);color:#fff;border-color:var(--c-blue)" onclick="glosAddTerm()">+ Agregar</button>'+'<span id="glos-add-msg" style="font-size:11px;color:var(--c-red);margin-left:.5rem"></span>';
     el.after(addDiv);
@@ -9657,8 +9657,20 @@ function buildRoadmap() {
 ════════════════════════════════════════ */
 const ELI_KEY = 'fw_eli_v7';
 function loadELI() {
-  try { return JSON.parse(localStorage.getItem(ELI_KEY)) || defaultELI(); }
-  catch(e) { return defaultELI(); }
+  try {
+    var saved = JSON.parse(localStorage.getItem(ELI_KEY));
+    if(!saved) return defaultELI();
+    // Detect old example data and clean
+    if(saved.minuta && saved.minuta.rfs && saved.minuta.rfs.length > 0 &&
+       saved.minuta.rfs[0] && saved.minuta.rfs[0].desc && saved.minuta.rfs[0].desc.indexOf('SSO') >= 0){
+      saved.minuta.rfs = [];
+      saved.minuta.rnfs = [];
+      saved.minuta.sas = [];
+      saved.minuta.rcs = [];
+      localStorage.setItem(ELI_KEY, JSON.stringify(saved));
+    }
+    return saved;
+  } catch(e) { return defaultELI(); }
 }
 function saveELI() { localStorage.setItem(ELI_KEY, JSON.stringify(ELI)); }
 function defaultELI() {
@@ -9668,9 +9680,9 @@ function defaultELI() {
       proyecto:'', sesionId:'ELI-001', fecha:'', hora:'', analista:'', tecnica:'Entrevista estructurada',
       lugar:'', objetivo:'',
       participantes:[
-        {nombre:'', rol:'Product Owner', area:'Negocio', participacion:'Confirmada'},
-        {nombre:'', rol:'Usuario clave', area:'Operativo', participacion:'Confirmada'},
-        {nombre:'', rol:'Analista BA',   area:'TI / Proyecto', participacion:'Facilitador'},
+        {nombre:'', rol:'', area:'', participacion:'Confirmada'},
+        {nombre:'', rol:'', area:'', participacion:'Confirmada'},
+        {nombre:'', rol:'', area:'', participacion:'Facilitador'},
       ],
       rfs:[], rnfs:[], sas:[], rcs:[],
       pendientes:'', proximos:'',
@@ -10160,8 +10172,8 @@ function renderSrsEditor(){
     return '<div style="display:grid;grid-template-columns:80px 100px 1fr 1fr 28px;gap:5px;align-items:center;padding:5px 0;border-bottom:0.5px solid var(--border)">'
       +'<input value="'+escHS(r.id)+'" style="font-family:var(--font-mono);font-size:11px;color:var(--c-purple);background:var(--surface);border:0.5px solid var(--border2);border-radius:4px;padding:3px 6px;outline:none" oninput="SRS.rnfs['+i+'].id=this.value;srsSave()">'
       +'<select style="background:var(--surface);border:0.5px solid var(--border2);border-radius:4px;padding:3px 5px;font-size:11px;color:var(--text);font-family:var(--font-sans);outline:none" onchange="SRS.rnfs['+i+'].cat=this.value;srsSave()">'+catOpts.map(function(o){return'<option'+(r.cat===o?' selected':'')+'>'+o+'</option>';}).join('')+'</select>'
-      +'<input value="'+escHS(r.atributo)+'" placeholder="Atributo..." style="background:var(--surface);border:0.5px solid var(--border2);border-radius:4px;padding:3px 6px;font-size:12px;color:var(--text);font-family:var(--font-sans);outline:none" oninput="SRS.rnfs['+i+'].atributo=this.value;srsSave()">'
-      +'<input value="'+escHS(r.valor)+'" placeholder="Valor objetivo..." style="background:var(--surface);border:0.5px solid var(--border2);border-radius:4px;padding:3px 6px;font-size:12px;color:var(--text);font-family:var(--font-sans);outline:none" oninput="SRS.rnfs['+i+'].valor=this.value;srsSave()">'
+      +'<textarea placeholder="Atributo..." style="background:var(--surface);border:0.5px solid var(--border2);border-radius:4px;padding:3px 6px;font-size:12px;color:var(--text);font-family:var(--font-sans);outline:none;resize:none;line-height:1.5;min-height:34px;overflow:hidden" oninput="autoH(this);SRS.rnfs['+i+'].atributo=this.value;srsSave()">'+escHS(r.atributo)+'</textarea>'
+      +'<textarea placeholder="Valor objetivo..." style="background:var(--surface);border:0.5px solid var(--border2);border-radius:4px;padding:3px 6px;font-size:12px;color:var(--text);font-family:var(--font-sans);outline:none;resize:none;line-height:1.5;min-height:34px;overflow:hidden" oninput="autoH(this);SRS.rnfs['+i+'].valor=this.value;srsSave()">'+escHS(r.valor)+'</textarea>'
       +'<button style="background:none;border:none;cursor:pointer;color:var(--muted);font-size:16px" onclick="SRS.rnfs.splice('+i+',1);srsSave();renderSrsEditor()">×</button>'
       +'</div>';
   }).join('');
@@ -10179,8 +10191,8 @@ function renderSrsEditor(){
 
   // SA / RC tab
   var sas=SRS.sas||[]; var rcs=SRS.rcs||[];
-  var saRows=sas.map(function(s,i){return '<div style="display:flex;gap:5px;align-items:center;padding:4px 0;border-bottom:0.5px solid var(--border)"><input value="'+escHS(s.id)+'" style="width:65px;flex-shrink:0;font-family:var(--font-mono);font-size:11px;color:var(--c-blue);background:var(--surface);border:0.5px solid var(--border2);border-radius:4px;padding:3px 6px;outline:none" oninput="SRS.sas['+i+'].id=this.value;srsSave()"><input value="'+escHS(s.desc)+'" placeholder="Descripción..." style="flex:1;background:var(--surface);border:0.5px solid var(--border2);border-radius:4px;padding:3px 6px;font-size:12px;color:var(--text);font-family:var(--font-sans);outline:none" oninput="SRS.sas['+i+'].desc=this.value;srsSave()"><button style="background:none;border:none;cursor:pointer;color:var(--muted);font-size:15px;flex-shrink:0" onclick="SRS.sas.splice('+i+',1);srsSave();renderSrsEditor()">×</button></div>';}).join('');
-  var rcRows=rcs.map(function(r,i){return '<div style="display:flex;gap:5px;align-items:center;padding:4px 0;border-bottom:0.5px solid var(--border)"><input value="'+escHS(r.id)+'" style="width:65px;flex-shrink:0;font-family:var(--font-mono);font-size:11px;color:var(--c-amber);background:var(--surface);border:0.5px solid var(--border2);border-radius:4px;padding:3px 6px;outline:none" oninput="SRS.rcs['+i+'].id=this.value;srsSave()"><input value="'+escHS(r.t)+'" placeholder="Tipo..." style="width:120px;flex-shrink:0;background:var(--surface);border:0.5px solid var(--border2);border-radius:4px;padding:3px 6px;font-size:12px;font-weight:500;color:var(--text);font-family:var(--font-sans);outline:none" oninput="SRS.rcs['+i+'].t=this.value;srsSave()"><input value="'+escHS(r.v)+'" placeholder="Valor..." style="flex:1;background:var(--surface);border:0.5px solid var(--border2);border-radius:4px;padding:3px 6px;font-size:12px;color:var(--text);font-family:var(--font-sans);outline:none" oninput="SRS.rcs['+i+'].v=this.value;srsSave()"><button style="background:none;border:none;cursor:pointer;color:var(--muted);font-size:15px;flex-shrink:0" onclick="SRS.rcs.splice('+i+',1);srsSave();renderSrsEditor()">×</button></div>';}).join('');
+  var saRows=sas.map(function(s,i){return '<div style="display:flex;gap:5px;align-items:start;padding:4px 0;border-bottom:0.5px solid var(--border)"><input value="'+escHS(s.id)+'" style="width:65px;flex-shrink:0;font-family:var(--font-mono);font-size:11px;color:var(--c-blue);background:var(--surface);border:0.5px solid var(--border2);border-radius:4px;padding:3px 6px;outline:none" oninput="SRS.sas['+i+'].id=this.value;srsSave()"><textarea placeholder="Descripción..." style="flex:1;background:var(--surface);border:0.5px solid var(--border2);border-radius:4px;padding:3px 6px;font-size:12px;color:var(--text);font-family:var(--font-sans);outline:none;resize:none;line-height:1.5;min-height:34px;overflow:hidden" oninput="autoH(this);SRS.sas['+i+'].desc=this.value;srsSave()">'+escHS(s.desc)+'</textarea><button style="background:none;border:none;cursor:pointer;color:var(--muted);font-size:15px;flex-shrink:0" onclick="SRS.sas.splice('+i+',1);srsSave();renderSrsEditor()">×</button></div>';}).join('');
+  var rcRows=rcs.map(function(r,i){return '<div style="display:flex;gap:5px;align-items:start;padding:4px 0;border-bottom:0.5px solid var(--border)"><input value="'+escHS(r.id)+'" style="width:65px;flex-shrink:0;font-family:var(--font-mono);font-size:11px;color:var(--c-amber);background:var(--surface);border:0.5px solid var(--border2);border-radius:4px;padding:3px 6px;outline:none" oninput="SRS.rcs['+i+'].id=this.value;srsSave()"><input value="'+escHS(r.t)+'" placeholder="Tipo..." style="width:120px;flex-shrink:0;background:var(--surface);border:0.5px solid var(--border2);border-radius:4px;padding:3px 6px;font-size:12px;font-weight:500;color:var(--text);font-family:var(--font-sans);outline:none" oninput="SRS.rcs['+i+'].t=this.value;srsSave()"><textarea placeholder="Valor..." style="flex:1;background:var(--surface);border:0.5px solid var(--border2);border-radius:4px;padding:3px 6px;font-size:12px;color:var(--text);font-family:var(--font-sans);outline:none;resize:none;line-height:1.5;min-height:34px;overflow:hidden" oninput="autoH(this);SRS.rcs['+i+'].v=this.value;srsSave()">'+escHS(r.v)+'</textarea><button style="background:none;border:none;cursor:pointer;color:var(--muted);font-size:15px;flex-shrink:0" onclick="SRS.rcs.splice('+i+',1);srsSave();renderSrsEditor()">×</button></div>';}).join('');
 
   var tab3='<div class="tab-panel" id="srse-3">'+srsReglasBanner('SA')+srsReglasBanner('RC')+'<div class="g2">'
     +'<div class="card"><div class="card-title">Supuestos (SA)</div>'+saRows+'<button class="btn btn-sm" style="margin-top:.5rem" onclick="srsAddSA()">+ Supuesto</button>'
@@ -11133,7 +11145,7 @@ function bpmnRenderPasos(tipo){
     var tipoSel=tipoOpts.map(function(t){return'<option'+(p.tipo===t?' selected':'')+'>'+t+'</option>';}).join('');
     html+='<tr>'
       +'<td><span style="font-family:var(--font-mono);color:'+col+';font-size:12px;font-weight:600">'+(i+1)+'</span></td>'
-      +'<td><input class="bpmn-paso-inp" data-tipo="'+tipo+'" data-idx="'+i+'" data-key="desc" value="'+esc(p.desc)+'" placeholder="Describe el paso..." style="width:100%;min-width:180px;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 6px;font-size:12px;color:var(--text);outline:none"></td>'
+      +'<td><textarea class="bpmn-paso-inp" data-tipo="'+tipo+'" data-idx="'+i+'" data-key="desc" placeholder="Describe el paso..." style="width:100%;min-width:180px;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 6px;font-size:12px;color:var(--text);outline:none;resize:none;line-height:1.5;min-height:34px;overflow:hidden">'+esc(p.desc)+'</textarea></td>'
       +'<td><input class="bpmn-paso-inp" data-tipo="'+tipo+'" data-idx="'+i+'" data-key="actor" value="'+esc(p.actor)+'" placeholder="Ej: Analista" style="width:100%;min-width:100px;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 6px;font-size:12px;color:var(--text);outline:none"></td>'
       +'<td><input class="bpmn-paso-inp" data-tipo="'+tipo+'" data-idx="'+i+'" data-key="tiempo" value="'+esc(p.tiempo)+'" placeholder="2h" style="width:60px;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 6px;font-size:12px;color:var(--text);outline:none"></td>'
       +'<td><select class="bpmn-paso-inp" data-tipo="'+tipo+'" data-idx="'+i+'" data-key="tipo" style="background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 5px;font-size:11px;color:var(--text);outline:none">'+tipoSel+'</select></td>'
@@ -11145,12 +11157,15 @@ function bpmnRenderPasos(tipo){
   // Add event listeners after render
   el.querySelectorAll('.bpmn-paso-inp').forEach(function(inp){
     inp.addEventListener('input', function(){
+      if(this.tagName==='TEXTAREA') autoH(this);
       bpmnSetPaso(this.dataset.tipo, parseInt(this.dataset.idx), this.dataset.key, this.value);
     });
     inp.addEventListener('change', function(){
       bpmnSetPaso(this.dataset.tipo, parseInt(this.dataset.idx), this.dataset.key, this.value);
     });
   });
+  // Init textarea heights
+  el.querySelectorAll('textarea.bpmn-paso-inp').forEach(function(ta){autoH(ta);});
   el.querySelectorAll('.bpmn-del-btn').forEach(function(btn){
     btn.addEventListener('click', function(){
       bpmnDelPaso(this.dataset.tipo, parseInt(this.dataset.idx));
@@ -11404,9 +11419,9 @@ function renderAnaEstr(){
   // Add form
   html+='<div class="card" style="margin-bottom:1rem">'
     +'<div class="card-title" style="margin-bottom:.6rem">Agregar requisito bruto</div>'
-    +'<div style="display:grid;grid-template-columns:90px 1fr 80px 80px 28px;gap:.5rem;align-items:center">'
+    +'<div style="display:grid;grid-template-columns:90px 1fr 80px 80px 28px;gap:.5rem;align-items:start">'
     +'<input id="estr-id" placeholder="RF-001" style="background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:4px 8px;font-size:12px;font-family:var(--font-mono);color:var(--c-blue);outline:none;width:100%">'
-    +'<input id="estr-desc" placeholder="Descripción del requisito..." style="background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:4px 8px;font-size:12px;color:var(--text);outline:none;width:100%">'
+    +'<textarea id="estr-desc" placeholder="Descripción del requisito..." style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:4px 8px;font-size:12px;color:var(--text);outline:none;resize:none;line-height:1.5;min-height:36px;overflow:hidden"></textarea>'
     +'<select id="estr-tipo" style="background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:4px 6px;font-size:12px;color:var(--text);outline:none;width:100%">'+tipos.map(function(t){return'<option>'+t+'</option>';}).join('')+'</select>'
     +'<select id="estr-pri" style="background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:4px 6px;font-size:12px;color:var(--text);outline:none;width:100%">'+priOpts.map(function(p){return'<option>'+p+'</option>';}).join('')+'</select>'
     +'<button class="btn btn-sm" style="background:var(--c-purple);color:#fff;border-color:var(--c-purple);padding:4px 8px" onclick="estrAdd()">+</button>'
@@ -11420,7 +11435,7 @@ function renderAnaEstr(){
       var col=estColor[item.estado]||'var(--muted)';
       html+='<tr>'
         +'<td><span style="font-family:var(--font-mono);color:var(--c-blue);font-size:11px">'+esc(item.id)+'</span></td>'
-        +'<td><input value="'+esc(item.desc)+'" style="width:100%;min-width:200px;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 6px;font-size:12px;color:var(--text);outline:none" oninput="estrSet('+i+',\'desc\',this.value)"></td>'
+        +'<td><textarea style="width:100%;min-width:200px;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 6px;font-size:12px;color:var(--text);outline:none;resize:none;line-height:1.5;min-height:34px;overflow:hidden" oninput="autoH(this);estrSet('+i+',\'desc\',this.value)">'+esc(item.desc)+'</textarea></td>'
         +'<td><select style="background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 5px;font-size:11px;color:var(--text);outline:none" onchange="estrSet('+i+',\'tipo\',this.value)">'+tipos.map(function(t){return'<option'+(item.tipo===t?' selected':'')+'>'+t+'</option>';}).join('')+'</select></td>'
         +'<td><select style="background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 5px;font-size:11px;color:var(--text);outline:none" onchange="estrSet('+i+',\'prioridad\',this.value)">'+priOpts.map(function(p){return'<option'+(item.prioridad===p?' selected':'')+'>'+p+'</option>';}).join('')+'</select></td>'
         +'<td><select style="background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 5px;font-size:11px;font-weight:500;color:'+col+';outline:none" onchange="estrSet('+i+',\'estado\',this.value)">'+estados.map(function(s){return'<option'+(item.estado===s?' selected':'')+'>'+s+'</option>';}).join('')+'</select></td>'
@@ -12239,9 +12254,9 @@ function renderAnaGap(){
     +'.ginp:focus{border-color:var(--c-purple)}'
     +'.gbdel{background:none;border:none;cursor:pointer;color:var(--muted);font-size:16px;padding:0 2px;line-height:1}'
     +'.gbdel:hover{color:var(--c-red)}'
-    +'.brow{display:grid;grid-template-columns:1fr 110px 70px 1fr 28px;gap:5px;align-items:center;padding:6px 0;border-bottom:0.5px solid var(--border)}'
+    +'.brow{display:grid;grid-template-columns:1fr 110px 70px 1fr 28px;gap:5px;align-items:start;padding:6px 0;border-bottom:0.5px solid var(--border)}'
     +'.brow:last-child{border-bottom:none}'
-    +'.brow input,.brow select{background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:4px 7px;font-size:12px;color:var(--text);font-family:var(--font-sans);outline:none}'
+    +'.brow input,.brow select,.brow textarea{background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:4px 7px;font-size:12px;color:var(--text);font-family:var(--font-sans);outline:none;resize:none;line-height:1.5}'
     +'.brow input:focus,.brow select:focus{border-color:var(--c-purple)}'
     +'</style>';
 
@@ -12252,7 +12267,7 @@ function renderAnaGap(){
     +'<div class="card-title" style="color:var(--c-red);margin-bottom:.5rem">Proceso actual (As-Is)</div>'
     +g.asIs.map(function(s,i){
       return '<div class="gline"><div style="width:5px;height:5px;border-radius:50%;background:var(--c-red);flex-shrink:0;margin-top:7px"></div>'
-        +'<input class="ginp" value="'+escH(s)+'" oninput="ANA.gap.asIs['+i+']=this.value;anaSave()">'
+        +'<textarea class="ginp" oninput="autoH(this);ANA.gap.asIs['+i+']=this.value;anaSave()">'+escH(s)+'</textarea>'
         +'<button class="gbdel" onclick="ANA.gap.asIs.splice('+i+',1);anaSave();renderAnaGap()">×</button></div>';
     }).join('')
     +'<button class="btn btn-sm" style="margin-top:.5rem" onclick="ANA.gap.asIs.push(\'\');anaSave();renderAnaGap()">+ Paso As-Is</button>'
@@ -12263,7 +12278,7 @@ function renderAnaGap(){
     +'<div class="card-title" style="color:var(--c-green);margin-bottom:.5rem">Proceso futuro (To-Be)</div>'
     +g.toBe.map(function(s,i){
       return '<div class="gline"><div style="width:5px;height:5px;border-radius:50%;background:var(--c-green);flex-shrink:0;margin-top:7px"></div>'
-        +'<input class="ginp" value="'+escH(s)+'" oninput="ANA.gap.toBe['+i+']=this.value;anaSave()">'
+        +'<textarea class="ginp" oninput="autoH(this);ANA.gap.toBe['+i+']=this.value;anaSave()">'+escH(s)+'</textarea>'
         +'<button class="gbdel" onclick="ANA.gap.toBe.splice('+i+',1);anaSave();renderAnaGap()">×</button></div>';
     }).join('')
     +'<button class="btn btn-sm" style="margin-top:.5rem" onclick="ANA.gap.toBe.push(\'\');anaSave();renderAnaGap()">+ Paso To-Be</button>'
@@ -12278,7 +12293,7 @@ function renderAnaGap(){
     +hdr
     +g.brechas.map(function(b,i){
       return '<div class="brow">'
-        +'<input value="'+escH(b.titulo)+'" placeholder="Descripción de la brecha..." oninput="ANA.gap.brechas['+i+'].titulo=this.value;anaSave()">'
+        +'<textarea placeholder="Descripción de la brecha..." style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:5px;padding:4px 7px;font-size:12px;color:var(--text);font-family:var(--font-sans);outline:none;resize:none;line-height:1.5;min-height:36px;overflow:hidden" oninput="autoH(this);ANA.gap.brechas['+i+'].titulo=this.value;anaSave()">'+escH(b.titulo)+'</textarea>'
         +'<select onchange="ANA.gap.brechas['+i+'].tipo=this.value;anaSave()">'+tipos.map(function(t){return'<option'+(b.tipo===t?' selected':'')+'>'+t+'</option>';}).join('')+'</select>'
         +'<select oninput="ANA.gap.brechas['+i+'].impacto=this.value;anaSave()" style="background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:2px 4px;font-size:11px;color:var(--text);outline:none">'
         +'<option value="Alto"'+(b.impacto==="Alto"||b.impacto===3||b.impacto===4||b.impacto===5?' selected':'')+'>Alto</option>'
@@ -12530,7 +12545,7 @@ function renderSrsRtm(){
         +'<input class="rtm-inp" data-req="'+esc(req.id)+'" data-key="responsable" value="'+esc(row.responsable||'')+'" placeholder="Nombre o rol..." style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 6px;font-size:11px;outline:none"></div>'
         // Componente
         +'<div><label style="font-size:9px;font-weight:600;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">Componente del sistema</label>'
-        +'<input class="rtm-inp" data-req="'+esc(req.id)+'" data-key="componente" value="'+esc(row.componente||'')+'" placeholder="Módulo, servicio..." style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 6px;font-size:11px;outline:none"></div>'
+        +'<textarea class="rtm-inp" data-req="'+esc(req.id)+'" data-key="componente" placeholder="Módulo, servicio..." style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 6px;font-size:11px;outline:none;resize:none;line-height:1.5;min-height:34px;overflow:hidden">'+esc(row.componente||'')+'</textarea></div>'
         +'</div>'
         // Fields — row 2
         +'<div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:.4rem;margin-bottom:.4rem">'
@@ -12557,7 +12572,7 @@ function renderSrsRtm(){
         +'</div>'
         // Observaciones
         +'<div><label style="font-size:9px;font-weight:600;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px">Observaciones</label>'
-        +'<input class="rtm-inp" data-req="'+esc(req.id)+'" data-key="obs" value="'+esc(row.obs||'')+'" placeholder="Notas, acuerdos, dependencias..." style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 6px;font-size:11px;outline:none"></div>'
+        +'<textarea class="rtm-inp" data-req="'+esc(req.id)+'" data-key="obs" placeholder="Notas, acuerdos, dependencias..." style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 6px;font-size:11px;outline:none;resize:none;line-height:1.5;min-height:34px;overflow:hidden">'+esc(row.obs||'')+'</textarea></div>'
         +'</div>';
     });
     html+='</div>';
@@ -12567,12 +12582,16 @@ function renderSrsRtm(){
   el.innerHTML=html;
 
   el.querySelectorAll('.rtm-inp').forEach(function(inp){
-    inp.addEventListener('input',function(){saveRow(this.dataset.req,this.dataset.key,this.value);});
+    inp.addEventListener('input',function(){
+      if(this.tagName==='TEXTAREA') autoH(this);
+      saveRow(this.dataset.req,this.dataset.key,this.value);
+    });
     inp.addEventListener('change',function(){
       saveRow(this.dataset.req,this.dataset.key,this.value);
       if(this.dataset.key==='estadoTraz'||this.dataset.key==='estadoImpl') renderSrsRtm();
     });
   });
+  el.querySelectorAll('textarea.rtm-inp').forEach(function(ta){autoH(ta);});
 }
 function rtmSaveRow(rfId,key,val){
   var data; try{data=JSON.parse(localStorage.getItem(RTM_KEY))||{items:[]};}catch(e){data={items:[]};}
