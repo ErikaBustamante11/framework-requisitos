@@ -110,7 +110,7 @@ h1,h2,h3,h4,h5 { font-family: var(--font-serif); font-weight: 500; line-height: 
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: .4px;
-  color: var(--muted);
+  color: var(--c-teal);
   padding: .6rem .7rem .2rem;
   display: flex;
   align-items: center;
@@ -120,7 +120,7 @@ h1,h2,h3,h4,h5 { font-family: var(--font-serif); font-weight: 500; line-height: 
   border-radius: 4px;
   transition: color .15s;
 }
-.nav-label:hover { color: var(--text); }
+.nav-label:hover { color: var(--c-teal-d); }
 .nav-label.is-capa {
   padding-top: .7rem;
   margin-top: .3rem;
@@ -130,7 +130,7 @@ h1,h2,h3,h4,h5 { font-family: var(--font-serif); font-weight: 500; line-height: 
   content: '▾';
   font-size: 10px;
   transition: transform .2s;
-  color: var(--faint);
+  color: var(--c-teal);
 }
 .nav-group.collapsed .nav-label::after { transform: rotate(-90deg); }
 .nav-label[style*="pointer-events:none"]::after { display: none; }
@@ -11886,19 +11886,9 @@ function defCTX(){
     sel: 0,
     diagramas: [{
       nombre: 'Diagrama de contexto',
-      sistema: 'Sistema',
-      entidades: [
-        {id:'E1', nombre:'Usuario final', tipo:'actor', descripcion:'Persona que usa el sistema'},
-        {id:'E2', nombre:'Administrador', tipo:'actor', descripcion:'Gestiona configuración'},
-        {id:'E3', nombre:'Base de datos', tipo:'sistema', descripcion:'Almacenamiento persistente'},
-        {id:'E4', nombre:'API externa', tipo:'sistema', descripcion:'Servicio externo de datos'}
-      ],
-      flujos: [
-        {id:'F1', de:'E1', a:'sistema', etiqueta:'Solicita operación'},
-        {id:'F2', de:'sistema', a:'E1', etiqueta:'Devuelve resultado'},
-        {id:'F3', de:'sistema', a:'E3', etiqueta:'Lee / escribe datos'},
-        {id:'F4', de:'E4', a:'sistema', etiqueta:'Envía datos externos'}
-      ]
+      sistema: '',
+      entidades: [],
+      flujos: []
     }]
   };
 }
@@ -11910,6 +11900,14 @@ function loadCTX(){
     if(d.sistema&&!d.diagramas){
       d={sel:0,diagramas:[{nombre:'Diagrama de contexto',sistema:d.sistema,entidades:d.entidades||[],flujos:d.flujos||[]}]};
       localStorage.setItem(CTX_KEY,JSON.stringify(d));
+    }
+    // Detect and clear example data
+    if(d.diagramas&&d.diagramas[0]&&d.diagramas[0].entidades&&
+       d.diagramas[0].entidades.length>0&&
+       d.diagramas[0].entidades[0].nombre==='Usuario final'&&
+       d.diagramas[0].sistema==='Sistema'){
+      localStorage.removeItem(CTX_KEY);
+      return defCTX();
     }
     return d;
   }catch(e){return defCTX();}
@@ -13150,16 +13148,15 @@ function renderSrsChecklist(data){
 }
 
 function defHU(){
-  return {items:[
-    {id:'HU-001',rol:'Analista de crédito',quiero:'consultar el score crediticio del cliente de forma automática',para:'reducir el tiempo de evaluación de 2 días a menos de 1 hora',prioridad:'Must',estado:'Aprobada',rfs:'RF-001',otros:'',criterios:'',escenarios:[]},
-    {id:'HU-002',rol:'Cliente',quiero:'registrarme una sola vez en el portal',para:'no tener que repetir mis datos en múltiples sistemas',prioridad:'Must',estado:'Aprobada',rfs:'RF-002',otros:'',criterios:'',escenarios:[]},
-    {id:'HU-003',rol:'Administrador',quiero:'configurar las reglas de decisión del motor',para:'adaptar los criterios de aprobación sin intervención de TI',prioridad:'Should',estado:'En revisión',rfs:'',otros:'',criterios:'',escenarios:[]},
-    {id:'HU-004',rol:'Usuario',quiero:'recibir notificaciones en tiempo real',para:'saber el estado de mi solicitud sin tener que consultar manualmente',prioridad:'Must',estado:'Borrador',rfs:'',otros:'',criterios:'',escenarios:[]}
-  ]};
+  return {items:[]};
 }
 
 function huAdd(){
   var data; try{data=JSON.parse(localStorage.getItem(HU_KEY))||defHU();}catch(e){data=defHU();}
+  // Detect and clear example data
+  if(data.items&&data.items.length>0&&data.items[0]&&data.items[0].rol&&data.items[0].rol.indexOf('cr\u00e9dito')>=0){
+    data=defHU(); localStorage.removeItem(HU_KEY);
+  }
   var n=data.items.length+1;
   data.items.push({id:'HU-'+String(n).padStart(3,'0'),rol:'',quiero:'',para:'',prioridad:'Must',estado:'Borrador',rfs:'',otros:'',criterios:'',escenarios:[]});
   window._huSel=data.items.length-1;
