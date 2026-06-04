@@ -6980,10 +6980,10 @@ function renderValWT(){
               var tc=sevColor[h.tipo]||'var(--muted)';
               var tb=sevBg[h.tipo]||'rgba(0,0,0,.03)';
               var hec=h.estado==='Resuelto'?'var(--c-green)':h.estado==='En proceso'?'var(--c-amber)':'var(--muted)';
-              html+='<div style="display:grid;grid-template-columns:80px 90px 1fr 90px 24px;gap:4px;align-items:center;padding:4px 0;border-bottom:0.5px solid var(--border)">'
+              html+='<div style="display:grid;grid-template-columns:80px 90px 1fr 90px 24px;gap:4px;align-items:start;padding:4px 0;border-bottom:0.5px solid var(--border)">'
                 +'<input value="'+esc(h.rfid||'')+'" placeholder="RF-001" style="background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 5px;font-size:11px;font-family:var(--font-mono);color:var(--c-blue);outline:none" oninput="wt2SH('+i+','+hi+',\'rfid\',this.value)">'
                 +'<select style="background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 4px;font-size:11px;color:'+tc+';font-weight:500;outline:none;background-color:'+tb+'" onchange="wt2SH('+i+','+hi+',\'tipo\',this.value);renderValWT()">'+['Inviabilidad','Ambigüedad','Inconsistencia','Pregunta','Mejora'].map(function(o){return'<option'+(h.tipo===o?' selected':'')+'>'+o+'</option>';}).join('')+'</select>'
-                +'<input value="'+esc(h.desc||'')+'" placeholder="Descripción..." style="background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 5px;font-size:11px;color:var(--text);outline:none" oninput="wt2SH('+i+','+hi+',\'desc\',this.value)">'
+                +'<textarea placeholder="Descripción..." style="background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 5px;font-size:11px;color:var(--text);outline:none;resize:none;line-height:1.5;min-height:34px;overflow:hidden;width:100%" oninput="autoH(this);wt2SH('+i+','+hi+',\'desc\',this.value)">'+esc(h.desc||'')+'</textarea>'
                 +'<select style="background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 4px;font-size:11px;color:'+hec+';font-weight:500;outline:none" onchange="wt2SH('+i+','+hi+',\'estado\',this.value);renderValWT()">'+['Abierto','En proceso','Resuelto'].map(function(o){return'<option'+(h.estado===o?' selected':'')+'>'+o+'</option>';}).join('')+'</select>'
                 +'<button style="background:none;border:none;cursor:pointer;color:var(--muted);font-size:13px" onclick="wt2DelH('+i+','+hi+')">×</button></div>';
             });
@@ -12636,7 +12636,7 @@ function renderWtSesiones(data){
       +'<div><label style="font-size:10px;color:var(--muted);display:block;margin-bottom:2px">Fecha</label>'
       +'<input class="wt-inp" data-idx="'+i+'" data-key="fecha" type="date" value="'+esc(s.fecha||'')+'" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 6px;font-size:12px;color:var(--text);outline:none"></div>'
       +'<div><label style="font-size:10px;color:var(--muted);display:block;margin-bottom:2px">Participantes</label>'
-      +'<input class="wt-inp" data-idx="'+i+'" data-key="participantes" value="'+esc(s.participantes||'')+'" placeholder="Nombres o roles..." style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 6px;font-size:12px;color:var(--text);outline:none"></div>'
+      +'<textarea class="wt-inp" data-idx="'+i+'" data-key="participantes" placeholder="Nombres o roles..." style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 6px;font-size:12px;color:var(--text);outline:none;resize:none;line-height:1.5;min-height:36px;overflow:hidden">'+esc(s.participantes||'')+'</textarea></div>'
       +'<div><label style="font-size:10px;color:var(--muted);display:block;margin-bottom:2px">Estado</label>'
       +'<select class="wt-inp" data-idx="'+i+'" data-key="estado" style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 5px;font-size:11px;outline:none">'
       +'<option'+(s.estado==='Pendiente'||!s.estado?' selected':'')+'>Pendiente</option>'
@@ -12652,7 +12652,7 @@ function renderWtSesiones(data){
   });
   el.innerHTML=html;
   el.querySelectorAll('.wt-inp').forEach(function(inp){
-    inp.addEventListener('input',function(){ wtSave(parseInt(this.dataset.idx),this.dataset.key,this.value); });
+    inp.addEventListener('input',function(){ if(this.tagName==='TEXTAREA') autoH(this); wtSave(parseInt(this.dataset.idx),this.dataset.key,this.value); });
     inp.addEventListener('change',function(){ wtSave(parseInt(this.dataset.idx),this.dataset.key,this.value); });
   });
   el.querySelectorAll('.wt-del').forEach(function(btn){
@@ -12924,7 +12924,7 @@ function renderSrsWalkthrough(d){
         +'<select class="wt-hi" data-si="'+sel+'" data-hi="'+hi+'" data-k="estado" style="font-size:10px;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:2px 4px;outline:none;color:'+(resuelto?'var(--c-green)':'var(--c-amber)')+'">'+['Pendiente','En revisión','Resuelto'].map(function(s2){return'<option'+(h.estado===s2?' selected':'')+'>'+s2+'</option>';}).join('')+'</select>'
         +'<button class="wt-del" data-si="'+sel+'" data-hi="'+hi+'" style="background:none;border:none;cursor:pointer;color:var(--muted);font-size:15px">×</button>'
         +'</div>'
-        +'<input class="wt-hi" data-si="'+sel+'" data-hi="'+hi+'" data-k="texto" value="'+esc(h.texto||'')+'" placeholder="Describe el hallazgo o comentario del stakeholder..." style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 7px;font-size:11px;color:var(--text);outline:none">'
+        +'<textarea class="wt-hi" data-si="'+sel+'" data-hi="'+hi+'" data-k="texto" placeholder="Describe el hallazgo o comentario del stakeholder..." style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:4px;padding:3px 7px;font-size:11px;color:var(--text);outline:none;resize:none;line-height:1.5;min-height:34px;overflow:hidden">'+esc(h.texto||'')+'</textarea>'
         +'</div>';
     });
   }
@@ -12963,9 +12963,10 @@ function renderSrsWalkthrough(d){
     });
   });
   el.querySelectorAll('.wt-hi').forEach(function(inp){
-    inp.addEventListener('input',function(){wtHSet(parseInt(this.dataset.si),parseInt(this.dataset.hi),this.dataset.k,this.value);});
+    inp.addEventListener('input',function(){ if(this.tagName==='TEXTAREA') autoH(this); wtHSet(parseInt(this.dataset.si),parseInt(this.dataset.hi),this.dataset.k,this.value);});
     inp.addEventListener('change',function(){wtHSet(parseInt(this.dataset.si),parseInt(this.dataset.hi),this.dataset.k,this.value);if(this.dataset.k==='estado') renderSrsWalkthrough(d);});
   });
+  el.querySelectorAll('textarea.wt-inp,textarea.wt-hi').forEach(function(ta){autoH(ta);});
   el.querySelectorAll('.wt-del').forEach(function(btn){
     btn.addEventListener('click',function(){wtDelH(parseInt(this.dataset.si),parseInt(this.dataset.hi));});
   });
